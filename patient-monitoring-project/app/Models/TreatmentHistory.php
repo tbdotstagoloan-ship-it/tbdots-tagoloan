@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class TreatmentHistory extends Model
+{
+    protected $table = 'tbl_treatment_histories';
+
+    protected $fillable = [
+        'hist_date_tx_started',
+        'hist_treatment_unit',
+        'hist_regimen',
+        'hist_outcome',
+        'patient_id',
+        'treatfacility_id',
+    ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+
+    public function treatmentFacility()
+    {
+        return $this->belongsTo(TreatmentFacility::class, 'treatfacility_id');
+    }
+}
