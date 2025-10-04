@@ -630,7 +630,7 @@
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                   <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="submit" class="btn add-patient-btn">Submit</button>
+                  <button type="submit" class="btn btn-success">Submit</button>
                 </div>
               </div>
             </div>

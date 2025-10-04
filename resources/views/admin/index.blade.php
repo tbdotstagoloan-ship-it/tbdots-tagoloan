@@ -164,7 +164,7 @@
         <div class="card-value">{{ $totalPatients }}</div>
       </div>
       <div class="card-icon">
-        <img src="{{ url('assets/img/tbpatient.png') }}" alt="">
+        <img src="{{ url('assets/img/patienttb.png') }}" alt="">
       </div>
     </div>
   </div>
@@ -177,7 +177,7 @@
         <div class="card-value">{{ $totalPhysician }}</div>
       </div>
       <div class="card-icon">
-        <img src="{{ url('assets/img/physician.png') }}" alt="">
+        <img src="{{ url('assets/img/doctor.png') }}" alt="">
       </div>
     </div>
   </div>
@@ -190,7 +190,7 @@
         <div class="card-value">{{ $totalStaff }}</div>
       </div>
       <div class="card-icon">
-        <img src="{{ url('assets/img/medical-staff.png') }}" alt="">
+        <img src="{{ url('assets/img/psychiatrist.png') }}" alt="">
       </div>
     </div>
   </div>
