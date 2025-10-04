@@ -356,7 +356,7 @@
         icon: 'success',
         title: 'Registration Successful!',
         text: "{{ session('success') }}",
-        confirmButtonColor: '#2575fc',
+        confirmButtonColor: '#198754',
       });
     </script>
   @endif

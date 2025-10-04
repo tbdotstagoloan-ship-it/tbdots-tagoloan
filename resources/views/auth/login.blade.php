@@ -57,7 +57,7 @@
             </button>
         </form>
         <div class="text-center mt-4" style="font-size: 0.90rem;">
-            <p>Don't have an account? <a href="{{ route('register') }}" style="color: #2575fc; font-weight: 600; font-size: 0.90rem; text-decoration: none;">
+            <p>Don't have an account? <a href="{{ route('register') }}" style="text-decoration: none;">
                 Sign Up
             </a>
             </p>
