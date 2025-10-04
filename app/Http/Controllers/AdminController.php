@@ -131,96 +131,6 @@ class AdminController extends Controller
         return view('admin.error');
     }
 
-    public function store(Request $request, $patientId)
-    {
-        $request->validate([
-            'sput_date_collected' => 'required|date',
-            'sput_smear_result'   => 'nullable|string',
-            'sput_xpert_result'   => 'required|string',
-        ]);
-
-        $patient = Patient::findOrFail($patientId);
-
-        $patient->sputum_monitorings()->create([
-            'sput_date_collected' => $request->sput_date_collected,
-            'sput_smear_result'   => $request->sput_smear_result,
-            'sput_xpert_result'   => $request->sput_xpert_result,
-        ]);
-
-        return back()->with('success', 'Sputum result added successfully.');
-    }
-
-    public function storeAdverseEvent(Request $request, $patientId)
-    {
-        $request->validate([
-            'adv_ae_date' => 'required|date',
-            'adv_specific_ae' => 'required|string|max:255',
-            'adv_fda_reported_date' => 'nullable|date',
-        ]);
-
-        $patient = Patient::findOrFail($patientId);
-
-        $patient->adverseEvents()->create([
-            'adv_ae_date' => $request->adv_ae_date,
-            'adv_specific_ae' => $request->adv_specific_ae,
-            'adv_fda_reported_date' => $request->adv_fda_reported_date,
-        ]);
-
-        return back()->with('success', 'Adverse event added successfully.');
-    }
-
-    public function storeProgress(Request $request, $patientId)
-    {
-        $request->validate([
-            'prog_date' => 'required|date',
-            'prog_problem' => 'required|string',
-            'prog_action_taken' => 'required|string',
-            'prog_plan' => 'required|string',
-        ]);
-
-        $patient = Patient::findOrFail($patientId);
-
-        $patient->Progress()->create([
-            'prog_date' => $request->prog_date,
-            'prog_problem' => $request->prog_problem,
-            'prog_action_taken' => $request->prog_action_taken,
-            'prog_plan' => $request->prog_plan,
-        ]);
-
-        return back()->with('success', 'Patient Progress added successfully.');
-    }
-
-    public function storeCloseContact(Request $request, $patientId)
-    {
-        $request->validate([
-            'con_name' => 'required|string|max:255',
-            'con_age' => 'required|integer',
-            'con_sex' => 'required|string',
-            'con_relationship' => 'required|string|max:255',
-            'con_initial_screening' => 'nullable|date',
-            'con_follow_up' => 'nullable|date',
-            'con_remarks' => 'nullable|string|max:255',
-        ]);
-
-        $patient = Patient::findOrFail($patientId);
-
-        $patient->close_contacts()->create([
-            'con_name' => $request->con_name,
-            'con_age' => $request->con_age,
-            'con_sex' => $request->con_sex,
-            'con_relationship' => $request->con_relationship,
-            'con_initial_screening' => $request->con_initial_screening,
-            'con_follow_up' => $request->con_follow_up,
-            'con_remarks' => $request->con_remarks,
-        ]);
-
-        return back()->with('success', 'Close contact added successfully.');
-    }
-
-
-
-
-
 
     // Edit
     // public function edit($id)
@@ -283,7 +193,8 @@ class AdminController extends Controller
             'diagnosingFacility',
             'screenings.labTests',
             'diagnosis.tbClassification',
-            'treatmentFacilities.treatmentHistories',
+            'treatmentFacilities',
+            'treatmentHistories',
             'hivInfos',
             'baselineInfos',
             'comorbidities',

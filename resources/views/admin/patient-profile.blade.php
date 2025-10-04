@@ -861,7 +861,7 @@
 
                 <div class="info-section">
                     <button class="btn btn-sm btn-success float-end" data-bs-toggle="modal"
-                        data-bs-target="#editTreatmentRegimenModal">
+                        data-bs-target="#editTreatmentOutcomeModal">
                         <i class="fas fa-add"></i>
                     </button>
                     <h2 class="section-title">Treatment Regimen</h2>
@@ -1278,59 +1278,65 @@
                         <h5 class="modal-title" id="editLabTestsModalLabel">Laboratory Tests</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Connected to store route -->
+                    <form method="POST" action="{{ route('laboratory-tests.store', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
-
+                            <!-- Smear Microscopy -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="lab_smear_test_date" class="form-label">Smear Microscopy</label>
+                                    <label for="lab_smear_test_date" class="form-label">Smear Microscopy (Date)</label>
                                     <input type="date" class="form-control" id="lab_smear_test_date"
                                         name="lab_smear_test_date" max="<?php echo date('Y-m-d'); ?>">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="lab_smear_result" class="form-label">Result</label>
-                                    <input type="text" name="lab_smear_result" id="lab_smear_result"
-                                        class="form-control" placeholder="Result">
+                                    <label for="lab_smear_result" class="form-label">Smear Microscopy Result</label>
+                                    <input type="text" class="form-control" id="lab_smear_result"
+                                        name="lab_smear_result" placeholder="Result (e.g. Negative, 1+, etc.)">
                                 </div>
                             </div>
 
+                            <!-- Tuberculin Skin Test -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="lab_tst_test_date" class="form-label">Tuberculin Skin Test</label>
+                                    <label for="lab_tst_test_date" class="form-label">Tuberculin Skin Test (Date)</label>
                                     <input type="date" class="form-control" id="lab_tst_test_date"
                                         name="lab_tst_test_date" max="<?php echo date('Y-m-d'); ?>">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="lab_tst_result" class="form-label">Result</label>
-                                    <input type="text" class="form-control" id="lab_tst_result" name="lab_tst_result"
-                                        placeholder="Result">
+                                    <label for="lab_tst_result" class="form-label">TST Result</label>
+                                    <input type="text" class="form-control" id="lab_tst_result"
+                                        name="lab_tst_result" placeholder="Result (e.g. Positive, Negative)">
                                 </div>
                             </div>
 
+                            <!-- Other Tests -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="lab_other_test_date" class="form-label">Other Test</label>
+                                    <label for="lab_other_test_date" class="form-label">Other Test (Date)</label>
                                     <input type="date" class="form-control" id="lab_other_test_date"
                                         name="lab_other_test_date" max="<?php echo date('Y-m-d'); ?>">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="lab_other_result" class="form-label">Result</label>
+                                    <label for="lab_other_result" class="form-label">Other Test Result</label>
                                     <input type="text" class="form-control" id="lab_other_result"
-                                        name="lab_other_result" placeholder="Result">
+                                        name="lab_other_result" placeholder="Result (optional)">
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Diagnosis Modal -->
+
+        <!-- Referral Modal -->
         <div class="modal fade" id="editDiagnosisModal" tabindex="-1" aria-labelledby="editDiagnosisModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -1339,11 +1345,12 @@
                         <h5 class="modal-title" id="editDiagnosisModalLabel">Referral</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Add action route -->
+                    <form method="POST" action="{{ route('referrals.store', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
                             <div class="row">
-
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_referred_to" class="form-label">Referred to</label>
                                     <input type="text" class="form-control" id="diag_referred_to"
@@ -1351,10 +1358,11 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_address" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="diag_address" name="diag_address"
-                                        placeholder="Address">
+                                    <input type="text" class="form-control" id="diag_address"
+                                        name="diag_address" placeholder="Address">
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_facility_code" class="form-label">Facility Code</label>
@@ -1363,26 +1371,29 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_province" class="form-label">Province</label>
-                                    <input type="text" class="form-control" id="diag_province" name="diag_province"
-                                        placeholder="Province">
+                                    <input type="text" class="form-control" id="diag_province"
+                                        name="diag_province" placeholder="Province">
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_region" class="form-label">Region</label>
-                                    <input type="text" class="form-control" id="diag_region" name="diag_region"
-                                        placeholder="Region">
+                                    <input type="text" class="form-control" id="diag_region"
+                                        name="diag_region" placeholder="Region">
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
 
         <!-- History of TB Treatment Modal -->
         <div class="modal fade" id="editTreatmentHistoryModal" tabindex="-1"
@@ -1393,27 +1404,33 @@
                         <h5 class="modal-title" id="editTreatmentHistoryModalLabel">History of TB Treatment</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Add route for storing treatment history -->
+                    <form method="POST" action="{{ route('treatment-history.store', $patient->id) }}">
                         @csrf
+
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="hist_date_tx_started" class="form-label">Date Tx Started</label>
                                 <input type="date" class="form-control" id="hist_date_tx_started"
                                     name="hist_date_tx_started" max="<?php echo date('Y-m-d'); ?>" required>
                             </div>
+
                             <div class="mb-3">
                                 <label for="hist_treatment_unit" class="form-label">Name of Treatment Unit</label>
                                 <input type="text" class="form-control" id="hist_treatment_unit"
                                     name="hist_treatment_unit" placeholder="Treatment unit" required>
                             </div>
+
                             <div class="mb-3">
                                 <label for="hist_regimen" class="form-label">Treatment Regimen</label>
-                                <input type="text" class="form-control" id="hist_regimen" name="hist_regimen"
-                                    placeholder="Treatment regimen" required>
+                                <input type="text" class="form-control" id="hist_regimen"
+                                    name="hist_regimen" placeholder="Treatment regimen" required>
                             </div>
+
                             <div class="mb-3">
                                 <label for="hist_outcome" class="form-label">Outcome</label>
-                                <select class="form-control" id="hist_outcome" name="hist_outcome" required>
+                                <select class="form-control form-select" id="hist_outcome" name="hist_outcome" required>
                                     <option value="" disabled selected>Please Select</option>
                                     <option value="Cured">Cured</option>
                                     <option value="Treatment Completed">Treatment Completed</option>
@@ -1422,14 +1439,16 @@
                                 </select>
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
 
         <!-- Co-morbidities Modal -->
         <div class="modal fade" id="editComorbiditiesModal" tabindex="-1" aria-labelledby="editComorbiditiesModalLabel"
@@ -1440,17 +1459,21 @@
                         <h5 class="modal-title" id="editComorbiditiesModalLabel">Co-morbidities</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Add form action for saving co-morbidity -->
+                    <form method="POST" action="{{ route('comorbidities.store', $patient->id) }}">
                         @csrf
+
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="com_date_diagnosed" class="form-label">Date Diagnosed</label>
                                 <input type="date" class="form-control" id="com_date_diagnosed"
                                     name="com_date_diagnosed" max="<?php echo date('Y-m-d'); ?>" required>
                             </div>
+
                             <div class="mb-3">
                                 <label for="com_type" class="form-label">Type</label>
-                                <select class="form-control" id="com_type" name="com_type" required>
+                                <select class="form-control form-select" id="com_type" name="com_type" required>
                                     <option value="">Please Select</option>
                                     <option value="Diabetes Mellitus">Diabetes Mellitus</option>
                                     <option value="Mental Illness">Mental Illness</option>
@@ -1460,56 +1483,60 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
+
                             <div class="mb-3">
                                 <label for="com_other" class="form-label">Other (Specify)</label>
                                 <input type="text" class="form-control" id="com_other" name="com_other"
                                     placeholder="Specify">
                             </div>
+
                             <div class="mb-3">
                                 <label for="com_treatment" class="form-label">Treatment</label>
-                                <input type="text" class="form-control" id="com_treatment" name="com_treatment"
-                                    placeholder="Treatment">
+                                <input type="text" class="form-control" id="com_treatment"
+                                    name="com_treatment" placeholder="Treatment">
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Baseline Information Modal -->
+
+        <!-- HIV Modal -->
         <div class="modal fade" id="editBaselineModal" tabindex="-1" aria-labelledby="editBaselineModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editBaselineModalLabel">HIV</h5>
+                        <h5 class="modal-title" id="editBaselineModalLabel">HIV Baseline Information</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Form with action route -->
+                    <form method="POST" action="{{ route('hiv.store', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
                             <div class="row">
-
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_information" class="form-label">HIV Information</label>
                                     <input type="text" class="form-control" id="hiv_information" name="hiv_information"
-                                        placeholder="Hiv Information">
+                                        placeholder="HIV Information">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_test_date" class="form-label">HIV Test Date</label>
                                     <input type="date" class="form-control" id="hiv_test_date" name="hiv_test_date"
                                         max="<?php echo date('Y-m-d'); ?>">
                                 </div>
-
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="hiv_confirmatory_test_date" class="form-label">Confirmatory Test
-                                        Date</label>
+                                    <label for="hiv_confirmatory_test_date" class="form-label">Confirmatory Test Date</label>
                                     <input type="date" class="form-control" id="hiv_confirmatory_test_date"
                                         name="hiv_confirmatory_test_date" max="<?php echo date('Y-m-d'); ?>">
                                 </div>
@@ -1523,7 +1550,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_art_started" class="form-label">Started on ART?</label>
-                                    <select class="form-control" id="hiv_art_started" name="hiv_art_started">
+                                    <select class="form-control form-select" id="hiv_art_started" name="hiv_art_started">
                                         <option value="">Please Select</option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
@@ -1531,47 +1558,44 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_cpt_started" class="form-label">Started on CPT?</label>
-                                    <select class="form-control" id="hiv_cpt_started" name="hiv_cpt_started">
+                                    <select class="form-control form-select" id="hiv_cpt_started" name="hiv_cpt_started">
                                         <option value="">Please Select</option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
                                     </select>
                                 </div>
                             </div>
-
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Treatment Regimen Modal -->
-        <div class="modal fade" id="editTreatmentRegimenModal" tabindex="-1"
-            aria-labelledby="editTreatmentRegimenModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+
+        <!-- Treatment Outcome Modal -->
+        <div class="modal fade" id="editTreatmentOutcomeModal" tabindex="-1"
+            aria-labelledby="editTreatmentOutcomeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editTreatmentRegimenModalLabel">Treatment Regimen</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Form with route and CSRF -->
+                    <form method="POST" action="{{ route('treatment-outcome.store', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="reg_end_type" class="form-label">Regimen Type at End of
-                                        Treatment</label>
-                                    <input type="text" class="form-control" id="reg_end_type" name="reg_end_type"
-                                        placeholder="Regimen type at end of treatment">
-                                </div>
 
-                                <div class="col-md-6 mb-3">
+                                <div class="mb-3">
                                     <label for="out_outcome" class="form-label">Outcome</label>
-                                    <select class="form-control" id="out_outcome" name="out_outcome">
+                                    <select class="form-control form-select" id="out_outcome" name="out_outcome" required>
                                         <option value="">Please Select</option>
                                         <option value="Cured">Cured</option>
                                         <option value="Treatment Completed">Treatment Completed</option>
@@ -1581,74 +1605,77 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="mb-3">
                                     <label for="out_date" class="form-label">Date of Outcome</label>
                                     <input type="date" class="form-control" id="out_date" name="out_date"
                                         max="<?php echo date('Y-m-d'); ?>">
                                 </div>
-                                <div class="col-md-6 mb-3">
+
+                                <div class="mb-3">
                                     <label for="out_reason" class="form-label">Reason</label>
                                     <input type="text" class="form-control" id="out_reason" name="out_reason"
                                         placeholder="Reason">
                                 </div>
-                            </div>
-
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
+
         <!-- Prescribed Drugs Modal -->
         <div class="modal fade" id="editPrescribedDrugsModal" tabindex="-1"
             aria-labelledby="editPrescribedDrugsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editPrescribedDrugsModalLabel">Prescribed Drugs</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Form with route -->
+                    <form method="POST" action="{{ route('prescribed-drugs.store', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_date" class="form-label">Continuation Date</label>
-                                    <input type="date" class="form-control" id="drug_con_date" name="drug_con_date"
-                                        max="<?php echo date('Y-m-d'); ?>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_name" class="form-label">Drug</label>
-                                    <input type="text" class="form-control" id="drug_con_name" name="drug_con_name"
-                                        placeholder="Drug">
-                                </div>
+                            <div class="mb-3">
+                                <label for="drug_con_date" class="form-label">Continuation Date</label>
+                                <input type="date" class="form-control" id="drug_con_date" name="drug_con_date"
+                                    max="<?php echo date('Y-m-d'); ?>" required>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_strength" class="form-label">Strength</label>
-                                    <input type="text" class="form-control" id="drug_con_strength"
-                                        name="drug_con_strength" placeholder="Strength">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_unit" class="form-label">Unit</label>
-                                    <input type="text" class="form-control" id="drug_con_unit" name="drug_con_unit"
-                                        placeholder="Unit">
-                                </div>
+
+                            <div class="mb-3">
+                                <label for="drug_con_name" class="form-label">Drug</label>
+                                <input type="text" class="form-control" id="drug_con_name" name="drug_con_name"
+                                    placeholder="Drug name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="drug_con_strength" class="form-label">Strength</label>
+                                <input type="text" class="form-control" id="drug_con_strength" name="drug_con_strength"
+                                    placeholder="Strength (e.g. 500mg)">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="drug_con_unit" class="form-label">Unit</label>
+                                <input type="text" class="form-control" id="drug_con_unit" name="drug_con_unit"
+                                    placeholder="Unit (e.g. tablet, capsule)">
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
 
         <!-- Administration of Drugs Modal -->
         <div class="modal fade" id="editAdministrationModal" tabindex="-1"
@@ -1702,7 +1729,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -1715,9 +1742,9 @@
             <div class="modal-dialog">
                 <div class="modal-content">
 
-                    <div class="modal-header bg-danger text-white">
+                    <div class="modal-header">
                         <h5 class="modal-title" id="editAdverseEventModalLabel">
-                            Add Serious Adverse Event (SAE)
+                            Add Serious Adverse Event
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -1751,7 +1778,7 @@
                         <!-- Footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Add Event</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
 
@@ -1781,23 +1808,20 @@
                             </div>
                             <div class="mb-3">
                                 <label for="prog_problem" class="form-label">Problem</label>
-                                <textarea class="form-control" id="prog_problem" name="prog_problem" rows="3"
-                                    required></textarea>
+                                <input type="text" class="form-control" id="prog_problem" name="prog_problem" placeholder="Problem" required>
                             </div>
                             <div class="mb-3">
                                 <label for="prog_action_taken" class="form-label">Action Taken</label>
-                                <textarea class="form-control" id="prog_action_taken" name="prog_action_taken" rows="3"
-                                    required></textarea>
+                                <input type="text" class="form-control" id="prog_action_taken" name="prog_action_taken" placeholder="Action taken" required>
                             </div>
                             <div class="mb-3">
                                 <label for="prog_plan" class="form-label">Plan</label>
-                                <textarea class="form-control" id="prog_plan" name="prog_plan" rows="3"
-                                    required></textarea>
+                                <input type="text" class="form-control" id="prog_plan" name="prog_plan" placeholder="Plan" required>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -1832,7 +1856,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="con_sex" class="form-label">Sex</label>
-                                    <select class="form-control" id="con_sex" name="con_sex" required>
+                                    <select class="form-control form-select" id="con_sex" name="con_sex" required>
                                         <option value="">Please Select</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
@@ -1862,7 +1886,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -1876,7 +1900,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
 
-                    <div class="modal-header bg-success text-white">
+                    <div class="modal-header">
                         <h5 class="modal-title" id="editSputumModalLabel">Add Sputum Monitoring Result</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -1894,22 +1918,21 @@
 
                             <!-- Smear Microscopy -->
                             <div class="mb-3">
-                                <label for="sput_smear_result" class="form-label">Smear Microscopy / TB LAMP</label>
-                                <input type="text" class="form-control" id="sput_smear_result" name="sput_smear_result">
+                                <label for="sput_smear_result" class="form-label">Smear Microscopy /TB LAMP</label>
+                                <input type="text" class="form-control" id="sput_smear_result" name="sput_smear_result" placeholder="Smear microscopy / tb lamp">
                             </div>
 
                             <!-- Xpert MTB/RIF -->
                             <div class="mb-3">
                                 <label for="sput_xpert_result" class="form-label">Xpert MTB/RIF</label>
-                                <input type="text" class="form-control" id="sput_xpert_result" name="sput_xpert_result"
-                                    required>
+                                <input type="text" class="form-control" id="sput_xpert_result" name="sput_xpert_result" placeholder="Xpert mtb / rif" required>
                             </div>
                         </div>
 
                         <!-- Footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Add Result</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -1926,7 +1949,9 @@
                         <h5 class="modal-title" id="editChestXrayModalLabel">Chest X-ray</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- Laravel route for storing chest x-ray -->
+                    <form method="POST" action="{{ route('chest-xray.store', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
@@ -1936,23 +1961,31 @@
                             </div>
                             <div class="mb-3">
                                 <label for="xray_impression" class="form-label">Impression/ Comparative Reading</label>
-                                <input type="text" class="form-control" id="xray_impression" name="xray_impression"
-                                    required>
+                                 <select name="xray_impression" id="xray_impression" class="form-control form-select">
+                                    <option value="" disabled selected>Please Select</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Abnormal suggestive of TB">Abnormal suggestive of TB</option>
+                                    <option value="Abnormal not suggestive of TB">Abnormal not suggestive of TB</option>
+                                    <option value="Improved">Improved</option>
+                                    <option value="Stable/Unchanged">Stable/Unchanged</option>
+                                    <option value="Worsened">Worsened</option>
+                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="xray_descriptive_comment" class="form-label">Descriptive Comments</label>
                                 <input type="text" class="form-control" id="xray_descriptive_comment"
-                                    name="xray_descriptive_comment">
+                                    name="xray_descriptive_comment" placeholder="Descriptive comments">
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
 
         <!-- Post Treatment Follow-up Modal -->
         <div class="modal fade" id="editPostTreatmentModal" tabindex="-1" aria-labelledby="editPostTreatmentModalLabel"
@@ -1963,14 +1996,17 @@
                         <h5 class="modal-title" id="editPostTreatmentModalLabel">Post Treatment Follow-up</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Add action route -->
+                    <form method="POST" action="{{ route('post-treatment-follow-up.store', $patient->id) }}">
                         @csrf
+
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_months_after_tx" class="form-label">Months After Treatment</label>
                                     <input type="number" class="form-control" id="fol_months_after_tx"
-                                        name="fol_months_after_tx" required>
+                                        name="fol_months_after_tx" placeholder="Mo. after treatment" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_date" class="form-label">Date</label>
@@ -1978,32 +2014,37 @@
                                         max="<?php echo date('Y-m-d'); ?>" required>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_cxr_findings" class="form-label">CXR Findings</label>
                                     <input type="text" class="form-control" id="fol_cxr_findings"
-                                        name="fol_cxr_findings">
+                                        name="fol_cxr_findings" placeholder="Cxr findings">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="fol_smear_xpert" class="form-label">Smear/ Xpert</label>
-                                    <input type="text" class="form-control" id="fol_smear_xpert" name="fol_smear_xpert">
+                                    <label for="fol_smear_xpert" class="form-label">Smear / Xpert</label>
+                                    <input type="text" class="form-control" id="fol_smear_xpert"
+                                        name="fol_smear_xpert" placeholder="Smear /xpert">
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_tbc_dst" class="form-label">TBC & DST</label>
-                                    <input type="text" class="form-control" id="fol_tbc_dst" name="fol_tbc_dst">
+                                    <input type="text" class="form-control" id="fol_tbc_dst" name="fol_tbc_dst" placeholder="Tbc & dst">
                                 </div>
                             </div>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
 
 
     </main>
@@ -2021,6 +2062,19 @@
     <script src="{{ url('assets/js/sidebarToggle.js') }}"></script>
 
     <script src="{{ url('assets/js/rotate-icon.js') }}"></script>
+
+    @if(session('success'))
+    <script>
+      Swal.fire({
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        confirmButtonColor: '#198754',
+      });
+    </script>
+  @endif
+
+
 </body>
 
 </html>

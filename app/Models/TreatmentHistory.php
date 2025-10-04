@@ -14,7 +14,6 @@ class TreatmentHistory extends Model
         'hist_regimen',
         'hist_outcome',
         'patient_id',
-        'treatfacility_id',
     ];
 
     public function patient()
@@ -22,8 +21,4 @@ class TreatmentHistory extends Model
         return $this->belongsTo(Patient::class, 'patient_id');
     }
 
-    public function treatmentFacility()
-    {
-        return $this->belongsTo(TreatmentFacility::class, 'treatfacility_id');
-    }
 }
