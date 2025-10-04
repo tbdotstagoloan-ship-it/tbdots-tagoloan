@@ -19,7 +19,7 @@
 
     <div class="login-container">
         <div class="login-header">
-            <h2>Welcome to TB DOTS [PMS]</h2>
+            <h2>Please Sign In</h2>
         </div>
 
         <!-- Laravel Status Message -->

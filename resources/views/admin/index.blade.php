@@ -262,12 +262,12 @@
             {{ $extra }}
           ],
           backgroundColor: [
-            'rgba(9, 172, 117, 0.7)',
-            'rgba(75, 192, 192, 0.7)'
-          ],
-          borderColor: [
-            'rgba(9, 172, 117, 1)',
-            'rgba(75, 192, 192, 1)'
+            'rgba(76, 175, 80, 0.85)',     // Pulmonary - Green (#4CAF50)
+          'rgba(255, 222, 0, 0.85)'      // Extra-pulmonary - Yellow (#ffde00)
+        ],
+        borderColor: [
+          'rgba(56, 142, 60, 1)',        // Pulmonary - Dark Green
+          'rgba(255, 222, 0, 1)'         // Extra-pulmonary - Yellow border
           ],
           borderWidth: 1
         }]
@@ -302,8 +302,8 @@
             datasets: [{
               label: 'Patients Diagnosed',
               data: monthlyData,
-              backgroundColor: 'rgba(5, 150, 105, 0.7)',
-              borderColor: 'rgba(34, 197, 94, 0.5)',
+              backgroundColor: 'rgba(76, 175, 80, 0.85)',  // theme green
+              borderColor: 'rgba(56, 142, 60, 1)',         // darker green
               borderWidth: 1,
               borderRadius: 6
             }]
