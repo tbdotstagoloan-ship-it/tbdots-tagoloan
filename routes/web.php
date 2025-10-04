@@ -1,5 +1,18 @@
 <?php
 
+use App\Http\Controllers\SputumMonitoringController;
+use App\Http\Controllers\CloseContactController;
+use App\Http\Controllers\PatientProgressController;
+use App\Http\Controllers\AdverseEventController;
+use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\LaboratoryTestController;
+use App\Http\Controllers\PrescribedDrugsController;
+use App\Http\Controllers\TreatmentOutcomeController;
+use App\Http\Controllers\HivController;
+use App\Http\Controllers\ComorbidityController;
+use App\Http\Controllers\TreatmentHistoryController;
+use App\Http\Controllers\PostTreatmentFollowUpController;
+use App\Http\Controllers\ChestXrayController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PatientSummaryController;
 use App\Http\Controllers\ProfileController;
@@ -117,8 +130,18 @@ Route::post('validatePage3', [PatientController::class, 'validatePage3'])->middl
 
 
 // Follow Up
-Route::post('/patients/{patient}/sputum', [AdminController::class, 'store'])->name('sputum.store');
-Route::post('/patients/{patient}/adverse', [AdminController::class, 'storeAdverseEvent'])->name('adverse.store');
-Route::post('/patients/{patient}/progress', [AdminController::class, 'storeProgress'])->name('patient-progress.store');
-Route::post('/patients/{patient}/close-contact', [AdminController::class, 'storeCloseContact'])->name('close-contact.store');
+Route::post('/patients/{id}/adverse-events', [AdverseEventController::class, 'store'])->name('adverse.store');
+Route::post('/patients/{id}/progress', [PatientProgressController::class, 'store'])->name('patient-progress.store');
+Route::post('/patients/{id}/close-contact', [CloseContactController::class, 'store'])->name('close-contact.store');
+Route::post('/patients/{id}/sputum', [SputumMonitoringController::class, 'store'])->name('sputum.store');
+Route::post('/patients/{id}/chest-xray', [ChestXrayController::class, 'store'])->name('chest-xray.store');
+Route::post('/patients/{id}/post-treatment-follow-up', [PostTreatmentFollowUpController::class, 'store'])->name('post-treatment-follow-up.store');
+Route::post('/patients/{id}/treatment-history', [TreatmentHistoryController::class, 'store'])->name('treatment-history.store');
+Route::post('/patients/{id}/comorbidities', [ComorbidityController::class, 'store'])->name('comorbidities.store');
+Route::post('/patients/{id}/hiv', [HivController::class, 'store'])->name('hiv.store');
+Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::class, 'store'])->name('treatment-outcome.store');
+Route::post('/patients/{id}/prescribed-drugs', [PrescribedDrugsController::class, 'store'])->name('prescribed-drugs.store');
+Route::post('/patients/{id}/laboratory-tests', [LaboratoryTestController::class, 'store'])->name('laboratory-tests.store');
+Route::post('/patients/{id}/referrals', [ReferralController::class, 'store'])->name('referrals.store');
+
 

@@ -155,7 +155,7 @@
               <input type="hidden" name="per_page" value="{{ $perPage }}">
               <input type="text" name="search" value="{{ request('search') }}" class="form-control searchBtn me-2"
                 placeholder="Search patients...">
-              <button type="submit" class="btn btn-primary search-btn">Search</button>
+              <button type="submit" class="btn btn-secondary search-btn">Search</button>
             </form>
 
           </div>
@@ -323,6 +323,7 @@
       });
     });
   </script>
+  
   @if(session('success'))
     <script>
       Swal.fire({
