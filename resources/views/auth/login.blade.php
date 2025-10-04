@@ -20,7 +20,7 @@
     <div class="login-container">
         <div class="login-header">
             <h2>Welcome to TB DOTS [PMS]</h2>
-            <h1 style="color:red;">Version 6.1</h1>
+            <h1 style="color:red;">Version 7.1.1</h1>
         </div>
 
         <!-- Laravel Status Message -->
