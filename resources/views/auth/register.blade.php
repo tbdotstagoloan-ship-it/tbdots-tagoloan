@@ -26,14 +26,17 @@
                 padding: 8px;
                 width: 100%;
                 color: white;
-                background-color: #2575fc;
+                background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
                 border: none;
                 border-radius: 8px;
                 cursor: pointer;
             }
 
             #form button:hover {
-                background-color: #1a5ed8;
+                background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+                box-shadow: 0 6px 16px rgba(76, 175, 80, 0.35);
+                transform: translateY(-1px);
             }
 
             .input-control {
@@ -85,7 +88,7 @@
             }
 
             .already a {
-                color: #18a678;
+                color: #4caf50 !important;
                 text-decoration: none;
                 font-weight: 500;
             }

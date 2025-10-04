@@ -20,10 +20,10 @@ body {
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(251, 191, 36, 0.15), 0 4px 12px rgba(76, 175, 80, 0.1);
     padding: 40px;
-    width: 120%;
+    width: 100%;
     max-width: 420px;
     margin-top: 10px;
-    border-top: 4px solid #fbbf24;
+    border-top: 4px solid #ffde00;
     border-left: 1px solid rgba(251, 191, 36, 0.2);
     border-right: 1px solid rgba(76, 175, 80, 0.1);
     border-bottom: 1px solid rgba(76, 175, 80, 0.1);
@@ -47,16 +47,21 @@ body {
     align-items: center;
     justify-content: center;
     margin-bottom: 40px;
+    width: 100%;
 }
 
 .top-logo {
     text-align: center;
     color: #282828;
+    margin-bottom: 20px;
 }
 
 .top-logo img {
     height: 150px;
     filter: drop-shadow(0 4px 8px rgba(251, 191, 36, 0.2)) drop-shadow(0 2px 4px rgba(76, 175, 80, 0.15));
+    max-width: 100%;
+    height: auto;
+    max-height: 150px;
 }
 
 .top-logo h3 {
@@ -166,20 +171,6 @@ body {
     font-weight: 500;
 }
 
-@media (max-width: 480px) {
-    .login-container {
-        padding: 32px 24px;
-    }
-
-    .login-header h2 {
-        font-size: 1.2rem;
-    }
-
-    .top-logo h3 {
-        font-size: 22px;
-    }
-}
-
 .loader {
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-left-color: #fff;
@@ -230,4 +221,175 @@ body {
 
 .toggle-password:hover {
     color: #4caf50;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .page-wrapper {
+        margin-bottom: 20px;
+    }
+
+    .top-logo img {
+        height: 120px;
+        max-height: 120px;
+    }
+
+    .top-logo h3 {
+        font-size: 22px;
+        margin-top: 15px;
+    }
+
+    .login-container {
+        padding: 30px 24px;
+        max-width: 100%;
+    }
+
+    .login-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .form-group input {
+        padding: 12px 14px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+
+    .login-btn {
+        padding: 13px;
+        font-size: 15px;
+    }
+
+    .text-center p {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .page-wrapper {
+        margin-bottom: 15px;
+    }
+
+    .top-logo img {
+        height: 100px;
+        max-height: 100px;
+    }
+
+    .top-logo h3 {
+        font-size: 20px;
+        margin-top: 12px;
+    }
+
+    .login-container {
+        padding: 24px 20px;
+        border-radius: 10px;
+    }
+
+    .login-header {
+        margin-bottom: 20px;
+    }
+
+    .login-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group .form-label {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    .form-group input {
+        padding: 11px 12px;
+        font-size: 16px;
+    }
+
+    .toggle-password {
+        right: 12px;
+        top: 40px;
+        font-size: 14px;
+    }
+
+    .login-btn {
+        padding: 12px;
+        font-size: 15px;
+        margin-top: 6px;
+    }
+
+    .text-center p {
+        font-size: 0.8rem;
+        margin-top: 14px;
+    }
+
+    .error {
+        font-size: 0.75rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+    .top-logo img {
+        height: 80px;
+        max-height: 80px;
+    }
+
+    .login-container {
+        padding: 20px 16px;
+    }
+
+    .login-header h2 {
+        font-size: 1rem;
+    }
+
+    .form-group input {
+        padding: 10px;
+    }
+
+    .login-btn {
+        padding: 11px;
+        font-size: 14px;
+    }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+    }
+
+    .page-wrapper {
+        margin-bottom: 10px;
+    }
+
+    .top-logo img {
+        height: 70px;
+        max-height: 70px;
+    }
+
+    .top-logo h3 {
+        font-size: 18px;
+        margin-top: 8px;
+    }
+
+    .login-container {
+        padding: 20px;
+        margin-top: 5px;
+    }
+
+    .login-header {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
 }

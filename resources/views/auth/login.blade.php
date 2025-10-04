@@ -19,7 +19,7 @@
 
     <div class="login-container">
         <div class="login-header">
-            <h2>Welcome to TB DOTS [PMS]</h2>
+            <h2>Please Sign In</h2>
         </div>
 
         <!-- Laravel Status Message -->
@@ -57,7 +57,7 @@
             </button>
         </form>
         <div class="text-center mt-4" style="font-size: 0.90rem;">
-            <p>Don't have an account? <a href="{{ route('register') }}" style="color: #2575fc; font-weight: 600; font-size: 0.90rem; text-decoration: none;">
+            <p>Don't have an account? <a href="{{ route('register') }}" style="text-decoration: none;">
                 Sign Up
             </a>
             </p>
