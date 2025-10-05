@@ -1541,9 +1541,27 @@
                                                 —
                                             @endif
                                         </td>
-                                        <td>{{ $patient->adherences->first()->pha_intensive_end ?? '—' }}</td>
-                                        <td>{{ $patient->adherences->first()->pha_continuation_start ?? '—' }}</td>
-                                        <td>{{ $patient->adherences->first()->pha_continuation_end ?? '—' }}</td>
+                                        <td>
+                                            @if(!empty($patient->adherences->first()->pha_intensive_end))
+                                                {{ \Carbon\Carbon::parse($patient->adherences->first()->pha_intensive_end)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(!empty($patient->adherences->first()->pha_continuation_start))
+                                                {{ \Carbon\Carbon::parse($patient->adherences->first()->pha_continuation_start)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(!empty($patient->adherences->first()->pha_continuation_end))
+                                                {{ \Carbon\Carbon::parse($patient->adherences->first()->pha_continuation_end)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
