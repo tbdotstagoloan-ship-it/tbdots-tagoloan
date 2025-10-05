@@ -314,7 +314,8 @@
                   </div>
                   <div class="col-md-3">
                     <label for="base_diabetes_screening">Diabetes Screening</label>
-                    <select name="base_diabetes_screening" id="base_diabetes_screening" class="form-control form-select">
+                    <select name="base_diabetes_screening" id="base_diabetes_screening"
+                      class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Known Diabetic">Known Diabetic</option>
                       <option value="Not Eligible">Not Eligible</option>
@@ -322,7 +323,8 @@
                   </div>
                   <div class="col-md-3">
                     <label for="base_four_ps_beneficiary">4Ps Beneficiary?</label>
-                    <select name="base_four_ps_beneficiary" id="base_four_ps_beneficiary" class="form-control form-select">
+                    <select name="base_four_ps_beneficiary" id="base_four_ps_beneficiary"
+                      class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Yes">Yes</option>
                       <option value="No">No</option>
@@ -333,11 +335,13 @@
                 <div class="row mb-2">
                   <div class="col-md-3">
                     <label for="base_fbs_screening">FBS Screening</label>
-                    <input type="text" name="base_fbs_screening" id="base_fbs_screening" class="form-control" placeholder="mg/dl">
+                    <input type="text" name="base_fbs_screening" id="base_fbs_screening" class="form-control"
+                      placeholder="mg/dl">
                   </div>
                   <div class="col-md-3">
                     <label for="base_date_tested">Date Tested</label>
-                    <input type="date" name="base_date_tested" id="base_date_tested" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="base_date_tested" id="base_date_tested" class="form-control"
+                      max="<?php echo date('Y-m-d'); ?>">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
@@ -595,21 +599,22 @@
                       max="<?php echo date('Y-m-d'); ?>">
                     <div class="error"></div>
                   </div>
+
                   <div class="col-md-3">
                     <label for="pha_intensive_end">IP End Date</label>
-                    <input type="date" name="pha_intensive_end" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="pha_intensive_end" id="trt_intensive_phase_end" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
-                    <label for="pha_continuation_start">Continuation Phase Date</label>
-                    <input type="date" name="pha_continuation_start" class="form-control"
+                    <label for="pha_continuation_start">Continuation Phase Start</label>
+                    <input type="date" name="pha_continuation_start" id="pha_continuation_start" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                     <div class="error"></div>
                   </div>
+
                   <div class="col-md-3">
                     <label for="pha_continuation_end">CP End Date</label>
-                    <input type="date" name="pha_continuation_end" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="pha_continuation_end" id="pha_continuation_end" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -658,24 +663,25 @@
 
           </form>
 
-           <!-- Preview Modal -->
-<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="previewModalLabel">Preview Entered Data</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="previewContent">
-        <!-- Auto-filled preview will show here -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Edit</button>
-        <button type="button" class="btn btn-primary" id="confirmSubmit">Confirm & Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
+          <!-- Preview Modal -->
+          <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="previewModalLabel">Preview Entered Data</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="previewContent">
+                  <!-- Auto-filled preview will show here -->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Edit</button>
+                  <button type="button" class="btn btn-primary" id="confirmSubmit">Confirm & Submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
         </div>
@@ -766,12 +772,12 @@
     ];
 
     form.addEventListener("submit", function (e) {
-  e.preventDefault(); // stop default submit
+      e.preventDefault(); // stop default submit
 
-  if (validateInputs()) {
-    // populate preview
-    const preview = document.getElementById("previewContent");
-    preview.innerHTML = `
+      if (validateInputs()) {
+        // populate preview
+        const preview = document.getElementById("previewContent");
+        preview.innerHTML = `
       <table class="table table-bordered">
         <tbody>
           <tr><th colspan="2">II. Treatment</th></tr>
@@ -844,16 +850,16 @@
       </table>
     `;
 
-    // show modal
-    let modal = new bootstrap.Modal(document.getElementById("previewModal"));
-    modal.show();
-  }
-});
+        // show modal
+        let modal = new bootstrap.Modal(document.getElementById("previewModal"));
+        modal.show();
+      }
+    });
 
-// ✅ Final confirm button event
-document.getElementById("confirmSubmit").addEventListener("click", function () {
-  form.submit(); // final submit
-});
+    // ✅ Final confirm button event
+    document.getElementById("confirmSubmit").addEventListener("click", function () {
+      form.submit(); // final submit
+    });
 
 
     const setError = (element, message) => {
@@ -1002,7 +1008,7 @@ document.getElementById("confirmSubmit").addEventListener("click", function () {
         if (input.value.length > 11) input.value = input.value.slice(0, 11); // limit to 11 digits
       });
     });
-</script>
+  </script>
 
 
   @if(session('success'))
@@ -1011,10 +1017,56 @@ document.getElementById("confirmSubmit").addEventListener("click", function () {
         icon: 'success',
         title: 'Success!',
         text: "{{ session('success') }}",
-        confirmButtonColor: '#2575fc',
+        confirmButtonColor: '#198754',
       });
     </script>
   @endif
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const startInput = document.getElementById('trt_intensive_phase_start');
+    const endInput = document.getElementById('trt_intensive_phase_end');
+
+    startInput.addEventListener('change', function() {
+      if (this.value) {
+        const startDate = new Date(this.value);
+
+        // Add 56 days (Intensive Phase duration)
+        const endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 56);
+
+        // Format to YYYY-MM-DD
+        const formatted = endDate.toISOString().split('T')[0];
+
+        // Set the end date field automatically
+        endInput.value = formatted;
+      }
+    });
+  });
+  </script>
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const startInput = document.getElementById('pha_continuation_start');
+  const endInput = document.getElementById('pha_continuation_end');
+
+  startInput.addEventListener('change', function() {
+    if (this.value) {
+      const startDate = new Date(this.value);
+
+      // Add 6 months to the selected start date
+      const endDate = new Date(startDate);
+      endDate.setMonth(startDate.getMonth() + 6);
+
+      // Format the date to YYYY-MM-DD
+      const formattedEndDate = endDate.toISOString().split('T')[0];
+
+      // Set the calculated end date
+      endInput.value = formattedEndDate;
+    }
+  });
+});
+</script>
 
 
 </body>

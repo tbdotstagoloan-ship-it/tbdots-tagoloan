@@ -728,7 +728,7 @@
         icon: 'success',
         title: 'Success!',
         text: "{{ session('success') }}",
-        confirmButtonColor: '#2575fc',
+        confirmButtonColor: '#198754',
       });
     </script>
   @endif

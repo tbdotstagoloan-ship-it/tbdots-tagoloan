@@ -68,9 +68,10 @@ class AdminController extends Controller
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->select(
                 'p.id',
+                'p.*',
                 'p.pat_full_name',
                 'p.pat_sex',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+                // DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
                 'p.pat_current_address',
                 'd.diag_tb_case_no',
                 'd.diag_diagnosis_date',
@@ -145,7 +146,6 @@ class AdminController extends Controller
     public function edit($id)
     {
         $patient = Patient::findOrFail($id);
-
         return view('patient.edit', compact('patient'));
     }
 
@@ -156,34 +156,35 @@ class AdminController extends Controller
         return view ('patient.add-result');
     }
 
-    // Update
     public function update(Request $request, $id)
     {
-        $patient = Patient::findOrFail($id);
-
-        $patient->update([
-            'pat_full_name',
-            'pat_date_of_birth',
-            'pat_age',
-            'pat_sex',
-            'pat_civil_status',
-            'pat_permanent_address',
-            'pat_permanent_city_mun',
-            'pat_permanent_region',
-            'pat_permanent_zip_code',
-            'pat_current_address',
-            'pat_current_city_mun',
-            'pat_current_region',
-            'pat_current_zip_code',
-            'pat_contact_number',
-            'pat_other_contact',
-            'pat_philhealth_no',
-            'pat_nationality'
+        // Validate the request
+        $validatedData = $request->validate([
+            'pat_full_name' => 'required|string|max:255',
+            'pat_date_of_birth' => 'required|date',
+            'pat_age' => 'required|string',
+            'pat_sex' => 'required|string',
+            'pat_civil_status' => 'required|string',
+            'pat_permanent_address' => 'nullable|string',
+            'pat_permanent_city_mun' => 'nullable|string',
+            'pat_permanent_province' => 'nullable|string',
+            'pat_permanent_region' => 'nullable|string',
+            'pat_permanent_zip_code' => 'nullable|string',
+            'pat_current_address' => 'nullable|string',
+            'pat_current_city_mun' => 'nullable|string',
+            'pat_current_province' => 'nullable|string',
+            'pat_current_region' => 'nullable|string',
+            'pat_current_zip_code' => 'nullable|string',
+            'pat_contact_number' => 'nullable|string',
+            'pat_other_contact' => 'nullable|string',
+            'pat_philhealth_no' => 'nullable|string',
+            'pat_nationality' => 'nullable|string',
         ]);
 
-        $patient->update($request->all());
+        $patient = Patient::findOrFail($id);
+        $patient->update($validatedData);
 
-        return redirect()->route('admin.patient')->with('success', 'Patient updated successfully!');
+        return redirect()->back()->with('success', 'Patient updated successfully!');
     }
 
     // View

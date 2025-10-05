@@ -178,12 +178,12 @@
                     <div class="col-md-3">
                       <label for="pat_permanent_city_mun">City/ Municipality</label>
                       <input type="text" name="pat_permanent_city_mun" class="form-control" 
-                            value={{ old('pat_permanent_city_mun', $patient->pat_permanent_city_mun) }}>
+                            value="{{ old('pat_permanent_city_mun', $patient->pat_permanent_city_mun) }}">
                     </div>
                     <div class="col-md-3">
                       <label for="pat_permanent_region">Region</label>
                       <input type="text" name="pat_permanent_region" class="form-control" 
-                            value="{{ old('pat_permanent_reigon', $patient->pat_permanent_region) }}">
+                            value="{{ old('pat_permanent_region', $patient->pat_permanent_region) }}">
                     </div>
                     <div class="col-md-3">
                       <label for="pat_permanent_zip_code">Zip Code</label>

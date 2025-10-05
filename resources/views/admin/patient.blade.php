@@ -175,9 +175,7 @@
               </tr>
             </thead>
             <tbody>
-
               @foreach ($patients as $patient)
-
                 <tr>
                   <td>{{ $patient->id }}</td>
                   <td>{{ $patient->pat_full_name }}</td>
@@ -193,7 +191,6 @@
                         <i class="fas fa-ellipsis-v"></i>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
-
                         <!-- View -->
                         <li>
                           <a class="dropdown-item d-flex align-items-center"
@@ -204,8 +201,8 @@
 
                         <!-- Edit -->
                         <li>
-                          <a class="dropdown-item d-flex align-items-center"
-                            href="{{ route('patients.edit', $patient->id) }}" title="Edit Details">
+                          <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal"
+                            data-bs-target="#editPatientModal{{ $patient->id }}" title="Edit Details">
                             <i class="fas fa-edit me-2"></i> Edit
                           </a>
                         </li>
@@ -237,45 +234,206 @@
                             <i class="fas fa-user-plus me-2"></i> Create Account
                           </a>
                         </li>
-
                       </ul>
                     </div>
                   </td>
                 </tr>
 
-              @endforeach
+                <!-- Edit Patient Modal - MOVED INSIDE THE LOOP -->
+                <div class="modal fade" id="editPatientModal{{ $patient->id }}" tabindex="-1"
+                  aria-labelledby="editPatientModalLabel{{ $patient->id }}" aria-hidden="true">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="editPatientModalLabel{{ $patient->id }}">Update Patient Information
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{{ route('patients.update', $patient->id) }}" method="POST"
+                          id="editPatientForm{{ $patient->id }}">
+                          @csrf
+                          @method('PUT')
 
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="pat_full_name{{ $patient->id }}" class="form-label">Patient's Full Name</label>
+                              <input type="text" name="pat_full_name" id="pat_full_name{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_full_name ?? '' }}" required>
+                            </div>
+                            <div class="col-md-2">
+                              <label for="pat_date_of_birth{{ $patient->id }}" class="form-label">Date of Birth</label>
+                              <input type="date" name="pat_date_of_birth" id="pat_date_of_birth{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_date_of_birth ?? '' }}" max="<?php echo date('Y-m-d'); ?>" required>
+                            </div>
+                            <div class="col-md-2">
+                              <label for="pat_age{{ $patient->id }}" class="form-label">Age</label>
+                              <input type="text" name="pat_age" id="pat_age{{ $patient->id }}" class="form-control"
+                                value="{{ $patient->pat_age ?? '' }}" readonly>
+                            </div>
+                            <div class="col-md-2">
+                              <label for="pat_sex{{ $patient->id }}" class="form-label">Sex</label>
+                              <select name="pat_sex" id="pat_sex{{ $patient->id }}" class="form-control form-select"
+                                required>
+                                <option disabled {{ empty($patient->pat_sex) ? 'selected' : '' }}>Select</option>
+                                @foreach (["Male", "Female"] as $sex)
+                                  <option value="{{ $sex }}" {{ isset($patient->pat_sex) && $patient->pat_sex == $sex ? 'selected' : '' }}>
+                                    {{ $sex }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            </div>
+                            <div class="col-md-2">
+                              <label for="pat_civil_status{{ $patient->id }}" class="form-label">Civil Status</label>
+                              <select name="pat_civil_status" id="pat_civil_status{{ $patient->id }}"
+                                class="form-control form-select" required>
+                                <option disabled {{ empty($patient->pat_civil_status) ? 'selected' : '' }}>Select</option>
+                                @foreach (["Single", "Married", "Divorced"] as $status)
+                                  <option value="{{ $status }}" {{ isset($patient->pat_civil_status) && $patient->pat_civil_status == $status ? 'selected' : '' }}>
+                                    {{ $status }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="pat_permanent_address{{ $patient->id }}" class="form-label">Permanent
+                                Address</label>
+                              <input type="text" name="pat_permanent_address" id="pat_permanent_address{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_permanent_address ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_permanent_city_mun{{ $patient->id }}" class="form-label">City/
+                                Municipality</label>
+                              <input type="text" name="pat_permanent_city_mun"
+                                id="pat_permanent_city_mun{{ $patient->id }}" class="form-control"
+                                value="{{ $patient->pat_permanent_city_mun ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_permanent_province{{ $patient->id }}" class="form-label">Province</label>
+                              <input type="text" name="pat_permanent_province"
+                                id="pat_permanent_province{{ $patient->id }}" class="form-control"
+                                value="{{ $patient->pat_permanent_province ?? '' }}">
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="pat_permanent_region{{ $patient->id }}" class="form-label">Region</label>
+                              <input type="text" name="pat_permanent_region" id="pat_permanent_region{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_permanent_region ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_permanent_zip_code{{ $patient->id }}" class="form-label">Zip Code</label>
+                              <input type="text" name="pat_permanent_zip_code"
+                                id="pat_permanent_zip_code{{ $patient->id }}" class="form-control"
+                                value="{{ $patient->pat_permanent_zip_code ?? '' }}">
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="pat_current_address{{ $patient->id }}" class="form-label">Current
+                                Address</label>
+                              <input type="text" name="pat_current_address" id="pat_current_address{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_address ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_current_city_mun{{ $patient->id }}" class="form-label">City/
+                                Municipality</label>
+                              <input type="text" name="pat_current_city_mun" id="pat_current_city_mun{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_city_mun ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_current_province{{ $patient->id }}" class="form-label">Province</label>
+                              <input type="text" name="pat_current_province" id="pat_current_province{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_province ?? '' }}">
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="pat_current_region{{ $patient->id }}" class="form-label">Region</label>
+                              <input type="text" name="pat_current_region" id="pat_current_region{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_region ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_current_zip_code{{ $patient->id }}" class="form-label">Zip Code</label>
+                              <input type="text" name="pat_current_zip_code" id="pat_current_zip_code{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_zip_code ?? '' }}">
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-3">
+                              <label for="pat_contact_number{{ $patient->id }}" class="form-label">Contact Number</label>
+                              <input type="text" name="pat_contact_number" id="pat_contact_number{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_contact_number ?? '' }}">
+                            </div>
+                            <div class="col-md-3">
+                              <label for="pat_other_contact{{ $patient->id }}" class="form-label">Other Contact
+                                Information</label>
+                              <input type="text" name="pat_other_contact" id="pat_other_contact{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_other_contact ?? '' }}">
+                            </div>
+                            <div class="col-md-3">
+                              <label for="pat_philhealth_no{{ $patient->id }}" class="form-label">PhilHealth No.</label>
+                              <input type="text" name="pat_philhealth_no" id="pat_philhealth_no{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_philhealth_no ?? '' }}">
+                            </div>
+                            <div class="col-md-3">
+                              <label for="pat_nationality{{ $patient->id }}" class="form-label">Nationality</label>
+                              <input type="text" name="pat_nationality" id="pat_nationality{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_nationality ?? '' }}">
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" form="editPatientForm{{ $patient->id }}"
+                          class="btn btn-success">Update</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End of Modal -->
+
+              @endforeach
             </tbody>
           </table>
 
         </div>
       </div>
 
-     <div class="card-footer">
-  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-    
-    <!-- Left: showing entries -->
-    <div>
-      Showing {{ $patients->firstItem() }} to {{ $patients->lastItem() }} of {{ $patients->total() }} entries
-    </div>
+      <div class="card-footer">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
 
-    <!-- Center: pagination links -->
-    <div>
-      {{ $patients->appends(['search' => request('search'), 'per_page' => $perPage])->links() }}
-    </div>
+          <!-- Left: showing entries -->
+          <div>
+            Showing {{ $patients->firstItem() }} to {{ $patients->lastItem() }} of {{ $patients->total() }} entries
+          </div>
 
-    <!-- Right: per page dropdown -->
-    <form method="GET" action="{{ url('patient') }}" class="d-flex align-items-center">
-      <select name="per_page" id="per_page" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
-        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-        <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
-        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-        <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-      </select>
-      <span class="ms-2">per page</span>
-    </form>
-  </div>
-</div>
+          <!-- Center: pagination links -->
+          <div>
+            {{ $patients->appends(['search' => request('search'), 'per_page' => $perPage])->links() }}
+          </div>
+
+          <!-- Right: per page dropdown -->
+          <form method="GET" action="{{ url('patient') }}" class="d-flex align-items-center">
+            <select name="per_page" id="per_page" class="form-select form-select-sm w-auto"
+              onchange="this.form.submit()">
+              <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+              <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
+              <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+              <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+            </select>
+            <span class="ms-2">per page</span>
+          </form>
+        </div>
+      </div>
 
 
 
@@ -323,7 +481,7 @@
       });
     });
   </script>
-  
+
   @if(session('success'))
     <script>
       Swal.fire({
@@ -345,6 +503,50 @@
       });
     </script>
   @endif
+
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Find all date of birth inputs
+  const dobInputs = document.querySelectorAll('input[name="pat_date_of_birth"]');
+  
+  dobInputs.forEach(function(dobInput) {
+    dobInput.addEventListener('change', function() {
+      const inputId = this.id;
+      const patientId = inputId.replace('pat_date_of_birth', '');
+      const ageInput = document.getElementById('pat_age' + patientId);
+
+      if (this.value && ageInput) {
+        const birthDate = new Date(this.value);
+        const today = new Date();
+
+        // Compute total years
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+
+        // Adjust for months/days
+        if (today.getDate() < birthDate.getDate()) {
+          months--;
+        }
+        if (months < 0) {
+          years--;
+          months += 12;
+        }
+
+        // Format display with proper singular/plural
+        let formattedAge = `${years} year${years === 1 ? '' : 's'}`;
+        if (months > 0) {
+          formattedAge += ` ${months} month${months === 1 ? '' : 's'}`;
+        }
+
+        // Update the input (readonly text)
+        ageInput.value = formattedAge;
+      }
+    });
+  });
+});
+</script>
+
+
 
 </body>
 
