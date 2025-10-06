@@ -132,7 +132,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+          <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -156,45 +156,46 @@
     </h4>
 
     <div class="card-grid">
-  <!-- Patient -->
-  <div class="card-dashboard patient">
-    <div class="card-body">
-      <div class="card-info">
-        <div class="card-title">Patients</div>
-        <div class="card-value">{{ $totalPatients }}</div>
+      <!-- Patient -->
+      <div class="card-dashboard patient">
+        <div class="card-body">
+          <div class="card-info">
+            <div class="card-title">Patients</div>
+            <div class="card-value">{{ $totalPatients }}</div>
+          </div>
+          <div class="card-icon">
+            <i class="fas fa-users"></i>
+          </div>
+        </div>
       </div>
-      <div class="card-icon">
-        <img src="{{ url('assets/img/patienttb.png') }}" alt="">
-      </div>
-    </div>
-  </div>
 
-  <!-- Physician -->
-  <div class="card-dashboard physician">
-    <div class="card-body">
-      <div class="card-info">
-        <div class="card-title">Physician</div>
-        <div class="card-value">{{ $totalPhysician }}</div>
+      <!-- Physician -->
+      <div class="card-dashboard physician">
+        <div class="card-body">
+          <div class="card-info">
+            <div class="card-title">Physician</div>
+            <div class="card-value">{{ $totalPhysician }}</div>
+          </div>
+          <div class="card-icon">
+            <i class="fas fa-user-doctor"></i>
+          </div>
+        </div>
       </div>
-      <div class="card-icon">
-        <img src="{{ url('assets/img/doctor.png') }}" alt="">
-      </div>
-    </div>
-  </div>
 
-  <!-- Staff -->
-  <div class="card-dashboard staff">
-    <div class="card-body">
-      <div class="card-info">
-        <div class="card-title">Staff</div>
-        <div class="card-value">{{ $totalStaff }}</div>
+      <!-- Staff -->
+      <div class="card-dashboard staff">
+        <div class="card-body">
+          <div class="card-info">
+            <div class="card-title">Staff</div>
+            <div class="card-value">{{ $totalStaff }}</div>
+          </div>
+          <div class="card-icon">
+            <i class="fas fa-user-tie"></i>
+          </div>
+        </div>
       </div>
-      <div class="card-icon">
-        <img src="{{ url('assets/img/psychiatrist.png') }}" alt="">
-      </div>
+
     </div>
-  </div>
-</div>
 
 
 
@@ -263,11 +264,11 @@
           ],
           backgroundColor: [
             'rgba(76, 175, 80, 0.85)',     // Pulmonary - Green (#4CAF50)
-          'rgba(255, 222, 0, 0.85)'      // Extra-pulmonary - Yellow (#ffde00)
-        ],
-        borderColor: [
-          'rgba(56, 142, 60, 1)',        // Pulmonary - Dark Green
-          'rgba(255, 222, 0, 1)'         // Extra-pulmonary - Yellow border
+            'rgba(255, 222, 0, 0.85)'      // Extra-pulmonary - Yellow (#ffde00)
+          ],
+          borderColor: [
+            'rgba(56, 142, 60, 1)',        // Pulmonary - Dark Green
+            'rgba(255, 222, 0, 1)'         // Extra-pulmonary - Yellow border
           ],
           borderWidth: 1
         }]
