@@ -30,4 +30,15 @@ class LaboratoryTestController extends Controller
 
         return redirect()->back()->with('success', 'Laboratory test added successfully.');
     }
+
+    public function update(Request $request, $id)
+    {
+        $labTest = LaboratoryTest::findOrFail($id);
+
+        $labTest->update($request->all());
+
+        return redirect()->back()->with('success', 'Laboratory test updated successfully.');
+    }
+
+
 }
