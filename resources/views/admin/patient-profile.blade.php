@@ -496,6 +496,7 @@
                 <span class="fw-bold" style="color: #059669; font-size: 1.5rem;">
                     {{ $patient->pat_full_name }}
                 </span>
+                <p>Version 1</p>
             </h1>
 
             <a href="{{ url('patient') }}" class="btn btn-secondary backBtn">
