@@ -154,238 +154,209 @@
 
         /* Medication Adherence Calendar Styles */
         .adherence-calendar-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e2e8f0;
-            margin-top: 20px;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 32px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e5e7eb;
+        margin-top: 20px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
         }
 
         .adherence-calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 32px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e2e8f0;
         }
 
         .adherence-calendar-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #0f172a;
-            letter-spacing: -0.01em;
-            margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #1e293b;
         }
 
         .adherence-calendar-nav {
-            display: flex;
-            gap: 12px;
-            align-items: center;
+        display: flex;
+        gap: 8px;
         }
 
         .adherence-nav-btn {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            color: #475569;
+        background: #f8fafc;
+        border: 1px solid #d1d5db;
+        width: 36px;
+        height: 36px;
+        border-radius: 6px;
+        color: #475569;
+        transition: 0.2s ease;
         }
-
         .adherence-nav-btn:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            color: #1e293b;
+        background: #e2e8f0;
+        color: #1e293b;
         }
 
+        /* Calendar grid */
         .adherence-calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+        max-width: 700px;
+        margin: 0 auto;
         }
 
         .adherence-day-header {
-            text-align: center;
-            padding: 12px 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        text-align: center;
+        padding: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
         }
 
         .adherence-calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            border: 1px solid transparent;
-            background: #ffffff;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #1e293b;
+        transition: 0.2s ease;
+        cursor: pointer;
         }
-
+        .adherence-calendar-day span {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #1e293b;
+        }
         .adherence-calendar-day:hover {
-            background: #f8fafc;
-            border-color: #e2e8f0;
+        background: #f9fafb;
         }
-
-        .adherence-calendar-day.adherence-empty {
-            cursor: default;
-            background: transparent;
-        }
-
-        .adherence-calendar-day.adherence-empty:hover {
-            background: transparent;
-            border-color: transparent;
-        }
-
         .adherence-calendar-day.adherence-taken {
-            background: #f0fdf4;
-            color: #15803d;
-            border-color: #bbf7d0;
+        background: #ecfdf5;
+        color: #047857;
+        border-color: #a7f3d0;
         }
-
-        .adherence-calendar-day.adherence-taken:hover {
-            background: #dcfce7;
-            border-color: #86efac;
-        }
-
         .adherence-calendar-day.adherence-missed {
-            background: #fef2f2;
-            color: #b91c1c;
-            border-color: #fecaca;
+        background: #fef2f2;
+        color: #b91c1c;
+        border-color: #fecaca;
         }
-
-        .adherence-calendar-day.adherence-missed:hover {
-            background: #fee2e2;
-            border-color: #fca5a5;
+        .adherence-calendar-day.adherence-empty {
+        background: transparent;
+        border: none;
+        cursor: default;
         }
 
         .adherence-status-icon {
-            position: absolute;
-            bottom: 4px;
-            right: 4px;
-            font-size: 10px;
+        position: absolute;
+        bottom: 5px;
+        font-size: 11px;
+        opacity: 0.9;
         }
 
-        .adherence-calendar-day.adherence-taken .adherence-status-icon {
-            color: #22c55e;
-        }
-
-        .adherence-calendar-day.adherence-missed .adherence-status-icon {
-            color: #ef4444;
-        }
-
+        /* Stats */
         .adherence-stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 32px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-top: 32px;
         }
 
         .adherence-stat-card {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
+        background: #f9fafb;
+        padding: 16px 20px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        text-align: center;
         }
 
         .adherence-stat-label {
-            font-size: 13px;
-            color: #64748b;
-            font-weight: 500;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        font-size: 13px;
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 500;
         }
-
         .adherence-stat-value {
-            font-size: 24px;
-            font-weight: 600;
-            color: #0f172a;
+        font-size: 24px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-top: 6px;
+        }
+        .adherence-stat-success .adherence-stat-value {
+        color: #15803d;
+        }
+        .adherence-stat-danger .adherence-stat-value {
+        color: #b91c1c;
         }
 
-        .adherence-stat-card.adherence-stat-success .adherence-stat-value {
-            color: #15803d;
-        }
-
-        .adherence-stat-card.adherence-stat-danger .adherence-stat-value {
-            color: #b91c1c;
-        }
-
+        /* Legend */
         .adherence-legend-container {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid #e2e8f0;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
         }
 
         .adherence-legend {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
         }
-
         .adherence-legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            color: #475569;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: #475569;
         }
-
         .adherence-legend-indicator {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         }
-
         .adherence-legend-indicator.adherence-taken {
-            background: #f0fdf4;
-            color: #15803d;
-            border: 1px solid #bbf7d0;
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
         }
-
         .adherence-legend-indicator.adherence-missed {
-            background: #fef2f2;
-            color: #b91c1c;
-            border: 1px solid #fecaca;
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
-            .adherence-calendar-card {
-                padding: 24px;
-            }
-
-            .adherence-calendar-title {
-                font-size: 18px;
-            }
-
-            .adherence-legend {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .adherence-stats-container {
-                grid-template-columns: 1fr;
-            }
+        .adherence-calendar-card {
+            padding: 20px;
         }
+        .adherence-calendar-title {
+            font-size: 18px;
+        }
+        .adherence-calendar-grid {
+            gap: 4px;
+        }
+        .adherence-legend {
+            flex-direction: column;
+            align-items: center;
+        }
+        }
+
     </style>
 </head>
 
@@ -468,14 +439,14 @@
         </ul>
 
         <div class="logout-section">
-            <form id="logout-form" method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="button" id="logout-btn" class="logout-button">
-                    <img src="{{ url('assets/img/logout.png') }}" class="menu-icon" alt="">
-                    <span class="menu-text">Logout</span>
-                </button>
-            </form>
-        </div>
+      <form id="logout-form" method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="button" id="logout-btn" class="logout-button">
+           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+          <span class="menu-text">Logout</span>
+        </button>
+      </form>
+    </div>
 
     </div>
 
@@ -535,7 +506,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h4 class="fw-bold mb-1">Diagnosing Facility</h4>
+            <h5 class="fw-bold mb-1">Diagnosing Facility</h5>
             <p class="text-muted small mb-0">
                 Information about the facility where the diagnosis was conducted.
             </p>
@@ -574,7 +545,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-            <h4 class="fw-bold mb-1">Patient Demographic</h4>
+            <h5 class="fw-bold mb-1">Patient Demographic</h5>
             <p class="text-muted small mb-0">
                 Basic information, contact details, and address of the patient.
             </p>
@@ -687,7 +658,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Screening Information</h4>
+                            <h5 class="fw-bold mb-1">Screening Information</h5>
                             <p class="text-muted small mb-0">Details regarding the patient's referral, location, and
                                 mode of screening.</p>
                         </div>
@@ -733,7 +704,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Laboratory Tests</h4>
+                            <h5 class="fw-bold mb-1">Laboratory Tests</h5>
                             <p class="text-muted small mb-0">Patient’s laboratory test details, dates, and results.</p>
                         </div>
                         @foreach($patient->labTests as $labTest)
@@ -825,7 +796,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Diagnosis</h4>
+                            <h5 class="fw-bold mb-1">Diagnosis</h5>
                             <p class="text-muted small mb-0">Details of the patient’s diagnosis, attending physician,
                                 and referral information.</p>
                         </div>
@@ -904,7 +875,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <h4 class="fw-bold mb-1">TB Disease Classification</h4>
+                        <h5 class="fw-bold mb-1">TB Disease Classification</h5>
                         <p class="text-muted small mb-0">
                             Details about the patient’s TB classification, drug resistance, and anatomical site.
                         </p>
@@ -967,7 +938,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Treatment Facility</h4>
+                            <h5 class="fw-bold mb-1">Treatment Facility</h5>
                             <p class="text-muted small mb-0">Details of the facility where the patient is receiving
                                 treatment.</p>
                         </div>
@@ -1018,7 +989,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">History of TB Treatment</h4>
+                            <h5 class="fw-bold mb-1">History of TB Treatment</h5>
                             <p class="text-muted small mb-0">Previous TB treatment information and outcomes.</p>
                         </div>
                         <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
@@ -1074,7 +1045,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Co-morbidities</h4>
+                            <h5 class="fw-bold mb-1">Co-morbidities</h5>
                             <p class="text-muted small mb-0">Other medical conditions and treatments related to this
                                 patient.</p>
                         </div>
@@ -1131,7 +1102,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <h4 class="fw-bold mb-1">Baseline Information</h4>
+                        <h5 class="fw-bold mb-1">Baseline Information</h5>
                         <p class="text-muted small mb-0">
                             Patient’s initial measurements, vital signs, and screening details.
                         </p>
@@ -1230,7 +1201,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">HIV Information</h4>
+                            <h5 class="fw-bold mb-1">HIV Information</h5>
                             <p class="text-muted small mb-0">Details regarding HIV screening, test results, and
                                 treatment initiation.</p>
                         </div>
@@ -1299,7 +1270,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Treatment Regimen</h4>
+                            <h5 class="fw-bold mb-1">Treatment Regimen</h5>
                             <p class="text-muted small mb-0">Details regarding the patient’s treatment regimen from
                                 start to end.</p>
                         </div>
@@ -1355,7 +1326,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Treatment Outcome</h4>
+                            <h5 class="fw-bold mb-1">Treatment Outcome</h5>
                             <p class="text-muted small mb-0">List of all recorded treatment outcomes and reasons.</p>
                         </div>
                         <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
@@ -1410,14 +1381,14 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Prescribed Drugs</h4>
+                            <h5 class="fw-bold mb-1">Prescribed Drugs</h5>
                             <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and
                                 continuation phases.</p>
                         </div>
-                        <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                             data-bs-target="#editPrescribedDrugsModal">
                             <i class="fas fa-plus"></i> Add Record
-                        </button>
+                        </button> -->
                     </div>
 
                     @if ($patient->prescribedDrugs->isNotEmpty())
@@ -1489,7 +1460,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Administration of Drugs</h4>
+                            <h5 class="fw-bold mb-1">Administration of Drugs</h5>
                             <p class="text-muted small mb-0">Details of treatment supporter, treatment schedules, and
                                 patient measurements.</p>
                         </div>
@@ -1619,7 +1590,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Serious Adverse Events</h4>
+                            <h5 class="fw-bold mb-1">Serious Adverse Events</h5>
                             <p class="text-muted small mb-0">Recorded adverse events and AEs of special interest for
                                 this patient.</p>
                         </div>
@@ -1679,7 +1650,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Patient Progress Report</h4>
+                            <h5 class="fw-bold mb-1">Patient Progress Report</h5>
                             <p class="text-muted small mb-0">Summary of the patient’s progress and treatment updates.
                             </p>
                         </div>
@@ -1736,7 +1707,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Close Contacts</h4>
+                            <h5 class="fw-bold mb-1">Close Contacts</h5>
                             <p class="text-muted small mb-0">List of patient’s identified close contacts and their
                                 screening details.</p>
                         </div>
@@ -1808,7 +1779,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Sputum Monitoring</h4>
+                            <h5 class="fw-bold mb-1">Sputum Monitoring</h5>
                             <p class="text-muted small mb-0">Laboratory monitoring results of sputum samples collected
                                 during treatment.</p>
                         </div>
@@ -1863,7 +1834,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Chest X-ray</h4>
+                            <h5 class="fw-bold mb-1">Chest X-ray</h5>
                             <p class="text-muted small mb-0">Recorded chest X-ray examinations and findings during
                                 patient management.</p>
                         </div>
@@ -1918,7 +1889,7 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h4 class="fw-bold mb-1">Post-Treatment Follow-up</h4>
+                            <h5 class="fw-bold mb-1">Post-Treatment Follow-up</h5>
                             <p class="text-muted small mb-0">Follow-up examinations and results after treatment
                                 completion.</p>
                         </div>
@@ -1980,57 +1951,59 @@
 
             <!-- Medication Adherence Tab -->
             <div id="adherence-tab" class="tab-content" style="margin-top: 30px; display: none;">
-                <div class="info-section">
-                    <h2 class="section-title">Medication Adherence</h2>
+            <div class="info-section">
+                <h5 class="fw-bold mb-3">Medication Adherence</h5>
 
-                    <div class="adherence-calendar-card">
-                        <div class="adherence-calendar-header">
-                            <h3 class="adherence-calendar-title" id="monthYear"></h3>
-                            <div class="adherence-calendar-nav">
-                                <button class="adherence-nav-btn" id="prevMonth">
-                                    <i class="fa fa-chevron-left"></i>
-                                </button>
-                                <button class="adherence-nav-btn" id="nextMonth">
-                                    <i class="fa fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="adherence-calendar-grid" id="calendar"></div>
-
-                        <div class="adherence-stats-container">
-                            <div class="adherence-stat-card adherence-stat-success">
-                                <div class="adherence-stat-label">Adherence Rate</div>
-                                <div class="adherence-stat-value" id="adherenceRate">0%</div>
-                            </div>
-                            <div class="adherence-stat-card adherence-stat-success">
-                                <div class="adherence-stat-label">Days Taken</div>
-                                <div class="adherence-stat-value" id="daysTaken">0</div>
-                            </div>
-                            <div class="adherence-stat-card adherence-stat-danger">
-                                <div class="adherence-stat-label">Days Missed</div>
-                                <div class="adherence-stat-value" id="daysMissed">0</div>
-                            </div>
-                        </div>
-
-                        <div class="adherence-legend-container">
-                            <div class="adherence-legend">
-                                <div class="adherence-legend-item">
-                                    <div class="adherence-legend-indicator adherence-taken">
-                                        <i class="fa fa-check"></i>
-                                    </div>
-                                    <span>Medication Taken</span>
-                                </div>
-                                <div class="adherence-legend-item">
-                                    <div class="adherence-legend-indicator adherence-missed">
-                                        <i class="fa fa-times"></i>
-                                    </div>
-                                    <span>Medication Missed</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="adherence-calendar-card">
+                <div class="adherence-calendar-header">
+                    <div class="d-flex align-items-center gap-3">
+                    <h3 class="adherence-calendar-title mb-0" id="monthYear"></h3>
+                    </div>
+                    <div class="adherence-calendar-nav">
+                    <button class="adherence-nav-btn" id="prevMonth">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <button class="adherence-nav-btn" id="nextMonth">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
                     </div>
                 </div>
+
+                <div class="adherence-calendar-grid" id="calendar"></div>
+
+                <div class="adherence-stats-container mt-4">
+                    <div class="adherence-stat-card adherence-stat-success">
+                    <div class="adherence-stat-label">Adherence Rate</div>
+                    <div class="adherence-stat-value" id="adherenceRate">0%</div>
+                    </div>
+                    <div class="adherence-stat-card adherence-stat-success">
+                    <div class="adherence-stat-label">Days Taken</div>
+                    <div class="adherence-stat-value" id="daysTaken">0</div>
+                    </div>
+                    <div class="adherence-stat-card adherence-stat-danger">
+                    <div class="adherence-stat-label">Days Missed</div>
+                    <div class="adherence-stat-value" id="daysMissed">0</div>
+                    </div>
+                </div>
+
+                <div class="adherence-legend-container">
+                    <div class="adherence-legend">
+                    <div class="adherence-legend-item">
+                        <div class="adherence-legend-indicator adherence-taken">
+                        <i class="fa fa-check"></i>
+                        </div>
+                        <span>Medication Taken</span>
+                    </div>
+                    <div class="adherence-legend-item">
+                        <div class="adherence-legend-indicator adherence-missed">
+                        <i class="fa fa-times"></i>
+                        </div>
+                        <span>Medication Missed</span>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
             </div>
 
         </div>
@@ -2125,8 +2098,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2206,8 +2179,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2261,8 +2234,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2318,8 +2291,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2391,8 +2364,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2443,8 +2416,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2515,8 +2488,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                         </div>
                     </form>
@@ -2576,8 +2549,8 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2625,8 +2598,8 @@
 
                         <!-- Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
 
@@ -2671,8 +2644,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2741,8 +2714,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2789,8 +2762,8 @@
 
                         <!-- Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2836,8 +2809,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2896,8 +2869,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                         </div>
                     </form>
                 </div>

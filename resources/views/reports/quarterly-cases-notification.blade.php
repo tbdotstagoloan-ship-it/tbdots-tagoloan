@@ -104,7 +104,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-          <img src="{{ url('assets/img/logout.png') }}" class="menu-icon" alt="">
+           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>

@@ -294,25 +294,28 @@ body {
 .logout-section {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     margin-top: auto;
+    padding: 10px 20px;
 }
 
 .logout-button {
-    color: #dc2626;
-    padding: 14px 25px;
-    font-weight: 600;
-    background: transparent;
+    background-color: #facc15; /* Yellow */
+    color: #1f2937; /* Dark gray text for contrast */
+    padding: 10px 75px;
     border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 100%;
+    /* gap: 2px; */
     cursor: pointer;
-    font-size: 0.9rem;
-    text-align: left;
-    border-left: 3px solid transparent;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .logout-button:hover {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    background-color: #fbbf24; /* Slightly darker yellow on hover */
 }
 
 .sidebar.collapsed .logout-button {
@@ -860,21 +863,20 @@ pointer-events: auto !important; /* ensures cursor still shows */
 .backBtn:hover {
     background-color: #ffffff !important; /* stays white */
     border: 1px solid #ccc;            /* stays same border */
-    color: #2d3436 !important;            /* text turns black */
 }
 
 .backBtn i {
     color: #636e72 !important;   /* icon stays dark slate */
 }
 
-.backBtn:hover i {
-    color: #2d3436 !important;   /* icon does NOT change */
-}
-
 .menu-icon {
     width: 20px;
     height: 20px;
     margin-right: 10px;
+}
+
+.menu-icon-logout {
+    margin-left: 10px;
 }
 
 .menu-icons {
@@ -888,3 +890,62 @@ pointer-events: auto !important; /* ensures cursor still shows */
   padding: 6px 12px;    /* mas malapad at mataas */
   border-radius: 20px;  /* pill style */
 }
+
+/* Tabs container */
+  .nav-tabs {
+    border: none;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-shadow: inset 0 -1px 0 #e5e7eb;
+  }
+
+  /* Tab buttons */
+  .nav-tabs .nav-link {
+    border: none;
+    background: transparent;
+    color: #374151;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 10px 18px;
+    margin-right: 4px;
+    transition: all 0.2s ease;
+  }
+
+  .nav-tabs .nav-link:hover {
+    background-color: #e6f4ea;
+    color: #45a049;
+  }
+
+  .nav-tabs .nav-link.active {
+    background-color: #4caf50;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* Tab content area */
+  .tab-content {
+    background: #fff;
+    /* border: 1px solid #e5e7eb; */
+    border-radius: 8px;
+    /* padding: 24px; */
+    margin-top: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Form labels and inputs */
+  label {
+    font-weight: 500;
+    color: #374151;
+    font-size: 0.9rem;
+  }
+
+  input.form-control, select.form-control {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+  }
+
+  input.form-control:focus, select.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+  }

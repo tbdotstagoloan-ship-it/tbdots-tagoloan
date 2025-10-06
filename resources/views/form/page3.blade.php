@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
   <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+
 </head>
 
 <body>
@@ -91,7 +92,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-          <img src="{{ url('assets/img/logout.png') }}" class="menu-icon" alt="">
+           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -121,32 +122,38 @@
             @csrf
 
             <!-- Tabs -->
-            <ul class="nav nav-tabs" id="formTabs" role="tablist">
-              <li class="nav-item">
-                <button class="nav-link active" id="ae-tab" data-bs-toggle="tab" data-bs-target="#ae" type="button"
-                  role="tab">E. Serious Adverse Events and AEs of Special Interest</button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" id="progress-tab" data-bs-toggle="tab" data-bs-target="#progress" type="button"
-                  role="tab">F. Patient Progress Report Form</button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" id="close-tab" data-bs-toggle="tab" data-bs-target="#close" type="button"
-                  role="tab">G. Close Contacts</button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" id="sputum-tab" data-bs-toggle="tab" data-bs-target="#sputum" type="button"
-                  role="tab">H. Sputum Monitoring</button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" id="xray-tab" data-bs-toggle="tab" data-bs-target="#xray" type="button"
-                  role="tab">I. Chest X-ray</button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" id="followup-tab" data-bs-toggle="tab" data-bs-target="#followup" type="button"
-                  role="tab">J. Post Treatment Follow-up</button>
-              </li>
-            </ul>
+              <ul class="nav nav-tabs flex-wrap" id="formTabs" role="tablist">
+                <li class="nav-item">
+                  <button class="nav-link active" id="ae-tab" data-bs-toggle="tab" data-bs-target="#ae" type="button" role="tab">
+                    E. Serious Adverse Events
+                  </button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" id="progress-tab" data-bs-toggle="tab" data-bs-target="#progress" type="button" role="tab">
+                    F. Patient Progress Report
+                  </button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" id="close-tab" data-bs-toggle="tab" data-bs-target="#close" type="button" role="tab">
+                    G. Close Contacts
+                  </button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" id="sputum-tab" data-bs-toggle="tab" data-bs-target="#sputum" type="button" role="tab">
+                    H. Sputum Monitoring
+                  </button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" id="xray-tab" data-bs-toggle="tab" data-bs-target="#xray" type="button" role="tab">
+                    I. Chest X-ray
+                  </button>
+                </li>
+                <li class="nav-item">
+                  <button class="nav-link" id="followup-tab" data-bs-toggle="tab" data-bs-target="#followup" type="button" role="tab">
+                    J. Post Treatment Follow-up
+                  </button>
+                </li>
+              </ul>
 
             <!-- Tab Content -->
             <div class="tab-content p-3" id="formTabsContent">
@@ -169,9 +176,12 @@
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
                 </div>
-                <div class="d-flex justify-content-end mt-3">
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
-                </div>
+                <div class="d-flex justify-content-end mt-4">
+                <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+
               </div>
 
               <!-- TAB 2: Patient Progress-->
@@ -195,221 +205,79 @@
                     <input type="text" name="prog_plan" class="form-control" placeholder="Plan">
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
               <!-- TAB 3: Close Contact -->
               <div class="tab-pane fade" id="close" role="tabpanel">
-                <h5 class="mb-4">G. Close Contacts</h5>
-                <div class="row mb-3">
-                  <div class="col-md-3">
-                    <label for="con_name">Name</label>
-                    <input type="text" name="con_name" class="form-control" placeholder="Name">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_age">Age</label>
-                    <input type="text" name="con_age" class="form-control" placeholder="Age" min="0" max="120">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_sex">Sex</label>
-                    <select name="con_sex" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_relationship">Relationship</label>
-                    <input type="text" name="con_relationship" class="form-control" placeholder="Relationship">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h5 class="mb-0 fw-bold">G. Close Contacts</h5>
+                  <button type="button" class="btn btn-success btn-sm d-flex align-items-center gap-2" id="addMoreContact">
+                    <i class="fas fa-plus"></i> Add Close Contact
+                  </button>
+                </div>
+
+                <div id="closeContactContainer">
+                  <div class="close-contact-entry mb-3">
+                    <div class="row mb-3">
+                      <div class="col-md-3">
+                        <label for="con_name">Name</label>
+                        <input type="text" name="con_name" class="form-control" placeholder="Name">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="con_age">Age</label>
+                        <input type="number" name="con_age" class="form-control" placeholder="Age" min="0" max="120">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="con_sex">Sex</label>
+                        <select name="con_sex" class="form-control form-select">
+                          <option value="" disabled selected>Select</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="con_relationship">Relationship</label>
+                        <input type="text" name="con_relationship" class="form-control" placeholder="Relationship">
+                      </div>
+                    </div>
+
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <label for="con_initial_screening">Initial Screening</label>
+                        <input type="date" name="con_initial_screening" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="con_follow_up">Ff-up</label>
+                        <input type="date" name="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="con_remarks">Remarks</label>
+                        <input type="text" name="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
+                      </div>
+                      <div class="col-md-3 d-flex justify-content-end mt-4">
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-contact mt-2" style="height:40px; width:85px; display:none;">
+                          <i class="fas fa-trash-alt me-1"></i>Remove
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div class="row mb-2">
-                  <div class="col-md-3">
-                    <label for="con_initial_screening">Initial Screening</label>
-                    <input type="date" name="con_initial_screening" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_follow_up">Ff-up</label>
-                    <input type="date" name="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_remarks">Remarks</label>
-                    <input type="text" name="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
-                  </div>
-                </div>
-
-                <hr>
-
-                <div class="row mb-3">
-                  <div class="col-md-3">
-                    <label for="con_name">Name</label>
-                    <input type="text" name="con_name" class="form-control" placeholder="Name">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_age">Age</label>
-                    <input type="text" name="con_age" class="form-control" placeholder="Age" min="0" max="120">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_sex">Sex</label>
-                    <select name="con_sex" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_relationship">Relationship</label>
-                    <input type="text" name="con_relationship" class="form-control" placeholder="Relationship">
-                  </div>
-                </div>
-
-                <div class="row mb-2">
-                  <div class="col-md-3">
-                    <label for="con_initial_screening">Initial Screening</label>
-                    <input type="date" name="con_initial_screening" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_follow_up">Ff-up</label>
-                    <input type="date" name="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_remarks">Remarks</label>
-                    <input type="text" name="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
-                  </div>
-                </div>
-
-                <hr>
-
-                <div class="row mb-3">
-                  <div class="col-md-3">
-                    <label for="con_name">Name</label>
-                    <input type="text" name="con_name" class="form-control" placeholder="Name">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_age">Age</label>
-                    <input type="text" name="con_age" class="form-control" placeholder="Age" min="0" max="120">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_sex">Sex</label>
-                    <select name="con_sex" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_relationship">Relationship</label>
-                    <input type="text" name="con_relationship" class="form-control" placeholder="Relationship">
-                  </div>
-                </div>
-
-                <div class="row mb-2">
-                  <div class="col-md-3">
-                    <label for="con_initial_screening">Initial Screening</label>
-                    <input type="date" name="con_initial_screening" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_follow_up">Ff-up</label>
-                    <input type="date" name="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_remarks">Remarks</label>
-                    <input type="text" name="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
-                  </div>
-                </div>
-
-                <hr>
-
-                <div class="row mb-3">
-                  <div class="col-md-3">
-                    <label for="con_name">Name</label>
-                    <input type="text" name="con_name" class="form-control" placeholder="Name">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_age">Age</label>
-                    <input type="text" name="con_age" class="form-control" placeholder="Age" min="0" max="120">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_sex">Sex</label>
-                    <select name="con_sex" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_relationship">Relationship</label>
-                    <input type="text" name="con_relationship" class="form-control" placeholder="Relationship">
-                  </div>
-                </div>
-
-                <div class="row mb-2">
-                  <div class="col-md-3">
-                    <label for="con_initial_screening">Initial Screening</label>
-                    <input type="date" name="con_initial_screening" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_follow_up">Ff-up</label>
-                    <input type="date" name="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_remarks">Remarks</label>
-                    <input type="text" name="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
-                  </div>
-                </div>
-
-                <hr>
-
-                <div class="row mb-3">
-                  <div class="col-md-3">
-                    <label for="con_name">Name</label>
-                    <input type="text" name="con_name" class="form-control" placeholder="Name">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_age">Age</label>
-                    <input type="text" name="con_age" class="form-control" placeholder="Age" min="0" max="120">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_sex">Sex</label>
-                    <select name="con_sex" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_relationship">Relationship</label>
-                    <input type="text" name="con_relationship" class="form-control" placeholder="Relationship">
-                  </div>
-                </div>
-
-                <div class="row mb-2">
-                  <div class="col-md-3">
-                    <label for="con_initial_screening">Initial Screening</label>
-                    <input type="date" name="con_initial_screening" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_follow_up">Ff-up</label>
-                    <input type="date" name="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="con_remarks">Remarks</label>
-                    <input type="text" name="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
-                  </div>
-                </div>
-
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -432,9 +300,13 @@
                     <input type="text" name="sput_xpert_result" class="form-control" placeholder="Xpert MTB/RIF">
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -505,9 +377,13 @@
                       <input type="text" name="out_descriptive_comments" class="form-control" placeholder="Descriptive Comments" >
                     </div>
                   </div> -->
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -538,9 +414,11 @@
                     <input type="text" name="fol_tbc_dst" class="form-control" placeholder="TBC & DST">
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="submit" class="btn btn-success">Submit</button>
+                <div class="d-flex justify-content-between mt-4">
+                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                 </div>
               </div>
 
@@ -718,10 +596,6 @@
 
   </script>
 
-
-
-
-
   @if(session('success'))
     <script>
       Swal.fire({
@@ -733,7 +607,47 @@
     </script>
   @endif
 
+      <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const container = document.getElementById('closeContactContainer');
+  const addBtn = document.getElementById('addMoreContact');
 
+  addBtn.addEventListener('click', function () {
+    // Clone the first close contact entry
+    const firstEntry = container.querySelector('.close-contact-entry');
+    const newEntry = firstEntry.cloneNode(true);
+
+    // Clear all input values
+    newEntry.querySelectorAll('input, select').forEach(input => input.value = '');
+
+    // Show the remove button for this new entry
+    newEntry.querySelector('.remove-contact').style.display = 'block';
+
+    // Append new entry
+    container.appendChild(newEntry);
+
+    // Show remove button on previous entries too
+    container.querySelectorAll('.remove-contact').forEach((btn, index) => {
+      btn.style.display = index === 0 ? 'none' : 'block';
+    });
+  });
+
+  // Remove close contact entry
+  container.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-contact') || e.target.closest('.remove-contact')) {
+      const allEntries = container.querySelectorAll('.close-contact-entry');
+      if (allEntries.length > 1) {
+        e.target.closest('.close-contact-entry').remove();
+
+        // Hide remove button if only one entry left
+        if (container.querySelectorAll('.close-contact-entry').length === 1) {
+          container.querySelector('.remove-contact').style.display = 'none';
+        }
+      }
+    }
+  });
+});
+</script>
 
 </body>
 
