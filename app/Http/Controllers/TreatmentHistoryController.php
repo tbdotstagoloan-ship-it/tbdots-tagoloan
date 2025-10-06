@@ -14,7 +14,7 @@ class TreatmentHistoryController extends Controller
             'hist_treatment_unit' => 'required|string|max:255',
             'hist_regimen' => 'required|string|max:255',
             'hist_outcome' => 'required|string|max:50',
-            'treatfacility_id' => 'nullable|integer|exists:treatment_facilities,id',
+            // 'treatfacility_id' => 'nullable|integer|exists:treatment_facilities,id',
         ]);
 
         TreatmentHistory::create([
@@ -23,7 +23,7 @@ class TreatmentHistoryController extends Controller
             'hist_treatment_unit' => $request->hist_treatment_unit,
             'hist_regimen' => $request->hist_regimen,
             'hist_outcome' => $request->hist_outcome,
-            'treatfacility_id' => $request->treatfacility_id, // ✅ Added this
+            // 'treatfacility_id' => $request->treatfacility_id, 
         ]);
 
 

@@ -496,7 +496,6 @@
                 <span class="fw-bold" style="color: #059669; font-size: 1.5rem;">
                     {{ $patient->pat_full_name }}
                 </span>
-                <p>Version 1</p>
             </h1>
 
             <a href="{{ url('patient') }}" class="btn btn-secondary backBtn">
@@ -1055,7 +1054,13 @@
 
                                         @if ($hasData)
                                             <tr>
-                                                <td>{{ $history->hist_date_tx_started ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($history->hist_date_tx_started))
+                                                        {{ \Carbon\Carbon::parse($history->hist_date_tx_started)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $history->hist_treatment_unit ?? '—' }}</td>
                                                 <td>{{ $history->hist_regimen ?? '—' }}</td>
                                                 <td>{{ $history->hist_outcome ?? '—' }}</td>
@@ -1106,7 +1111,13 @@
 
                                         @if ($hasData)
                                             <tr>
-                                                <td>{{ $comorbidity->com_date_diagnosed ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($comorbidity->com_date_diagnosed))
+                                                        {{ \Carbon\Carbon::parse($comorbidity->com_date_diagnosed)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $comorbidity->com_type ?? '—' }}</td>
                                                 <td>{{ $comorbidity->com_other ?? '—' }}</td>
                                                 <td>{{ $comorbidity->com_treatment ?? '—' }}</td>
@@ -1460,7 +1471,13 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ $patient->prescribedDrugs->first()->drug_con_date ?? '—' }}</td>
+                                        <td>
+                                            @if(!empty($patient->prescribedDrugs->first()->drug_con_date))
+                                                {{ \Carbon\Carbon::parse($patient->prescribedDrugs->first()->drug_con_date)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
                                         <td>{{ $patient->prescribedDrugs->first()->drug_con_name ?? '—' }}</td>
                                         <td>{{ $patient->prescribedDrugs->first()->drug_con_strength ?? '—' }}</td>
                                         <td>{{ $patient->prescribedDrugs->first()->drug_con_unit ?? '—' }}</td>
@@ -1639,9 +1656,21 @@
 
                                         @if ($hasData)
                                             <tr>
-                                                <td>{{ $adverse->adv_ae_date ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($adverse->adv_ae_date))
+                                                        {{ \Carbon\Carbon::parse($adverse->adv_ae_date)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $adverse->adv_specific_ae ?? '—' }}</td>
-                                                <td>{{ $adverse->adv_fda_reported_date ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($adverse->adv_fda_reported_date))
+                                                        {{ \Carbon\Carbon::parse($adverse->adv_fda_reported_date)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endif
                                     @endforeach
@@ -1689,7 +1718,13 @@
 
                                         @if ($hasData)
                                             <tr>
-                                                <td>{{ $prog->prog_date ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($prog->prog_date))
+                                                        {{ \Carbon\Carbon::parse($prog->prog_date)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $prog->prog_problem ?? '—' }}</td>
                                                 <td>{{ $prog->prog_action_taken ?? '—' }}</td>
                                                 <td>{{ $prog->prog_plan ?? '—' }}</td>
@@ -1750,8 +1785,20 @@
                                                 <td>{{ $contact->con_age ?? '—' }}</td>
                                                 <td>{{ $contact->con_sex ?? '—' }}</td>
                                                 <td>{{ $contact->con_relationship ?? '—' }}</td>
-                                                <td>{{ $contact->con_initial_screening ?? '—' }}</td>
-                                                <td>{{ $contact->con_follow_up ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($contact->con_initial_screening))
+                                                        {{ \Carbon\Carbon::parse($contact->con_initial_screening)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(!empty($contact->con_follow_up))
+                                                        {{ \Carbon\Carbon::parse($contact->con_follow_up)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $contact->con_remarks ?? '—' }}</td>
                                             </tr>
                                         @endif
@@ -1798,7 +1845,13 @@
 
                                         @if ($hasData)
                                             <tr>
-                                                <td>{{ $sputum->sput_date_collected ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($sputum->sput_date_collected))
+                                                        {{ \Carbon\Carbon::parse($sputum->sput_date_collected)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $sputum->sput_smear_result ?? '—' }}</td>
                                                 <td>{{ $sputum->sput_xpert_result ?? '—' }}</td>
                                             </tr>
@@ -1847,7 +1900,13 @@
 
                                         @if ($hasData)
                                             <tr>
-                                                <td>{{ $xray->xray_date_examined ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($xray->xray_date_examined))
+                                                        {{ \Carbon\Carbon::parse($xray->xray_date_examined)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $xray->xray_impression ?? '—' }}</td>
                                                 <td>{{ $xray->xray_descriptive_comment ?? '—' }}</td>
                                             </tr>
@@ -1901,7 +1960,13 @@
                                         @if ($hasData)
                                             <tr>
                                                 <td>{{ $followup->fol_months_after_tx ?? '—' }}</td>
-                                                <td>{{ $followup->fol_date ?? '—' }}</td>
+                                                <td>
+                                                    @if(!empty($followup->fol_date))
+                                                        {{ \Carbon\Carbon::parse($followup->fol_date)->format('F j, Y') }}
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td>{{ $followup->fol_cxr_findings ?? '—' }}</td>
                                                 <td>{{ $followup->fol_smear_xpert ?? '—' }}</td>
                                                 <td>{{ $followup->fol_tbc_dst ?? '—' }}</td>
