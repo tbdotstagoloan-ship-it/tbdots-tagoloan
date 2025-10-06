@@ -4,7 +4,7 @@ use App\Http\Controllers\SputumMonitoringController;
 use App\Http\Controllers\CloseContactController;
 use App\Http\Controllers\PatientProgressController;
 use App\Http\Controllers\AdverseEventController;
-use App\Http\Controllers\ReferralController;
+use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\LaboratoryTestController;
 use App\Http\Controllers\PrescribedDrugsController;
 use App\Http\Controllers\TreatmentOutcomeController;
@@ -141,7 +141,8 @@ Route::post('/patients/{id}/comorbidities', [ComorbidityController::class, 'stor
 Route::post('/patients/{id}/hiv', [HivController::class, 'store'])->name('hiv.store');
 Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::class, 'store'])->name('treatment-outcome.store');
 Route::post('/patients/{id}/prescribed-drugs', [PrescribedDrugsController::class, 'store'])->name('prescribed-drugs.store');
+
 Route::post('/patients/{id}/laboratory-tests', [LaboratoryTestController::class, 'store'])->name('laboratory-tests.store');
-Route::post('/patients/{id}/referrals', [ReferralController::class, 'store'])->name('referrals.store');
+Route::put('/laboratory-tests/{id}', [LaboratoryTestController::class, 'update'])->name('laboratory-tests.update');
 
-
+Route::put('/referrals/{id}', [DiagnosisController::class, 'update'])->name('referrals.update');
