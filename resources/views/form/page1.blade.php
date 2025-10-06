@@ -92,7 +92,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-          <img src="{{ url('assets/img/logout.png') }}" class="menu-icon" alt="">
+           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -196,9 +196,11 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-end mt-3">
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
-                </div>
+                <div class="d-flex justify-content-end mt-4">
+                <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
               </div>
 
               <!-- TAB 2: Patient Demographic -->
@@ -299,7 +301,7 @@
                   <div class="col-md-4">
                     <label for="pat_permanent_zip_code">Zip Code</label>
                     <input type="text" name="pat_permanent_zip_code" id="pat_permanent_zip_code" class="form-control"
-                      placeholder="Zip code">
+                      placeholder="Zip code" maxlength="5">
                     <div class="error"></div>
                   </div>
                 </div>
@@ -332,13 +334,17 @@
                   <div class="col-md-4">
                     <label for="pat_current_zip_code">Zip Code</label>
                     <input type="text" name="pat_current_zip_code" id="pat_current_zip_code" class="form-control"
-                      placeholder="Zip code">
+                      placeholder="Zip code" maxlength="5">
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -391,9 +397,13 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -471,9 +481,13 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -489,8 +503,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="diag_notification_date">Date of Notification</label>
-                    <input type="date" name="diag_notification_date" id="diag_notification_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="diag_notification_date" id="diag_notification_date" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -557,9 +570,13 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -628,9 +645,11 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="submit" class="btn btn-success">Submit</button>
+                <div class="d-flex justify-content-between mt-4">
+                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                 </div>
               </div>
             </div>
@@ -960,14 +979,29 @@
     });
 
     // ✅ Restrict to digits only in real-time
-    [pat_contact_number, pat_other_contact].forEach(input => {
+    [pat_philhealth_no, pat_permanent_zip_code, pat_current_zip_code, pat_contact_number, pat_other_contact].forEach(input => {
       input.addEventListener("input", () => {
         input.value = input.value.replace(/\D/g, ""); // remove non-digits
       });
     });
   </script>
 
+    <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const screeningInput = document.getElementById('diag_date_of_screening');
+    const notificationInput = document.getElementById('diag_notification_date');
 
+    screeningInput.addEventListener('change', function() {
+      if (this.value) {
+        // Auto-fill notification date same as screening date
+        notificationInput.value = this.value;
+      } else {
+        // Clear if screening date removed
+        notificationInput.value = '';
+      }
+    });
+  });
+</script>
 
 </body>
 

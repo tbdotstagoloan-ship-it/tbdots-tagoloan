@@ -91,7 +91,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-          <img src="{{ url('assets/img/logout.png') }}" class="menu-icon" alt="">
+           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -181,8 +181,10 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-end mt-3">
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-end mt-4">
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -390,9 +392,13 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -423,9 +429,13 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -455,14 +465,19 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
               <!-- TAB 5: Medicine -->
               <div class="tab-pane fade" id="medicine" role="tabpanel">
+                <h5 class="mb-4">Prescribed Drugs</h5>
                 <div class="row mb-2">
                   <div class="col-md-3">
                     <label for="drug_start_date">Date Start</label>
@@ -499,7 +514,7 @@
                 <div class="row mb-2">
                   <div class="col-md-3">
                     <label for="drug_con_date">Continuation</label>
-                    <input type="date" name="drug_con_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="drug_con_date" id="drug_con_date" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
@@ -527,9 +542,13 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="button" class="btn btn-primary next-tab">Next</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                  Next <i class="fas fa-arrow-right"></i>
+                </button>
                 </div>
               </div>
 
@@ -595,8 +614,7 @@
                 <div class="row mb-3">
                   <div class="col-md-3">
                     <label for="pha_intensive_start">Intensive Phase Start Date</label>
-                    <input type="date" name="pha_intensive_start" id="trt_intensive_phase_start" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="pha_intensive_start" id="trt_intensive_phase_start" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
 
@@ -607,8 +625,7 @@
                   </div>
                   <div class="col-md-3">
                     <label for="pha_continuation_start">Continuation Phase Start</label>
-                    <input type="date" name="pha_continuation_start" id="pha_continuation_start" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="pha_continuation_start" id="pha_continuation_start" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
 
@@ -655,9 +672,11 @@
                     <div class="error"></div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-between mt-3">
-                  <button type="button" class="btn btn-secondary prev-tab">Previous</button>
-                  <button type="submit" class="btn btn-success" id="openPreview">Submit</button>
+                <div class="d-flex justify-content-between mt-4">
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                  <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
                 </div>
               </div>
 
@@ -1024,48 +1043,46 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const startInput = document.getElementById('trt_intensive_phase_start');
-    const endInput = document.getElementById('trt_intensive_phase_end');
+    const drugStart = document.getElementById('trt_date_start');
+    const drugContinuation = document.getElementById('drug_con_date');
+    const intensiveStart = document.getElementById('trt_intensive_phase_start');
+    const intensiveEnd = document.getElementById('trt_intensive_phase_end');
+    const contStart = document.getElementById('pha_continuation_start');
+    const contEnd = document.getElementById('pha_continuation_end');
 
-    startInput.addEventListener('change', function() {
+    drugStart.addEventListener('change', function() {
       if (this.value) {
         const startDate = new Date(this.value);
 
-        // Add 56 days (Intensive Phase duration)
-        const endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + 56);
+        // Intensive Phase Start = Date Start
+        intensiveStart.value = this.value;
 
-        // Format to YYYY-MM-DD
-        const formatted = endDate.toISOString().split('T')[0];
+        // Intensive Phase End = Start + 56 days
+        const intensiveEndDate = new Date(startDate);
+        intensiveEndDate.setDate(startDate.getDate() + 56);
+        intensiveEnd.value = intensiveEndDate.toISOString().split('T')[0];
 
-        // Set the end date field automatically
-        endInput.value = formatted;
+        // Drug Continuation = Start + 57 days (day after Intensive End)
+        const drugConDate = new Date(startDate);
+        drugConDate.setDate(startDate.getDate() + 56 + 1);
+        drugContinuation.value = drugConDate.toISOString().split('T')[0];
+
+        // Continuation Phase Start = same as Drug Continuation
+        contStart.value = drugContinuation.value;
+
+        // Continuation Phase End = Continuation Start + 6 months
+        const contEndDate = new Date(drugConDate);
+        contEndDate.setMonth(contEndDate.getMonth() + 6);
+        contEnd.value = contEndDate.toISOString().split('T')[0];
+      } else {
+        intensiveStart.value = '';
+        intensiveEnd.value = '';
+        drugContinuation.value = '';
+        contStart.value = '';
+        contEnd.value = '';
       }
     });
   });
-  </script>
-
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const startInput = document.getElementById('pha_continuation_start');
-  const endInput = document.getElementById('pha_continuation_end');
-
-  startInput.addEventListener('change', function() {
-    if (this.value) {
-      const startDate = new Date(this.value);
-
-      // Add 6 months to the selected start date
-      const endDate = new Date(startDate);
-      endDate.setMonth(startDate.getMonth() + 6);
-
-      // Format the date to YYYY-MM-DD
-      const formattedEndDate = endDate.toISOString().split('T')[0];
-
-      // Set the calculated end date
-      endInput.value = formattedEndDate;
-    }
-  });
-});
 </script>
 
 
