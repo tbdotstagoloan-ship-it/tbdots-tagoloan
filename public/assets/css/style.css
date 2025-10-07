@@ -578,11 +578,11 @@ body {
     flex-shrink: 0;
 }
 
-/* .card-icon img {
+.card-icon img {
     width: 30px;
     height: 30px;
     object-fit: contain;
-} */
+}
 
 
 
@@ -790,8 +790,8 @@ body {
     transition: border-color 0.3s ease;
 }
 
-.form-control:focus {
-    /* border-color: #2cc094; */
+/* .form-control:focus {
+    border-color: #2cc094;
     border-color: #fff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.1);
@@ -809,7 +809,7 @@ input.success, select.success {
   font-size: 1rem;
   color: #ff3860;
   margin-top: 1px;
-}
+} */
 
 label {
     font-weight: 600;

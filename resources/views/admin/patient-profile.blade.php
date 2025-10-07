@@ -909,7 +909,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Anatomical Site</th>
-                                    <th>Site Other</th>
+                                    <th>Extra-pulmonary Site</th>
                                     <th>Registration Group</th>
                                 </tr>
                             </thead>

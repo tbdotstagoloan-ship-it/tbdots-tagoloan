@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdherenceController;
 use App\Http\Controllers\SputumMonitoringController;
 use App\Http\Controllers\CloseContactController;
 use App\Http\Controllers\PatientProgressController;
@@ -146,3 +147,5 @@ Route::post('/patients/{id}/laboratory-tests', [LaboratoryTestController::class,
 Route::put('/laboratory-tests/{id}', [LaboratoryTestController::class, 'update'])->name('laboratory-tests.update');
 
 Route::put('/referrals/{id}', [DiagnosisController::class, 'update'])->name('referrals.update');
+
+Route::put('/patients/adherence/{id}', [AdherenceController::class, 'update'])->name('adherence.update');

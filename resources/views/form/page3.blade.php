@@ -8,7 +8,36 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
   <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <style>
+    .card {
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
 
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .preview-table th {
+      width: 35%;
+      color: #6b7280;
+      font-weight: 600;
+      vertical-align: top;
+    }
+
+    .preview-table td {
+      color: #111827;
+      word-break: break-word;
+    }
+
+    .preview-table tr:not(:last-child) td,
+    .preview-table tr:not(:last-child) th {
+      border-bottom: 1px solid #f3f4f6;
+      padding-bottom: 0.75rem;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -437,8 +466,10 @@
                   <!-- Auto-filled preview will show here -->
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Edit</button>
-                  <button type="button" class="btn btn-primary" id="confirmSubmit">Confirm & Submit</button>
+                  <button type="button" class="btn backBtn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-edit me-1"></i>Edit</button>
+                  <button type="button" class="btn btn-success" id="confirmSubmit">
+                    <i class="fas fa-paper-plane me-1"></i> Confirm & Submit </button>
                 </div>
               </div>
             </div>
@@ -558,30 +589,101 @@
 
         const p = form; // shortcut to form elements
         let html = `
-      <table class="table table-bordered">
-        <tbody>
-          <tr><th colspan="2" class="bg-light">E. Serious Adverse Events</th></tr>
-          <tr><th>Date of AE</th><td>${p.adv_ae_date.value}</td></tr>
-          <tr><th>Specific AE</th><td>${p.adv_specific_ae.value}</td></tr>
-          <tr><th>Date Reported to FDA</th><td>${p.adv_fda_reported_date.value}</td></tr>
+        <div class="container-fluid px-2">
 
-          <tr><th colspan="2" class="bg-light">F. Patient Progress Report Form</th></tr>
-          <tr><th>Date</th><td>${p.prog_date.value}</td></tr>
-          <tr><th>Problem</th><td>${p.prog_problem.value}</td></tr>
-          <tr><th>Action Taken</th><td>${p.prog_action_taken.value}</td></tr>
-          <tr><th>Plan</th><td>${p.prog_plan.value}</td></tr>
+          <!-- Serious Adverse Events -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-1">E. Serious Adverse Events</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Date of AE</th><td>${p.adv_ae_date.value}</td></tr>
+                  <tr><th>Specific AE</th><td>${p.adv_specific_ae.value}</td></tr>
+                  <tr><th>Date Reported to FDA</th><td>${p.adv_fda_reported_date.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-          <tr><th colspan="2" class="bg-light">G. Close Contacts</th></tr>
-          <tr><th>Name</th><td>${p.con_name.value}</td></tr>
-          <tr><th>Age</th><td>${p.con_age.value}</td></tr>
-          <tr><th>Sex</th><td>${p.con_sex.value}</td></tr>
-          <tr><th>Relationship</th><td>${p.con_relationship.value}</td></tr>
-          <tr><th>Initial Screening</th><td>${p.con_initial_screening.value}</td></tr>
-          <tr><th>Follow-up</th><td>${p.con_follow_up.value}</td></tr>
-          <tr><th>Remarks</th><td>${p.con_remarks.value}</td></tr>
-        </tbody>
-      </table>
-    `;
+          <!-- Patient Progress Report Form -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-1">F. Patient Progress Report Form</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Date</th><td>${p.prog_date.value}</td></tr>
+                  <tr><th>Problem</th><td>${p.prog_problem.value}</td></tr>
+                  <tr><th>Action Taken</th><td>${p.prog_action_taken.value}</td></tr>
+                  <tr><th>Plan</th><td>${p.prog_plan.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Close Contacts -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-1">G. Close Contacts</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Name</th><td>${p.con_name.value}</td></tr>
+                  <tr><th>Age</th><td>${p.con_age.value}</td></tr>
+                  <tr><th>Sex</th><td>${p.con_sex.value}</td></tr>
+                  <tr><th>Relationship</th><td>${p.con_relationship.value}</td></tr>
+                  <tr><th>Initial Screening</th><td>${p.con_initial_screening.value}</td></tr>
+                  <tr><th>Follow-up</th><td>${p.con_follow_up.value}</td></tr>
+                  <tr><th>Remarks</th><td>${p.con_remarks.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Sputum Monitoring -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-1">H. Sputum Monitoring</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Date Collected</th><td>${p.sput_date_collected.value}</td></tr>
+                  <tr><th>Smear Microscopy / TB LAMP</th><td>${p.sput_smear_result.value}</td></tr>
+                  <tr><th>Xpert MTB/RIF</th><td>${p.sput_xpert_result.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Chest X-ray -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-1">I. Chest X-ray</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Date Examined</th><td>${p.xray_date_examined.value}</td></tr>
+                  <tr><th>Impression / Comparative Reading</th><td>${p.xray_impression.value}</td></tr>
+                  <tr><th>Descriptive Comments</th><td>${p.xray_descriptive_comment.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Post Treatment Follow-up -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-1">J. Post Treatment Follow-up</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Months After Treatment</th><td>${p.fol_months_after_tx.value}</td></tr>
+                  <tr><th>Date</th><td>${p.fol_date.value}</td></tr>
+                  <tr><th>CXR Findings</th><td>${p.fol_cxr_findings.value}</td></tr>
+                  <tr><th>Smear / Xpert</th><td>${p.fol_smear_xpert.value}</td></tr>
+                  <tr><th>TBC & DST</th><td>${p.fol_tbc_dst.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      `;
 
         document.getElementById("previewContent").innerHTML = html;
         let modal = new bootstrap.Modal(document.getElementById("previewModal"));
