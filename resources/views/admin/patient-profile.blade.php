@@ -1324,58 +1324,66 @@
 
 
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <h5 class="fw-bold mb-1">Treatment Outcome</h5>
-                            <p class="text-muted small mb-0">List of all recorded treatment outcomes and reasons.</p>
-                        </div>
-                        <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                            data-bs-target="#editTreatmentOutcomeModal">
-                            <i class="fas fa-plus"></i> Add Record
-                        </button>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Treatment Outcome</h5>
+                        <p class="text-muted small mb-0">List of all recorded treatment outcomes and reasons.</p>
                     </div>
-
-                    @if ($patient->treatmentOutcomes->isNotEmpty())
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Outcome</th>
-                                        <th>Date of Outcome</th>
-                                        <th>Reason</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($patient->treatmentOutcomes as $outcome)
-                                        @php
-                                            $hasData = !empty($outcome->out_outcome)
-                                                || !empty($outcome->out_date)
-                                                || !empty($outcome->out_reason);
-                                        @endphp
-
-                                        @if ($hasData)
-                                            <tr>
-                                                <td>{{ $outcome->out_outcome ?? '—' }}</td>
-                                                <td>
-                                                    @if (!empty($outcome->out_date))
-                                                        {{ \Carbon\Carbon::parse($outcome->out_date)->format('F j, Y') }}
-                                                    @else
-                                                        —
-                                                    @endif
-                                                </td>
-                                                <td>{{ $outcome->out_reason ?? '—' }}</td>
-                                            </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @else
-                        <p class="text-muted fst-italic mt-2">
-                            No treatment outcome recorded for this patient.
-                        </p>
-                    @endif
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" 
+                            onclick="editOutcome(
+                                {{ $patient->treatmentOutcomes->first()->id ?? 0 }}, 
+                                '{{ addslashes($patient->treatmentOutcomes->first()->out_outcome ?? '') }}', 
+                                '{{ $patient->treatmentOutcomes->first()->out_date ?? '' }}', 
+                                '{{ addslashes($patient->treatmentOutcomes->first()->out_reason ?? '') }}'
+                            )"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editTreatmentOutcomeModal"
+                            @if($patient->treatmentOutcomes->isEmpty()) disabled @endif>
+                        <i class="fas fa-edit"></i> Edit Outcome
+                    </button>
                 </div>
+
+                @if ($patient->treatmentOutcomes->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Outcome</th>
+                                    <th>Date of Outcome</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->treatmentOutcomes as $outcome)
+                                    @php
+                                        $hasData = !empty($outcome->out_outcome)
+                                            || !empty($outcome->out_date)
+                                            || !empty($outcome->out_reason);
+                                    @endphp
+
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>{{ $outcome->out_outcome ?? '—' }}</td>
+                                            <td>
+                                                @if (!empty($outcome->out_date))
+                                                    {{ \Carbon\Carbon::parse($outcome->out_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $outcome->out_reason ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">
+                        No treatment outcome recorded for this patient.
+                    </p>
+                @endif
+            </div>
 
 
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
@@ -1464,10 +1472,10 @@
                             <p class="text-muted small mb-0">Details of treatment supporter, treatment schedules, and
                                 patient measurements.</p>
                         </div>
-                        <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                             data-bs-target="#editAdministrationModal">
                             <i class="fas fa-plus"></i> Add Record
-                        </button>
+                        </button> -->
                     </div>
 
                     {{-- Table 1: Treatment Supporter Information --}}
@@ -1577,9 +1585,6 @@
                         </p>
                     @endif
                 </div>
-
-
-
 
             </div>
 
@@ -2374,55 +2379,57 @@
 
 
         <!-- Treatment Outcome Modal -->
-        <div class="modal fade" id="editTreatmentOutcomeModal" tabindex="-1"
-            aria-labelledby="editTreatmentOutcomeModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editTreatmentRegimenModalLabel">Treatment Outcome</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal fade" id="editTreatmentOutcomeModal" tabindex="-1" aria-labelledby="editTreatmentOutcomeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTreatmentOutcomeModalLabel">Edit Treatment Outcome</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form method="POST" id="editOutcomeForm">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="edit_out_outcome" class="form-label">Outcome</label>
+                            <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
+                            value="{{ old('out_outcome', $patient->treatmentOutcomes->first()->out_outcome ?? '') }}" required>
+                                <option value="">Please Select</option>
+                                <option value="Cured">Cured</option>
+                                <option value="Treatment Completed">Treatment Completed</option>
+                                <option value="Lost to Follow-up">Lost to Follow-up</option>
+                                <option value="Died">Died</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit_out_date" class="form-label">Date of Outcome</label>
+                            <input type="date" class="form-control" id="edit_out_date" name="out_date"
+                                max="<?php echo date('Y-m-d'); ?>"
+                                value="{{ old('out_outcome', $patient->treatmentOutcomes->first()->out_outcome ?? '') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edit_out_reason" class="form-label">Reason</label>
+                            <input type="text" class="form-control" id="edit_out_reason" name="out_reason"
+                                placeholder="Enter reason"
+                                value="{{ old('out_outcome', $patient->treatmentOutcomes->first()->out_outcome ?? '') }}">
+                        </div>
                     </div>
 
-                    <!-- ✅ Form with route and CSRF -->
-                    <form method="POST" action="{{ route('treatment-outcome.store', $patient->id) }}">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="row">
-
-                                <div class="mb-3">
-                                    <label for="out_outcome" class="form-label">Outcome</label>
-                                    <select class="form-control form-select" id="out_outcome" name="out_outcome"
-                                        required>
-                                        <option value="">Please Select</option>
-                                        <option value="Cured">Cured</option>
-                                        <option value="Treatment Completed">Treatment Completed</option>
-                                        <option value="Lost to Follow-up">Lost to Follow-up</option>
-                                        <option value="Died">Died</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="out_date" class="form-label">Date of Outcome</label>
-                                <input type="date" class="form-control" id="out_date" name="out_date"
-                                    max="<?php echo date('Y-m-d'); ?>">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="out_reason" class="form-label">Reason</label>
-                                <input type="text" class="form-control" id="out_reason" name="out_reason"
-                                    placeholder="Reason">
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-close me-1"></i>Close
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i>Update
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
 
         <!-- Prescribed Drugs Modal -->
@@ -3012,13 +3019,31 @@
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const modal = document.getElementById('editDiagnosisModal');
-        modal.addEventListener('shown.bs.modal', function () {
-            document.getElementById('diag_diagnosis_date').focus();
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('editDiagnosisModal');
+            modal.addEventListener('shown.bs.modal', function () {
+                document.getElementById('diag_diagnosis_date').focus();
+            });
         });
+    </script>
+
+    <script>
+    function editOutcome(id, outcome, date, reason) {
+        // Set form action to update route
+        const form = document.getElementById('editOutcomeForm');
+        form.action = `/treatment-outcome/${id}`;
+        
+        // Populate form fields with existing data
+        document.getElementById('edit_out_outcome').value = outcome || '';
+        document.getElementById('edit_out_date').value = date || '';
+        document.getElementById('edit_out_reason').value = reason || '';
+    }
+
+    // Reset form when modal closes
+    document.getElementById('editTreatmentOutcomeModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('editOutcomeForm').reset();
     });
-</script>
+    </script>
 
 </body>
 

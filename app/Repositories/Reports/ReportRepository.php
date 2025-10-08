@@ -219,7 +219,9 @@ class ReportRepository implements ReportRepositoryInterface
             ->where(function($q){
                 $q->whereNull('t.out_outcome')->orWhere('t.out_outcome', 'Ongoing');
             })
-            ->orderBy('a.pha_continuation_start', 'desc')
+            // 👉 Para lumabas lang kapag Day 1 or higher
+            ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
+            ->orderBy('a.pha_continuation_start')
             ->paginate($perPage);
     }
 

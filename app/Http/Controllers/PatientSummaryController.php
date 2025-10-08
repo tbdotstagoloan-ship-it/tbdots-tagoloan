@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\TBClassification;
 use Illuminate\Http\Request;
 use App\Models\Patient;
+use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class PatientSummaryController extends Controller
 {
@@ -54,6 +58,18 @@ class PatientSummaryController extends Controller
             'clinic' => 'TB DOTS Tagoloan' // replace with your facility name
         ])->setPaper('A4', 'portrait');
 
+        // ✅ Add Page Number
+    $canvas = $pdf->getDomPDF()->getCanvas();
+    $canvas->page_text(
+        520, // X position
+        30, // Y position
+        // "Page {PAGE_NUM} of {PAGE_COUNT}",
+        "{PAGE_NUM}", 
+        null, 
+        10, 
+        [0, 0, 0] // Text color (black)
+    );
+
         return $pdf->stream('Patient Summary Report' . '.pdf');
     }
 
@@ -75,7 +91,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.newly-diagnosed-report', compact('new'));
+    $pdf = PDF::loadView('pdf.newly-diagnosed-report', compact('new'))
+        ->setPaper('A4', 'portrait');
+
+    // ✅ Add Page Number
+    $canvas = $pdf->getDomPDF()->getCanvas();
+    $canvas->page_text(
+        520, // X position
+        30, // Y position
+        // "Page {PAGE_NUM} of {PAGE_COUNT}",
+        "{PAGE_NUM}", 
+        null, 
+        10, 
+        [0, 0, 0] // Text color (black)
+    );
+
         return $pdf->stream('Newly Diagnosed Report.pdf');
     }
 
@@ -97,9 +127,22 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.relapse-report', compact('relapse'));
-        return $pdf->stream('Relapse Report.pdf');
-    }
+        $pdf = Pdf::loadView('pdf.relapse-report', compact('relapse'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number 
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position
+            30, // Y position
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+            return $pdf->stream('Relapse Report.pdf');
+        }
 
     public function bacteriologicallyConfirmedPDF()
     {
@@ -119,7 +162,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.bacteriologically-confirmed-report', compact('bacteriologicallyConfirmed'));
+        $pdf = Pdf::loadView('pdf.bacteriologically-confirmed-report', compact('bacteriologicallyConfirmed'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Bacteriologically-Confirmed TB Report.pdf');
     }
 
@@ -141,7 +198,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.clinically-diagnosed-report', compact('clinicallyDiagnosed'));
+        $pdf = Pdf::loadView('pdf.clinically-diagnosed-report', compact('clinicallyDiagnosed'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Clinically Diagnosed Report.pdf');
     }
 
@@ -163,7 +234,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.pulmonary-report', compact('pulmonary'));
+        $pdf = Pdf::loadView('pdf.pulmonary-report', compact('pulmonary'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Pulmonary TB Report.pdf');
     }
 
@@ -186,7 +271,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.extra-pulmonary-report', compact('extraPulmonary'));
+        $pdf = Pdf::loadView('pdf.extra-pulmonary-report', compact('extraPulmonary'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Extra Pulmonary TB Report.pdf');
     }
 
@@ -209,7 +308,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.ongoing-treatment-report', compact('ongoingPatients'));
+        $pdf = Pdf::loadView('pdf.ongoing-treatment-report', compact('ongoingPatients'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Ongoing Treatment Report.pdf');
     }
 
@@ -232,7 +345,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no','desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.barangay-cases-report', compact('brgyCases'));
+        $pdf = Pdf::loadView('pdf.barangay-cases-report', compact('brgyCases'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Barangay Cases Report.pdf');
     }
 
@@ -269,7 +396,21 @@ class PatientSummaryController extends Controller
             ->orderBy('a.pha_intensive_start', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.intensive-treatment-report', compact('intensive'));
+        $pdf = Pdf::loadView('pdf.intensive-treatment-report', compact('intensive'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Intensive Treatment Report.pdf'); 
     }
 
@@ -283,9 +424,9 @@ class PatientSummaryController extends Controller
             ->select(
                 'p.pat_full_name',
                 'p.pat_sex',
-                'pd.drug_name',
-                'pd.drug_strength',
-                'pd.drug_unit',
+                'pd.drug_con_name',
+                'pd.drug_con_strength',
+                'pd.drug_con_unit',
                 'a.pha_continuation_start',
                 'a.pha_continuation_end',
                 't.out_outcome as outcome',
@@ -297,16 +438,31 @@ class PatientSummaryController extends Controller
                 END as treatment_day
             ")
             )
-            ->where('pd.drug_name', '2FDC')   // Maintenance = 2FDC
+            ->where('pd.drug_con_name', '2FDC')   // Maintenance = 2FDC
             ->where(function($query) {
                 $query->whereNull('t.out_outcome')
                     ->orWhere('t.out_outcome', 'Ongoing'); // only ongoing patients
             })
             // ->orderBy('p.pat_full_name')
+            ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
             ->orderBy('a.pha_continuation_start')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.maintenance-treatment-report', compact('maintenanceTreatment'));
+        $pdf = Pdf::loadView('pdf.maintenance-treatment-report', compact('maintenanceTreatment'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Maintenance Treatment Report.pdf');
 
     }
@@ -329,7 +485,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.underage-report', compact('underage'));
+        $pdf = Pdf::loadView('pdf.underage-report', compact('underage'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Underage Patients Report.pdf');
     }
 
@@ -348,7 +518,21 @@ class PatientSummaryController extends Controller
             ->orderBy('s.sput_date_collected')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.sputum-monitoring-report', compact('sputum'));
+        $pdf = Pdf::loadView('pdf.sputum-monitoring-report', compact('sputum'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Sputum Monitoring Report.pdf');
     }
 
@@ -372,7 +556,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.cured-report', compact('cured'));
+        $pdf = Pdf::loadView('pdf.cured-report', compact('cured'))
+        ->setPaper('A4', 'portrait');
+        
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Cured Patients Report.pdf'); 
     }
 
@@ -397,7 +595,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.treatment-completed-report', compact('treatmentCompleted'));
+        $pdf = Pdf::loadView('pdf.treatment-completed-report', compact('treatmentCompleted'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Treatment Completed Report.pdf'); 
     }
 
@@ -420,7 +632,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.lost-to-follow-up-report', compact('lostToFollowUp'));
+        $pdf = Pdf::loadView('pdf.lost-to-follow-up-report', compact('lostToFollowUp'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Lost to Follow Up Report.pdf');
     }
 
@@ -445,7 +671,21 @@ class PatientSummaryController extends Controller
             ->orderBy('d.diag_tb_case_no', 'desc')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.expired-report', compact('expired'));
+        $pdf = Pdf::loadView('pdf.expired-report', compact('expired'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Expired Patients Report.pdf');
     }
 
@@ -483,7 +723,21 @@ class PatientSummaryController extends Controller
             ->orderBy('barangay')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.barangay-cases-notification-report', compact('brgyCasesNotification'));
+        $pdf = Pdf::loadView('pdf.barangay-cases-notification-report', compact('brgyCasesNotification'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Barangay Cases Notification Report.pdf'); 
     }
 
@@ -510,7 +764,21 @@ class PatientSummaryController extends Controller
             ->orderBy('quarter')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.quarterly-cases-notification-report', compact('quarterlyCasesNotification'));
+        $pdf = Pdf::loadView('pdf.quarterly-cases-notification-report', compact('quarterlyCasesNotification'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Quarterly Cases Notification Report.pdf');
     }
 
@@ -538,7 +806,21 @@ class PatientSummaryController extends Controller
             ->orderBy('quarter')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.quarterly-tb-classification-report', compact('quarterlyTBClassification'));
+        $pdf = Pdf::loadView('pdf.quarterly-tb-classification-report', compact('quarterlyTBClassification'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Quarterly TB Classification Report.pdf');
     }
 
@@ -566,7 +848,21 @@ class PatientSummaryController extends Controller
             ->orderBy('quarter')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.quarterly-anatomical-site-report', compact('quarterlyAnatomicalSite'));
+        $pdf = Pdf::loadView('pdf.quarterly-anatomical-site-report', compact('quarterlyAnatomicalSite'))
+        ->setPaper('A4', 'portrait');
+
+         // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Quarterly Anatomical Site Report.pdf');
     }
 
@@ -601,7 +897,21 @@ class PatientSummaryController extends Controller
             ->orderBy('quarter')
             ->get();
             
-        $pdf = Pdf::loadView('pdf.quarterly-treatment-outcome-report', compact('quarterlyOutcome'));
+        $pdf = Pdf::loadView('pdf.quarterly-treatment-outcome-report', compact('quarterlyOutcome'))
+        ->setPaper('A4', 'portrait');
+
+        // ✅ Add Page Number
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $canvas->page_text(
+            520, // X position 
+            30, // Y position 
+            // "Page {PAGE_NUM} of {PAGE_COUNT}",
+            "{PAGE_NUM}", 
+            null, 
+            10, 
+            [0, 0, 0] // Text color (black)
+        );
+
         return $pdf->stream('Quarterly Treatment Outcome Report.pdf');
     }
 

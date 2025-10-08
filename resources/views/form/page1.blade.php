@@ -838,7 +838,7 @@
       // diag_mode_of_screening,
       // diag_date_of_screening,
       diag_diagnosis_date,
-      diag_notification_date,
+      // diag_notification_date,
       // diag_attending_physician,
       clas_bacteriological_status,
       clas_drug_resistance_status,

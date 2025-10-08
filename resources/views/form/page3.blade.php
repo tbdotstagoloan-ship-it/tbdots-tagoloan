@@ -193,15 +193,15 @@
                 <div class="row mb-2">
                   <div class="col-md-4">
                     <label for="adv_ae_date">Date of AE</label>
-                    <input type="date" name="adv_ae_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="adv_ae_date" id="adv_ae_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
                     <label for="adv_specific_ae">Specific AE</label>
-                    <input type="text" name="adv_specific_ae" class="form-control" placeholder="Specific AE">
+                    <input type="text" name="adv_specific_ae" id="adv_specific_ae" class="form-control" placeholder="Specific AE">
                   </div>
                   <div class="col-md-4">
                     <label for="adv_fda_reported_date">Date Reported to FDA</label>
-                    <input type="date" name="adv_fda_reported_date" class="form-control"
+                    <input type="date" name="adv_fda_reported_date" id="adv_fda_reported_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
                 </div>
@@ -219,19 +219,19 @@
                 <div class="row mb-2">
                   <div class="col-md-3">
                     <label for="prog_date">Date</label>
-                    <input type="date" name="prog_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="prog_date" id="prog_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-3">
                     <label for="prog_problem">Problem</label>
-                    <input type="text" name="prog_problem" class="form-control" placeholder="AE, reason of absence">
+                    <input type="text" name="prog_problem" id="prog_problem" class="form-control" placeholder="AE, reason of absence">
                   </div>
                   <div class="col-md-3">
                     <label for="prog_action_taken">Action Taken</label>
-                    <input type="text" name="prog_action_taken" class="form-control" placeholder="Action taken">
+                    <input type="text" name="prog_action_taken" id="prog_action_taken" class="form-control" placeholder="Action taken">
                   </div>
                   <div class="col-md-3">
                     <label for="prog_plan">Plan</label>
-                    <input type="text" name="prog_plan" class="form-control" placeholder="Plan">
+                    <input type="text" name="prog_plan" id="prog_plan" class="form-control" placeholder="Plan">
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
@@ -258,15 +258,15 @@
                     <div class="row mb-3">
                       <div class="col-md-3">
                         <label for="con_name">Name</label>
-                        <input type="text" name="con_name" class="form-control" placeholder="Name">
+                        <input type="text" name="con_name[]" id="con_name" class="form-control" placeholder="Name">
                       </div>
                       <div class="col-md-3">
                         <label for="con_age">Age</label>
-                        <input type="number" name="con_age" class="form-control" placeholder="Age" min="0" max="120">
+                        <input type="number" name="con_age[]" id="con_age" class="form-control" placeholder="Age" min="0" max="120">
                       </div>
                       <div class="col-md-3">
                         <label for="con_sex">Sex</label>
-                        <select name="con_sex" class="form-control form-select">
+                        <select name="con_sex[]" id="con_sex" class="form-control form-select">
                           <option value="" disabled selected>Select</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
@@ -274,22 +274,22 @@
                       </div>
                       <div class="col-md-3">
                         <label for="con_relationship">Relationship</label>
-                        <input type="text" name="con_relationship" class="form-control" placeholder="Relationship">
+                        <input type="text" name="con_relationship[]" id="con_relationship" class="form-control" placeholder="Relationship">
                       </div>
                     </div>
 
                     <div class="row mb-2">
                       <div class="col-md-3">
                         <label for="con_initial_screening">Initial Screening</label>
-                        <input type="date" name="con_initial_screening" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                        <input type="date" name="con_initial_screening[]" id="con_initial_screening" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                       </div>
                       <div class="col-md-3">
                         <label for="con_follow_up">Ff-up</label>
-                        <input type="date" name="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                        <input type="date" name="con_follow_up[]" id="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                       </div>
                       <div class="col-md-3">
                         <label for="con_remarks">Remarks</label>
-                        <input type="text" name="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
+                        <input type="text" name="con_remarks[]" id="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
                       </div>
                       <div class="col-md-3 d-flex justify-content-end mt-4">
                         <button type="button" class="btn btn-outline-danger btn-sm remove-contact mt-2" style="height:40px; width:85px; display:none;">
@@ -316,17 +316,17 @@
                 <div class="row mb-2">
                   <div class="col-md-4">
                     <label for="sput_date_collected">Date Collected</label>
-                    <input type="date" name="sput_date_collected" class="form-control"
+                    <input type="date" name="sput_date_collected" id="sput_date_collected" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
                     <label for="sput_smear_result">Smear Microscopy/ TB LAMP</label>
-                    <input type="text" name="sput_smear_result" class="form-control"
+                    <input type="text" name="sput_smear_result" id="sput_smear_result" class="form-control"
                       placeholder="Smear Microscopy/ TB LAMP">
                   </div>
                   <div class="col-md-4">
                     <label for="sput_xpert_result">Xpert MTB/RIF</label>
-                    <input type="text" name="sput_xpert_result" class="form-control" placeholder="Xpert MTB/RIF">
+                    <input type="text" name="sput_xpert_result" id="sput_xpert_result" class="form-control" placeholder="Xpert MTB/RIF">
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
@@ -345,12 +345,12 @@
                 <div class="row mb-3">
                   <div class="col-md-4">
                     <label for="xray_date_examined">Date Examined</label>
-                    <input type="date" name="xray_date_examined" class="form-control"
+                    <input type="date" name="xray_date_examined" id="xray_date_examined" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
                     <label for="xray_impression">Impression/ Comparative Reading</label>
-                    <select name="xray_impression" class="form-control form-select">
+                    <select name="xray_impression" id="xray_impression" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Normal">Normal</option>
                       <option value="Abnormal suggestive of TB">Abnormal suggestive of TB</option>
@@ -362,7 +362,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="xray_descriptive_comment">Descriptive Comments</label>
-                    <input type="text" name="xray_descriptive_comment" class="form-control"
+                    <input type="text" name="xray_descriptive_comment" id="xray_descriptive_comment" class="form-control"
                       placeholder="Descriptive Comments">
                   </div>
                 </div>
@@ -422,25 +422,25 @@
                 <div class="row mb-3">
                   <div class="col-md-4">
                     <label for="fol_months_after_tx">Mo. After Tx</label>
-                    <input type="text" name="fol_months_after_tx" class="form-control" placeholder="PT">
+                    <input type="text" name="fol_months_after_tx" id="fol_months_after_tx" class="form-control" placeholder="PT">
                   </div>
                   <div class="col-md-4">
                     <label for="fol_date">Date</label>
-                    <input type="date" name="fol_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="fol_date" id="fol_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
                     <label for="fol_cxr_findings">CXR Findings</label>
-                    <input type="text" name="fol_cxr_findings" class="form-control" placeholder="CXR Findings">
+                    <input type="text" name="fol_cxr_findings" id="fol_cxr_findings" class="form-control" placeholder="CXR Findings">
                   </div>
                 </div>
                 <div class="row mb-3">
                   <div class="col-md-4">
                     <label for="fol_smear_xpert">Smear/ Xpert</label>
-                    <input type="text" name="fol_smear_xpert" class="form-control" placeholder="Smear/ Xpert">
+                    <input type="text" name="fol_smear_xpert" id="fol_smear_xpert" class="form-control" placeholder="Smear/ Xpert">
                   </div>
                   <div class="col-md-4">
                     <label for="fol_tbc_dst">TBC & DST</label>
-                    <input type="text" name="fol_tbc_dst" class="form-control" placeholder="TBC & DST">
+                    <input type="text" name="fol_tbc_dst" id="fol_tbc_dst" class="form-control" placeholder="TBC & DST">
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
@@ -498,204 +498,234 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      const form = document.getElementById('form');
-      const inputs = document.querySelectorAll("input.form-control, select.form-select");
+    const form = document.getElementById('form');
+    const inputs = document.querySelectorAll("input.form-control, select.form-select");
+    const container = document.getElementById('closeContactContainer');
 
-      const setError = (element, message) => {
-        let errorDisplay = element.parentElement.querySelector('.error');
-        if (!errorDisplay) {
-          errorDisplay = document.createElement('div');
-          errorDisplay.className = 'error';
-          element.parentElement.appendChild(errorDisplay);
+    const setError = (element, message) => {
+      let errorDisplay = element.parentElement.querySelector('.error');
+      if (!errorDisplay) {
+        errorDisplay = document.createElement('div');
+        errorDisplay.className = 'error';
+        element.parentElement.appendChild(errorDisplay);
+      }
+      errorDisplay.innerText = message;
+      element.classList.add('error');
+      element.classList.remove('success');
+    };
+
+    const setSuccess = (element) => {
+      const errorDisplay = element.parentElement.querySelector('.error');
+      if (errorDisplay) errorDisplay.innerText = '';
+      element.classList.add('success');
+      element.classList.remove('error');
+    };
+
+    inputs.forEach(input => {
+      const validate = () => {
+        const value = input.value.trim();
+        const today = new Date();
+
+        // 1️⃣ Empty required fields
+        if (input.hasAttribute("required") && value === "") {
+          setError(input, "This is required.");
+          return;
         }
-        errorDisplay.innerText = message;
-        element.classList.add('error');
-        element.classList.remove('success');
-      };
 
-      const setSuccess = (element) => {
-        const errorDisplay = element.parentElement.querySelector('.error');
-        if (errorDisplay) errorDisplay.innerText = '';
-        element.classList.add('success');
-        element.classList.remove('error');
-      };
-
-      inputs.forEach(input => {
-        const validate = () => {
-          const value = input.value.trim();
-          const today = new Date();
-
-          // 1️⃣ Empty required fields
-          if (input.hasAttribute("required") && value === "") {
-            setError(input, "This is required.");
+        // 2️⃣ Age field must be numeric (con_age[])
+        if (input.name === "con_age[]" && value !== "") {
+          const regex = /^[0-9]+$/;
+          if (!regex.test(value)) {
+            setError(input, "Age must be a valid number.");
             return;
           }
-
-          // 2️⃣ Age field must be numeric (con_age)
-          if (input.name === "con_age" && value !== "") {
-            const regex = /^[0-9]+$/;
-            if (!regex.test(value)) {
-              setError(input, "Age must be a valid number.");
-              return;
-            }
-          }
-
-          // 3️⃣ Special characters check (for other text fields)
-          if (input.type === "text" && value !== "" && input.name !== "con_age") {
-            const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
-            if (!regex.test(value)) {
-              setError(input, "Special characters prohibited.");
-              return;
-            }
-          }
-
-          // 4️⃣ Future date check
-          if (input.type === "date" && value !== "") {
-            const selectedDate = new Date(value);
-            if (selectedDate > today) {
-              setError(input, "Enter a valid date.");
-              return;
-            }
-          }
-
-          // ✅ If all validations pass
-          if (value !== "") {
-            setSuccess(input);
-          } else {
-            input.classList.remove("success", "error");
-            const errorDisplay = input.parentElement.querySelector('.error');
-            if (errorDisplay) errorDisplay.innerText = '';
-          }
-        };
-
-        // Run once on load (for pre-filled values)
-        validate();
-
-        // Run on typing or changing
-        input.addEventListener("input", validate);
-        input.addEventListener("change", validate);
-
-        // 🔒 Restrict "con_age" to digits only during typing
-        if (input.name === "con_age") {
-          input.addEventListener("input", () => {
-            input.value = input.value.replace(/\D/g, ""); // remove non-digits
-          });
         }
-      });
 
-      // ✅ Preview Modal before final submit
-      form.addEventListener("submit", function (e) {
-        e.preventDefault(); // stop normal submit
+        // 3️⃣ Special characters check (for other text fields)
+        if (input.type === "text" && value !== "" && input.name !== "con_age[]") {
+          const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
+          if (!regex.test(value)) {
+            setError(input, "Special characters prohibited.");
+            return;
+          }
+        }
 
-        const p = form; // shortcut to form elements
-        let html = `
-        <div class="container-fluid px-2">
+        // 4️⃣ Future date check
+        if (input.type === "date" && value !== "") {
+          const selectedDate = new Date(value);
+          if (selectedDate > today) {
+            setError(input, "Enter a valid date.");
+            return;
+          }
+        }
 
-          <!-- Serious Adverse Events -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-1">E. Serious Adverse Events</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Date of AE</th><td>${p.adv_ae_date.value}</td></tr>
-                  <tr><th>Specific AE</th><td>${p.adv_specific_ae.value}</td></tr>
-                  <tr><th>Date Reported to FDA</th><td>${p.adv_fda_reported_date.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        // ✅ If all validations pass
+        if (value !== "") {
+          setSuccess(input);
+        } else {
+          input.classList.remove("success", "error");
+          const errorDisplay = input.parentElement.querySelector('.error');
+          if (errorDisplay) errorDisplay.innerText = '';
+        }
+      };
 
-          <!-- Patient Progress Report Form -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-1">F. Patient Progress Report Form</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Date</th><td>${p.prog_date.value}</td></tr>
-                  <tr><th>Problem</th><td>${p.prog_problem.value}</td></tr>
-                  <tr><th>Action Taken</th><td>${p.prog_action_taken.value}</td></tr>
-                  <tr><th>Plan</th><td>${p.prog_plan.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+      // Run once on load (for pre-filled values)
+      validate();
 
-          <!-- Close Contacts -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-1">G. Close Contacts</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Name</th><td>${p.con_name.value}</td></tr>
-                  <tr><th>Age</th><td>${p.con_age.value}</td></tr>
-                  <tr><th>Sex</th><td>${p.con_sex.value}</td></tr>
-                  <tr><th>Relationship</th><td>${p.con_relationship.value}</td></tr>
-                  <tr><th>Initial Screening</th><td>${p.con_initial_screening.value}</td></tr>
-                  <tr><th>Follow-up</th><td>${p.con_follow_up.value}</td></tr>
-                  <tr><th>Remarks</th><td>${p.con_remarks.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+      // Run on typing or changing
+      input.addEventListener("input", validate);
+      input.addEventListener("change", validate);
 
-          <!-- Sputum Monitoring -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-1">H. Sputum Monitoring</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Date Collected</th><td>${p.sput_date_collected.value}</td></tr>
-                  <tr><th>Smear Microscopy / TB LAMP</th><td>${p.sput_smear_result.value}</td></tr>
-                  <tr><th>Xpert MTB/RIF</th><td>${p.sput_xpert_result.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Chest X-ray -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-1">I. Chest X-ray</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Date Examined</th><td>${p.xray_date_examined.value}</td></tr>
-                  <tr><th>Impression / Comparative Reading</th><td>${p.xray_impression.value}</td></tr>
-                  <tr><th>Descriptive Comments</th><td>${p.xray_descriptive_comment.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Post Treatment Follow-up -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-1">J. Post Treatment Follow-up</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Months After Treatment</th><td>${p.fol_months_after_tx.value}</td></tr>
-                  <tr><th>Date</th><td>${p.fol_date.value}</td></tr>
-                  <tr><th>CXR Findings</th><td>${p.fol_cxr_findings.value}</td></tr>
-                  <tr><th>Smear / Xpert</th><td>${p.fol_smear_xpert.value}</td></tr>
-                  <tr><th>TBC & DST</th><td>${p.fol_tbc_dst.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-      `;
-
-        document.getElementById("previewContent").innerHTML = html;
-        let modal = new bootstrap.Modal(document.getElementById("previewModal"));
-        modal.show();
-      });
-
-      // ✅ Final confirmation → submit form
-      document.getElementById("confirmSubmit").addEventListener("click", function () {
-        form.submit();
-      });
+      // 🔒 Restrict "con_age[]" to digits only during typing
+      if (input.name === "con_age[]") {
+        input.addEventListener("input", () => {
+          input.value = input.value.replace(/\D/g, ""); // remove non-digits
+        });
+      }
     });
 
+    // ✅ Preview Modal before final submit
+    form.addEventListener("submit", function (e) {
+      e.preventDefault(); // stop normal submit
+
+      const p = form; // shortcut to form elements
+
+      // 🔥 BUILD CLOSE CONTACTS HTML (loop through all entries)
+      let closeContactsHTML = '';
+      const contactEntries = container.querySelectorAll('.close-contact-entry');
+
+      contactEntries.forEach((entry, index) => {
+        const name = entry.querySelector('[name="con_name[]"]')?.value || '';
+        const age = entry.querySelector('[name="con_age[]"]')?.value || '';
+        const sex = entry.querySelector('[name="con_sex[]"]')?.value || '';
+        const relationship = entry.querySelector('[name="con_relationship[]"]')?.value || '';
+        const screening = entry.querySelector('[name="con_initial_screening[]"]')?.value || '';
+        const followup = entry.querySelector('[name="con_follow_up[]"]')?.value || '';
+        const remarks = entry.querySelector('[name="con_remarks[]"]')?.value || '';
+
+        // Skip if all fields are empty
+        if (!name && !age && !sex && !relationship && !screening && !followup && !remarks) return;
+
+        closeContactsHTML += `
+          <div class="mb-3 pb-3 ${index < contactEntries.length - 1 ? 'border-bottom' : ''}">
+            <h6 class="text-muted mb-2">Contact ${index + 1}</h6>
+            <table class="table table-borderless preview-table align-middle mb-0">
+              <tbody>
+                <tr><th>Name</th><td>${name || '-'}</td></tr>
+                <tr><th>Age</th><td>${age || '-'}</td></tr>
+                <tr><th>Sex</th><td>${sex || '-'}</td></tr>
+                <tr><th>Relationship</th><td>${relationship || '-'}</td></tr>
+                <tr><th>Initial Screening</th><td>${screening || '-'}</td></tr>
+                <tr><th>Follow-up</th><td>${followup || '-'}</td></tr>
+                <tr><th>Remarks</th><td>${remarks || '-'}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        `;
+      });
+
+      // If no contacts were added
+      if (!closeContactsHTML) {
+        closeContactsHTML = '<p class="text-muted mb-0">No close contacts added</p>';
+      }
+
+      let html = `
+      <div class="container-fluid px-2">
+
+        <!-- Serious Adverse Events -->
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+          <div class="card-body">
+            <h6 class="fw-bold mb-1">E. Serious Adverse Events</h6>
+            <table class="table table-borderless preview-table align-middle mb-0">
+              <tbody>
+                <tr><th>Date of AE</th><td>${p.adv_ae_date.value || '-'}</td></tr>
+                <tr><th>Specific AE</th><td>${p.adv_specific_ae.value || '-'}</td></tr>
+                <tr><th>Date Reported to FDA</th><td>${p.adv_fda_reported_date.value || '-'}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Patient Progress Report Form -->
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+          <div class="card-body">
+            <h6 class="fw-bold mb-1">F. Patient Progress Report Form</h6>
+            <table class="table table-borderless preview-table align-middle mb-0">
+              <tbody>
+                <tr><th>Date</th><td>${p.prog_date.value || '-'}</td></tr>
+                <tr><th>Problem</th><td>${p.prog_problem.value || '-'}</td></tr>
+                <tr><th>Action Taken</th><td>${p.prog_action_taken.value || '-'}</td></tr>
+                <tr><th>Plan</th><td>${p.prog_plan.value || '-'}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Close Contacts -->
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+          <div class="card-body">
+            <h6 class="fw-bold mb-1">G. Close Contacts</h6>
+            ${closeContactsHTML}
+          </div>
+        </div>
+
+        <!-- Sputum Monitoring -->
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+          <div class="card-body">
+            <h6 class="fw-bold mb-1">H. Sputum Monitoring</h6>
+            <table class="table table-borderless preview-table align-middle mb-0">
+              <tbody>
+                <tr><th>Date Collected</th><td>${p.sput_date_collected.value || '-'}</td></tr>
+                <tr><th>Smear Microscopy / TB LAMP</th><td>${p.sput_smear_result.value || '-'}</td></tr>
+                <tr><th>Xpert MTB/RIF</th><td>${p.sput_xpert_result.value || '-'}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Chest X-ray -->
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+          <div class="card-body">
+            <h6 class="fw-bold mb-1">I. Chest X-ray</h6>
+            <table class="table table-borderless preview-table align-middle mb-0">
+              <tbody>
+                <tr><th>Date Examined</th><td>${p.xray_date_examined.value || '-'}</td></tr>
+                <tr><th>Impression / Comparative Reading</th><td>${p.xray_impression.value || '-'}</td></tr>
+                <tr><th>Descriptive Comments</th><td>${p.xray_descriptive_comment.value || '-'}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Post Treatment Follow-up -->
+        <div class="card shadow-sm border-0 rounded-3 mb-4">
+          <div class="card-body">
+            <h6 class="fw-bold mb-1">J. Post Treatment Follow-up</h6>
+            <table class="table table-borderless preview-table align-middle mb-0">
+              <tbody>
+                <tr><th>Months After Treatment</th><td>${p.fol_months_after_tx.value || '-'}</td></tr>
+                <tr><th>Date</th><td>${p.fol_date.value || '-'}</td></tr>
+                <tr><th>CXR Findings</th><td>${p.fol_cxr_findings.value || '-'}</td></tr>
+                <tr><th>Smear / Xpert</th><td>${p.fol_smear_xpert.value || '-'}</td></tr>
+                <tr><th>TBC & DST</th><td>${p.fol_tbc_dst.value || '-'}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      `;
+
+      document.getElementById("previewContent").innerHTML = html;
+      let modal = new bootstrap.Modal(document.getElementById("previewModal"));
+      modal.show();
+    });
+
+    // ✅ Final confirmation → submit form
+    document.getElementById("confirmSubmit").addEventListener("click", function () {
+      form.submit();
+    });
+  });
   </script>
 
   @if(session('success'))

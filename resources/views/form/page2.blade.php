@@ -858,11 +858,6 @@
       trt_tx_supporter_type,
       trt_tx_supporter_contact, // required contact
       trt_treatment_schedule,
-      trt_intensive_phase_start,
-      trt_intensive_phase_end,
-      pha_continuation_start,
-      pha_continuation_end,
-      drug_con_date,
 
     ];
 

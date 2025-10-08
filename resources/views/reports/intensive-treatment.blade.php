@@ -152,9 +152,9 @@
                       <th>Drug</th>
                       <th>Strength</th>
                       <th>Unit</th>
-                      <th>Intensive Start</th>
+                      <th>Intensive Phase Start</th>
                       <th>Day</th>
-                      <th>Intensive End</th>
+                      <th>Intensive Phase End</th>
                       <th>Status</th>
                   </tr>
               </thead>

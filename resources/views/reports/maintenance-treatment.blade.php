@@ -152,9 +152,9 @@
                   <th>Drug</th>
                   <th>Strength</th>
                   <th>Unit</th>
-                  <th>Maintenance Start</th>
+                  <th>Continuation Phase Start</th>
                   <th>Day</th>
-                  <th>Maintenance End</th>
+                  <th>Continuation Phase End</th>
                   <th>Status</th>
                 </tr>
               </thead>

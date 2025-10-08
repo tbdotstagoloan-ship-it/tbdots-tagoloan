@@ -353,19 +353,46 @@ class PatientController extends Controller
             $progress_validate['patient_id'] = $patientId;
             Progress::create($progress_validate);
 
-            // Close Contact
+            // Close Contact (MULTIPLE ENTRIES)
             $close_contact_validate = $request->validate([
-                'con_name' => 'nullable',
-                'con_age' => 'nullable',
-                'con_sex' => 'nullable',
-                'con_relationship' => 'nullable',
-                'con_initial_screening' => 'nullable',
-                'con_follow_up' => 'nullable',
-                'con_remarks' => 'nullable'
+                'con_name' => 'nullable|array',
+                'con_name.*' => 'nullable|string',
+                'con_age' => 'nullable|array',
+                'con_age.*' => 'nullable|integer',
+                'con_sex' => 'nullable|array',
+                'con_sex.*' => 'nullable|string',
+                'con_relationship' => 'nullable|array',
+                'con_relationship.*' => 'nullable|string',
+                'con_initial_screening' => 'nullable|array',
+                'con_initial_screening.*' => 'nullable|date',
+                'con_follow_up' => 'nullable|array',
+                'con_follow_up.*' => 'nullable|date',
+                'con_remarks' => 'nullable|array',
+                'con_remarks.*' => 'nullable|string'
             ]);
 
-            $close_contact_validate['patient_id'] = $patientId;
-            CloseContact::create($close_contact_validate);
+            // Loop through and insert multiple close contacts
+            if ($request->has('con_name')) {
+                $contactNames = $request->con_name;
+                
+                foreach ($contactNames as $index => $name) {
+                    // Skip empty entries (if all fields are empty)
+                    if (empty($name) && empty($request->con_age[$index] ?? null)) {
+                        continue;
+                    }
+                    
+                    CloseContact::create([
+                        'patient_id' => $patientId,
+                        'con_name' => $name ?? null,
+                        'con_age' => $request->con_age[$index] ?? null,
+                        'con_sex' => $request->con_sex[$index] ?? null,
+                        'con_relationship' => $request->con_relationship[$index] ?? null,
+                        'con_initial_screening' => $request->con_initial_screening[$index] ?? null,
+                        'con_follow_up' => $request->con_follow_up[$index] ?? null,
+                        'con_remarks' => $request->con_remarks[$index] ?? null,
+                    ]);
+                }
+            }
 
             // Sputum Monitoring
             $sputum_monitoring_validate = $request->validate([
