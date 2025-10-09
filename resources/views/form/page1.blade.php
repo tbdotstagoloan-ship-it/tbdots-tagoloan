@@ -613,7 +613,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="diag_region">Region</label>
-                    <input type="text" name="diag_region" id="diag_referred_region" class="form-control form-select">
+                    <input type="text" name="diag_region" id="diag_referred_region" class="form-control" placeholder="Region">
                     <!-- <select name="diag_region" id="diag_referred_region" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Region I - Ilocos Region">Region I - Ilocos Region</option>
@@ -672,7 +672,7 @@
                   <div class="col-md-4">
                     <label for="clas_other_drug_resistant">Other Drug-resistant TB</label>
                     <input type="text" name="clas_other_drug_resistant" id="diag_other_drug_resistant_tb"
-                      class="form-control" placeholder="Other drug-resistant TB">
+                      class="form-control" placeholder="Specify">
                     <div class="error"></div>
                   </div>
                 </div>

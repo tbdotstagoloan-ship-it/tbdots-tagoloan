@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use App\Models\Notification;
 use App\Models\Adherence;
-use App\Models\Admin;
 use App\Models\AdverseEvent;
 use App\Models\BaselineInfo;
 use App\Models\ChestXray;
@@ -12,6 +11,7 @@ use App\Models\Comorbidity;
 use App\Models\Diagnosis;
 use App\Models\HIVInfo;
 use App\Models\LaboratoryTest;
+use App\Models\PatientAccount;
 use App\Models\PostTreatmentFollowUp;
 use App\Models\PrescribedDrug;
 use App\Models\Progress;
@@ -439,8 +439,8 @@ class PatientController extends Controller
         public function store(Request $request)
         {
             $validator = Validator::make($request->all(), [
-                'adm_username'    => 'required|string|max:255|unique:tbl_admins,adm_username',
-                'adm_password'    => [
+                'acc_username'    => 'required|string|max:255|unique:tbl_patient_accounts,acc_username',
+                'acc_password'    => [
                     'required',
                     'string',
                     'min:8',
@@ -450,18 +450,18 @@ class PatientController extends Controller
                     'regex:/[\W]/', 
                 ],
                 'patient_id'      => 'required|exists:tbl_patients,id',
-                'diagfacility_id' => 'nullable|exists:tbl_diagnosing_facilities,id',
+                // 'diagfacility_id' => 'nullable|exists:tbl_diagnosing_facilities,id',
             ]);
 
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            Admin::create([
-                'adm_username'    => $request->adm_username,
-                'adm_password'    => Hash::make($request->adm_password),
+            PatientAccount::create([
+                'acc_username'    => $request->acc_username,
+                'acc_password'    => Hash::make($request->acc_password),
                 'patient_id'      => $request->patient_id,
-                'diagfacility_id' => $request->diagfacility_id,
+                // 'diagfacility_id' => $request->diagfacility_id,
             ]);
 
             return redirect()->route('admin.patient')
@@ -471,12 +471,12 @@ class PatientController extends Controller
         public function patientAccount(Request $request)
     {
         $patientAccount = DB::table('tbl_patients as p')
-            ->join('tbl_admins as a', 'p.id', '=', 'a.patient_id')
+            ->join('tbl_patient_accounts as a', 'p.id', '=', 'a.patient_id')
             ->select(
                 'p.id',
                 'p.pat_full_name',
-                'a.adm_username',
-                'a.adm_password'
+                'a.acc_username',
+                'a.acc_password'
             )
         ->paginate(10);
 

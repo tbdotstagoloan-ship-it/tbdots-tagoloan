@@ -348,7 +348,7 @@
                   <div class="col-md-3">
                     <label for="base_vital_signs">Other Vital Signs</label>
                     <input type="text" name="base_vital_signs" id="trt_other_vital_signs" class="form-control"
-                      placeholder="Treatment considerations">
+                      placeholder="Treatment considerations" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
@@ -441,9 +441,9 @@
                     </select>
                   </div>
                   <div class="col-md-3">
-                    <label for="com_other">Other</label>
+                    <label for="com_other">Other (Specify)</label>
                     <input type="text" name="com_other" id="trt_comorbidity_other" class="form-control"
-                      placeholder="Other">
+                      placeholder="Specify">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
@@ -582,7 +582,6 @@
                     <label for="drug_con_name">Drug</label>
                     <select name="drug_con_name" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
-                      <option value="4FDC">4FDC</option>
                       <option value="2FDC">2FDC</option>
                       <option value="H">H</option>
                       <option value="R">R</option>

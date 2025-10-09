@@ -144,20 +144,20 @@
 
           <div class="form-group">
             <label class="form-label">Username</label>
-            <input type="text" id="username" name="adm_username" placeholder="Username"
-              value="{{ old('adm_username') }}">
-            @error('adm_username')
+            <input type="text" id="username" name="acc_username" placeholder="Username"
+              value="{{ old('acc_username') }}">
+            @error('acc_username')
               <div class="error-message">{{ $message }}</div>
             @enderror
           </div>
 
           <div class="form-group">
             <label class="form-label">Password</label>
-            <input type="password" id="password" name="adm_password" placeholder="Password">
+            <input type="password" id="password" name="acc_password" placeholder="Password">
             <span class="toggle-password" onclick="togglePassword('password', this)">
               <i class="fa-solid fa-eye-slash"></i>
             </span>
-            @error('adm_password')
+            @error('acc_password')
               <div class="error-message">{{ $message }}</div>
             @enderror
           </div>

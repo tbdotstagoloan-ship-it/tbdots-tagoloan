@@ -134,16 +134,16 @@
           <tr>
           <td>{{ $patient->id }}</td>
           <td>{{ $patient->pat_full_name }}</td>
-          <td>{{ $patient->adm_username }}</td>
-          <td>{{ $patient->adm_password }}</td>
-          <td class="text-center">
+          <td>{{ $patient->acc_username }}</td>
+          <td>{{ $patient->acc_password }}</td>
+          <!-- <td class="text-center">
           <div class="dropdown">
             <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-ellipsis-v"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
 
-              <!-- Delete -->
+              
               <li>
                 <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="d-inline">
                   @csrf
@@ -156,7 +156,7 @@
 
             </ul>
           </div>
-        </td>
+        </td> -->
           </tr>
 
         @endforeach

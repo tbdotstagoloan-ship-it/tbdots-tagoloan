@@ -790,27 +790,6 @@ body {
     transition: border-color 0.3s ease;
 }
 
-/* .form-control:focus {
-    border-color: #2cc094;
-    border-color: #fff;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.1);
-}
-
-input.error, select.error {
-  border-color: #ff3860 !important;
-}
-
-input.success, select.success {
-  border-color: #09c372 !important;
-}
-
-.error {
-  font-size: 1rem;
-  color: #ff3860;
-  margin-top: 1px;
-} */
-
 label {
     font-weight: 600;
     color: #495057;

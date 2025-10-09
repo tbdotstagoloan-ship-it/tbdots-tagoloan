@@ -92,9 +92,9 @@ body {
 
 .form-group input:focus {
     outline: none;
-    border-color: #fbbf24;
+    border-color: #4caf50;
     background: white;
-    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15), 0 0 0 1px #fbbf24;
+    /* box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15), 0 0 0 1px #fbbf24; */
 }
 
 .form-group input::placeholder {
