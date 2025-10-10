@@ -24,7 +24,7 @@
         .header img.left-logo {
             position: absolute;
             left: 0;
-            top: -2px;
+            top: -5px;
             width: 105px;
             height: 105px;
             object-fit: contain;
