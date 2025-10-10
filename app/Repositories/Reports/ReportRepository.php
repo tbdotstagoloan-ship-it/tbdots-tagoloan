@@ -441,6 +441,7 @@ class ReportRepository implements ReportRepositoryInterface
                     / NULLIF(SUM(CASE WHEN t.out_outcome IN ("Cured","Treatment Completed","Lost to Follow-Up","Died") THEN 1 ELSE 0 END),0) * 100), 2) as tsr')
             )
             ->groupBy('year', 'quarter')
+            ->havingRaw('total > 0')
             ->orderBy('year')
             ->orderBy('quarter')
             ->paginate($perPage);

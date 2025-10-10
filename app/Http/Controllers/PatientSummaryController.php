@@ -92,18 +92,27 @@ class PatientSummaryController extends Controller
             ->get();
 
     $pdf = PDF::loadView('pdf.newly-diagnosed-report', compact('new'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-    // ✅ Add Page Number
+    // 📝 Force render to get the canvas
+    $pdf->output();
     $canvas = $pdf->getDomPDF()->getCanvas();
+
+    $w = $canvas->get_width();
+    $h = $canvas->get_height();
+
+    // ✅ Get font using font metrics (this works in most Dompdf versions)
+    $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+    $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+    // ✅ Page number at upper right corner
     $canvas->page_text(
-        520, // X position
-        30, // Y position
-        // "Page {PAGE_NUM} of {PAGE_COUNT}",
-        "{PAGE_NUM}", 
-        null, 
-        10, 
-        [0, 0, 0] // Text color (black)
+        $w - 50,             // adjust X position
+        30,                   // Y position (top)
+        "{PAGE_NUM}",
+        $font,                // formal font
+        11,                   // font size
+        [0, 0, 0]             // black text
     );
 
         return $pdf->stream('Newly Diagnosed Report.pdf');
@@ -128,18 +137,27 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.relapse-report', compact('relapse'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number 
+         // 📝 Force render to get the canvas
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position
-            30, // Y position
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
             return $pdf->stream('Relapse Report.pdf');
         }
@@ -163,18 +181,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.bacteriologically-confirmed-report', compact('bacteriologicallyConfirmed'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Bacteriologically-Confirmed TB Report.pdf');
@@ -199,18 +225,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.clinically-diagnosed-report', compact('clinicallyDiagnosed'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Clinically Diagnosed Report.pdf');
@@ -235,18 +269,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.pulmonary-report', compact('pulmonary'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Pulmonary TB Report.pdf');
@@ -272,18 +314,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.extra-pulmonary-report', compact('extraPulmonary'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Extra Pulmonary TB Report.pdf');
@@ -309,18 +359,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.ongoing-treatment-report', compact('ongoingPatients'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Ongoing Treatment Report.pdf');
@@ -346,18 +404,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.barangay-cases-report', compact('brgyCases'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Barangay Cases Report.pdf');
@@ -397,18 +463,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.intensive-treatment-report', compact('intensive'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Intensive Treatment Report.pdf'); 
@@ -449,18 +523,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.maintenance-treatment-report', compact('maintenanceTreatment'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Maintenance Treatment Report.pdf');
@@ -486,18 +568,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.underage-report', compact('underage'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Underage Patients Report.pdf');
@@ -519,18 +609,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.sputum-monitoring-report', compact('sputum'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Sputum Monitoring Report.pdf');
@@ -557,18 +655,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.cured-report', compact('cured'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
         
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Cured Patients Report.pdf'); 
@@ -596,18 +702,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.treatment-completed-report', compact('treatmentCompleted'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Treatment Completed Report.pdf'); 
@@ -633,18 +747,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.lost-to-follow-up-report', compact('lostToFollowUp'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Lost to Follow Up Report.pdf');
@@ -672,18 +794,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.expired-report', compact('expired'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Expired Patients Report.pdf');
@@ -724,18 +854,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.barangay-cases-notification-report', compact('brgyCasesNotification'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Barangay Cases Notification Report.pdf'); 
@@ -765,18 +903,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.quarterly-cases-notification-report', compact('quarterlyCasesNotification'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Quarterly Cases Notification Report.pdf');
@@ -807,18 +953,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.quarterly-tb-classification-report', compact('quarterlyTBClassification'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Quarterly TB Classification Report.pdf');
@@ -849,18 +1003,26 @@ class PatientSummaryController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('pdf.quarterly-anatomical-site-report', compact('quarterlyAnatomicalSite'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-         // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Quarterly Anatomical Site Report.pdf');
@@ -893,23 +1055,32 @@ class PatientSummaryController extends Controller
                 ) as tsr')
             )
             ->groupBy('year', 'quarter')
+            ->havingRaw('total > 0')
             ->orderBy('year')
             ->orderBy('quarter')
             ->get();
             
         $pdf = Pdf::loadView('pdf.quarterly-treatment-outcome-report', compact('quarterlyOutcome'))
-        ->setPaper('A4', 'portrait');
+        ->setPaper('A4', 'landscape');
 
-        // ✅ Add Page Number
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
+
+        $w = $canvas->get_width();
+        $h = $canvas->get_height();
+
+        // ✅ Get font using font metrics (this works in most Dompdf versions)
+        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
+        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
+
+        // ✅ Page number at upper right corner
         $canvas->page_text(
-            520, // X position 
-            30, // Y position 
-            // "Page {PAGE_NUM} of {PAGE_COUNT}",
-            "{PAGE_NUM}", 
-            null, 
-            10, 
-            [0, 0, 0] // Text color (black)
+            $w - 50,             // adjust X position
+            30,                   // Y position (top)
+            "{PAGE_NUM}",
+            $font,                // formal font
+            11,                   // font size
+            [0, 0, 0]             // black text
         );
 
         return $pdf->stream('Quarterly Treatment Outcome Report.pdf');
