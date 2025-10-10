@@ -24,7 +24,8 @@
         .header img.left-logo {
             position: absolute;
             left: 0;
-            top: 0;
+            top: 50%;
+            transform: translateY(-50%);
             width: 110px;
             height: 110px;
             object-fit: contain;
@@ -32,15 +33,16 @@
         .header img.right-logo {
             position: absolute;
             right: 0;
-            top: 0;
+            top: 50%;
+            transform: translateY(-50%);
             width: 80px;
             height: 80px;
             object-fit: contain;
         }
         .header .text {
             text-align: center;
-            margin: 0 100px;
-            padding-top: 5px;
+            margin: 0 130px;
+            padding-top: 15px;
         }
         .header h4 {
             margin: 0;
