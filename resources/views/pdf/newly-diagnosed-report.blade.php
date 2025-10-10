@@ -27,6 +27,7 @@
             top: 0;
             width: 105px;
             height: 105px;
+            margin-bottom: 2px;
             object-fit: contain;
         }
         .header img.right-logo {
