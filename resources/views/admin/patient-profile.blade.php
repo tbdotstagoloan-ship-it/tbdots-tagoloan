@@ -365,7 +365,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
-                <img src="{{url('assets/img/TBDOTS.png')}}" alt="TB DOTS Logo" />
+                <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
             </div>
             <div class="sidebar-brand">
                 <h2>TB DOTS</h2>
