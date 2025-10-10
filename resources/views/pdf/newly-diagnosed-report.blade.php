@@ -19,16 +19,14 @@
             padding-bottom: 10px;
             margin-bottom: 25px;
             position: relative;
-            min-height: 110px;
-            display: flex;
-            align-items: center;
+            min-height: 90px;
         }
         .header img.left-logo {
             position: absolute;
             left: 0;
             top: 0;
-            width: 110px;
-            height: 110px;
+            width: 90px;
+            height: 90px;
             object-fit: contain;
         }
         .header img.right-logo {
@@ -41,9 +39,8 @@
         }
         .header .text {
             text-align: center;
-            margin: 0 auto;
-            width: 100%;
-            padding: 0 130px;
+            margin: 0 100px;
+            padding-top: 5px;
         }
         .header h4 {
             margin: 0;
