@@ -146,13 +146,13 @@
 
     <!-- HEADER -->
     <div class="header">
-        <img src="{{ public_path('assets/img/tbdots-logo2.png') }}" class="left-logo" alt="Logo Left">
+        <img src="{{ public_path('assets/img/tbdots-logo-2.png') }}" class="left-logo" alt="Logo Left">
         <div class="text">
             <h4>Republic of the Philippines</h4>
             <h4>Municipality of Tagoloan</h4>
             <h3>TB DOTS Tagoloan</h3>
         </div>
-        <img src="{{ public_path('assets/img/tbdots-logo1.png') }}" class="right-logo" alt="Logo Right">
+        <img src="{{ public_path('assets/img/tbdots-logo-1.png') }}" class="right-logo" alt="Logo Right">
     </div>
 
     <!-- REPORT TITLE -->
