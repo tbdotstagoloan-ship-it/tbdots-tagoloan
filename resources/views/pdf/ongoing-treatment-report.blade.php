@@ -15,23 +15,33 @@
 
         /* HEADER */
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%;
             border-bottom: 2px solid #28a745;
             padding-bottom: 10px;
             margin-bottom: 25px;
             position: relative;
+            min-height: 90px;
         }
-        .header img {
+        .header img.left-logo {
             position: absolute;
             left: 0;
-            width: 70px;
-            height: 70px;
+            top: -5px;
+            width: 105px;
+            height: 105px;
+            object-fit: contain;
+        }
+        .header img.right-logo {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
         }
         .header .text {
             text-align: center;
-            width: 100%;
+            margin: 0 100px;
+            padding-top: 5px;
         }
         .header h4 {
             margin: 0;
@@ -137,11 +147,13 @@
 
     <!-- HEADER -->
     <div class="header">
+        <img src="{{ public_path('assets/img/tbdots-logo-2.png') }}" class="left-logo" alt="Logo Left">
         <div class="text">
             <h4>Republic of the Philippines</h4>
             <h4>Municipality of Tagoloan</h4>
             <h3>TB DOTS Tagoloan</h3>
         </div>
+        <img src="{{ public_path('assets/img/tbdots-logo-1.png') }}" class="right-logo" alt="Logo Right">
     </div>
 
     <!-- TITLE -->
