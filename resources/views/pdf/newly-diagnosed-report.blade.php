@@ -15,8 +15,8 @@
         /* HEADER */
         .header {
             display: flex;
-            align-items: center;
             justify-content: space-between; /* Align logos to the left and right */
+            align-items: center; /* Vertically align the logos */
             border-bottom: 2px solid #28a745;
             padding-bottom: 10px;
             margin-bottom: 25px;
