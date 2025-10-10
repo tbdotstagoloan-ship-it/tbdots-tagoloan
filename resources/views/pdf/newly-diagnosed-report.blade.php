@@ -13,13 +13,29 @@
         }
 
         /* HEADER */
-         .header {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 3px solid #1f5124;
             padding-bottom: 15px;
             margin-bottom: 30px;
+        }
+
+        .logo-left,
+        .logo-right {
+            flex: 0 0 auto;
+            width: 100px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-left {
+            justify-content: flex-start;
+        }
+
+        .logo-right {
+            justify-content: flex-end;
         }
 
         .header img {
