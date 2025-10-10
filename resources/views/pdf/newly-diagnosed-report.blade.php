@@ -16,41 +16,29 @@
         .header {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between; /* Align logos to the left and right */
             border-bottom: 2px solid #28a745;
             padding-bottom: 10px;
             margin-bottom: 25px;
-            position: relative;
         }
-        .header img.left-logo {
-            position: absolute;
-            left: 0;
+
+        .header img {
             width: 70px;
             height: 70px;
             object-fit: contain;
         }
-        .header img.right-logo {
-            position: absolute;
-            right: 0;
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-        }
-            /* .header img {
-                position: absolute;
-                left: 0;
-                width: 70px;
-                height: 70px;
-            } */
+
         .header .text {
             text-align: center;
-            width: 100%;
+            flex-grow: 1; /* Ensures the text takes up remaining space */
         }
+
         .header h4 {
             margin: 0;
             font-size: 13px;
             color: #555;
         }
+
         .header h3 {
             margin: 8px 0 2px;
             font-size: 18px;
@@ -85,11 +73,13 @@
             font-size: 13px;
             text-align: center;
         }
+
         th, td { 
             border: 1px solid #ccc; 
             padding: 8px 10px;
             text-align: center; 
         }
+
         th { 
             background: #28a745;
             color: #fff; 
@@ -97,12 +87,15 @@
             font-weight: bold;
             letter-spacing: 0.5px;
         }
+
         td { 
             text-align: center;
         }
+
         tr:nth-child(even) td {
             background: #f8fdf8;
         }
+
         tr:hover td {
             background: #e9f7ec;
         }
@@ -124,16 +117,19 @@
             justify-content: flex-end;
             text-align: center;
         }
+
         .signature {
             width: 250px;
             border-top: 1px solid #000;
             padding-top: 5px;
             font-size: 13px;
         }
+
         .signature-title {
             font-weight: bold;
             text-transform: uppercase;
         }
+
         .signature-subtitle {
             font-size: 11px;
             color: #555;
@@ -143,19 +139,20 @@
         @page {
             margin: 40px;
         }
+
     </style>
 </head>
 <body>
 
     <!-- HEADER -->
     <div class="header">
-        <img src="{{ public_path('assets/img/TBDOTS.png') }}" class="left-logo" alt="Logo Left">
+        <img src="{{ public_path('assets/img/tbdots-logo2.png') }}" class="left-logo" alt="Logo Left">
         <div class="text">
             <h4>Republic of the Philippines</h4>
             <h4>Municipality of Tagoloan</h4>
             <h3>TB DOTS Tagoloan</h3>
         </div>
-        <img src="{{ public_path('assets/img/TBDOTS.png') }}" class="right-logo" alt="Logo Right">
+        <img src="{{ public_path('assets/img/tbdots-logo1.png') }}" class="right-logo" alt="Logo Right">
     </div>
 
     <!-- REPORT TITLE -->
