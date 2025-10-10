@@ -13,19 +13,27 @@
         }
 
         /* HEADER */
-        .header {
+         .header {
             display: flex;
-            justify-content: space-between; /* Align logos to the left and right */
-            align-items: center; /* Vertically align the logos */
-            border-bottom: 2px solid #28a745;
-            padding-bottom: 10px;
-            margin-bottom: 25px;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #1f5124;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
         }
 
         .header img {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
+        }
+
+         .header .left-logo {
+            margin-right: 20px;
+        }
+
+        .header .right-logo {
+            margin-left: 20px;
         }
 
         .header .text {
