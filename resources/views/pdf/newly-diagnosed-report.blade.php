@@ -19,13 +19,14 @@
             padding-bottom: 10px;
             margin-bottom: 25px;
             position: relative;
-            min-height: 90px;
+            min-height: 110px;
+            display: flex;
+            align-items: center;
         }
         .header img.left-logo {
             position: absolute;
             left: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0;
             width: 110px;
             height: 110px;
             object-fit: contain;
@@ -33,16 +34,16 @@
         .header img.right-logo {
             position: absolute;
             right: 0;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 0;
             width: 80px;
             height: 80px;
             object-fit: contain;
         }
         .header .text {
             text-align: center;
-            margin: 0 130px;
-            padding-top: 15px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 130px;
         }
         .header h4 {
             margin: 0;
