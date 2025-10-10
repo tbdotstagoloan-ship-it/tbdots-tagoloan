@@ -25,8 +25,8 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             object-fit: contain;
         }
         .header img.right-logo {
