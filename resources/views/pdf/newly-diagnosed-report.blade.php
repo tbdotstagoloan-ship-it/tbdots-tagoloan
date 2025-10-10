@@ -16,35 +16,24 @@
         .header {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             border-bottom: 2px solid #28a745;
             padding-bottom: 10px;
             margin-bottom: 25px;
-            position: relative;
         }
         .header img.left-logo {
-            position: absolute;
-            left: 0;
             width: 80px;
             height: 80px;
             object-fit: contain;
         }
         .header img.right-logo {
-            position: absolute;
-            right: 0;
             width: 80px;
             height: 80px;
             object-fit: contain;
         }
-        .header img {
-            position: absolute;
-            left: 0;
-            width: 80px;
-            height: 80px;
-            }
         .header .text {
             text-align: center;
-            width: 100%;
+            flex: 1;
         }
         .header h4 {
             margin: 0;
