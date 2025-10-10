@@ -14,26 +14,33 @@
 
         /* HEADER */
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            width: 100%;
             border-bottom: 2px solid #28a745;
             padding-bottom: 10px;
             margin-bottom: 25px;
+            position: relative;
+            min-height: 90px;
         }
         .header img.left-logo {
+            position: absolute;
+            left: 0;
+            top: 0;
             width: 80px;
             height: 80px;
             object-fit: contain;
         }
         .header img.right-logo {
+            position: absolute;
+            right: 0;
+            top: 0;
             width: 80px;
             height: 80px;
             object-fit: contain;
         }
         .header .text {
             text-align: center;
-            flex: 1;
+            margin: 0 100px;
+            padding-top: 5px;
         }
         .header h4 {
             margin: 0;
