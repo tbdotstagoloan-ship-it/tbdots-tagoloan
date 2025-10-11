@@ -157,7 +157,8 @@
 
     <div class="card-grid">
       <!-- Patient -->
-      <div class="card-dashboard patient">
+      <a href="{{ url('patient') }}" style="text-decoration:none;">
+        <div class="card-dashboard patient">
         <div class="card-body">
           <div class="card-info">
             <div class="card-title">Patients</div>
@@ -168,6 +169,7 @@
           </div>
         </div>
       </div>
+      </a>
 
       <!-- Physician -->
       <div class="card-dashboard physician">

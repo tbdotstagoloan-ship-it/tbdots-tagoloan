@@ -5,32 +5,46 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class PatientAuthController extends Controller
 {
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        // Find the patient account
+        $account = DB::table('tbl_patient_accounts')
+            ->where('acc_username', $request->username)
+            ->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$account) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid credentials'
+                'message' => 'Invalid username or password',
             ], 401);
         }
 
-        $token = $user->createToken('mobile-login')->plainTextToken;
+        // Verify password (hashed via bcrypt)
+        if (!Hash::check($request->password, $account->acc_password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid username or password',
+            ], 401);
+        }
+
+        // Get basic patient info
+        $patient = DB::table('tbl_patients')
+            ->where('id', $account->patient_id)
+            ->first();
 
         return response()->json([
             'success' => true,
-            'token' => $token,
-            'user' => $user
+            'message' => 'Login successful',
+            'patient' => $patient,
         ]);
     }
 }
