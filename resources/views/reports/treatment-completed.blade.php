@@ -138,8 +138,8 @@
         <div class="card-body p-0">
           <div class="table-responsive">
 
-          <select id="statusRedirect" class="form-select mb-2" style="width: 235px;">
-            <option value="" disabled selected>Select Treatment Outcome</option>
+          <select id="statusRedirect" class="form-select form-select-sm w-auto mb-2" style="width: 235px;">
+            <option value="" disabled selected>Select Outcome</option>
             <option value="{{ url('cured') }}">Cured</option>
             <option value="{{ url('treatment-completed') }}">Treatment Completed</option>
             <option value="{{ url('lost-to-follow-up') }}">Lost to Follow-up</option>

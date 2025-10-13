@@ -2,50 +2,47 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
+use App\Models\PatientAccount;
+use App\Models\Patient;
 
 class PatientAuthController extends Controller
 {
-    public function login(Request $request)
+    public function patientLogin(Request $request)
     {
         $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
+            'username' => 'required',
+            'password' => 'required',
         ]);
 
-        // Find the patient account
-        $account = DB::table('tbl_patient_accounts')
-            ->where('acc_username', $request->username)
-            ->first();
+        $account = PatientAccount::where('acc_username', $request->username)->first();
 
-        if (!$account) {
+        if (!$account || !Hash::check($request->password, $account->acc_password)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid username or password',
+                'message' => 'Invalid credentials'
             ], 401);
         }
 
-        // Verify password (hashed via bcrypt)
-        if (!Hash::check($request->password, $account->acc_password)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Invalid username or password',
-            ], 401);
-        }
-
-        // Get basic patient info
-        $patient = DB::table('tbl_patients')
-            ->where('id', $account->patient_id)
-            ->first();
+        // Get patient info
+        $patient = Patient::find($account->patient_id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Login successful',
-            'patient' => $patient,
+            'user' => [
+                'id' => $account->id,
+                'username' => $account->acc_username,
+                'patient_id' => $account->patient_id,
+                'full_name' => $patient->pat_full_name ?? null,
+                'contact_number' => $patient->pat_contact_number ?? null,
+            ],
         ]);
     }
+    
+
 }
