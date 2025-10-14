@@ -5,15 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-
 use App\Models\PatientAccount;
 use App\Models\Patient;
 
 class PatientAuthController extends Controller
 {
-    public function patientLogin(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
             'username' => 'required',
@@ -29,11 +26,15 @@ class PatientAuthController extends Controller
             ], 401);
         }
 
-        // Get patient info
+        // ✅ Generate Sanctum token
+        $token = $account->createToken('patient_token')->plainTextToken;
+
         $patient = Patient::find($account->patient_id);
 
         return response()->json([
             'success' => true,
+            'message' => 'Login successful',
+            'token' => $token,
             'user' => [
                 'id' => $account->id,
                 'username' => $account->acc_username,
@@ -43,6 +44,13 @@ class PatientAuthController extends Controller
             ],
         ]);
     }
-    
 
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logout successful',
+        ]);
+    }
 }

@@ -75,7 +75,10 @@ class PatientSummaryController extends Controller
 
     public function newlyDiagnosedPDF()
     {
-        $new = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $patients = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -89,34 +92,27 @@ class PatientSummaryController extends Controller
             )
             ->where('t.clas_registration_group', 'New')
             ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->cursor();
 
-    $pdf = PDF::loadView('pdf.newly-diagnosed-report', compact('new'))
-        ->setPaper('A4', 'landscape');
+        // Efficient memory usage
+        $data = collect();
+        foreach ($patients as $record) {
+            $data->push($record);
+        }
 
-    // 📝 Force render to get the canvas
-    $pdf->output();
-    $canvas = $pdf->getDomPDF()->getCanvas();
+        $pdf = PDF::loadView('pdf.newly-diagnosed-report', ['new' => $data])
+            ->setPaper('A4', 'landscape');
 
-    $w = $canvas->get_width();
-    $h = $canvas->get_height();
-
-    // ✅ Get font using font metrics (this works in most Dompdf versions)
-    $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-    $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-    // ✅ Page number at upper right corner
-    $canvas->page_text(
-        $w - 50,             // adjust X position
-        30,                   // Y position (top)
-        "{PAGE_NUM}",
-        $font,                // formal font
-        11,                   // font size
-        [0, 0, 0]             // black text
-    );
+        // Add page number
+        $pdf->output(); // Force render
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $w = $canvas->get_width();
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Newly Diagnosed Report.pdf');
     }
+
 
     public function relapsePDF()
     {

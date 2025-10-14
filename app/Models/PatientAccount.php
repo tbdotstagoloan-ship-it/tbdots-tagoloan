@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
-class patientAccount extends Model
+class PatientAccount extends Model
 {
+
+    use HasApiTokens;
     protected $table = 'tbl_patient_accounts';
 
     protected $fillable = [
-        // 'diagfacility_id',
         'patient_id',
         'acc_username',
         'acc_password',
@@ -23,10 +25,5 @@ class patientAccount extends Model
     {
         return $this->belongsTo(Patient::class, 'patient_id');
     }
-
-    // public function diagnosingFacility()
-    // {
-    //     return $this->belongsTo(DiagnosingFacility::class, 'diagfacility_id');
-    // }
 
 }
