@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -10,7 +11,7 @@ use App\Models\Patient;
 
 class PatientAuthController extends Controller
 {
-    public function login(Request $request)
+    public function patientLogin(Request $request)
     {
         $request->validate([
             'username' => 'required',
