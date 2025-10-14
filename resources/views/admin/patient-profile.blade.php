@@ -2103,8 +2103,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2184,8 +2184,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2239,8 +2239,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2296,8 +2296,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2369,8 +2369,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2420,10 +2420,10 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="fas fa-close me-1"></i>Close
+                            Close
                         </button>
                         <button type="submit" class="btn btn-success">
-                            <i class="fas fa-save me-1"></i>Update
+                            Update
                         </button>
                     </div>
                 </form>
@@ -2495,8 +2495,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                         </div>
                     </form>
@@ -2556,8 +2556,8 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2605,8 +2605,8 @@
 
                         <!-- Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
 
@@ -2651,8 +2651,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2721,8 +2721,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2769,8 +2769,8 @@
 
                         <!-- Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2816,8 +2816,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -2876,8 +2876,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-close me-1"></i>Close</button>
-                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
                 </div>

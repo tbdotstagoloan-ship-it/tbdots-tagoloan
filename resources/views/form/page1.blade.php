@@ -713,7 +713,7 @@
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back
                   </button>
-                  <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                  <button type="submit" class="btn btn-success">Submit</button>
                 </div>
               </div>
             </div>
@@ -736,7 +736,7 @@
                   <button type="button" class="btn backBtn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-edit me-1"></i>Edit</button>
                   <button type="button" class="btn btn-success" id="confirmSubmit">
-                    <i class="fas fa-paper-plane me-1"></i> Confirm & Submit </button>
+                     Confirm & Submit </button>
                 </div>
               </div>
             </div>
