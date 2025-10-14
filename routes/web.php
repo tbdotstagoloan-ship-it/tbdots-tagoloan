@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MedicationController;
 use App\Http\Controllers\AdherenceController;
 use App\Http\Controllers\SputumMonitoringController;
 use App\Http\Controllers\CloseContactController;
@@ -156,3 +157,23 @@ Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::cla
 // Update route (for editing)
 Route::put('/treatment-outcome/{id}', [TreatmentOutcomeController::class, 'update'])
     ->name('treatment-outcome.update');
+
+
+/*
+|--------------------------------------------------------------------------
+| Medication API Routes
+|--------------------------------------------------------------------------
+*/
+
+// Get medication logs
+Route::get('/medication-logs', [MedicationController::class, 'getConfirmedLogs']);
+Route::get('/missed-logs', [MedicationController::class, 'getMissedLogs']);
+Route::get('/combined-logs', [MedicationController::class, 'getCombinedLogs']);
+
+// Insert medication logs
+Route::post('/medication-logs', [MedicationController::class, 'confirmMedication']);
+Route::post('/missed-logs', [MedicationController::class, 'markMissed']);
+
+// Get statistics
+Route::get('/adherence-stats', [MedicationController::class, 'getAdherenceStats']);
+
