@@ -12,8 +12,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        parent::boot();
-
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
@@ -23,4 +21,5 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
     }
+
 }
