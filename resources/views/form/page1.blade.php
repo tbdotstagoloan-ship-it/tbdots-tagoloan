@@ -8,7 +8,63 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
   <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <style>
+    .card {
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
 
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .preview-table th {
+      width: 35%;
+      color: #6b7280;
+      font-weight: 600;
+      vertical-align: top;
+    }
+
+    .preview-table td {
+      color: #111827;
+      word-break: break-word;
+    }
+
+    .preview-table tr:not(:last-child) td,
+    .preview-table tr:not(:last-child) th {
+      border-bottom: 1px solid #f3f4f6;
+      padding-bottom: 0.75rem;
+    }
+
+    .section-header {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Error message styling */
+    .error {
+      color: #ef4444;
+      font-size: 0.85rem;
+    }
+
+    .is-invalid {
+      border-color: #ef4444;
+    /* background-color: #fef2f2; */
+      background-image: none !important;
+      /* removes Bootstrap's error icon */
+    }
+
+    /* Green border for valid */
+    .is-valid {
+      border-color: #4caf50;
+      background-color: #f1f8f4;
+      background-image: none !important;
+      /* removes Bootstrap's check icon */
+    }
+  </style>
 </head>
 
 <body>
@@ -16,7 +72,7 @@
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <img src="{{url('assets/img/TBDOTS.png')}}" alt="TB DOTS Logo" />
+        <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
       </div>
       <div class="sidebar-brand">
         <h2>TB DOTS</h2>
@@ -92,7 +148,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+          <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -159,25 +215,25 @@
                   <div class="col-md-3">
                     <label for="fac_name">Name of Diagnosing Facility</label>
                     <input type="text" name="fac_name" id="pat_diagnosing_facility" class="form-control"
-                      placeholder="Diagnosing facility">
+                      placeholder="Diagnosing facility" required>
                     <div class="error"></div>
                   </div>
 
                   <div class="col-md-3">
                     <label for="fac_ntp_code">NTP Facility Code</label>
                     <input type="text" name="fac_ntp_code" id="pat_ntp_facility_code" class="form-control"
-                      placeholder="NTP facility code">
+                      placeholder="NTP facility code" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
                     <label for="fac_province">Province/ HUC</label>
                     <input type="text" name="fac_province" id="pat_province" class="form-control"
-                      placeholder="Province/ huc">
+                      placeholder="Province/ huc" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
                     <label for="fac_region">Region</label>
-                    <select name="fac_region" id="pat_region" class="form-control form-select">
+                    <!-- <select name="fac_region" id="pat_region" class="form-control form-select" required>
                       <option value="">Select</option>
                       <option value="Region I - Ilocos Region">Region I - Ilocos Region</option>
                       <option value="Region II - Cagayan Valley">Region II - Cagayan Valley</option>
@@ -192,15 +248,17 @@
                       <option value="Region XI - Davao Region">Region XI - Davao Region</option>
                       <option value="Region XII - SOCCSKSARGEN">Region XII - SOCCSKSARGEN</option>
                       <option value="Region XIII - Caraga">Region XIII - Caraga</option>
-                    </select>
+                    </select> -->
+                    <input type="text" name="fac_region" id="pat_region" class="form-control" placeholder="Region"
+                      required>
                     <div class="error"></div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-end mt-4">
-                <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
+                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
+                    Next <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
               </div>
 
               <!-- TAB 2: Patient Demographic -->
@@ -210,13 +268,13 @@
                   <div class="col-md-4">
                     <label for="pat_full_name">Patient's Full Name</label>
                     <input type="text" name="pat_full_name" id="pat_full_name" class="form-control"
-                      placeholder="Surname, given names, middle name">
+                      placeholder="Surname, given names, middle name" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_date_of_birth">Date of Birth</label>
                     <input type="date" name="pat_date_of_birth" id="pat_date_of_birth" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="<?php echo date('Y-m-d'); ?>" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -227,7 +285,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="pat_sex">Sex</label>
-                    <select name="pat_sex" id="pat_sex" class="form-control form-select">
+                    <select name="pat_sex" id="pat_sex" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -236,7 +294,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="pat_civil_status">Civil Status</label>
-                    <select name="pat_civil_status" id="pat_civil_status" class="form-control form-select">
+                    <select name="pat_civil_status" id="pat_civil_status" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Single">Single</option>
                       <option value="Married">Married</option>
@@ -247,7 +305,7 @@
                   <div class="col-md-4">
                     <label for="pat_contact_number">Contact Number</label>
                     <input type="text" name="pat_contact_number" id="pat_contact_number" class="form-control"
-                      placeholder="09XXXXXXXXX" maxlength="11">
+                      placeholder="09XXXXXXXXX" maxlength="11" required>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -268,7 +326,7 @@
                   <div class="col-md-4">
                     <label for="pat_nationality">Nationality</label>
                     <input type="text" name="pat_nationality" id="pat_nationality" class="form-control"
-                      placeholder="Nationality">
+                      placeholder="Nationality" required>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -277,31 +335,31 @@
                   <div class="col-md-4">
                     <label for="pat_permanent_address">Permanent Address</label>
                     <input type="text" name="pat_permanent_address" id="pat_permanent_address" class="form-control"
-                      placeholder="House no., street, brgy">
+                      placeholder="House no., street, brgy" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_permanent_city_mun">City/ Municipality</label>
                     <input type="text" name="pat_permanent_city_mun" id="pat_permanent_city_mun" class="form-control"
-                      placeholder="City/ municipality">
+                      placeholder="City/ municipality" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_permanent_province">Province</label>
                     <input type="text" name="pat_permanent_province" id="pat_permanent_province" class="form-control"
-                      placeholder="Province">
+                      placeholder="Province" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_permanent_region">Region</label>
                     <input type="text" name="pat_permanent_region" id="pat_permanent_region" class="form-control"
-                      placeholder="Region">
+                      placeholder="Region" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_permanent_zip_code">Zip Code</label>
                     <input type="text" name="pat_permanent_zip_code" id="pat_permanent_zip_code" class="form-control"
-                      placeholder="Zip code" maxlength="5">
+                      placeholder="Zip code" maxlength="5" required>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -310,41 +368,41 @@
                   <div class="col-md-4">
                     <label for="pat_current_address">Current Address</label>
                     <input type="text" name="pat_current_address" id="pat_current_address" class="form-control"
-                      placeholder="House no., street, brgy">
+                      placeholder="House no., street, brgy" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_current_city_mun">City/ Municipality</label>
                     <input type="text" name="pat_current_city_mun" id="pat_current_city_mun" class="form-control"
-                      placeholder="City/ municipality">
+                      placeholder="City/ municipality" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_current_province">Province</label>
                     <input type="text" name="pat_current_province" id="pat_current_province" class="form-control"
-                      placeholder="Province">
+                      placeholder="Province" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_current_region">Region</label>
                     <input type="text" name="pat_current_region" id="pat_current_region" class="form-control"
-                      placeholder="Region">
+                      placeholder="Region" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_current_zip_code">Zip Code</label>
                     <input type="text" name="pat_current_zip_code" id="pat_current_zip_code" class="form-control"
-                      placeholder="Zip code" maxlength="5">
+                      placeholder="Zip code" maxlength="5" required>
                     <div class="error"></div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
+                    <i class="fas fa-arrow-left"></i> Back
+                  </button>
                   <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
+                    Next <i class="fas fa-arrow-right"></i>
+                  </button>
                 </div>
               </div>
 
@@ -356,18 +414,19 @@
                   <div class="col-md-4">
                     <label for="scr_referred_by">Referred by</label>
                     <input type="text" name="scr_referred_by" id="diag_referred_by" class="form-control"
-                      placeholder="Name">
+                      placeholder="Name" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="scr_location">Location</label>
                     <input type="text" name="scr_location" id="diag_location" class="form-control"
-                      placeholder="Location">
+                      placeholder="Location" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="scr_referrer_type">Type of Referrer</label>
-                    <select name="scr_referrer_type" id="diag_type_of_referrer" class="form-control form-select">
+                    <select name="scr_referrer_type" id="diag_type_of_referrer" class="form-control form-select"
+                      required>
                       <option value="" disabled selected>Select</option>
                       <option value="Public">Public</option>
                       <option value="Other public">Other public</option>
@@ -381,7 +440,8 @@
                 <div class="row">
                   <div class="col-md-4">
                     <label for="scr_screening_mode">Mode of Screening</label>
-                    <select name="scr_screening_mode" id="diag_mode_of_screening" class="form-control form-select">
+                    <select name="scr_screening_mode" id="diag_mode_of_screening" class="form-control form-select"
+                      required>
                       <option value="" disabled selected>Select</option>
                       <option value="PCF">PCF</option>
                       <option value="ACF">ACF</option>
@@ -393,17 +453,17 @@
                   <div class="col-md-4">
                     <label for="scr_screening_date">Date of Screening</label>
                     <input type="date" name="scr_screening_date" id="diag_date_of_screening" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" />
+                      max="<?php echo date('Y-m-d'); ?>" required />
                     <div class="error"></div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
+                    <i class="fas fa-arrow-left"></i> Back
+                  </button>
                   <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
+                    Next <i class="fas fa-arrow-right"></i>
+                  </button>
                 </div>
               </div>
 
@@ -414,7 +474,7 @@
                   <div class="col-md-4">
                     <label for="lab_xpert_test_date">Xpert MTB/RIF</label>
                     <input type="date" name="lab_xpert_test_date" id="diag_xpert_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="<?php echo date('Y-m-d'); ?>" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -426,7 +486,7 @@
                   <div class="col-md-4">
                     <label for="lab_cxray_test_date">Chest X-ray</label>
                     <input type="date" name="lab_cxray_test_date" id="diag_chest_xray_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="<?php echo date('Y-m-d'); ?>" required>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -435,7 +495,7 @@
                   <div class="col-md-4">
                     <label for="lab_xpert_result"></label>
                     <input type="text" name="lab_xpert_result" id="diag_xpert_result" class="form-control"
-                      placeholder="Result">
+                      placeholder="Result" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -447,7 +507,7 @@
                   <div class="col-md-4">
                     <label for="lab_cxray_result"></label>
                     <input type="text" name="lab_cxray_result" id="diag_chest_xray_result" class="form-control"
-                      placeholder="Result">
+                      placeholder="Result" required>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -483,11 +543,11 @@
                 </div>
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
+                    <i class="fas fa-arrow-left"></i> Back
+                  </button>
                   <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
+                    Next <i class="fas fa-arrow-right"></i>
+                  </button>
                 </div>
               </div>
 
@@ -498,12 +558,13 @@
                   <div class="col-md-4">
                     <label for="diag_diagnosis_date">Date of Diagnosis</label>
                     <input type="date" name="diag_diagnosis_date" id="diag_diagnosis_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="<?php echo date('Y-m-d'); ?>" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="diag_notification_date">Date of Notification</label>
-                    <input type="date" name="diag_notification_date" id="diag_notification_date" class="form-control" readonly>
+                    <input type="date" name="diag_notification_date" id="diag_notification_date" class="form-control"
+                      readonly>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -516,7 +577,8 @@
                 <div class="row mb-3">
                   <div class="col-md-4">
                     <label for="diag_attending_physician">Attending Physician</label>
-                    <select name="diag_attending_physician" id="diag_attending_physician" class="form-control">
+                    <select name="diag_attending_physician" id="diag_attending_physician"
+                      class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Dr. Jennifer Advincula">Dr. Jennifer Advincula</option>
                     </select>
@@ -551,7 +613,8 @@
                   </div>
                   <div class="col-md-4">
                     <label for="diag_region">Region</label>
-                    <select name="diag_region" id="diag_referred_region" class="form-control form-select">
+                    <input type="text" name="diag_region" id="diag_referred_region" class="form-control" placeholder="Region">
+                    <!-- <select name="diag_region" id="diag_referred_region" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Region I - Ilocos Region">Region I - Ilocos Region</option>
                       <option value="Region II - Cagayan Valley">Region II - Cagayan Valley</option>
@@ -566,17 +629,17 @@
                       <option value="Region XI - Davao Region">Region XI - Davao Region</option>
                       <option value="Region XII - SOCCSKSARGEN">Region XII - SOCCSKSARGEN</option>
                       <option value="Region XIII - Caraga">Region XIII - Caraga</option>
-                    </select>
+                    </select> -->
                     <div class="error"></div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
+                    <i class="fas fa-arrow-left"></i> Back
+                  </button>
                   <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
+                    Next <i class="fas fa-arrow-right"></i>
+                  </button>
                 </div>
               </div>
 
@@ -586,8 +649,8 @@
                 <div class="row mb-3">
                   <div class="col-md-4">
                     <label for="clas_bacteriological_status">Bacteriological Status</label>
-                    <select name="clas_bacteriological_status" id="diag_bacteriological_status"
-                      class="form-control form-select">
+                    <select name="clas_bacteriological_status" id="clas_bacteriological_status"
+                      class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Bacteriologically-confirmed TB">Bacteriologically-confirmed TB</option>
                       <option value="Clinically-diagnosed TB">Clinically-diagnosed TB</option>
@@ -597,7 +660,7 @@
                   <div class="col-md-4">
                     <label for="clas_drug_resistance_status">Drug Resistance Bacteriological Status</label>
                     <select name="clas_drug_resistance_status" id="clas_drug_resistance_status"
-                      class="form-control form-select">
+                      class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Drug-susceptible">Drug-susceptible</option>
                       <option value="Bacteriologically-confirmed RR-TB">Bacteriologically-confirmed RR-TB</option>
@@ -609,7 +672,7 @@
                   <div class="col-md-4">
                     <label for="clas_other_drug_resistant">Other Drug-resistant TB</label>
                     <input type="text" name="clas_other_drug_resistant" id="diag_other_drug_resistant_tb"
-                      class="form-control" placeholder="Other drug-resistant TB">
+                      class="form-control" placeholder="Specify">
                     <div class="error"></div>
                   </div>
                 </div>
@@ -617,7 +680,8 @@
                 <div class="row">
                   <div class="col-md-4">
                     <label for="clas_anatomical_site">Anatomical Site</label>
-                    <select name="clas_anatomical_site" id="diag_anatomical_site" class="form-control form-select">
+                    <select name="clas_anatomical_site" id="clas_anatomical_site" class="form-control form-select"
+                      required>
                       <option value="" disabled selected>Select</option>
                       <option value="Pulmonary">Pulmonary</option>
                       <option value="Extra-pulmonary">Extra-pulmonary</option>
@@ -625,15 +689,15 @@
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="clas_site_other">Site (If extra-pulmonary)</label>
-                    <input type="text" name="clas_site_other" id="diag_site_other" class="form-control"
-                      placeholder="Site">
+                    <label for="clas_site_other">Extra-pulmonary Site (Specify)</label>
+                    <input type="text" name="clas_site_other" id="clas_site_other" class="form-control"
+                      placeholder="Specify">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="clas_registration_group">Registration Group</label>
-                    <select name="clas_registration_group" id="diag_registration_group"
-                      class="form-control form-select">
+                    <select name="clas_registration_group" id="clas_registration_group" class="form-control form-select"
+                      required>
                       <option value="" disabled selected>Select</option>
                       <option value="New">New</option>
                       <option value="Relapse">Relapse</option>
@@ -646,10 +710,10 @@
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
-                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
-                  <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane me-1"></i>Submit</button>
+                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
+                    <i class="fas fa-arrow-left"></i> Back
+                  </button>
+                  <button type="submit" class="btn btn-success">Submit</button>
                 </div>
               </div>
             </div>
@@ -669,8 +733,10 @@
                   <!-- Auto-filled preview will show here -->
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Edit</button>
-                  <button type="button" class="btn btn-primary" id="confirmSubmit">Confirm & Submit</button>
+                  <button type="button" class="btn backBtn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-edit me-1"></i>Edit</button>
+                  <button type="button" class="btn btn-success" id="confirmSubmit">
+                     Confirm & Submit </button>
                 </div>
               </div>
             </div>
@@ -751,9 +817,9 @@
       pat_region,
       pat_full_name,
       pat_date_of_birth,
-      pat_age,
-      pat_sex,
-      pat_civil_status,
+      // pat_age,
+      // pat_sex,
+      // pat_civil_status,
       pat_permanent_address,
       pat_permanent_city_mun,
       pat_permanent_province,
@@ -768,16 +834,16 @@
       pat_nationality,
       diag_referred_by,
       diag_location,
-      diag_type_of_referrer,
-      diag_mode_of_screening,
-      diag_date_of_screening,
+      // diag_type_of_referrer,
+      // diag_mode_of_screening,
+      // diag_date_of_screening,
       diag_diagnosis_date,
-      diag_notification_date,
-      diag_attending_physician,
-      diag_bacteriological_status,
+      // diag_notification_date,
+      // diag_attending_physician,
+      clas_bacteriological_status,
       clas_drug_resistance_status,
-      diag_anatomical_site,
-      diag_registration_group,
+      clas_anatomical_site,
+      clas_registration_group,
       diag_xpert_test_date,
       diag_xpert_result,
       diag_chest_xray_test_date,
@@ -791,47 +857,127 @@
         // populate preview
         const preview = document.getElementById("previewContent");
         preview.innerHTML = `
-      <table class="table table-bordered">
-        <tbody>
-          <tr><th>Full Name</th><td>${pat_full_name.value}</td></tr>
-          <tr><th>Date of Birth</th><td>${pat_date_of_birth.value}</td></tr>
-          <tr><th>Age</th><td>${pat_age.value}</td></tr>
-          <tr><th>Sex</th><td>${pat_sex.value}</td></tr>
-          <tr><th>Civil Status</th><td>${pat_civil_status.value}</td></tr>
-          <tr><th>Contact Number</th><td>${pat_contact_number.value}</td></tr>
-          <tr><th>Other Contact</th><td>${pat_other_contact.value}</td></tr>
-          <tr><th>Nationality</th><td>${pat_nationality.value}</td></tr>
-          <tr><th>Permanent Address</th>
-            <td>${pat_permanent_address.value}, ${pat_permanent_city_mun.value}, 
-            ${pat_permanent_province.value}, ${pat_permanent_region.value} - ${pat_permanent_zip_code.value}</td>
-          </tr>
-          <tr><th>Current Address</th>
-            <td>${pat_current_address.value}, ${pat_current_city_mun.value}, 
-            ${pat_current_province.value}, ${pat_current_region.value} - ${pat_current_zip_code.value}</td>
-          </tr>
-          <tr><th>Diagnosing Facility</th><td>${pat_diagnosing_facility.value}</td></tr>
-          <tr><th>NTP Facility Code</th><td>${pat_ntp_facility_code.value}</td></tr>
-          <tr><th>Province</th><td>${pat_province.value}</td></tr>
-          <tr><th>Region</th><td>${pat_region.value}</td></tr>
-          <tr><th>Referred By</th><td>${diag_referred_by.value}</td></tr>
-          <tr><th>Location</th><td>${diag_location.value}</td></tr>
-          <tr><th>Type of Referrer</th><td>${diag_type_of_referrer.value}</td></tr>
-          <tr><th>Mode of Screening</th><td>${diag_mode_of_screening.value}</td></tr>
-          <tr><th>Date of Screening</th><td>${diag_date_of_screening.value}</td></tr>
-          <tr><th>Diagnosis Date</th><td>${diag_diagnosis_date.value}</td></tr>
-          <tr><th>Notification Date</th><td>${diag_notification_date.value}</td></tr>
-          <tr><th>Attending Physician</th><td>${diag_attending_physician.value}</td></tr>
-          <tr><th>Bacteriological Status</th><td>${diag_bacteriological_status.value}</td></tr>
-          <tr><th>Drug Resistance Status</th><td>${clas_drug_resistance_status.value}</td></tr>
-          <tr><th>Anatomical Site</th><td>${diag_anatomical_site.value}</td></tr>
-          <tr><th>Registration Group</th><td>${diag_registration_group.value}</td></tr>
-          <tr><th>Xpert Test Date</th><td>${diag_xpert_test_date.value}</td></tr>
-          <tr><th>Xpert Result</th><td>${diag_xpert_result.value}</td></tr>
-          <tr><th>Chest X-ray Test Date</th><td>${diag_chest_xray_test_date.value}</td></tr>
-          <tr><th>Chest X-ray Result</th><td>${diag_chest_xray_result.value}</td></tr>
-        </tbody>
-      </table>
-    `;
+        <div class="container-fluid px-2">
+
+        <!-- Diagnosing Facility -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-2">Facility Information</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Diagnosing Facility</th><td>${pat_diagnosing_facility.value}</td></tr>
+                  <tr><th>NTP Facility Code</th><td>${pat_ntp_facility_code.value}</td></tr>
+                  <tr><th>Province</th><td>${pat_province.value}</td></tr>
+                  <tr><th>Region</th><td>${pat_region.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Patient Information -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-2">Patient Information</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Full Name</th><td>${pat_full_name.value}</td></tr>
+                  <tr><th>Date of Birth</th><td>${pat_date_of_birth.value}</td></tr>
+                  <tr><th>Age</th><td>${pat_age.value}</td></tr>
+                  <tr><th>Sex</th><td>${pat_sex.value}</td></tr>
+                  <tr><th>Civil Status</th><td>${pat_civil_status.value}</td></tr>
+                  <tr><th>Contact Number</th><td>${pat_contact_number.value}</td></tr>
+                  <tr><th>Other Contact</th><td>${pat_other_contact.value}</td></tr>
+                  <tr><th>PhilHealth No.</th><td>${pat_philhealth_no.value}</td></tr>
+                  <tr><th>Nationality</th><td>${pat_nationality.value}</td></tr>
+                  <tr>
+                    <th>Permanent Address</th>
+                    <td>${pat_permanent_address.value}, ${pat_permanent_city_mun.value}, ${pat_permanent_province.value}, ${pat_permanent_region.value} - ${pat_permanent_zip_code.value}</td>
+                  </tr>
+                  <tr>
+                    <th>Current Address</th>
+                    <td>${pat_current_address.value}, ${pat_current_city_mun.value}, ${pat_current_province.value}, ${pat_current_region.value} - ${pat_current_zip_code.value}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Screening Information -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-2">Screening Information</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Referred By</th><td>${diag_referred_by.value}</td></tr>
+                  <tr><th>Location</th><td>${diag_location.value}</td></tr>
+                  <tr><th>Type of Referrer</th><td>${diag_type_of_referrer.value}</td></tr>
+                  <tr><th>Mode of Screening</th><td>${diag_mode_of_screening.value}</td></tr>
+                  <tr><th>Date of Screening</th><td>${diag_date_of_screening.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Laboratory Tests -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-2">Laboratory Tests</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Xpert Test Date</th><td>${diag_xpert_test_date.value}</td></tr>
+                  <tr><th>Xpert Result</th><td>${diag_xpert_result.value}</td></tr>
+                  <tr><th>Smear Microscopy Test Date</th><td>${diag_smear_test_date.value}</td></tr>
+                  <tr><th>Smear Result</th><td>${diag_smear_result.value}</td></tr>
+                  <tr><th>Chest X-ray Test Date</th><td>${diag_chest_xray_test_date.value}</td></tr>
+                  <tr><th>Chest X-ray Result</th><td>${diag_chest_xray_result.value}</td></tr>
+                  <tr><th>Tuberculin Skin Test Date</th><td>${diag_tuberculin_skin_test_date.value}</td></tr>
+                  <tr><th>Tuberculin Skin Test Result</th><td>${diag_tuberculin_skin_result.value}</td></tr>
+                  <tr><th>Other Test Date</th><td>${diag_other_test_date.value}</td></tr>
+                  <tr><th>Other Test Result</th><td>${diag_other_test_result.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Diagnosis -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-2">Diagnosis</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Diagnosis Date</th><td>${diag_diagnosis_date.value}</td></tr>
+                  <tr><th>Notification Date</th><td>${diag_notification_date.value}</td></tr>
+                  <tr><th>Attending Physician</th><td>${diag_attending_physician.value}</td></tr>
+                  <tr><th>Referred to</th><td>${diag_referred_to.value}</td></tr>
+                  <tr><th>Address</th><td>${diag_referred_address.value}</td></tr>
+                  <tr><th>Facility Code</th><td>${diag_referred_facility_code.value}</td></tr>
+                  <tr><th>Province</th><td>${diag_referred_province.value}</td></tr>
+                  <tr><th>Region</th><td>${diag_referred_region.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TB Disease Classification -->
+          <div class="card shadow-sm border-0 rounded-3 mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold mb-2">TB Disease Classification</h6>
+              <table class="table table-borderless preview-table align-middle mb-0">
+                <tbody>
+                  <tr><th>Bacteriological Status</th><td>${clas_bacteriological_status.value}</td></tr>
+                  <tr><th>Drug Resistance Status</th><td>${clas_drug_resistance_status.value}</td></tr>
+                  <tr><th>Other Drug-resistant TB</th><td>${diag_other_drug_resistant_tb.value}</td></tr>
+                  <tr><th>Anatomical Site</th><td>${clas_anatomical_site.value}</td></tr>
+                  <tr><th>Extra-pulmonary Site</th><td>${clas_site_other.value}</td></tr>
+                  <tr><th>Registration Group</th><td>${clas_registration_group.value}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      `;
+
 
         // show modal
         let modal = new bootstrap.Modal(document.getElementById("previewModal"));
@@ -848,15 +994,15 @@
     const setError = (element, message) => {
       const errorDisplay = element.parentElement.querySelector('.error');
       if (errorDisplay) errorDisplay.innerText = message;
-      element.classList.add('error');
-      element.classList.remove('success');
+      element.classList.add('is-invalid');
+      element.classList.remove('is-valid');
     };
 
-    const setSuccess = element => {
+    const setSuccess = (element) => {
       const errorDisplay = element.parentElement.querySelector('.error');
       if (errorDisplay) errorDisplay.innerText = '';
-      element.classList.add('success');
-      element.classList.remove('error');
+      element.classList.add('is-valid');
+      element.classList.remove('is-invalid');
     };
 
     // ✅ Contact number validation
@@ -979,29 +1125,129 @@
     });
 
     // ✅ Restrict to digits only in real-time
-    [pat_philhealth_no, pat_permanent_zip_code, pat_current_zip_code, pat_contact_number, pat_other_contact].forEach(input => {
+    [pat_permanent_zip_code, pat_current_zip_code, pat_contact_number, pat_other_contact].forEach(input => {
       input.addEventListener("input", () => {
         input.value = input.value.replace(/\D/g, ""); // remove non-digits
       });
     });
   </script>
 
-    <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const screeningInput = document.getElementById('diag_date_of_screening');
-    const notificationInput = document.getElementById('diag_notification_date');
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const tabs = document.querySelectorAll("#formTabs .nav-link");
+      const nextButtons = document.querySelectorAll(".next-tab");
+      const prevButtons = document.querySelectorAll(".prev-tab");
+      let isAlertShown = false;
 
-    screeningInput.addEventListener('change', function() {
-      if (this.value) {
-        // Auto-fill notification date same as screening date
-        notificationInput.value = this.value;
-      } else {
-        // Clear if screening date removed
-        notificationInput.value = '';
+      // Track which tabs are already valid
+      const validatedTabs = new Set();
+
+      // 🔹 Validate all required fields within a specific tab
+      function validateTab(tabId) {
+        const requiredInputs = document.querySelectorAll(`#${tabId} [required]`);
+        let isValid = true;
+
+        requiredInputs.forEach(input => {
+          const errorDiv = input.nextElementSibling;
+          if (input.value.trim() === "") {
+            isValid = false;
+            input.classList.add("is-invalid");
+            if (errorDiv && errorDiv.classList.contains("error")) {
+              errorDiv.textContent = "This field is required.";
+            }
+          } else {
+            input.classList.remove("is-invalid");
+            if (errorDiv && errorDiv.classList.contains("error")) {
+              errorDiv.textContent = "";
+            }
+          }
+        });
+
+        // If valid, mark tab as validated
+        if (isValid) validatedTabs.add(tabId);
+        return isValid;
       }
+
+      // 🔹 Show SweetAlert warning
+      function showValidationAlert() {
+        if (!isAlertShown) {
+          isAlertShown = true;
+          Swal.fire({
+            icon: "warning",
+            title: "Incomplete Fields",
+            text: "Please fill out all required fields before proceeding.",
+            confirmButtonColor: "#198754",
+            confirmButtonText: "OK",
+          }).then(() => {
+            isAlertShown = false;
+          });
+        }
+      }
+
+      // 🔹 Prevent switching tabs if moving forward to a higher tab index
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("show.bs.tab", function (e) {
+          const currentActive = document.querySelector("#formTabs .nav-link.active");
+          const currentIndex = Array.from(tabs).indexOf(currentActive);
+
+          // Only validate if moving forward
+          if (index > currentIndex) {
+            const currentPane = document.querySelector(currentActive.dataset.bsTarget);
+            if (!currentPane) return;
+
+            const currentTabId = currentPane.id;
+            if (!validateTab(currentTabId)) {
+              e.preventDefault();
+              showValidationAlert();
+            }
+          }
+        });
+      });
+
+      // 🔹 Handle "Next" buttons
+      nextButtons.forEach(btn => {
+        btn.addEventListener("click", function () {
+          const currentPane = btn.closest(".tab-pane");
+          const currentTabId = currentPane.id;
+          if (validateTab(currentTabId)) {
+            const currentTab = document.querySelector(`#formTabs .nav-link[data-bs-target="#${currentTabId}"]`);
+            const nextTab = currentTab.parentElement.nextElementSibling?.querySelector(".nav-link");
+            if (nextTab) new bootstrap.Tab(nextTab).show();
+          } else {
+            showValidationAlert();
+          }
+        });
+      });
+
+      // 🔹 Handle "Back" buttons (always allowed)
+      prevButtons.forEach(btn => {
+        btn.addEventListener("click", function () {
+          const currentPane = btn.closest(".tab-pane");
+          const currentTabId = currentPane.id;
+          const currentTab = document.querySelector(`#formTabs .nav-link[data-bs-target="#${currentTabId}"]`);
+          const prevTab = currentTab.parentElement.previousElementSibling?.querySelector(".nav-link");
+          if (prevTab) new bootstrap.Tab(prevTab).show();
+        });
+      });
     });
-  });
-</script>
+  </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const screeningInput = document.getElementById('diag_date_of_screening');
+      const notificationInput = document.getElementById('diag_notification_date');
+
+      screeningInput.addEventListener('change', function () {
+        if (this.value) {
+          // Auto-fill notification date same as screening date
+          notificationInput.value = this.value;
+        } else {
+          // Clear if screening date removed
+          notificationInput.value = '';
+        }
+      });
+    });
+  </script>
 
 </body>
 

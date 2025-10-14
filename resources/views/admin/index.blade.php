@@ -56,7 +56,7 @@
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <img src="{{url('assets/img/TBDOTS.png')}}" alt="TB DOTS Logo" />
+        <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
       </div>
       <div class="sidebar-brand">
         <h2>TB DOTS</h2>
@@ -157,17 +157,19 @@
 
     <div class="card-grid">
       <!-- Patient -->
-      <div class="card-dashboard patient">
+      <a href="{{ url('patient') }}" style="text-decoration:none;">
+        <div class="card-dashboard patient">
         <div class="card-body">
           <div class="card-info">
             <div class="card-title">Patients</div>
             <div class="card-value">{{ $totalPatients }}</div>
           </div>
           <div class="card-icon">
-            <i class="fas fa-users"></i>
+            <img src="{{ url('assets/img/tbpatient.png') }}" alt="">
           </div>
         </div>
       </div>
+      </a>
 
       <!-- Physician -->
       <div class="card-dashboard physician">
@@ -177,7 +179,7 @@
             <div class="card-value">{{ $totalPhysician }}</div>
           </div>
           <div class="card-icon">
-            <i class="fas fa-user-doctor"></i>
+            <img src="{{ url('assets/img/physician.png') }}" alt="">
           </div>
         </div>
       </div>
@@ -190,7 +192,7 @@
             <div class="card-value">{{ $totalStaff }}</div>
           </div>
           <div class="card-icon">
-            <i class="fas fa-user-tie"></i>
+            <img src="{{ url('assets/img/medical-staff.png') }}" alt="">
           </div>
         </div>
       </div>

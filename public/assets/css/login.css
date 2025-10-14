@@ -57,9 +57,9 @@ body {
 }
 
 .top-logo img {
-    height: 150px;
+    height: 70px;
     filter: drop-shadow(0 4px 8px rgba(251, 191, 36, 0.2)) drop-shadow(0 2px 4px rgba(76, 175, 80, 0.15));
-    max-width: 100%;
+    max-width: 70%;
     height: auto;
     max-height: 150px;
 }

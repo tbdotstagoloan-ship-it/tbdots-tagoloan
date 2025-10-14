@@ -14,7 +14,7 @@
     <div class="page-wrapper">
         <!-- TOP LOGO -->
         <div class="top-logo">
-            <img src="{{ url('assets/img/TBDOTS.png') }}" alt="logo">
+            <img src="{{ url('assets/img/tbdots-logo-1.png') }}" alt="logo">
         </div>
 
     <div class="login-container">

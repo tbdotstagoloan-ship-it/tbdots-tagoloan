@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbl_admins', function (Blueprint $table) {
+        Schema::create('tbl_patient_accounts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('diagfacility_id');
             $table->unsignedBigInteger('patient_id');
-            $table->string('adm_username');
-            $table->string('adm_password');
-
-            $table->foreign('diagfacility_id')
-                    ->references('id')
-                    ->on('tbl_diagnosing_facilities')
-                    ->onDelete('cascade');
+            $table->string('acc_username');
+            $table->string('acc_password');
                     
             $table->foreign('patient_id')
                     ->references('id')
@@ -36,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbl_admins');
+        Schema::dropIfExists('tbl_patient_accounts');
     }
 };

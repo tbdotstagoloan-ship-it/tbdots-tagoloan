@@ -38,7 +38,7 @@
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <img src="{{url('assets/img/TBDOTS.png')}}" alt="TB DOTS Logo" />
+        <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
       </div>
       <div class="sidebar-brand">
         <h2>TB DOTS</h2>
@@ -429,6 +429,8 @@
               <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
               <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
               <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+              <option value="250" {{ $perPage == 250 ? 'selected' : '' }}>250</option>
+              <option value="500" {{ $perPage == 500 ? 'selected' : '' }}>500</option>
             </select>
             <span class="ms-2">per page</span>
           </form>

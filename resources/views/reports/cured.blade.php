@@ -28,7 +28,7 @@
     <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <img src="{{url('assets/img/TBDOTS.png')}}" alt="TB DOTS Logo" />
+        <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
       </div>
       <div class="sidebar-brand">
         <h2>TB DOTS</h2>
@@ -139,8 +139,8 @@
         <div class="card-body p-0">
           <div class="table-responsive">
 
-        <select id="statusRedirect" class="form-select mb-2" style="width: 235px;">
-          <option value="" disabled selected>Select Treatment Outcome</option>
+        <select id="statusRedirect" class="form-select form-select-sm w-auto mb-2" style="width: 235px;">
+          <option value="" disabled selected>Select Outcome</option>
           <option value="{{ url('cured') }}">Cured</option>
           <option value="{{ url('treatment-completed') }}">Treatment Completed</option>
           <option value="{{ url('lost-to-follow-up') }}">Lost to Follow-up</option>

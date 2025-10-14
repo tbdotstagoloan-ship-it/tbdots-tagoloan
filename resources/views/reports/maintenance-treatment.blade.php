@@ -28,7 +28,7 @@
     <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
-        <img src="{{url('assets/img/TBDOTS.png')}}" alt="TB DOTS Logo" />
+        <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
       </div>
       <div class="sidebar-brand">
         <h2>TB DOTS</h2>
@@ -152,9 +152,9 @@
                   <th>Drug</th>
                   <th>Strength</th>
                   <th>Unit</th>
-                  <th>Maintenance Start</th>
+                  <th>Continuation Phase Start</th>
                   <th>Day</th>
-                  <th>Maintenance End</th>
+                  <th>Continuation Phase End</th>
                   <th>Status</th>
                 </tr>
               </thead>

@@ -13,17 +13,11 @@ return new class extends Migration
     {
         Schema::create('tbl_treatment_histories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('treatfacility_id');
             $table->unsignedBigInteger('patient_id');
             $table->date('hist_date_tx_started')->nullable();
             $table->string('hist_treatment_unit')->nullable();
             $table->string('hist_regimen')->nullable();
             $table->string('hist_outcome')->nullable();
-
-            $table->foreign('treatfacility_id')
-                    ->references('id')
-                    ->on('tbl_treatment_facilities')
-                    ->onDelete('cascade');
                     
             $table->foreign('patient_id')
                     ->references('id')

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdherenceController;
 use App\Http\Controllers\SputumMonitoringController;
 use App\Http\Controllers\CloseContactController;
 use App\Http\Controllers\PatientProgressController;
@@ -139,10 +140,19 @@ Route::post('/patients/{id}/post-treatment-follow-up', [PostTreatmentFollowUpCon
 Route::post('/patients/{id}/treatment-history', [TreatmentHistoryController::class, 'store'])->name('treatment-history.store');
 Route::post('/patients/{id}/comorbidities', [ComorbidityController::class, 'store'])->name('comorbidities.store');
 Route::post('/patients/{id}/hiv', [HivController::class, 'store'])->name('hiv.store');
-Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::class, 'store'])->name('treatment-outcome.store');
+// Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::class, 'store'])->name('treatment-outcome.store');
 Route::post('/patients/{id}/prescribed-drugs', [PrescribedDrugsController::class, 'store'])->name('prescribed-drugs.store');
 
 Route::post('/patients/{id}/laboratory-tests', [LaboratoryTestController::class, 'store'])->name('laboratory-tests.store');
 Route::put('/laboratory-tests/{id}', [LaboratoryTestController::class, 'update'])->name('laboratory-tests.update');
 
 Route::put('/referrals/{id}', [DiagnosisController::class, 'update'])->name('referrals.update');
+
+Route::put('/patients/adherence/{id}', [AdherenceController::class, 'update'])->name('adherence.update');
+
+Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::class, 'store'])
+    ->name('treatment-outcome.store');
+
+// Update route (for editing)
+Route::put('/treatment-outcome/{id}', [TreatmentOutcomeController::class, 'update'])
+    ->name('treatment-outcome.update');
