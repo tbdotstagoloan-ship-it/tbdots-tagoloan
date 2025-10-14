@@ -170,4 +170,3 @@ class MedicationController extends Controller
         ]);
     }
 }
-?>
