@@ -2995,11 +2995,12 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
+            let adherenceData = {}; // make this reassignable
 
-            // Sample adherence data - Replace with your database values
-            const adherenceData = {};
+            //  Sample: replace with actual logged-in username dynamically
+            const username = "Syramae123"; // or fetch this from your backend/session
 
-            async function fetchAdherenceData(username) {
+            async function fetchAdherenceData() {
                 try {
                     const response = await fetch(`/api/adherence/${username}`);
                     const data = await response.json();
@@ -3011,7 +3012,7 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error("Error fetching adherence data:", error);
+                    console.error(" Error fetching adherence data:", error);
                 }
             }
 
@@ -3061,7 +3062,7 @@
                     calendar.appendChild(empty);
                 }
 
-                // Calendar days
+                // Calendar days with adherence status
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -3072,7 +3073,11 @@
                     if (adherenceData[dateStr]) {
                         cell.classList.add("adherence-" + adherenceData[dateStr]);
                         const icon = document.createElement("i");
-                        icon.classList.add("fa", adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times", "adherence-status-icon");
+                        icon.classList.add(
+                            "fa",
+                            adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
+                            "adherence-status-icon"
+                        );
                         cell.appendChild(icon);
                     }
 
@@ -3092,10 +3097,11 @@
                 renderCalendar(currentDate);
             });
 
-            // Initial render
-            renderCalendar(currentDate);
+            // Initial fetch and render
+            fetchAdherenceData();
         })();
-    </script>
+        </script>
+
 
     <script>
         function editOutcome(id, outcome, date, reason) {
