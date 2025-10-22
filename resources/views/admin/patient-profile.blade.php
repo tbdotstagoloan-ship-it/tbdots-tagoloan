@@ -537,7 +537,7 @@
 
             <!-- Patient Profile Tab -->
             <div id="personal-tab" class="tab-content active" style="margin-top: 30px;">
-                
+
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
@@ -1997,7 +1997,7 @@
                                 <div id="adherence-tab" class="tab-content" style="margin-top: 30px; display: none;">
                                     <div class="info-section">
                                         <h5 class="fw-bold mb-3">Medication Adherence</h5>
-                                        <input type="hidden" id="patient-username" value="{{ $patient->username }}">
+
                                         <div class="adherence-calendar-card">
                                             <div class="adherence-calendar-header">
                                                 <div class="d-flex align-items-center gap-3">
@@ -2995,15 +2995,14 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {};
+            let adherenceData = {}; // make this reassignable
 
-            // ✅ Get username dynamically from the page
-            const username = document.getElementById('patient-username').value;
+            //  Sample: replace with actual logged-in username dynamically
+            const username = "Syramae123"; // or fetch this from your backend/session
 
             async function fetchAdherenceData() {
                 try {
                     const response = await fetch(`/api/adherence/${username}`);
-                    if (!response.ok) throw new Error("Failed to fetch adherence");
                     const data = await response.json();
 
                     adherenceData = {};
@@ -3013,7 +3012,7 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error("❌ Error fetching adherence data:", error);
+                    console.error(" Error fetching adherence data:", error);
                 }
             }
 
@@ -3032,7 +3031,7 @@
                 const total = taken + missed;
                 const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
 
-                adherenceRateEl.textContent = `${rate}%`;
+                adherenceRateEl.textContent = rate + "%";
                 daysTakenEl.textContent = taken;
                 daysMissedEl.textContent = missed;
             }
@@ -3047,6 +3046,7 @@
                 const monthName = date.toLocaleString("default", { month: "long" });
                 monthYear.textContent = `${monthName} ${year}`;
 
+                // Day headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3055,12 +3055,14 @@
                     calendar.appendChild(header);
                 });
 
+                // Empty cells for offset
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
+                // Calendar days with adherence status
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -3095,10 +3097,10 @@
                 renderCalendar(currentDate);
             });
 
+            // Initial fetch and render
             fetchAdherenceData();
         })();
         </script>
-
 
 
     <script>
