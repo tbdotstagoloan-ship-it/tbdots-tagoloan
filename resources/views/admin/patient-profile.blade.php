@@ -2995,10 +2995,10 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {}; // make this reassignable
+            let adherenceData = {};
 
-            //  Sample: replace with actual logged-in username dynamically
-            const username = "Syramae123"; // or fetch this from your backend/session
+            // Use the patient's username from the Blade variable
+            const username = "{{ $patient->username }}";
 
             async function fetchAdherenceData() {
                 try {
@@ -3012,7 +3012,7 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error(" Error fetching adherence data:", error);
+                    console.error("Error fetching adherence data:", error);
                 }
             }
 
@@ -3100,7 +3100,7 @@
             // Initial fetch and render
             fetchAdherenceData();
         })();
-        </script>
+    </script>
 
 
     <script>

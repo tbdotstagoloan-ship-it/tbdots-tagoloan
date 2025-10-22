@@ -94,9 +94,11 @@ class AdminController extends Controller
     }
 
 
-    public function patientProfile()
+    public function patientProfile($id)
     {
-        return view('admin.patient-profile');
+        $patient = Patient::findOrFail($id);
+
+        return view('admin.patient-profile', compact('patient'));
     }
 
     public function page1()
