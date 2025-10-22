@@ -27,5 +27,3 @@ Route::get('/physicians', [PhysicianController::class, 'show']);
 
 Route::post('/adherence/log', [MedicationAdherenceController::class, 'logAdherence']);
 Route::get('/adherence/{username}', [MedicationAdherenceController::class, 'getAdherence']);
-Route::get('/adherence', [MedicationAdherenceController::class, 'getAllAdherence']);
-Route::get('/adherence/{patientId}', [MedicationAdherenceController::class, 'getByPatient']);

@@ -2995,14 +2995,14 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {};
-            let currentPatientId = null; // dynamic patient ID
+            let adherenceData = {}; // make this reassignable
 
-            // 🔸 Fetch adherence data for the selected patient
-            async function fetchAdherenceData(patientId) {
+            //  Sample: replace with actual logged-in username dynamically
+            const username = "Syramae123"; // or fetch this from your backend/session
+
+            async function fetchAdherenceData() {
                 try {
-                    const response = await fetch(`/api/adherence/${patientId}`);
-                    if (!response.ok) throw new Error('Failed to fetch adherence data');
+                    const response = await fetch(`/api/adherence/${username}`);
                     const data = await response.json();
 
                     adherenceData = {};
@@ -3012,11 +3012,10 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error("❌ Error fetching adherence data:", error);
+                    console.error(" Error fetching adherence data:", error);
                 }
             }
 
-            // 📊 Calculate stats (rate, taken, missed)
             function calculateStats(year, month) {
                 let taken = 0;
                 let missed = 0;
@@ -3037,7 +3036,6 @@
                 daysMissedEl.textContent = missed;
             }
 
-            // 📅 Render the calendar grid
             function renderCalendar(date) {
                 calendar.innerHTML = "";
                 const year = date.getFullYear();
@@ -3048,7 +3046,7 @@
                 const monthName = date.toLocaleString("default", { month: "long" });
                 monthYear.textContent = `${monthName} ${year}`;
 
-                // Headers
+                // Day headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3057,14 +3055,14 @@
                     calendar.appendChild(header);
                 });
 
-                // Empty cells
+                // Empty cells for offset
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
-                // Days
+                // Calendar days with adherence status
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -3089,7 +3087,6 @@
                 calculateStats(year, month);
             }
 
-            // ⏪⏩ Navigation
             document.getElementById("prevMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
                 renderCalendar(currentDate);
@@ -3100,22 +3097,10 @@
                 renderCalendar(currentDate);
             });
 
-            // 👁️ Listen to “View Details” clicks to load correct patient data
-            document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('.btn-view-details').forEach(button => {
-                    button.addEventListener('click', function (e) {
-                        currentPatientId = this.getAttribute('data-patient-id');
-                        fetchAdherenceData(currentPatientId);
-
-                        // Optional: auto switch to medication tab if it's hidden
-                        document.getElementById('adherence-tab').style.display = 'block';
-                    });
-                });
-            });
-
+            // Initial fetch and render
+            fetchAdherenceData();
         })();
         </script>
-
 
 
     <script>

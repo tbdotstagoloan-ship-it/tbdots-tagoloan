@@ -41,11 +41,4 @@ class MedicationAdherenceController extends Controller
 
         return response()->json($logs);
     }
-
-    public function getByPatient($patientId)
-    {
-        $records = MedicationAdherence::where('patient_id', $patientId)->get();
-        return response()->json($records);
-    }
-
 }
