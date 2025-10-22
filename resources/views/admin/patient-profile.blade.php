@@ -3002,7 +3002,7 @@
 
             async function fetchAdherenceData() {
                 try {
-                    const response = await fetch(`/api/adherence/${username}`);
+                    const response = await fetch(`/adherence/${username}`);
                     if (!response.ok) throw new Error("Network response was not ok");
 
                     const data = await response.json();
