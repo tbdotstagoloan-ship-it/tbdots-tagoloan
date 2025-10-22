@@ -66,16 +66,13 @@ class PatientController extends Controller
 
         public function validatePage1 (Request $request) {
 
-            // Diagnosing Facility
-            $diagnosing_facility_validate = $request->validate([
-                'fac_name' => 'required',
-                'fac_ntp_code' => 'required',
-                'fac_province' => 'required',
-                'fac_region' => 'required'
+            // ✅ STEP 1: Just validate the selected diagnosing facility ID
+            $request->validate([
+                'fac_name' => 'required|exists:tbl_diagnosing_facilities,id'
             ]);
 
-            $diagnosing_facility_validate['user_id'] = Auth::id();
-            $facility = DiagnosingFacility::create($diagnosing_facility_validate);
+            // ✅ Get the selected facility (no insert)
+            $facility = DiagnosingFacility::findOrFail($request->fac_name);
 
             // Patient Demographic
             $patient_validate = $request->validate([
@@ -155,7 +152,7 @@ class PatientController extends Controller
 
             $diagnosis_validate['diag_tb_case_no'] = $tbCaseNo;
             $diagnosis_validate['patient_id'] = $patient->id;
-            $labtest_validate['diagfacility_id'] = $facility->id;
+            $diagnosis_validate['diagfacility_id'] = $facility->id;
 
             Diagnosis::create($diagnosis_validate);
 
@@ -177,12 +174,12 @@ class PatientController extends Controller
             session(['patient_id' => $patient->id]);
             session(['diagfacility_id' => $facility->id]);
 
-            // after validation and saving Page 1
+            // Also store readable info in session (optional)
             session([
-                'trea_name' => $request->fac_name,
-                'trea_ntp_code' => $request->fac_ntp_code,
-                'trea_province' => $request->fac_province,
-                'trea_region' => $request->fac_region,
+                'trea_name' => $facility->fac_name,
+                'trea_ntp_code' => $facility->fac_ntp_code,
+                'trea_province' => $facility->fac_province,
+                'trea_region' => $facility->fac_region,
             ]);
 
             return redirect ('form/page2')->with('success', 'You have successfully completed Page 1.');
@@ -207,7 +204,8 @@ class PatientController extends Controller
             $treatment_history_validate = $request->validate([
                 'hist_date_tx_started' => 'nullable',
                 'hist_treatment_unit' => 'nullable',
-                'hist_regimen' => 'nullable',
+                'hist_drug' => 'nullable',
+                'hist_treatment_duration' => 'nullable',
                 'hist_outcome' => 'nullable'
             ]);
 
@@ -233,7 +231,9 @@ class PatientController extends Controller
             $baseline_info_validate = $request->validate([
                 'base_weight' => 'required',
                 'base_height' => 'required',
-                'base_vital_signs' => 'required',
+                'base_blood_pressure' => 'required',
+                'base_heart_rate' => 'required',
+                'base_temperature' => 'required',
                 'base_emergency_contact_name' => 'required',
                 'base_relationship' => 'required',
                 'base_contact_info' => 'required',
@@ -285,9 +285,9 @@ class PatientController extends Controller
                 'drug_strength' => 'required',
                 'drug_unit' => 'required',
                 'drug_con_date' => 'nullable',
-                'drug_con_name' => 'nullable',
-                'drug_con_strength' => 'nullable',
-                'drug_con_unit' => 'nullable'
+                'drug_con_name' => 'required',
+                'drug_con_strength' => 'required',
+                'drug_con_unit' => 'required'
             ]);
 
             $prescribed_drug_validate['patient_id'] = $patientId;
@@ -476,9 +476,13 @@ class PatientController extends Controller
                 'p.id',
                 'p.pat_full_name',
                 'a.acc_username',
-                'a.acc_password'
+                'p.pat_contact_number',
+                'p.pat_date_of_birth',
+                'p.pat_sex',
+                'p.pat_permanent_address',
             )
-        ->paginate(10);
+            ->orderBy('p.id', 'desc')
+            ->paginate(10);
 
         return view ('admin.patient-accounts', compact('patientAccount'));
     }

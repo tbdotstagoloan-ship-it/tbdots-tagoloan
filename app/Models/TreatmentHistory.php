@@ -11,7 +11,8 @@ class TreatmentHistory extends Model
     protected $fillable = [
         'hist_date_tx_started',
         'hist_treatment_unit',
-        'hist_regimen',
+        'hist_drug',
+        'hist_treatment_duration',
         'hist_outcome',
         'patient_id',
     ];

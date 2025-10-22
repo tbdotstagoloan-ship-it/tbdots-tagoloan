@@ -19,9 +19,8 @@ class AdminController extends Controller
 
         $totalStaff = DB::table('users')->count();
 
-        $totalPhysician = DB::table('tbl_diagnosis')
-            ->distinct('diag_attending_physician')
-            ->count('diag_attending_physician');
+        $totalPhysician = DB::table('tbl_physicians')
+            ->where('phy_designation', 'Doctor')->count();
 
         $pulmonary = DB::table('tbl_tb_classifications')
             ->where('clas_anatomical_site', 'Pulmonary')->count();
@@ -29,12 +28,15 @@ class AdminController extends Controller
         $extra = DB::table('tbl_tb_classifications')
             ->where('clas_anatomical_site', 'Extra-pulmonary')->count();
 
+        $totalFacility = DB::table('tbl_diagnosing_facilities')->count();
+
         return view('admin.index', compact(
             'totalPatients',
             'totalPhysician',
             'totalStaff',
             'pulmonary',
-            'extra'
+            'extra',
+            'totalFacility'
         ));
     }
 
@@ -66,15 +68,17 @@ class AdminController extends Controller
 
         $patients = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
+            ->join('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
             ->select(
                 'p.id',
                 'p.*',
                 'p.pat_full_name',
                 'p.pat_sex',
-                // DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
                 'p.pat_current_address',
                 'd.diag_tb_case_no',
                 'd.diag_diagnosis_date',
+                'to.out_outcome as status'
             )
             ->when($search, function ($query, $search) {
                 $query->where('p.pat_full_name', 'LIKE', "%{$search}%")
@@ -147,13 +151,6 @@ class AdminController extends Controller
     {
         $patient = Patient::findOrFail($id);
         return view('patient.edit', compact('patient'));
-    }
-
-    public function add()
-    {
-        
-
-        return view ('patient.add-result');
     }
 
     public function update(Request $request, $id)

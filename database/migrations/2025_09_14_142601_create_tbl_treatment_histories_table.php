@@ -16,7 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->date('hist_date_tx_started')->nullable();
             $table->string('hist_treatment_unit')->nullable();
-            $table->string('hist_regimen')->nullable();
+            $table->string('hist_drug')->nullable();
+            $table->string('hist_treatment_duration')->nullable();
             $table->string('hist_outcome')->nullable();
                     
             $table->foreign('patient_id')

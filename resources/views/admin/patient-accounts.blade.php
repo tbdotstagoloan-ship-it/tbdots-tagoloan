@@ -39,9 +39,37 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add Patient</a></li>
-          <li><a class="nav-link" href="{{ url('patient') }}">Patient List</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
+      </li>
+
+      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+        <a href="{{ url('physician') }}">
+          <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Physician / Personnel</span>
+          </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Facilities">
+        <a href="{{url('facilities')}}">
+          <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Facilities</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+        <a href="{{url('medication-adherence-flags')}}">
+          <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Medication Adherence Flags</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Patient Accounts">
+        <a href="{{url('patient-accounts')}}">
+          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Patient Accounts</span>
+        </a>
       </li>
 
       <!-- <li class="menu-item" data-tooltip="Notification">
@@ -74,13 +102,6 @@
       </li>
 
       <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('patient-accounts')}}">
-          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient Accounts</span>
-        </a>
-      </li>
-
-      <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
@@ -92,7 +113,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+          <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -121,9 +142,12 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>Full Name</th>
                 <th>Username</th>
-                <th>Password</th>
+                <th>Contact Information</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Address</th>
                 <!-- <th>Action</th> -->
               </tr>
             </thead>
@@ -135,7 +159,10 @@
           <td>{{ $patient->id }}</td>
           <td>{{ $patient->pat_full_name }}</td>
           <td>{{ $patient->acc_username }}</td>
-          <td>{{ $patient->acc_password }}</td>
+          <td>{{ $patient->pat_contact_number }}</td>
+          <td>{{ Carbon\Carbon::parse($patient->pat_date_of_birth)->format('F j, Y') }}</td>
+          <td>{{ $patient->pat_sex }}</td>
+          <td>{{ $patient->pat_permanent_address }}</td>
           <!-- <td class="text-center">
           <div class="dropdown">
             <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

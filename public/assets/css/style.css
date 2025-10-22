@@ -866,9 +866,11 @@ pointer-events: auto !important; /* ensures cursor still shows */
 }
 
 .status-badge {
-  font-size: 12px;      /* laki ng text */
-  padding: 6px 12px;    /* mas malapad at mataas */
-  border-radius: 20px;  /* pill style */
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;    
+  border-radius: 20px;  
 }
 
 /* Tabs container */

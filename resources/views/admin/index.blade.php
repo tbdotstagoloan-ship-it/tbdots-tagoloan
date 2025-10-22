@@ -66,7 +66,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}" class="active">
+        <a href="{{url('admin/dashboard')}}">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -79,9 +79,37 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add Patient</a></li>
-          <li><a class="nav-link" href="{{ url('patient') }}">Patient List</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
+      </li>
+
+      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+        <a href="{{ url('physician') }}">
+          <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Physician / Personnel</span>
+          </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Facilities">
+        <a href="{{url('facilities')}}">
+          <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Facilities</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+        <a href="{{url('medication-adherence-flags')}}">
+          <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Medication Adherence Flags</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Patient Accounts">
+        <a href="{{url('patient-accounts')}}">
+          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Patient Accounts</span>
+        </a>
       </li>
 
       <!-- <li class="menu-item" data-tooltip="Notification">
@@ -111,13 +139,6 @@
           <li><a href="{{ url('barangay-cases-notification') }}" class="nav-link">Barangay Cases Notification</a></li>
           <li><a href="{{ url('quarterly-cases-notification') }}" class="nav-link">Quarterly Reports</a></li>
         </ul>
-      </li>
-
-      <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('patient-accounts')}}">
-          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient Accounts</span>
-        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Settings">
@@ -172,7 +193,8 @@
       </a>
 
       <!-- Physician -->
-      <div class="card-dashboard physician">
+      <a href="{{ url('physician') }}" style="text-decoration: none;">
+        <div class="card-dashboard physician">
         <div class="card-body">
           <div class="card-info">
             <div class="card-title">Physician</div>
@@ -183,19 +205,22 @@
           </div>
         </div>
       </div>
+      </a>
 
       <!-- Staff -->
-      <div class="card-dashboard staff">
+      <a href="{{ url('facilities') }}" style="text-decoration: none;">
+        <div class="card-dashboard staff">
         <div class="card-body">
           <div class="card-info">
-            <div class="card-title">Staff</div>
-            <div class="card-value">{{ $totalStaff }}</div>
+            <div class="card-title">Facilities</div>
+            <div class="card-value">{{ $totalFacility }}</div>
           </div>
           <div class="card-icon">
-            <img src="{{ url('assets/img/medical-staff.png') }}" alt="">
+            <img src="{{ url('assets/img/provider.png') }}" alt="">
           </div>
         </div>
       </div>
+      </a>
 
     </div>
 

@@ -18,11 +18,6 @@ return new class extends Migration
             $table->date('pha_intensive_end')->nullable();
             $table->date('pha_continuation_start')->nullable();
             $table->date('pha_continuation_end')->nullable();
-            $table->string('pha_month')->nullable();
-            $table->string('pha_monthly_doses')->nullable();
-            $table->string('pha_cumulative_doses')->nullable();
-            $table->string('pha_monthly_missed')->nullable();
-            $table->decimal('pha_adherence_percent', 5,2)->nullable();
             $table->decimal('pha_weight', 5,2)->nullable();
             $table->decimal('pha_child_height', 5,2)->nullable();
 

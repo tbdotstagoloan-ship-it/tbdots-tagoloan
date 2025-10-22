@@ -16,7 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->decimal('base_weight', 5,2);
             $table->decimal('base_height', 5,2);
-            $table->string('base_vital_signs');
+            $table->string('base_blood_pressure');
+            $table->string('base_heart_rate');
+            $table->string('base_temperature');
             $table->string('base_emergency_contact_name');
             $table->string('base_relationship');
             $table->string('base_contact_info');

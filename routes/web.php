@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\MedicationController;
+use App\Http\Controllers\PhysicianController;
+use App\Http\Controllers\DiagnosingFacilityController;
+use App\Http\Controllers\MedicationAdherenceController;
 use App\Http\Controllers\AdherenceController;
 use App\Http\Controllers\SputumMonitoringController;
 use App\Http\Controllers\CloseContactController;
@@ -27,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/dashboard', function () {
-    return view('admin/dashboard');
+    return view('/dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -158,22 +160,19 @@ Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::cla
 Route::put('/treatment-outcome/{id}', [TreatmentOutcomeController::class, 'update'])
     ->name('treatment-outcome.update');
 
+Route::get('/diagnosing-facility/default', [DiagnosingFacilityController::class, 'getDefault']);
 
-/*
-|--------------------------------------------------------------------------
-| Medication API Routes
-|--------------------------------------------------------------------------
-*/
+// Physician
+Route::get('physician', [PhysicianController::class, 'index'])->middleware(['auth'])->name('admin.physician');
+Route::post('/physician/store', [PhysicianController::class, 'store'])->name('physician.store');
+Route::put('/physician/{id}', [PhysicianController::class, 'update'])->name('physician.update');
+Route::delete('/physician/{id}', [PhysicianController::class, 'destroy'])->name('physician.destroy');
 
-// Get medication logs
-Route::get('/medication-logs', [MedicationController::class, 'getConfirmedLogs']);
-Route::get('/missed-logs', [MedicationController::class, 'getMissedLogs']);
-Route::get('/combined-logs', [MedicationController::class, 'getCombinedLogs']);
+// Facility
+Route::get('facilities', [DiagnosingFacilityController::class,'index'])->middleware(['auth'])->name('facility.facilities');
+Route::post('/facilities/store', [DiagnosingFacilityController::class, 'store'])->name('facilities.store');
+Route::put('/facilities/edit/{id}', [DiagnosingFacilityController::class, 'update'])->name('facilities.update');
+Route::delete('/facilities/{id}', [DiagnosingFacilityController::class, 'destroy'])->name('facilities.destroy');
 
-// Insert medication logs
-Route::post('/medication-logs', [MedicationController::class, 'confirmMedication']);
-Route::post('/missed-logs', [MedicationController::class, 'markMissed']);
-
-// Get statistics
-Route::get('/adherence-stats', [MedicationController::class, 'getAdherenceStats']);
-
+// Medication
+Route::get('medication-adherence-flags', [MedicationAdherenceController::class,'index'])->middleware(['auth'])->name('medication.index');

@@ -1,17 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>TB DOTS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
-    <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
-  </head>
 
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>TB DOTS - Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
+  <style>
+    .charts-row {
+      display: flex;
+      gap: 20px;
+    }
 
-    <div class="sidebar" id="sidebar">
+    .chart-card {
+      flex: 1;
+      /* hati sila sa lapad (50/50) */
+      min-width: 0;
+      /* para hindi mag-overflow */
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+      border: 2px solid #f1f3f4;
+    }
+
+    .doughnut-chart-container {
+      position: relative;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+      border: 2px solid #f1f3f4;
+      height: 350px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 350px;
+      background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+      border-radius: 16px;
+      padding: 20px;
+      border: 2px solid #f1f3f4;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    @media (max-width: 768px) {
+      .charts-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-logo">
         <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
@@ -125,95 +167,103 @@
         <i class="fas fa-bars"></i>
       </button>
     </div>
+
   </div>
 
-    <div class="main-content py-4" id="mainContent">
-      <h4 style="margin-bottom: 10px; color: #2c3e50; font-weight: 600;">
-        Pulmonary
-      </h4>
-      <p class="text-muted mb-3">
-        Patients with TB affecting the lungs.
-      </p>
 
-      <div class="d-flex justify-content-end mb-2 gap-1">
-        <a href="{{ route('pdf.pulmonary.pdf') }}" target="_blank" class="btn btn-danger">
-          <i class="fas fa-file-pdf me-1"></i> Generate Report
-        </a>
-      </div>
-      
-      <div class="card inventory-card shadow-sm border-0">
-        <div class="card-body p-0">
-          <div class="table-responsive">
+  <div class="main-content py-4" id="mainContent">
+    <h4 style="margin-bottom: 50px; color: #2c3e50; font-weight: 600;">
+        Medication Adherence Flags
+    </h4>
 
-          <select id="statusRedirect" class="form-select mb-2" style="width: 210px;">
-            <option value="" disabled selected>Select Anatomical Site</option>
-            <option value="{{ url('pulmonary') }}">Pulmonary</option>
-            <option value="{{ url('extra-pulmonary') }}">Extra Pulmonary</option>
-            </select>
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-0">
+        <div class="table-responsive">
 
-                <table class="table">
-              <thead>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Sex</th>
+                <th>TB Case #</th>
+                <th>Address</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+
+
                 <tr>
-                  <th>Name</th>
-                  <th>Age</th>
-                  <th>Sex</th>
-                  <th>Barangay</th>
-                  <th>TB Case #</th>
-                  <th>Diagnosis Date</th>
-                  <th>Anatomical Site</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  
+                  
                 </tr>
-              </thead>
-              <tbody>
+            </tbody>
+          </table>
 
-              @foreach ($pulmonary as $patient)
-                
-                <tr>
-                  <td>{{ $patient->pat_full_name }}</td>
-                  <td>{{ $patient->pat_age }}</td>
-                  <td>{{ $patient->pat_sex }}</td>
-                  <td>{{ $patient->barangay }}</td>
-                  <td>{{ $patient->diag_tb_case_no }}</td>
-                  <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
-                  <td>{{ $patient->anatomical_site }}</td>
-                </tr>
-
-                @endforeach
-
-              </tbody>
-            </table>
-  
-                </div>
-              </div>
-
-              <div class="card-footer">Showing {{ $pulmonary->firstItem() }} to {{ $pulmonary->lastItem() }} of
-        {{ $pulmonary->total() }} entries
-        <div class="mt-2">
-          {{ $pulmonary->links() }}
         </div>
       </div>
 
-            </div>
-          </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="{{ url('assets/js/sidebarToggle.js') }}"></script>
 
-    <script src="{{ url('assets/js/logout.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <script src="{{ url('assets/js/active.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="{{ url('assets/js/rotate-icon.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <script src="{{ url('assets/js/logout.js') }}"></script>
+
+  <script src="{{ url('assets/js/sidebarToggle.js') }}"></script>
+
+  <script src="{{ url('assets/js/active.js') }}"></script>
+
+  <script src="{{ url('assets/js/rotate-icon.js') }}"></script>
+
+  @if(session('success'))
     <script>
-      document.getElementById("statusRedirect").addEventListener("change", function() {
-        if (this.value) {
-          window.location.href = this.value;
-        }
+      Swal.fire({
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        confirmButtonColor: '#198754',
       });
     </script>
-    
-  </body>
+  @endif
+
+  <script>
+    document.querySelectorAll('.btn-delete').forEach(button => {
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+        let form = this.closest('form');
+
+        Swal.fire({
+          title: "Are you sure?",
+          text: "This patient will be permanently deleted!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#6c757d",
+          confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+
 </html>
