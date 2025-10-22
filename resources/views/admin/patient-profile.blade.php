@@ -3005,7 +3005,7 @@
 
             async function fetchAdherenceData() {
                 try {
-                    const response = await fetch(`/api/adherence/${username}`);
+                    const response = await fetch(`/adherence/${username}`);
                     const data = await response.json();
 
                     adherenceData = {};
