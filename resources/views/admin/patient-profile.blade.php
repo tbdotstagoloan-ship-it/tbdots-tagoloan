@@ -2995,22 +2995,19 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {}; // ✅ use let so we can reassign after fetch
+            let adherenceData = {}; // ✅ changed to let (mutable)
 
-            // 🔹 Change this to the actual logged-in user's username
-            const username = "{{ $username ?? 'test_user' }}";
-
-            async function fetchAdherenceData() {
+            async function fetchAdherenceData(username) {
                 try {
                     const response = await fetch(`/adherence/${username}`);
-                    if (!response.ok) throw new Error("Network response was not ok");
-
+                    if (!response.ok) throw new Error("Failed to fetch adherence data");
                     const data = await response.json();
 
-                    adherenceData = {}; // reset before filling
+                    adherenceData = {};
                     data.forEach(item => {
-                        const dateStr = new Date(item.date).toISOString().split("T")[0];
-                        adherenceData[dateStr] = item.status;
+                        // Example: 2025-10-22 format
+                        const dateOnly = item.date.split("T")[0];
+                        adherenceData[dateOnly] = item.status;
                     });
 
                     renderCalendar(currentDate);
@@ -3058,7 +3055,7 @@
                     calendar.appendChild(header);
                 });
 
-                // Empty cells for offset
+                // Empty cells before 1st
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
@@ -3074,13 +3071,11 @@
                     cell.classList.add("adherence-calendar-day");
 
                     if (adherenceData[dateStr]) {
-                        const status = adherenceData[dateStr];
-                        cell.classList.add("adherence-" + status);
-
+                        cell.classList.add("adherence-" + adherenceData[dateStr]);
                         const icon = document.createElement("i");
                         icon.classList.add(
                             "fa",
-                            status === "taken" ? "fa-check" : "fa-times",
+                            adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
                             "adherence-status-icon"
                         );
                         cell.appendChild(icon);
@@ -3092,6 +3087,7 @@
                 calculateStats(year, month);
             }
 
+            // Navigation buttons
             document.getElementById("prevMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
                 renderCalendar(currentDate);
@@ -3102,11 +3098,11 @@
                 renderCalendar(currentDate);
             });
 
-            // 🔹 Fetch adherence data on page load
-            fetchAdherenceData();
+            // 🔹 Replace this with actual username from backend/session
+            const username = "{{ $patient->username ?? 'testuser' }}"; 
+            fetchAdherenceData(username);
         })();
         </script>
-
 
 
     <script>
