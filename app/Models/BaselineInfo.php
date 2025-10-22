@@ -11,7 +11,9 @@ class BaselineInfo extends Model
     protected $fillable = [
         'base_weight',
         'base_height',
-        'base_vital_signs',
+        'base_blood_pressure',
+        'base_heart_rate',
+        'base_temperature',
         'base_emergency_contact_name',
         'base_relationship',
         'base_contact_info',

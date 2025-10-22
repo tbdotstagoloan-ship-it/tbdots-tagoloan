@@ -38,9 +38,37 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add Patient</a></li>
-          <li><a class="nav-link" href="{{ url('patient') }}">Patient List</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
+      </li>
+
+      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+        <a href="{{ url('physician') }}">
+          <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Physician / Personnel</span>
+          </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Facilities">
+        <a href="{{url('facilities')}}">
+          <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Facilities</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+        <a href="{{url('medication-adherence-flags')}}">
+          <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Medication Adherence Flags</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Patient Accounts">
+        <a href="{{url('patient-accounts')}}">
+          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Patient Accounts</span>
+        </a>
       </li>
 
       <!-- <li class="menu-item" data-tooltip="Notification">
@@ -73,13 +101,6 @@
       </li>
 
       <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('patient-accounts')}}">
-          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient Accounts</span>
-        </a>
-      </li>
-
-      <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
@@ -91,7 +112,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+          <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>

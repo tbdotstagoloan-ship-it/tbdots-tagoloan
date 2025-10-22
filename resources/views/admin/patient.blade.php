@@ -48,7 +48,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}" class="active">
+        <a href="{{url('admin/dashboard')}}">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -61,9 +61,37 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add Patient</a></li>
-          <li><a class="nav-link" href="{{ url('patient') }}">Patient List</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
+      </li>
+
+      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+        <a href="{{ url('physician') }}">
+          <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Physician / Personnel</span>
+          </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Facilities">
+        <a href="{{url('facilities')}}">
+          <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Facilities</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+        <a href="{{url('medication-adherence-flags')}}">
+          <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Medication Adherence Flags</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Patient Accounts">
+        <a href="{{url('patient-accounts')}}">
+          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Patient Accounts</span>
+        </a>
       </li>
 
       <!-- <li class="menu-item" data-tooltip="Notification">
@@ -96,13 +124,6 @@
       </li>
 
       <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('patient-accounts')}}">
-          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient Accounts</span>
-        </a>
-      </li>
-
-      <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
@@ -114,7 +135,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+          <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -150,6 +171,20 @@
         <div class="table-responsive">
 
           <div class="d-flex justify-content-between align-items-center">
+
+          <form method="GET" action="{{ url('patient') }}" class="d-flex align-items-center">
+            <select name="per_page" id="per_page" class="form-select form-select-sm w-auto"
+              onchange="this.form.submit()">
+              <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+              <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
+              <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+              <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+              <option value="250" {{ $perPage == 250 ? 'selected' : '' }}>250</option>
+              <option value="500" {{ $perPage == 500 ? 'selected' : '' }}>500</option>
+            </select>
+            <span class="ms-2"></span>
+          </form>
+
             <!-- Left side: Entries per page -->
             <form method="GET" action="{{ url('patient') }}" class="d-flex">
               <input type="hidden" name="per_page" value="{{ $perPage }}">
@@ -165,12 +200,13 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>Full Name</th>
                 <th>Sex</th>
                 <th>Age</th>
                 <th>Address</th>
                 <th>TB Case #</th>
                 <th>Date Registered</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -184,6 +220,22 @@
                   <td>{{ $patient->pat_current_address }}</td>
                   <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
+                  <td>
+                      @php
+                          $status = strtolower($patient->status);
+                          $badgeClass = match($status) {
+                              'ongoing' => 'bg-secondary',
+                              'cured' => 'bg-success',
+                              'treatment completed' => 'bg-success',
+                              'lost to follow-up' => 'bg-warning text-dark',
+                              'died' => 'bg-danger',
+                              default => 'bg-secondary'
+                          };
+                      @endphp
+
+                      <span class="status-badge badge {{ $badgeClass }}">{{ ucfirst($patient->status) }}</span>
+                  </td>
+
                   <td class="text-center">
                     <div class="dropdown">
                       <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown"
@@ -244,7 +296,7 @@
                   aria-labelledby="editPatientModalLabel{{ $patient->id }}" aria-hidden="true">
                   <div class="modal-dialog modal-xl">
                     <div class="modal-content">
-                      <div class="modal-header">
+                      <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editPatientModalLabel{{ $patient->id }}">Update Patient Information
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -392,7 +444,7 @@
                         </form>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" form="editPatientForm{{ $patient->id }}"
                           class="btn btn-success">Update</button>
                       </div>
@@ -408,32 +460,12 @@
         </div>
       </div>
 
-      <div class="card-footer">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+      
 
-          <!-- Left: showing entries -->
-          <div>
-            Showing {{ $patients->firstItem() }} to {{ $patients->lastItem() }} of {{ $patients->total() }} entries
-          </div>
-
-          <!-- Center: pagination links -->
-          <div>
-            {{ $patients->appends(['search' => request('search'), 'per_page' => $perPage])->links() }}
-          </div>
-
-          <!-- Right: per page dropdown -->
-          <form method="GET" action="{{ url('patient') }}" class="d-flex align-items-center">
-            <select name="per_page" id="per_page" class="form-select form-select-sm w-auto"
-              onchange="this.form.submit()">
-              <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-              <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
-              <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-              <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-              <option value="250" {{ $perPage == 250 ? 'selected' : '' }}>250</option>
-              <option value="500" {{ $perPage == 500 ? 'selected' : '' }}>500</option>
-            </select>
-            <span class="ms-2">per page</span>
-          </form>
+      <div class="card-footer">Showing {{ $patients->firstItem() }} to {{ $patients->lastItem() }} of
+        {{ $patients->total() }} entries
+        <div class="mt-2">
+          {{ $patients->links() }}
         </div>
       </div>
 

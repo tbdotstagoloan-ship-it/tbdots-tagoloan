@@ -52,7 +52,7 @@
 
     .is-invalid {
       border-color: #ef4444;
-      /* background-color: #fef2f2; */
+    /* background-color: #fef2f2; */
       background-image: none !important;
       /* removes Bootstrap's error icon */
     }
@@ -64,7 +64,6 @@
       background-image: none !important;
       /* removes Bootstrap's check icon */
     }
-
     #lab label.form-label {
       font-weight: 600;
       margin-bottom: 4px;
@@ -95,7 +94,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}">
+        <a href="{{url('admin/dashboard')}}" class="active">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -108,37 +107,9 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
-          <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add Patient</a></li>
+          <li><a class="nav-link" href="{{ url('patient') }}">Patient List</a></li>
         </ul>
-      </li>
-
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
-        <a href="{{ url('physician') }}">
-          <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
-          </a>
-      </li>
-
-      <li class="menu-item" data-tooltip="Facilities">
-        <a href="{{url('facilities')}}">
-          <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Facilities</span>
-        </a>
-      </li>
-
-      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
-        <a href="{{url('medication-adherence-flags')}}">
-          <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence Flags</span>
-        </a>
-      </li>
-
-      <li class="menu-item" data-tooltip="Patient Accounts">
-        <a href="{{url('patient-accounts')}}">
-          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient Accounts</span>
-        </a>
       </li>
 
       <!-- <li class="menu-item" data-tooltip="Notification">
@@ -168,6 +139,13 @@
           <li><a href="{{ url('barangay-cases-notification') }}" class="nav-link">Barangay Cases Notification</a></li>
           <li><a href="{{ url('quarterly-cases-notification') }}" class="nav-link">Quarterly Reports</a></li>
         </ul>
+      </li>
+
+      <li class="menu-item" data-tooltip="Settings">
+        <a href="{{url('patient-accounts')}}">
+          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Patient Accounts</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Settings">
@@ -246,34 +224,61 @@
                 <h5 class="mb-4">I. Case Finding / Notification</h5>
                 <!-- your case finding fields -->
                 <div class="row mb-2">
-                <div class="col-md-3">
-                  <label for="fac_name">Diagnosing Facility <span style="color: red;">*</span></label>
-                  <select name="fac_name" id="fac_name" class="form-control" required>
-                    <option value="" disabled selected>Select</option>
-                    <!-- dynamic options here -->
-                  </select>
-                  <div class="error"></div>
-                </div>
+                  <div class="col-md-3">
+                    <label for="fac_name">Name of Diagnosing Facility <span style="color: red;">*</span></label>
+                      <select name="fac_name" id="fac_name" class="form-control form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="TB DOTS Tagoloan">TB DOTS Tagoloan</option>
+                      </select>
+                      <!-- <input type="text" name="fac_name" id="fac_name" class="form-control"
+                      placeholder="Diagnosing facility" required> -->
+                    <div class="error"></div>
+                  </div>
 
-                <div class="col-md-3">
-                  <label for="fac_ntp_code">NTP Facility Code <span style="color: red;">*</span></label>
-                  <input type="text" name="fac_ntp_code" id="fac_ntp_code" class="form-control" readonly>
-                  <div class="error"></div>
+                  <div class="col-md-3">
+                    <label for="fac_ntp_code">NTP Facility Code <span style="color: red;">*</span></label>
+                      <select name="fac_ntp_code" id="fac_ntp_code" class="form-control form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="NTP-0001">NTP-0001</option>
+                      </select>
+                       <!-- <input type="text" name="fac_ntp_code" id="fac_ntp_code" class="form-control"
+                      placeholder="NTP facility code" required> -->
+                    <div class="error"></div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="fac_province">Province/ HUC <span style="color: red;">*</span></label>
+                      <select name="fac_province" id="fac_province" class="form-control form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="Misamis Oriental">Misamis Oriental</option>
+                      </select>
+                    <!-- <input type="text" name="fac_province" id="fac_province" class="form-control"
+                      placeholder="Province/ huc" required> -->
+                    <div class="error"></div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="fac_region">Region <span style="color: red;">*</span></label>
+                    <select name="fac_region" id="fac_region" class="form-control form-select" required>
+                      <option value="">Select</option>
+                      <option value="Region I - Ilocos Region">REGION I (ILOCOS REGION)</option>
+                      <option value="Region II - Cagayan Valley">REGION II (CAGAYAN VALLEY)</option>
+                      <option value="Region III - Central Luzon">REGION III (CENTRAL LUZON)</option>
+                      <option value="Region IV - CALABARZON">REGION IV (CALABARZON)</option>
+                      <option value="Region IV-B MIMAROPA">REGION IV-B (MIMAROPA)</option>
+                      <option value="Region V - Bicol Region">REGION V (BICOL REGION)</option>
+                      <option value="Region VI - Western Visayas">REGION VI (WESTERN VISAYAS)</option>
+                      <option value="Region VII - Central Visayas">REGION VII (CENTRAL VISAYAS)</option>
+                      <option value="Region VIII - Eastern Visayas">REGION VIII (EASTERN VISAYAS)</option>
+                      <option value="Region IX - Zamboanga Peninsula">REGION IX (ZAMBOANGA PENINSULA)</option>
+                      <option value="Region X - Northern Mindanao">REGION X (NORTHERN MINDANAO)</option>
+                      <option value="Region XI - Davao Region">REGION XI (DAVAO REGION)</option>
+                      <option value="Region XII - SOCCSKSARGEN">REGION XII (SOCCSKSARGEN)</option>
+                      <option value="Region XIII - Caraga">REGION XIII (CARAGA)</option>
+                    </select>
+                    <!-- <input type="text" name="fac_region" id="fac_region" class="form-control" placeholder="Region"
+                      required> -->
+                    <div class="error"></div>
+                  </div>
                 </div>
-
-                <div class="col-md-3">
-                  <label for="fac_province">Province/ HUC <span style="color: red;">*</span></label>
-                  <input type="text" name="fac_province" id="fac_province" class="form-control" readonly>
-                  <div class="error"></div>
-                </div>
-
-                <div class="col-md-3">
-                  <label for="fac_region">Region <span style="color: red;">*</span></label>
-                  <input type="text" name="fac_region" id="fac_region" class="form-control" readonly>
-                  <div class="error"></div>
-                </div>
-              </div>
-
                 <div class="d-flex justify-content-end mt-4">
                   <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
                     Next <i class="fas fa-arrow-right"></i>
@@ -332,144 +337,128 @@
 
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="pat_other_contact">Other Contact Information <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="pat_other_contact">Other Contact Information <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="pat_other_contact" id="pat_other_contact" class="form-control"
-                      placeholder="Other Contact Information" maxlength="11">
+                      placeholder="Other Contact Info" maxlength="11">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_philhealth_no">PhilHealth No. <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="pat_philhealth_no">PhilHealth No. <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="pat_philhealth_no" id="pat_philhealth_no" class="form-control"
                       placeholder="PhilHealth Number">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="pat_nationality">Nationality <span style="color: red;">*</span></label>
-                    <select name="pat_nationality" id="pat_nationality" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                      <option value="Filipino">Filipino</option>
-                    </select>
+                      <select name="pat_nationality" id="pat_nationality" class="form-control form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="Filipino">Filipino</option>
+                      </select>
                     <div class="error"></div>
                   </div>
                 </div>
 
                 <!-- ===== PERMANENT ADDRESS SECTION ===== -->
-                <h5 class="mb-3">Permanent Address</h5>
+                  <h5 class="mb-3">Permanent Address</h5>
 
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="pat_permanent_region">Region <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_region" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_permanent_region" id="pat_permanent_region_text">
-                    <!-- <input type="text" name="pat_permanent_region" id="pat_permanent_region" class="form-control" required> -->
-                    <div class="error"></div>
-                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="pat_permanent_region">Region <span style="color: red;">*</span></label>
+                      <select id="pat_permanent_region" name="pat_permanent_region" class="form-control form-select" required>
+                        <option value="">Select Region</option>
+                      </select>
+                      <!-- <input type="text" name="pat_permanent_region" id="pat_permanent_region" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_permanent_province">Province <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_province" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_permanent_province" id="pat_permanent_province_text">
-                    <!-- <input type="text" name="pat_permanent_province" id="pat_permanent_province" class="form-control" required> -->
-                    <div class="error"></div>
-                  </div>
+                    <div class="col-md-4">
+                      <label for="pat_permanent_province">Province <span style="color: red;">*</span></label>
+                      <select id="pat_permanent_province" name="pat_permanent_province" class="form-control form-select" required>
+                        <option value="">Select Province</option>
+                      </select>
+                      <!-- <input type="text" name="pat_permanent_province" id="pat_permanent_province" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_permanent_city_mun">City / Municipality <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_city_mun" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_permanent_city_mun" id="pat_permanent_city_mun_text">
-                    <!-- <input type="text" name="pat_permanent_city_mun" id="pat_permanent_city_mun" class="form-control" required> -->
-                    <div class="error"></div>
-                  </div>
+                    <div class="col-md-4">
+                      <label for="pat_permanent_city_mun">City / Municipality <span style="color: red;">*</span></label>
+                      <select id="pat_permanent_city_mun" name="pat_permanent_city_mun" class="form-control form-select" required>
+                        <option value="">Select City / Municipality</option>
+                      </select>
+                      <!-- <input type="text" name="pat_permanent_city_mun" id="pat_permanent_city_mun" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_permanent_address">Barangay <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_address" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_permanent_address" id="pat_permanent_address_text">
-                    <!-- <input type="text" name="pat_permanent_address" id="pat_permanent_address" class="form-control" required> -->
-                    <div class="error"></div>
-                  </div>
+                    <div class="col-md-4">
+                      <label for="pat_permanent_address">Barangay <span style="color: red;">*</span></label>
+                      <select id="pat_permanent_address" name="pat_permanent_address" class="form-control form-select" required>
+                        <option value="">Select Barangay</option>
+                      </select>
+                      <!-- <input type="text" name="pat_permanent_address" id="pat_permanent_address" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_permanent_zip_code">Zip Code</label>
-                    <input type="text" id="pat_permanent_zip_code" name="pat_permanent_zip_code" class="form-control" readonly>
-                    <div class="error"></div>
+                    <div class="col-md-4">
+                      <label for="pat_permanent_zip_code">Zip Code</label>
+                      <input type="text" id="pat_permanent_zip_code" name="pat_permanent_zip_code" class="form-control">
+                      <div class="error"></div>
+                    </div>
                   </div>
-                </div>
 
 
                 <!-- ===== CURRENT ADDRESS SECTION ===== -->
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                  <h5 class="mb-0">Current Address</h5>
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="mb-0">Current Address</h5>
 
-                  <div class="form-check formal-checkbox">
-                    <input type="checkbox" class="form-check-input" id="sameAsPermanent">
-                    <label class="form-check-label" for="sameAsPermanent">Same as Permanent Address</label>
-                  </div>
-                </div>
-
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="pat_current_region">Region <span style="color: red;">*</span></label>
-                    <select id="pat_current_region" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_current_region" id="pat_current_region_text">
-                    <!-- <input type="text" id="pat_current_region" name="pat_current_region" class="form-control" required> -->
-                    <div class="error"></div>
+                    <div class="form-check formal-checkbox">
+                      <input type="checkbox" class="form-check-input" id="sameAsPermanent">
+                      <label class="form-check-label" for="sameAsPermanent">Same as Permanent Address</label>
+                    </div>
                   </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_current_province">Province <span style="color: red;">*</span></label>
-                    <select id="pat_current_province" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_current_province" id="pat_current_province_text">
-                    <!-- <input type="text" id="pat_current_province" name="pat_current_province" class="form-control" required> -->
-                    <div class="error"></div>
-                  </div>
+                  <div class="row mb-3">
+                    <div class="col-md-4">
+                      <label for="pat_current_region">Region <span style="color: red;">*</span></label>
+                      <select id="pat_current_region" name="pat_current_region" class="form-control form-select" required>
+                        <option value="">Select Region</option>
+                      </select>
+                      <!-- <input type="text" id="pat_current_region" name="pat_current_region" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_current_city_mun">City / Municipality <span style="color: red;">*</span></label>
-                    <select id="pat_current_city_mun" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_current_city_mun" id="pat_current_city_mun_text">
-                    <!-- <input type="text" id="pat_current_city_mun" name="pat_current_city_mun" class="form-control" required> -->
-                    <div class="error"></div>
-                  </div>
+                    <div class="col-md-4">
+                      <label for="pat_current_province">Province <span style="color: red;">*</span></label>
+                      <select id="pat_current_province" name="pat_current_province" class="form-control form-select" required>
+                        <option value="">Select Province</option>
+                      </select>
+                      <!-- <input type="text" id="pat_current_province" name="pat_current_province" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_current_address">Barangay <span style="color: red;">*</span></label>
-                    <select id="pat_current_address" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="pat_current_address" id="pat_current_address_text">
-                    <!-- <input type="text" id="pat_current_address" name="pat_current_address" class="form-control" required> -->
-                    <div class="error"></div>
-                  </div>
+                    <div class="col-md-4">
+                      <label for="pat_current_city_mun">City / Municipality <span style="color: red;">*</span></label>
+                      <select id="pat_current_city_mun" name="pat_current_city_mun" class="form-control form-select" required>
+                        <option value="">Select City / Municipality</option>
+                      </select>
+                      <!-- <input type="text" id="pat_current_city_mun" name="pat_current_city_mun" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
 
-                  <div class="col-md-4">
-                    <label for="pat_current_zip_code">Zip Code</label>
-                    <input type="text" id="pat_current_zip_code" name="pat_current_zip_code" class="form-control" readonly>
-                    <div class="error"></div>
+                    <div class="col-md-4">
+                      <label for="pat_current_address">Barangay <span style="color: red;">*</span></label>
+                      <select id="pat_current_address" name="pat_current_address" class="form-control form-select" required>
+                        <option value="">Select Barangay</option>
+                      </select>
+                      <!-- <input type="text" id="pat_current_address" name="pat_current_address" class="form-control" required> -->
+                      <div class="error"></div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <label for="pat_current_zip_code">Zip Code</label>
+                      <input type="text" id="pat_current_zip_code" name="pat_current_zip_code" class="form-control">
+                      <div class="error"></div>
+                    </div>
                   </div>
-                </div>
 
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
@@ -489,18 +478,19 @@
                   <div class="col-md-4">
                     <label for="scr_referred_by">Referred by <span style="color: red;">*</span></label>
                     <input type="text" name="scr_referred_by" id="scr_referred_by" class="form-control"
-                      placeholder="Hospital / Barangay Name" required>
+                      placeholder="Name" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="scr_location">Location <span style="color: red;">*</span></label>
-                    <input type="text" name="scr_location" id="scr_location" class="form-control" placeholder="Location"
-                      required>
+                    <input type="text" name="scr_location" id="scr_location" class="form-control"
+                      placeholder="Location" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="scr_referrer_type">Type of Referrer <span style="color: red;">*</span></label>
-                    <select name="scr_referrer_type" id="scr_referrer_type" class="form-control form-select" required>
+                    <select name="scr_referrer_type" id="scr_referrer_type" class="form-control form-select"
+                      required>
                       <option value="" disabled selected>Select</option>
                       <option value="Public">Public</option>
                       <option value="Other public">Other public</option>
@@ -514,7 +504,8 @@
                 <div class="row">
                   <div class="col-md-4">
                     <label for="scr_screening_mode">Mode of Screening <span style="color: red;">*</span></label>
-                    <select name="scr_screening_mode" id="scr_screening_mode" class="form-control form-select" required>
+                    <select name="scr_screening_mode" id="scr_screening_mode" class="form-control form-select"
+                      required>
                       <option value="" disabled selected>Select</option>
                       <option value="PCF">PCF</option>
                       <option value="ACF">ACF</option>
@@ -547,36 +538,34 @@
                 <!-- Xpert MTB/RIF -->
                 <div class="row mb-3 align-items-end">
                   <div class="col-md-6">
-                    <label for="lab_xpert_result" class="form-label">Xpert MTB/RIF Test Result <span
-                        style="color: red;">*</span></label>
-                    <select name="lab_xpert_result" id="lab_xpert_result" class="form-control form-select" required>
+                    <label for="lab_xpert_result" class="form-label">Xpert MTB/RIF Test Result <span style="color: red;">*</span></label>
+                    <!-- <input type="text" name="lab_xpert_result" id="lab_xpert_result" class="form-control" placeholder="Xpert MTB/RIF Test Result" required> -->
+                     <select name="lab_xpert_result" id="lab_xpert_result" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Positive">Positive</option>
-                    </select>
+                     </select>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
-                    <label for="lab_xpert_test_date" class="form-label">Xpert MTB/RIF Test Date <span
-                        style="color: red;">*</span></label>
+                    <label for="lab_xpert_test_date" class="form-label">Xpert MTB/RIF Test Date <span style="color: red;">*</span></label>
                     <input type="date" name="lab_xpert_test_date" id="lab_xpert_test_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>" required>
-                    <div class="error"></div>
+                      <div class="error"></div>
                   </div>
                 </div>
 
                 <!-- Smear Microscopy / TB Lamp -->
                 <div class="row mb-3 align-items-end">
                   <div class="col-md-6">
-                    <label for="lab_smear_result" class="form-label">Smear Microscopy Test Result <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <select name="lab_smear_result" id="lab_smear_result" class="form-control form-select">
+                    <label for="lab_smear_result" class="form-label">Smear Microscopy Test Result <span style="color: #6b7280;">(Optional)</span></label>
+                    <!-- <input type="text" name="lab_smear_result" id="lab_smear_result" class="form-control" placeholder="Smear Microscopy Test Result"> -->
+                     <select name="lab_smear_result" id="lab_smear_result" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Positive">Positive</option>
-                    </select>
+                     </select>
                   </div>
                   <div class="col-md-6">
-                    <label for="lab_smear_test_date" class="form-label">Smear Microscopy / TB Lamp Test Date <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="lab_smear_test_date" class="form-label">Smear Microscopy / TB Lamp Test Date <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="lab_smear_test_date" id="lab_smear_test_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
@@ -585,37 +574,35 @@
                 <!-- Chest X-ray -->
                 <div class="row mb-3 align-items-end">
                   <div class="col-md-6">
-                    <label for="lab_cxray_result" class="form-label">Chest X-ray Test Result <span
-                        style="color: red;">*</span></label>
-                    <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                      <option value="PTB Confirmed">PTB Confirmed</option>
-                      <option value="Suggestive of TB">Suggestive of TB</option>
-                    </select>
+                    <label for="lab_cxray_result" class="form-label">Chest X-ray Test Result <span style="color: red;">*</span></label>
+                    <!-- <input type="text" name="lab_cxray_result" id="lab_cxray_result" class="form-control" placeholder="Chest X-ray Test Result" required> -->
+                     <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="PTB Confirmed">PTB Confirmed</option>
+                        <option value="Suggestive of TB">Suggestive of TB</option>
+                     </select>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
-                    <label for="lab_cxray_test_date" class="form-label">Chest X-ray Test Date <span
-                        style="color: red;">*</span></label>
+                    <label for="lab_cxray_test_date" class="form-label">Chest X-ray Test Date <span style="color: red;">*</span></label>
                     <input type="date" name="lab_cxray_test_date" id="lab_cxray_test_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>" required>
-                    <div class="error"></div>
+                      <div class="error"></div>
                   </div>
                 </div>
 
                 <!-- Tuberculin Skin Test -->
                 <div class="row mb-3 align-items-end">
                   <div class="col-md-6">
-                    <label for="lab_tst_result" class="form-label">Tuberculin Skin Test Result <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <select name="lab_tst_result" id="lab_tst_result" class="form-control form-select">
+                    <label for="lab_tst_result" class="form-label">Tuberculin Skin Test Result <span style="color: #6b7280;">(Optional)</span></label>
+                    <!-- <input type="text" name="lab_tst_result" id="lab_tst_result" class="form-control" placeholder="Tuberculin Skin Test Result"> -->
+                     <select name="lab_tst_result" id="lab_tst_result" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Positive">Positive</option>
-                    </select>
+                     </select>
                   </div>
                   <div class="col-md-6">
-                    <label for="lab_tst_test_date" class="form-label">Tuberculin Skin Test Date <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="lab_tst_test_date" class="form-label">Tuberculin Skin Test Date <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="lab_tst_test_date" id="lab_tst_test_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
@@ -624,16 +611,15 @@
                 <!-- Other -->
                 <div class="row mb-3 align-items-end">
                   <div class="col-md-6">
-                    <label for="lab_other_result" class="form-label">Other Test Result <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <select name="lab_other_result" id="lab_other_result" class="form-control form-select">
+                    <label for="lab_other_result" class="form-label">Other Test Result <span style="color: #6b7280;">(Optional)</span></label>
+                    <!-- <input type="text" name="lab_other_result" id="lab_other_result" class="form-control" placeholder="Other Test Result"> -->
+                     <select name="lab_other_result" id="lab_other_result" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Positive">Positive</option>
-                    </select>
+                     </select>
                   </div>
                   <div class="col-md-6">
-                    <label for="lab_other_test_date" class="form-label">Other Test Date <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="lab_other_test_date" class="form-label">Other Test Date <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="lab_other_test_date" id="lab_other_test_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
@@ -679,44 +665,56 @@
                     <select name="diag_attending_physician" id="diag_attending_physician"
                       class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
+                      <option value="Dr. Jennifer Advincula">Dr. Jennifer Advincula</option>
                     </select>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="diag_referred_to">Referred To <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="diag_referred_to" id="diag_referred_to" class="form-control"
-                      placeholder="Name of Treatment Facility">
+                      placeholder="Name">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="diag_address">Address <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="diag_address" id="diag_address" class="form-control" placeholder="Address">
+                    <input type="text" name="diag_address" id="diag_address" class="form-control"
+                      placeholder="Address">
                     <div class="error"></div>
                   </div>
                 </div>
 
                 <div class="row mb-2">
                   <div class="col-md-4">
-                    <label for="diag_facility_code">Facility Code <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="diag_facility_code">Facility Code <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="diag_facility_code" id="diag_facility_code" class="form-control"
                       placeholder="Facility code">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="diag_region">Region <span style="color: #6b7280;">(Optional)</span></label>
-                    <select id="diag_region" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="diag_region" id="diag_region_text">
+                    <label for="diag_province">Province/HUC <span style="color: #6b7280;">(Optional)</span></label>
+                    <input type="text" name="diag_province" id="diag_province" class="form-control"
+                      placeholder="Province/huc">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="diag_province">Province/HUC <span style="color: #6b7280;">(Optional)</span></label>
-                    <select id="diag_province" class="form-control form-select">
+                    <label for="diag_region">Region <span style="color: #6b7280;">(Optional)</span></label>
+                    <input type="text" name="diag_region" id="diag_region" class="form-control" placeholder="Region">
+                    <!-- <select name="diag_region" id="diag_referred_region" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="diag_province" id="diag_province_text">
+                      <option value="Region I - Ilocos Region">Region I - Ilocos Region</option>
+                      <option value="Region II - Cagayan Valley">Region II - Cagayan Valley</option>
+                      <option value="Region III - Central Luzon">Region III - Central Luzon</option>
+                      <option value="Region IV - CALABARZON">Region IV - CALABARZON</option>
+                      <option value="Region V - Bicol Region">Region V - Bicol Region</option>
+                      <option value="Region VI - Western Visayas">Region VI - Western Visayas</option>
+                      <option value="Region VII - Central Visayas">Region VII - Central Visayas</option>
+                      <option value="Region VIII - Eastern Visayas">Region VIII - Eastern Visayas</option>
+                      <option value="Region IX - Zamboanga Peninsula">Region IX - Zamboanga Peninsula</option>
+                      <option value="Region X - Northern Mindanao">Region X - Northern Mindanao</option>
+                      <option value="Region XI - Davao Region">Region XI - Davao Region</option>
+                      <option value="Region XII - SOCCSKSARGEN">Region XII - SOCCSKSARGEN</option>
+                      <option value="Region XIII - Caraga">Region XIII - Caraga</option>
+                    </select> -->
                     <div class="error"></div>
                   </div>
                 </div>
@@ -735,8 +733,7 @@
                 <h5 class="mb-4">E. TB Disease Classification</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="clas_bacteriological_status">Bacteriological Status <span
-                        style="color: red;">*</span></label>
+                    <label for="clas_bacteriological_status">Bacteriological Status <span style="color: red;">*</span></label>
                     <select name="clas_bacteriological_status" id="clas_bacteriological_status"
                       class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
@@ -746,8 +743,7 @@
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="clas_drug_resistance_status">Drug Resistance Bacteriological Status <span
-                        style="color: red;">*</span></label>
+                    <label for="clas_drug_resistance_status">Drug Resistance Bacteriological Status <span style="color: red;">*</span></label>
                     <select name="clas_drug_resistance_status" id="clas_drug_resistance_status"
                       class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
@@ -759,8 +755,7 @@
                     </select>
                   </div>
                   <div class="col-md-4">
-                    <label for="clas_other_drug_resistant">Other Drug-resistant TB <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="clas_other_drug_resistant">Other Drug-resistant TB <span style="color: #6b7280;">(Specify)</span></label>
                     <input type="text" name="clas_other_drug_resistant" id="clas_other_drug_resistant"
                       class="form-control" placeholder="Specify">
                     <div class="error"></div>
@@ -779,8 +774,7 @@
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="clas_site_other">Extra-pulmonary Site <span
-                        style="color: #6b7280;">(Optional)</span></label>
+                    <label for="clas_site_other">Extra-pulmonary Site <span style="color: #6b7280;">(Specify)</span></label>
                     <input type="text" name="clas_site_other" id="clas_site_other" class="form-control"
                       placeholder="Specify">
                     <div class="error"></div>
@@ -827,7 +821,7 @@
                   <button type="button" class="btn backBtn btn-secondary" data-bs-dismiss="modal">
                     <i class="fas fa-edit me-1"></i>Edit</button>
                   <button type="button" class="btn btn-success" id="confirmSubmit">
-                    Confirm & Submit </button>
+                     Confirm & Submit </button>
                 </div>
               </div>
             </div>
@@ -865,124 +859,88 @@
     const fac_region = document.getElementById('fac_region');
     const pat_full_name = document.getElementById('pat_full_name');
     const pat_date_of_birth = document.getElementById('pat_date_of_birth');
-    // const pat_age = document.getElementById('pat_age');
-    // const pat_sex = document.getElementById('pat_sex');
-    // const pat_civil_status = document.getElementById('pat_civil_status');
-    // const pat_permanent_address = document.getElementById('pat_permanent_address');
-    // const pat_permanent_city_mun = document.getElementById('pat_permanent_city_mun');
-    // const pat_permanent_province = document.getElementById('pat_permanent_province');
-    // const pat_permanent_region = document.getElementById('pat_permanent_region');
-    // const pat_permanent_zip_code = document.getElementById('pat_permanent_zip_code');
-    // const pat_current_address = document.getElementById('pat_current_address');
-    // const pat_current_city_mun = document.getElementById('pat_current_city_mun');
-    // const pat_current_province = document.getElementById('pat_current_province');
-    // const pat_current_region = document.getElementById('pat_current_region');
-    // const pat_current_zip_code = document.getElementById('pat_current_zip_code');
+    const pat_age = document.getElementById('pat_age');
+    const pat_sex = document.getElementById('pat_sex');
+    const pat_civil_status = document.getElementById('pat_civil_status');
+    const pat_permanent_address = document.getElementById('pat_permanent_address');
+    const pat_permanent_city_mun = document.getElementById('pat_permanent_city_mun');
+    const pat_permanent_province = document.getElementById('pat_permanent_province');
+    const pat_permanent_region = document.getElementById('pat_permanent_region');
+    const pat_permanent_zip_code = document.getElementById('pat_permanent_zip_code');
+    const pat_current_address = document.getElementById('pat_current_address');
+    const pat_current_city_mun = document.getElementById('pat_current_city_mun');
+    const pat_current_province = document.getElementById('pat_current_province');
+    const pat_current_region = document.getElementById('pat_current_region');
+    const pat_current_zip_code = document.getElementById('pat_current_zip_code');
     const pat_contact_number = document.getElementById('pat_contact_number');
     const pat_other_contact = document.getElementById('pat_other_contact');
     const pat_nationality = document.getElementById('pat_nationality');
     const scr_referred_by = document.getElementById('scr_referred_by');
     const scr_location = document.getElementById('scr_location');
-    // const scr_referrer_type = document.getElementById('scr_referrer_type');
-    // const scr_screening_mode = document.getElementById('scr_screening_mode');
-    // const scr_screening_date = document.getElementById('scr_screening_date');
+    const scr_referrer_type = document.getElementById('scr_referrer_type');
+    const scr_screening_mode = document.getElementById('scr_screening_mode');
+    const scr_screening_date = document.getElementById('scr_screening_date');
     const diag_diagnosis_date = document.getElementById('diag_diagnosis_date');
-    // const diag_notification_date = document.getElementById('diag_notification_date');
+    const diag_notification_date = document.getElementById('diag_notification_date');
     const diag_attending_physician = document.getElementById('diag_attending_physician');
     const clas_bacteriological_status = document.getElementById('clas_bacteriological_status');
     const clas_drug_resistance_status = document.getElementById('clas_drug_resistance_status');
     const clas_anatomical_site = document.getElementById('clas_anatomical_site');
     const clas_registration_group = document.getElementById('clas_registration_group');
-    // const lab_xpert_test_date = document.getElementById('lab_xpert_test_date');
-    // const lab_xpert_result = document.getElementById('lab_xpert_result');
-    // const lab_cxray_test_date = document.getElementById('lab_cxray_test_date');
-    // const lab_cxray_result = document.getElementById('lab_cxray_result');
+    const lab_xpert_test_date = document.getElementById('lab_xpert_test_date');
+    const lab_xpert_result = document.getElementById('lab_xpert_result');
+    const lab_cxray_test_date = document.getElementById('lab_cxray_test_date');
+    const lab_cxray_result = document.getElementById('lab_cxray_result');
 
     // Get ALL inputs and selects in the form
     const allInputs = form.querySelectorAll("input, select");
 
     const requiredFields = [
       fac_name,
+      fac_ntp_code,
+      fac_province,
+      fac_region,
       pat_full_name,
       pat_date_of_birth,
-      // pat_age,
-      // pat_sex,
-      // pat_civil_status,
-      // pat_permanent_address,
-      // pat_permanent_city_mun,
-      // pat_permanent_province,
-      // pat_permanent_region,
-      // pat_permanent_zip_code,
-      // pat_current_address,
-      // pat_current_city_mun,
-      // pat_current_province,
-      // pat_current_region,
-      // pat_current_zip_code,
+      pat_age,
+      pat_sex,
+      pat_civil_status,
+      pat_permanent_address,
+      pat_permanent_city_mun,
+      pat_permanent_province,
+      pat_permanent_region,
+      pat_permanent_zip_code,
+      pat_current_address,
+      pat_current_city_mun,
+      pat_current_province,
+      pat_current_region,
+      pat_current_zip_code,
       pat_contact_number,
-      // pat_nationality,
+      pat_nationality,
       scr_referred_by,
       scr_location,
-      // scr_referrer_type,
-      // scr_screening_mode,
-      // scr_screening_date,
+      scr_referrer_type,
+      scr_screening_mode,
+      scr_screening_date,
       diag_diagnosis_date,
-      // diag_notification_date,
+      diag_notification_date,
       diag_attending_physician,
       clas_bacteriological_status,
       clas_drug_resistance_status,
       clas_anatomical_site,
       clas_registration_group,
-      // lab_xpert_test_date,
-      // lab_xpert_result,
-      // lab_cxray_test_date,
-      // lab_cxray_result,
+      lab_xpert_test_date,
+      lab_xpert_result,
+      lab_cxray_test_date,
+      lab_cxray_result,
     ];
-
-    // ✅ Load Diagnosing Facilities dynamically
-      document.addEventListener("DOMContentLoaded", function() {
-        fetch("/api/facilities")
-          .then(response => response.json())
-          .then(data => {
-            data.forEach(facility => {
-              const option = document.createElement("option");
-              option.value = facility.id;
-              option.textContent = facility.fac_name;
-              option.dataset.code = facility.fac_ntp_code;
-              option.dataset.province = facility.fac_province;
-              option.dataset.region = facility.fac_region;
-              fac_name.appendChild(option);
-            });
-          })
-          .catch(error => console.error("Error loading facilities:", error));
-
-        fac_name.addEventListener("change", function() {
-          const selected = this.options[this.selectedIndex];
-          fac_ntp_code.value = selected.dataset.code || "";
-          fac_province.value = selected.dataset.province || "";
-          fac_region.value = selected.dataset.region || "";
-        });
-      });
 
     form.addEventListener("submit", function (e) {
       e.preventDefault(); // stop default submit first
 
       if (validateInputs()) {
-
-        function getSelectText(select) {
-          if (!select || !select.options.length) return '';
-          const selected = select.options[select.selectedIndex];
-          if (!selected || selected.value === '' || selected.text.toLowerCase().includes('select')) {
-            return ''; // return blank if no valid selection
-          }
-          return selected.text;
-        }
-
-
-
         // populate preview
         const preview = document.getElementById("previewContent");
-        const selectedFacility = fac_name.options[fac_name.selectedIndex].text;
-
         preview.innerHTML = `
         <div class="container-fluid px-2">
 
@@ -992,7 +950,7 @@
               <h6 class="fw-bold mb-2">Facility Information</h6>
               <table class="table table-borderless preview-table align-middle mb-0">
                 <tbody>
-                  <tr><th>Diagnosing Facility</th><td>${selectedFacility}</td></tr>
+                  <tr><th>Diagnosing Facility</th><td>${fac_name.value}</td></tr>
                   <tr><th>NTP Facility Code</th><td>${fac_ntp_code.value}</td></tr>
                   <tr><th>Province</th><td>${fac_province.value}</td></tr>
                   <tr><th>Region</th><td>${fac_region.value}</td></tr>
@@ -1018,21 +976,11 @@
                   <tr><th>Nationality</th><td>${pat_nationality.value}</td></tr>
                   <tr>
                     <th>Permanent Address</th>
-                    <td>${getSelectText(pat_permanent_address)}, 
-                        ${getSelectText(pat_permanent_city_mun)}, 
-                        ${getSelectText(pat_permanent_province)}, 
-                        ${getSelectText(pat_permanent_region)} - 
-                        ${pat_permanent_zip_code.value}
-                    </td>
+                    <td>${pat_permanent_address.value}, ${pat_permanent_city_mun.value}, ${pat_permanent_province.value}, ${pat_permanent_region.value} - ${pat_permanent_zip_code.value}</td>
                   </tr>
                   <tr>
                     <th>Current Address</th>
-                    <td>${getSelectText(pat_current_address)}, 
-                        ${getSelectText(pat_current_city_mun)}, 
-                        ${getSelectText(pat_current_province)}, 
-                        ${getSelectText(pat_current_region)} - 
-                        ${pat_current_zip_code.value}
-                    </td>
+                    <td>${pat_current_address.value}, ${pat_current_city_mun.value}, ${pat_current_province.value}, ${pat_current_region.value} - ${pat_current_zip_code.value}</td>
                   </tr>
                 </tbody>
               </table>
@@ -1084,13 +1032,13 @@
                 <tbody>
                   <tr><th>Diagnosis Date</th><td>${diag_diagnosis_date.value}</td></tr>
                   <tr><th>Notification Date</th><td>${diag_notification_date.value}</td></tr>
-                  <tr><th>TB Case Number</th><td>${diag_tb_case_no.value}</td></tr>
-                  <tr><th>Attending Physician</th><td>${diag_attending_physician.options[diag_attending_physician.selectedIndex]?.text || 'N/A'}</td></tr>
+                  tr><th>TB Case Number</th><td>${diag_tb_case_no.value}</td></tr>
+                  <tr><th>Attending Physician</th><td>${diag_attending_physician.value}</td></tr>
                   <tr><th>Referred to</th><td>${diag_referred_to.value}</td></tr>
                   <tr><th>Address</th><td>${diag_address.value}</td></tr>
                   <tr><th>Facility Code</th><td>${diag_facility_code.value}</td></tr>
-                  <tr><th>Province</th><td>${getSelectText(diag_province)}</td></tr>
-                  <tr><th>Region</th><td>${getSelectText(diag_region)}</td></tr>
+                  <tr><th>Province</th><td>${diag_province.value}</td></tr>
+                  <tr><th>Region</th><td>${diag_region.value}</td></tr>
                 </tbody>
               </table>
             </div>
@@ -1123,60 +1071,9 @@
       }
     });
 
-    // ✅ Final confirm button - ENABLE disabled fields before submit
+    // ✅ Final confirm button event
     document.getElementById("confirmSubmit").addEventListener("click", function () {
-      const sameCheckbox = document.getElementById("sameAsPermanent");
-
-      const permRegion = document.getElementById("pat_permanent_region");
-      const permRegionText = permRegion.options[permRegion.selectedIndex].text;
-      document.getElementById("pat_permanent_region_text").value = permRegionText;
-
-      const permProvince = document.getElementById("pat_permanent_province");
-      const permProvinceText = permProvince.options[permProvince.selectedIndex].text;
-      document.getElementById("pat_permanent_province_text").value = permProvinceText;
-
-      const permCity = document.getElementById("pat_permanent_city_mun");
-      const permCityText = permCity.options[permCity.selectedIndex].text;
-      document.getElementById("pat_permanent_city_mun_text").value = permCityText;
-
-      const permBrgy = document.getElementById("pat_permanent_address");
-      const permBrgyText = permBrgy.options[permBrgy.selectedIndex].text;
-      document.getElementById("pat_permanent_address_text").value = permBrgyText;
-
-      const currRegion = document.getElementById("pat_current_region");
-      const currRegionText = currRegion.options[currRegion.selectedIndex].text;
-      document.getElementById("pat_current_region_text").value = currRegionText;
-
-      const currProvince = document.getElementById("pat_current_province");
-      const currProvinceText = currProvince.options[currProvince.selectedIndex].text;
-      document.getElementById("pat_current_province_text").value = currProvinceText;
-
-      const currCity = document.getElementById("pat_current_city_mun");
-      const currCityText = currCity.options[currCity.selectedIndex].text;
-      document.getElementById("pat_current_city_mun_text").value = currCityText;
-
-      const currBrgy = document.getElementById("pat_current_address");
-      const currBrgyText = currBrgy.options[currBrgy.selectedIndex].text;
-      document.getElementById("pat_current_address_text").value = currBrgyText;
-
-      const diagRegion = document.getElementById("diag_region");
-      const diagRegionText = diagRegion.options[diagRegion.selectedIndex].text;
-      document.getElementById("diag_region_text").value = diagRegionText;
-
-      const diagProvince = document.getElementById("diag_province");
-      const diagProvinceText = diagProvince.options[diagProvince.selectedIndex].text;
-      document.getElementById("diag_province_text").value = diagProvinceText;
-      
-
-      // If checkbox is checked, temporarily enable current address fields for submission
-      if (sameCheckbox && sameCheckbox.checked) {
-        [pat_current_region, pat_current_province, pat_current_city_mun, pat_current_address].forEach(el => {
-          el.disabled = false;
-        });
-      }
-
-      // Now submit the form
-      form.submit();
+      form.submit(); // final submit
     });
 
 
@@ -1223,15 +1120,10 @@
       const today = new Date();
 
       const validateField = (element) => {
-        // Skip validation for disabled fields (they're auto-filled)
-        if (element.disabled) {
-          return true;
-        }
-
         const value = element.value.trim();
 
         // Required check
-        if (!value || value === "") {
+        if (!value) {
           setError(element, "This is required.");
           return false;
         }
@@ -1277,12 +1169,6 @@
     // Real-time validation
     allInputs.forEach(input => {
       const validateField = () => {
-
-        // Skip validation for disabled fields
-        if (input.disabled) {
-          return;
-        }
-
         const value = input.value.trim();
         const today = new Date();
 
@@ -1290,7 +1176,7 @@
           validateContactNumber(input, true);
         } else if (input === pat_other_contact) {
           validateContactNumber(input, false);
-        } else if (requiredFields.includes(input) && (!value || value === "")) {
+        } else if (requiredFields.includes(input) && !value) {
           setError(input, "This is required.");
         } else if (input.type === "text" && value) {
           const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
@@ -1306,10 +1192,15 @@
           } else {
             setSuccess(input);
           }
-        } else if (value && value !== "") {
-          setSuccess(input);
-        } else if (!requiredFields.includes(input)) {
-          input.classList.remove("is-valid", "is-invalid");
+        } else if (!requiredFields.includes(input) && value) {
+          const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
+          if (!regex.test(value)) {
+            setError(input, "Special characters prohibited.");
+          } else {
+            setSuccess(input);
+          }
+        } else {
+          input.classList.remove("success", "error");
           const errorDisplay = input.parentElement.querySelector('.error');
           if (errorDisplay) errorDisplay.innerText = '';
         }
@@ -1319,10 +1210,10 @@
       input.addEventListener("change", validateField);
     });
 
-    // Restrict to digits only
+    // ✅ Restrict to digits only in real-time
     [pat_permanent_zip_code, pat_current_zip_code, pat_contact_number, pat_other_contact].forEach(input => {
       input.addEventListener("input", () => {
-        input.value = input.value.replace(/\D/g, "");
+        input.value = input.value.replace(/\D/g, ""); // remove non-digits
       });
     });
   </script>
@@ -1427,7 +1318,7 @@
     });
   </script>
 
-  <script>
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
       const screeningInput = document.getElementById('scr_screening_date');
       const notificationInput = document.getElementById('diag_notification_date');
@@ -1445,209 +1336,159 @@
   </script>
 
   <!-- ===== SCRIPT SECTION ===== -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const permRegion = document.getElementById("pat_permanent_region");
-      const permProvince = document.getElementById("pat_permanent_province");
-      const permCity = document.getElementById("pat_permanent_city_mun");
-      const permBrgy = document.getElementById("pat_permanent_address");
-      const permZip = document.getElementById("pat_permanent_zip_code");
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const permRegion = document.getElementById("pat_permanent_region");
+  const permProvince = document.getElementById("pat_permanent_province");
+  const permCity = document.getElementById("pat_permanent_city_mun");
+  const permBrgy = document.getElementById("pat_permanent_address");
+  const permZip = document.getElementById("pat_permanent_zip_code");
 
-      const currRegion = document.getElementById("pat_current_region");
-      const currProvince = document.getElementById("pat_current_province");
-      const currCity = document.getElementById("pat_current_city_mun");
-      const currBrgy = document.getElementById("pat_current_address");
-      const currZip = document.getElementById("pat_current_zip_code");
+  const currRegion = document.getElementById("pat_current_region");
+  const currProvince = document.getElementById("pat_current_province");
+  const currCity = document.getElementById("pat_current_city_mun");
+  const currBrgy = document.getElementById("pat_current_address");
+  const currZip = document.getElementById("pat_current_zip_code");
 
-      const diagRegion = document.getElementById("diag_region");
-      const diagProvince = document.getElementById("diag_province");
+  const sameCheckbox = document.getElementById("sameAsPermanent");
 
-      const sameCheckbox = document.getElementById("sameAsPermanent");
+  // Load regions for both dropdowns
+  fetch("/api/regions")
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(region => {
+        permRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
+        currRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
+      });
+    });
 
-      // Load regions for both dropdowns
-      fetch("/api/regions")
-        .then(res => res.json())
-        .then(data => {
-          data.forEach(region => {
-            permRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
-            currRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
-            diagRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
-          });
+  // --- Helper function to copy Permanent → Current ---
+  function copyPermanentToCurrent() {
+    currRegion.value = permRegion.value;
+    currProvince.innerHTML = permProvince.innerHTML;
+    currCity.innerHTML = permCity.innerHTML;
+    currBrgy.innerHTML = permBrgy.innerHTML;
+
+    currProvince.value = permProvince.value;
+    currCity.value = permCity.value;
+    currBrgy.value = permBrgy.value;
+    currZip.value = permZip.value;
+  }
+
+  // --- Helper function to disable/enable Current fields ---
+  function toggleCurrentFields(disabled) {
+    [currRegion, currProvince, currCity, currBrgy].forEach(el => el.disabled = disabled);
+  }
+
+  // --- Permanent dropdown logic ---
+  permRegion.addEventListener("change", () => {
+    fetch(`/api/provinces/${permRegion.value}`)
+      .then(res => res.json())
+      .then(data => {
+        permProvince.innerHTML = '<option value="">Select Province</option>';
+        permCity.innerHTML = '<option value="">Select City / Municipality</option>';
+        permBrgy.innerHTML = '<option value="">Select Barangay</option>';
+        data.forEach(prov => {
+          permProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
         });
+        if (sameCheckbox.checked) copyPermanentToCurrent();
+      });
+  });
 
-      // --- Helper function to copy Permanent → Current ---
-      function copyPermanentToCurrent() {
-        currRegion.value = permRegion.value;
-        currProvince.innerHTML = permProvince.innerHTML;
-        currCity.innerHTML = permCity.innerHTML;
-        currBrgy.innerHTML = permBrgy.innerHTML;
-
-        currProvince.value = permProvince.value;
-        currCity.value = permCity.value;
-        currBrgy.value = permBrgy.value;
-        currZip.value = permZip.value;
-      }
-
-      // --- Helper function to toggle readonly instead of disabled ---
-      function toggleCurrentFields(makeReadonly) {
-        [currRegion, currProvince, currCity, currBrgy, currZip].forEach(el => {
-          if (makeReadonly) {
-            el.setAttribute('readonly', 'readonly');
-            el.style.pointerEvents = 'none';
-            el.style.backgroundColor = '#e9ecef';
-          } else {
-            el.removeAttribute('readonly');
-            el.style.pointerEvents = 'auto';
-            el.style.backgroundColor = '';
-          }
+  permProvince.addEventListener("change", () => {
+    fetch(`/api/cities/${permProvince.value}`)
+      .then(res => res.json())
+      .then(data => {
+        permCity.innerHTML = '<option value="">Select City / Municipality</option>';
+        permBrgy.innerHTML = '<option value="">Select Barangay</option>';
+        data.forEach(city => {
+          permCity.innerHTML += `<option value="${city.citymunCode}">${city.citymunDesc}</option>`;
         });
-      }
-
-      // --- Permanent dropdown logic ---
-      permRegion.addEventListener("change", () => {
-        fetch(`/api/provinces/${permRegion.value}`)
-          .then(res => res.json())
-          .then(data => {
-            permProvince.innerHTML = '<option value="">Select</option>';
-            permCity.innerHTML = '<option value="">Select</option>';
-            permBrgy.innerHTML = '<option value="">Select</option>';
-            data.forEach(prov => {
-              permProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
-            });
-            if (sameCheckbox.checked) copyPermanentToCurrent();
-          });
+        if (sameCheckbox.checked) copyPermanentToCurrent();
       });
+  });
 
-      permProvince.addEventListener("change", () => {
-        fetch(`/api/cities/${permProvince.value}`)
-          .then(res => res.json())
-          .then(data => {
-            permCity.innerHTML = '<option value="">Select</option>';
-            permBrgy.innerHTML = '<option value="">Select</option>';
-            data.forEach(city => {
-              permCity.innerHTML += `<option value="${city.citymunCode}">${city.citymunDesc}</option>`;
-            });
-            if (sameCheckbox.checked) copyPermanentToCurrent();
-          });
-      });
-
-      permCity.addEventListener("change", () => {
-        fetch(`/api/barangays/${permCity.value}`)
-          .then(res => res.json())
-          .then(data => {
-            permBrgy.innerHTML = '<option value="">Select</option>';
-            data.forEach(brgy => {
-              permBrgy.innerHTML += `<option value="${brgy.brgyCode}">${brgy.brgyDesc}</option>`;
-            });
-            if (sameCheckbox.checked) copyPermanentToCurrent();
-          });
-
-        fetch(`/api/zipcode/${permCity.value}`)
-          .then(res => res.json())
-          .then(data => {
-            permZip.value = data?.postal_code || '';
-            if (sameCheckbox.checked) currZip.value = permZip.value;
-          });
-      });
-
-      permBrgy.addEventListener("change", () => {
+  permCity.addEventListener("change", () => {
+    fetch(`/api/barangays/${permCity.value}`)
+      .then(res => res.json())
+      .then(data => {
+        permBrgy.innerHTML = '<option value="">Select Barangay</option>';
+        data.forEach(brgy => {
+          permBrgy.innerHTML += `<option value="${brgy.brgyCode}">${brgy.brgyDesc}</option>`;
+        });
         if (sameCheckbox.checked) copyPermanentToCurrent();
       });
 
-      // --- Current dropdown logic ---
-      currRegion.addEventListener("change", () => {
-        fetch(`/api/provinces/${currRegion.value}`)
-          .then(res => res.json())
-          .then(data => {
-            currProvince.innerHTML = '<option value="">Select</option>';
-            currCity.innerHTML = '<option value="">Select</option>';
-            currBrgy.innerHTML = '<option value="">Select</option>';
-            data.forEach(prov => {
-              currProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
-            });
-          });
-      });
-
-      currProvince.addEventListener("change", () => {
-        fetch(`/api/cities/${currProvince.value}`)
-          .then(res => res.json())
-          .then(data => {
-            currCity.innerHTML = '<option value="">Select</option>';
-            currBrgy.innerHTML = '<option value="">Select</option>';
-            data.forEach(city => {
-              currCity.innerHTML += `<option value="${city.citymunCode}">${city.citymunDesc}</option>`;
-            });
-          });
-      });
-
-      currCity.addEventListener("change", () => {
-        fetch(`/api/barangays/${currCity.value}`)
-          .then(res => res.json())
-          .then(data => {
-            currBrgy.innerHTML = '<option value="">Select</option>';
-            data.forEach(brgy => {
-              currBrgy.innerHTML += `<option value="${brgy.brgyCode}">${brgy.brgyDesc}</option>`;
-            });
-          });
-
-        fetch(`/api/zipcode/${currCity.value}`)
-          .then(res => res.json())
-          .then(data => {
-            currZip.value = data?.postal_code || '';
-          });
-      });
-
-      // --- Diagnosing Facility Dropdown Logic 👇
-    diagRegion.addEventListener("change", () => {
-      fetch(`/api/provinces/${diagRegion.value}`)
-        .then(res => res.json())
-        .then(data => {
-          diagProvince.innerHTML = '<option value="">Select</option>';
-          data.forEach(prov => {
-            diagProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
-          });
-        });
-    });
-
-      // --- Checkbox logic (use readonly instead of disabled) ---
-      sameCheckbox.addEventListener("change", () => {
-        if (sameCheckbox.checked) {
-          copyPermanentToCurrent();
-          toggleCurrentFields(true);
-        } else {
-          toggleCurrentFields(false);
-          currProvince.innerHTML = '<option value="">Select</option>';
-          currCity.innerHTML = '<option value="">Select</option>';
-          currBrgy.innerHTML = '<option value="">Select</option>';
-          currZip.value = '';
-        }
-      });
-    });
-  </script>
-
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const selectPhysician = document.getElementById('diag_attending_physician');
-
-    fetch('/api/physicians')
-      .then(response => response.json())
+    fetch(`/api/zipcode/${permCity.value}`)
+      .then(res => res.json())
       .then(data => {
-        selectPhysician.innerHTML = '<option value="" disabled selected>Select</option>';
-
-        data.forEach(physician => {
-          const prefix = physician.phy_designation === 'Doctor' ? 'Dr. ' : '';
-          const fullName = `${prefix}${physician.phy_first_name} ${physician.phy_last_name}`;
-          const option = document.createElement('option');
-          option.value = fullName; // ✅ store full name instead of ID
-          option.textContent = fullName;
-          selectPhysician.appendChild(option);
-        });
-      })
-      .catch(error => console.error('Error fetching physicians:', error));
+        permZip.value = data?.postal_code || '';
+        if (sameCheckbox.checked) currZip.value = permZip.value;
+      });
   });
-  </script>
 
+  permBrgy.addEventListener("change", () => {
+    if (sameCheckbox.checked) copyPermanentToCurrent();
+  });
 
+  // --- Current dropdown logic ---
+  currRegion.addEventListener("change", () => {
+    fetch(`/api/provinces/${currRegion.value}`)
+      .then(res => res.json())
+      .then(data => {
+        currProvince.innerHTML = '<option value="">Select Province</option>';
+        currCity.innerHTML = '<option value="">Select City / Municipality</option>';
+        currBrgy.innerHTML = '<option value="">Select Barangay</option>';
+        data.forEach(prov => {
+          currProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
+        });
+      });
+  });
+
+  currProvince.addEventListener("change", () => {
+    fetch(`/api/cities/${currProvince.value}`)
+      .then(res => res.json())
+      .then(data => {
+        currCity.innerHTML = '<option value="">Select City / Municipality</option>';
+        currBrgy.innerHTML = '<option value="">Select Barangay</option>';
+        data.forEach(city => {
+          currCity.innerHTML += `<option value="${city.citymunCode}">${city.citymunDesc}</option>`;
+        });
+      });
+  });
+
+  currCity.addEventListener("change", () => {
+    fetch(`/api/barangays/${currCity.value}`)
+      .then(res => res.json())
+      .then(data => {
+        currBrgy.innerHTML = '<option value="">Select Barangay</option>';
+        data.forEach(brgy => {
+          currBrgy.innerHTML += `<option value="${brgy.brgyCode}">${brgy.brgyDesc}</option>`;
+        });
+      });
+
+    fetch(`/api/zipcode/${currCity.value}`)
+      .then(res => res.json())
+      .then(data => {
+        currZip.value = data?.postal_code || '';
+      });
+  });
+
+  // --- Checkbox logic (auto sync) ---
+  sameCheckbox.addEventListener("change", () => {
+    if (sameCheckbox.checked) {
+      copyPermanentToCurrent();
+      toggleCurrentFields(true);
+    } else {
+      toggleCurrentFields(false);
+      currProvince.innerHTML = '<option value="">Select Province</option>';
+      currCity.innerHTML = '<option value="">Select City / Municipality</option>';
+      currBrgy.innerHTML = '<option value="">Select Barangay</option>';
+      currZip.value = '';
+    }
+  });
+});
+</script>
 
 </body>
 

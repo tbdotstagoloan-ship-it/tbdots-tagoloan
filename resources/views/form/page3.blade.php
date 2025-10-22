@@ -55,7 +55,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}" class="active">
+        <a href="{{url('admin/dashboard')}}">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -68,9 +68,37 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add Patient</a></li>
-          <li><a class="nav-link" href="{{ url('patient') }}">Patient List</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
+      </li>
+
+      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+        <a href="{{ url('physician') }}">
+          <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Physician / Personnel</span>
+          </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Facilities">
+        <a href="{{url('facilities')}}">
+          <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Facilities</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+        <a href="{{url('medication-adherence-flags')}}">
+          <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Medication Adherence Flags</span>
+        </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Patient Accounts">
+        <a href="{{url('patient-accounts')}}">
+          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Patient Accounts</span>
+        </a>
       </li>
 
       <!-- <li class="menu-item" data-tooltip="Notification">
@@ -103,13 +131,6 @@
       </li>
 
       <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('patient-accounts')}}">
-          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient Accounts</span>
-        </a>
-      </li>
-
-      <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
@@ -121,7 +142,7 @@
       <form id="logout-form" method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="button" id="logout-btn" class="logout-button">
-           <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+          <i class="fas fa-sign-out-alt menu-icon-logout"></i>
           <span class="menu-text">Logout</span>
         </button>
       </form>
@@ -192,15 +213,15 @@
                 <h5 class="mb-4">E. Serious Adverse Events and AEs of Special Interest</h5>
                 <div class="row mb-2">
                   <div class="col-md-4">
-                    <label for="adv_ae_date">Date of AE</label>
+                    <label for="adv_ae_date">Date of AE <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="adv_ae_date" id="adv_ae_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
-                    <label for="adv_specific_ae">Specific AE</label>
+                    <label for="adv_specific_ae">Specific AE <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="adv_specific_ae" id="adv_specific_ae" class="form-control" placeholder="Specific AE">
                   </div>
                   <div class="col-md-4">
-                    <label for="adv_fda_reported_date">Date Reported to FDA</label>
+                    <label for="adv_fda_reported_date">Date Reported to FDA <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="adv_fda_reported_date" id="adv_fda_reported_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
@@ -218,19 +239,19 @@
                 <h5 class="mb-4">F. Patient Progress Report Form</h5>
                 <div class="row mb-2">
                   <div class="col-md-3">
-                    <label for="prog_date">Date</label>
+                    <label for="prog_date">Date <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="prog_date" id="prog_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-3">
-                    <label for="prog_problem">Problem</label>
+                    <label for="prog_problem">Problem <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="prog_problem" id="prog_problem" class="form-control" placeholder="AE, reason of absence">
                   </div>
                   <div class="col-md-3">
-                    <label for="prog_action_taken">Action Taken</label>
+                    <label for="prog_action_taken">Action Taken <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="prog_action_taken" id="prog_action_taken" class="form-control" placeholder="Action taken">
                   </div>
                   <div class="col-md-3">
-                    <label for="prog_plan">Plan</label>
+                    <label for="prog_plan">Plan <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="prog_plan" id="prog_plan" class="form-control" placeholder="Plan">
                   </div>
                 </div>
@@ -257,15 +278,15 @@
                   <div class="close-contact-entry mb-3">
                     <div class="row mb-3">
                       <div class="col-md-3">
-                        <label for="con_name">Name</label>
+                        <label for="con_name">Name <span style="color: #6b7280;">(Optional)</span></label>
                         <input type="text" name="con_name[]" id="con_name" class="form-control" placeholder="Name">
                       </div>
                       <div class="col-md-3">
-                        <label for="con_age">Age</label>
+                        <label for="con_age">Age <span style="color: #6b7280;">(Optional)</span></label>
                         <input type="number" name="con_age[]" id="con_age" class="form-control" placeholder="Age" min="0" max="120">
                       </div>
                       <div class="col-md-3">
-                        <label for="con_sex">Sex</label>
+                        <label for="con_sex">Sex <span style="color: #6b7280;">(Optional)</span></label>
                         <select name="con_sex[]" id="con_sex" class="form-control form-select">
                           <option value="" disabled selected>Select</option>
                           <option value="Male">Male</option>
@@ -273,22 +294,22 @@
                         </select>
                       </div>
                       <div class="col-md-3">
-                        <label for="con_relationship">Relationship</label>
+                        <label for="con_relationship">Relationship <span style="color: #6b7280;">(Optional)</span></label>
                         <input type="text" name="con_relationship[]" id="con_relationship" class="form-control" placeholder="Relationship">
                       </div>
                     </div>
 
                     <div class="row mb-2">
                       <div class="col-md-3">
-                        <label for="con_initial_screening">Initial Screening</label>
+                        <label for="con_initial_screening">Initial Screening <span style="color: #6b7280;">(Optional)</span></label>
                         <input type="date" name="con_initial_screening[]" id="con_initial_screening" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                       </div>
                       <div class="col-md-3">
-                        <label for="con_follow_up">Ff-up</label>
+                        <label for="con_follow_up">Ff-up <span style="color: #6b7280;">(Optional)</span></label>
                         <input type="date" name="con_follow_up[]" id="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                       </div>
                       <div class="col-md-3">
-                        <label for="con_remarks">Remarks</label>
+                        <label for="con_remarks">Remarks <span style="color: #6b7280;">(Optional)</span></label>
                         <input type="text" name="con_remarks[]" id="con_remarks" class="form-control" placeholder="TB/ TPT Case Number">
                       </div>
                       <div class="col-md-3 d-flex justify-content-end mt-4">
@@ -315,17 +336,17 @@
                 <h5 class="mb-4">H. Sputum Monitoring</h5>
                 <div class="row mb-2">
                   <div class="col-md-4">
-                    <label for="sput_date_collected">Date Collected</label>
+                    <label for="sput_date_collected">Date Collected <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="sput_date_collected" id="sput_date_collected" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
-                    <label for="sput_smear_result">Smear Microscopy/ TB LAMP</label>
+                    <label for="sput_smear_result">Smear Microscopy/ TB LAMP <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="sput_smear_result" id="sput_smear_result" class="form-control"
                       placeholder="Smear Microscopy/ TB LAMP">
                   </div>
                   <div class="col-md-4">
-                    <label for="sput_xpert_result">Xpert MTB/RIF</label>
+                    <label for="sput_xpert_result">Xpert MTB/RIF <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="sput_xpert_result" id="sput_xpert_result" class="form-control" placeholder="Xpert MTB/RIF">
                   </div>
                 </div>
@@ -344,12 +365,12 @@
                 <h5 class="mb-4">I. Chest X-ray</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="xray_date_examined">Date Examined</label>
+                    <label for="xray_date_examined">Date Examined <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="xray_date_examined" id="xray_date_examined" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
-                    <label for="xray_impression">Impression/ Comparative Reading</label>
+                    <label for="xray_impression">Impression/ Comparative Reading <span style="color: #6b7280;">(Optional)</span></label>
                     <select name="xray_impression" id="xray_impression" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Normal">Normal</option>
@@ -361,51 +382,12 @@
                     </select>
                   </div>
                   <div class="col-md-4">
-                    <label for="xray_descriptive_comment">Descriptive Comments</label>
+                    <label for="xray_descriptive_comment">Descriptive Comments <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="xray_descriptive_comment" id="xray_descriptive_comment" class="form-control"
                       placeholder="Descriptive Comments">
                   </div>
                 </div>
 
-                <!-- <div class="row mb-3">
-                    <div class="col-md-4">
-                      <label for="out_date_examined"></label>
-                      <input type="date" name="out_date_examined" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                    <div class="col-md-4">
-                      <label for="out_impression"></label>
-                      <select name="out_impression" class="form-control form-select" >
-                        <option value="" disabled selected>Select</option>
-                        <option value="Normal">Improved</option>
-                        <option value="Abnormal suggestive of TB">Stable/Unchanged</option>
-                        <option value="Abnormal not suggestive of TB">Worsened</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <label for="out_descriptive_comments"></label>
-                      <input type="text" name="out_descriptive_comments" class="form-control" placeholder="Descriptive Comments" >
-                    </div>
-                  </div> -->
-
-                <!-- <div class="row mb-3">
-                    <div class="col-md-4">
-                      <label for="out_date_examined"></label>
-                      <input type="date" name="out_date_examined" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                    <div class="col-md-4">
-                      <label for="out_impression"></label>
-                      <select name="out_impression" class="form-control form-select" >
-                        <option value="" disabled selected>Select</option>
-                        <option value="Normal">Improved</option>
-                        <option value="Abnormal suggestive of TB">Stable/Unchanged</option>
-                        <option value="Abnormal not suggestive of TB">Worsened</option>
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <label for="out_descriptive_comments"></label>
-                      <input type="text" name="out_descriptive_comments" class="form-control" placeholder="Descriptive Comments" >
-                    </div>
-                  </div> -->
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                   <i class="fas fa-arrow-left"></i> Back
@@ -421,25 +403,25 @@
                 <h5 class="mb-4">J. Post Treatment Follow-up</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="fol_months_after_tx">Mo. After Tx</label>
+                    <label for="fol_months_after_tx">Mo. After Tx <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="fol_months_after_tx" id="fol_months_after_tx" class="form-control" placeholder="PT">
                   </div>
                   <div class="col-md-4">
-                    <label for="fol_date">Date</label>
+                    <label for="fol_date">Date <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="fol_date" id="fol_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
                   </div>
                   <div class="col-md-4">
-                    <label for="fol_cxr_findings">CXR Findings</label>
+                    <label for="fol_cxr_findings">CXR Findings <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="fol_cxr_findings" id="fol_cxr_findings" class="form-control" placeholder="CXR Findings">
                   </div>
                 </div>
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="fol_smear_xpert">Smear/ Xpert</label>
+                    <label for="fol_smear_xpert">Smear/ Xpert <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="fol_smear_xpert" id="fol_smear_xpert" class="form-control" placeholder="Smear/ Xpert">
                   </div>
                   <div class="col-md-4">
-                    <label for="fol_tbc_dst">TBC & DST</label>
+                    <label for="fol_tbc_dst">TBC & DST <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="fol_tbc_dst" id="fol_tbc_dst" class="form-control" placeholder="TBC & DST">
                   </div>
                 </div>
