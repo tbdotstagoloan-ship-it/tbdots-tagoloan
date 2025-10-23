@@ -2995,12 +2995,36 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {}; // make this reassignable
+            let adherenceData = {};
+            let username = null;
 
-            //  Sample: replace with actual logged-in username dynamically
-            const username = "Syra123"; // or fetch this from your backend/session
+            // Fetch the current logged-in user
+            async function fetchCurrentUser() {
+                try {
+                    const response = await fetch('/api/auth/current-user');
+                    const data = await response.json();
+                    
+                    if (data.success && data.username) {
+                        username = data.username;
+                        return true;
+                    } else {
+                        console.error('No user logged in');
+                        // Optionally redirect to login page
+                        // window.location.href = '/login';
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Error fetching current user:', error);
+                    return false;
+                }
+            }
 
             async function fetchAdherenceData() {
+                if (!username) {
+                    console.error('Username not set');
+                    return;
+                }
+
                 try {
                     const response = await fetch(`/api/adherence/${username}`);
                     const data = await response.json();
@@ -3012,7 +3036,7 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error(" Error fetching adherence data:", error);
+                    console.error("Error fetching adherence data:", error);
                 }
             }
 
@@ -3097,10 +3121,17 @@
                 renderCalendar(currentDate);
             });
 
-            // Initial fetch and render
-            fetchAdherenceData();
+            // Initialize: fetch user first, then fetch adherence data
+            async function initialize() {
+                const userFetched = await fetchCurrentUser();
+                if (userFetched) {
+                    await fetchAdherenceData();
+                }
+            }
+
+            initialize();
         })();
-        </script>
+    </script>
 
 
     <script>
