@@ -2996,10 +2996,11 @@
 
             let currentDate = new Date();
             let adherenceData = {};
-            let currentUsername = null; // <-- dynamic username
 
-            async function fetchAdherenceData(patientId) {
-                if (!patientId) return;
+            // ✅ Get patient ID directly from backend (passed from controller)
+            const patientId = "{{ $patient->id }}";
+
+            async function fetchAdherenceData() {
                 try {
                     const response = await fetch(`/api/adherence/${patientId}`);
                     if (!response.ok) throw new Error("Failed to fetch adherence");
@@ -3016,7 +3017,6 @@
                     calendar.innerHTML = `<p style="color:red; text-align:center;">Failed to load adherence data.</p>`;
                 }
             }
-
 
             function calculateStats(year, month) {
                 let taken = 0;
@@ -3048,7 +3048,6 @@
 
                 monthYear.textContent = `${monthName} ${year}`;
 
-                // Week headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3057,14 +3056,12 @@
                     calendar.appendChild(header);
                 });
 
-                // Empty cells before 1st day
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
-                // Days of month
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -3088,7 +3085,6 @@
                 calculateStats(year, month);
             }
 
-            // Navigation buttons
             document.getElementById("prevMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
                 renderCalendar(currentDate);
@@ -3099,17 +3095,11 @@
                 renderCalendar(currentDate);
             });
 
-            // 🔹 When "View Details" is clicked
-            document.querySelectorAll(".btn-view-details").forEach(btn => {
-                btn.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    const patientId = btn.dataset.patientId;
-                    fetchAdherenceData(patientId);
-                });
-            });
-
+            // ✅ Fetch automatically when profile loads
+            fetchAdherenceData();
         })();
         </script>
+
 
 
 
