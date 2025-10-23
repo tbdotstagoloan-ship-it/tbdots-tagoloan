@@ -246,8 +246,8 @@
                         <!-- View -->
                         <li>
                           <a 
-                            class="dropdown-item d-flex align-items-center btn-view-details"
                             href="{{ route('admin.patientProfile', $patient->id) }}" 
+                            class="dropdown-item d-flex align-items-center btn-view-details"
                             data-patient-id="{{ $patient->id }}" {{-- ✅ use patient_id --}}
                             title="Patient Details"
                           >
