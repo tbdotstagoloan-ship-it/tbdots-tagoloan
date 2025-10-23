@@ -245,17 +245,13 @@
                       <ul class="dropdown-menu dropdown-menu-end">
                         <!-- View -->
                         <li>
-                          <a 
+                          <a class="dropdown-item d-flex align-items-center btn-view-details"
                             href="{{ route('admin.patientProfile', $patient->id) }}" 
-                            class="dropdown-item d-flex align-items-center btn-view-details"
-                            data-patient-id="{{ $patient->id }}" {{-- ✅ use patient_id --}}
-                            title="Patient Details"
-                          >
+                            data-patient-id="{{ $patient->id }}"
+                            title="Patient Details">
                             <i class="fas fa-eye me-2"></i> View Details
                           </a>
                         </li>
-
-
 
                         <!-- Edit -->
                         <li>
