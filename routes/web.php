@@ -61,7 +61,7 @@ Route::get('error', [AdminController::class, 'error'])->middleware(['auth']);
 Route::delete('/patients/{id}', [AdminController::class, 'destroy'])->name('patients.destroy');
 Route::get('/patients/edit/{id}', [AdminController::class, 'edit'])->name('patients.edit');
 Route::put('/patients/update/{id}', [AdminController::class, 'update'])->name('patients.update');
-Route::get('/admin/patient-profile/{id}', [AdminController::class, 'view'])->name('admin.patientProfile');
+Route::get('/admin/patient-profile/{id}', [AdminController::class, 'patientProfile'])->name('admin.patientProfile');
 
 Route::get('create-patient-account/{patient}', [PatientController::class, 'createAccount'])->middleware(['auth'])->name('patient.account');
 Route::post('/patient/register', [PatientController::class, 'store'])->name('patient.register');
