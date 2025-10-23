@@ -19,6 +19,7 @@ class MedicationAdherenceController extends Controller
         // 🧠 Validate request
         $validated = $request->validate([
             'patient_id' => 'required|exists:tbl_patients,id',
+            'username' => 'required|string',
             'date' => 'required|date',
             'status' => 'required|in:taken,missed',
         ]);
@@ -26,6 +27,7 @@ class MedicationAdherenceController extends Controller
         // 💾 Save adherence record
         $adherence = MedicationAdherence::create([
             'patient_id' => $validated['patient_id'],
+            'username' => $validated['username'],
             'date' => $validated['date'],
             'status' => $validated['status'],
         ]);
