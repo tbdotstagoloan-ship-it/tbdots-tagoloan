@@ -2995,18 +2995,16 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {};
+            let adherenceData = {}; // make this reassignable
 
-            // ✅ Get patient ID directly from backend (passed from controller)
-            const patientId = "{{ $patient->id }}";
+            //  Sample: replace with actual logged-in username dynamically
+            const username = "Syramae123"; // or fetch this from your backend/session
 
-            // ✅ Fetch adherence data from Laravel API
             async function fetchAdherenceData() {
                 try {
-                    const response = await fetch(`/api/adherence/${patientId}`);
-                    if (!response.ok) throw new Error("Failed to fetch adherence");
-
+                    const response = await fetch(`/api/adherence/${username}`);
                     const data = await response.json();
+
                     adherenceData = {};
                     data.forEach(item => {
                         adherenceData[item.date] = item.status;
@@ -3014,43 +3012,10 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error("❌ Error fetching adherence data:", error);
-                    calendar.innerHTML = `<p style="color:red; text-align:center;">Failed to load adherence data.</p>`;
+                    console.error(" Error fetching adherence data:", error);
                 }
             }
 
-            // ✅ Save new adherence (taken/missed)
-            async function saveAdherence(patientId, date, status) {
-                try {
-                    const response = await fetch('/adherence/store', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        },
-                        body: JSON.stringify({
-                            patient_id: patientId,
-                            date: date,
-                            status: status
-                        })
-                    });
-
-                    const data = await response.json();
-                    if (response.ok) {
-                        console.log('✅ Saved:', data);
-                        // Update local data and re-render
-                        adherenceData[date] = status;
-                        renderCalendar(currentDate);
-                    } else {
-                        console.error('❌ Error:', data);
-                        alert(data.error || 'Failed to save adherence');
-                    }
-                } catch (error) {
-                    console.error('❌ Network error:', error);
-                }
-            }
-
-            // ✅ Calendar statistics calculation
             function calculateStats(year, month) {
                 let taken = 0;
                 let missed = 0;
@@ -3071,17 +3036,17 @@
                 daysMissedEl.textContent = missed;
             }
 
-            // ✅ Render calendar days
             function renderCalendar(date) {
                 calendar.innerHTML = "";
                 const year = date.getFullYear();
                 const month = date.getMonth();
                 const firstDay = new Date(year, month, 1);
                 const lastDay = new Date(year, month + 1, 0);
-                const monthName = date.toLocaleString("default", { month: "long" });
 
+                const monthName = date.toLocaleString("default", { month: "long" });
                 monthYear.textContent = `${monthName} ${year}`;
 
+                // Day headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3090,19 +3055,21 @@
                     calendar.appendChild(header);
                 });
 
+                // Empty cells for offset
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
+                // Calendar days with adherence status
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
                     cell.textContent = day;
                     cell.classList.add("adherence-calendar-day");
 
-                    // ✅ Apply adherence status color & icon
                     if (adherenceData[dateStr]) {
                         cell.classList.add("adherence-" + adherenceData[dateStr]);
                         const icon = document.createElement("i");
@@ -3113,14 +3080,6 @@
                         );
                         cell.appendChild(icon);
                     }
-
-                    // ✅ Allow clicking a date to log adherence
-                    cell.addEventListener("click", () => {
-                        const status = confirm(`Mark ${dateStr} as TAKEN?\nClick Cancel to mark as MISSED.`)
-                            ? "taken"
-                            : "missed";
-                        saveAdherence(patientId, dateStr, status);
-                    });
 
                     calendar.appendChild(cell);
                 }
@@ -3138,13 +3097,10 @@
                 renderCalendar(currentDate);
             });
 
-            // ✅ Fetch data automatically when profile loads
+            // Initial fetch and render
             fetchAdherenceData();
         })();
         </script>
-
-
-
 
 
     <script>
