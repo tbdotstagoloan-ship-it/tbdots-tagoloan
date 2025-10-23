@@ -177,14 +177,3 @@ Route::delete('/facilities/{id}', [DiagnosingFacilityController::class, 'destroy
 // Medication
 Route::get('medication-adherence-flags', [MedicationAdherenceController::class,'index'])->middleware(['auth'])->name('medication.index');
 
-
-
-// Protected route - patient can only view their own profile
-Route::middleware(['auth'])->group(function () {
-    Route::get('/patient/profile', [PatientController::class, 'show'])->name('patient.profile');
-});
-
-// Admin route - can view any patient
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/patient-profile/{id}', [PatientController::class, 'showById'])->name('admin.patient.show');
-});

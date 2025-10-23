@@ -4,34 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\MedicationAdherence;
 
 class MedicationAdherenceController extends Controller
 {
-    public function index()
+    public function index ()
     {
-        return view('medication.index');
-    }
-
-    // GET /api/auth/current-user
-    // Sa MedicationAdherenceController
-    public function getCurrentUser(Request $request)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            return response()->json([
-                'success' => true,
-                'username' => $user->username, // or $user->name
-                'user_id' => $user->id
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'No user logged in'
-        ], 401);
+        return view ('medication.index');
     }
 
     // POST /api/adherence/log

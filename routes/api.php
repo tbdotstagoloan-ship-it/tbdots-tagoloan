@@ -27,9 +27,5 @@ Route::get('/physicians', [PhysicianController::class, 'show']);
 
 Route::post('/adherence/log', [MedicationAdherenceController::class, 'logAdherence']);
 Route::get('/adherence/{username}', [MedicationAdherenceController::class, 'getAdherence']);
-Route::get('/auth/current-user', [MedicationAdherenceController::class, 'getCurrentUser']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/auth/current-user', [MedicationAdherenceController::class, 'getCurrentUser']);
-    Route::post('/adherence/log', [MedicationAdherenceController::class, 'logAdherence']);
-    Route::get('/adherence/{username}', [MedicationAdherenceController::class, 'getAdherence']);
-});
+
+
