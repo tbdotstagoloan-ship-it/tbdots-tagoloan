@@ -16,14 +16,22 @@ class MedicationAdherenceController extends Controller
     public function logAdherence(Request $request)
     {
         $validated = $request->validate([
+            'patient_id' => 'nullable|integer',
             'username' => 'required|string',
             'date' => 'required|date',
             'status' => 'required|in:taken,missed',
         ]);
 
         MedicationAdherence::updateOrCreate(
-            ['username' => $validated['username'], 'date' => $validated['date']],
-            ['status' => $validated['status']]
+[
+                'username' => $validated['username'],
+                'date' => $validated['date']
+            ],
+
+    [
+                'patient_id' => $validated['patient_id'] ?? null,
+                'status' => $validated['status']
+            ]
         );
 
         return response()->json([
