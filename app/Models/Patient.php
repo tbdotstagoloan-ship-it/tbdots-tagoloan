@@ -148,5 +148,10 @@ class Patient extends Model
         return $this->hasMany(PostTreatmentFollowUp::class, 'patient_id');
     }
 
+    public function medicationAdherences()
+    {
+        return $this->hasMany(MedicationAdherence::class, 'patient_id');
+    }
+
 
 }
