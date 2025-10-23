@@ -26,21 +26,27 @@ class MedicationAdherenceController extends Controller
             return response()->json(['error' => 'Patient not found'], 404);
         }
 
-        // ✅ Create or update adherence record
+        // ✅ Create or update adherence record with patient_id
         $adherence = MedicationAdherence::updateOrCreate(
             [
                 'patient_id' => $patient->id,
                 'date' => $request->date,
             ],
             [
-                'status' => $request->status,
                 'username' => $patient->username,
+                'status' => $request->status,
             ]
         );
 
         return response()->json([
             'message' => 'Adherence logged successfully',
-            'data' => $adherence,
+            'data' => [
+                'id' => $adherence->id,
+                'patient_id' => $patient->id,
+                'username' => $patient->username,
+                'date' => $adherence->date,
+                'status' => $adherence->status,
+            ],
         ], 200);
     }
 
@@ -51,7 +57,7 @@ class MedicationAdherenceController extends Controller
     {
         $adherences = MedicationAdherence::where('patient_id', $id)
             ->orderBy('date', 'asc')
-            ->get(['date', 'status']);
+            ->get(['id', 'patient_id', 'username', 'date', 'status']);
 
         if ($adherences->isEmpty()) {
             return response()->json(['message' => 'No adherence records found'], 404);
@@ -71,16 +77,24 @@ class MedicationAdherenceController extends Controller
             'status' => 'required|in:taken,missed',
         ]);
 
+        $patient = Patient::find($request->patient_id);
+
         $adherence = MedicationAdherence::create([
-            'patient_id' => $request->patient_id,
-            'username' => Patient::find($request->patient_id)->username,
+            'patient_id' => $patient->id,
+            'username' => $patient->username,
             'date' => $request->date,
             'status' => $request->status,
         ]);
 
         return response()->json([
             'message' => 'Adherence record created successfully',
-            'data' => $adherence,
+            'data' => [
+                'id' => $adherence->id,
+                'patient_id' => $patient->id,
+                'username' => $patient->username,
+                'date' => $adherence->date,
+                'status' => $adherence->status,
+            ],
         ], 201);
     }
 }

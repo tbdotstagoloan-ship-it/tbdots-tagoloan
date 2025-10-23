@@ -12,10 +12,10 @@ class MedicationAdherence extends Model
     protected $table = 'tbl_medication_adherences';
 
     protected $fillable = [
+        'patient_id',
         'username',
         'date',
-        'status',
-        'patient_id',
+        'status'
     ];
 
     public function patient()
