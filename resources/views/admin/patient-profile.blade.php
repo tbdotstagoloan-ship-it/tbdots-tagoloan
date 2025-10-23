@@ -3000,6 +3000,7 @@
             // ✅ Get patient ID directly from backend (passed from controller)
             const patientId = "{{ $patient->id }}";
 
+            // ✅ Fetch adherence data from Laravel API
             async function fetchAdherenceData() {
                 try {
                     const response = await fetch(`/api/adherence/${patientId}`);
@@ -3018,6 +3019,38 @@
                 }
             }
 
+            // ✅ Save new adherence (taken/missed)
+            async function saveAdherence(patientId, date, status) {
+                try {
+                    const response = await fetch('/adherence/store', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({
+                            patient_id: patientId,
+                            date: date,
+                            status: status
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        console.log('✅ Saved:', data);
+                        // Update local data and re-render
+                        adherenceData[date] = status;
+                        renderCalendar(currentDate);
+                    } else {
+                        console.error('❌ Error:', data);
+                        alert(data.error || 'Failed to save adherence');
+                    }
+                } catch (error) {
+                    console.error('❌ Network error:', error);
+                }
+            }
+
+            // ✅ Calendar statistics calculation
             function calculateStats(year, month) {
                 let taken = 0;
                 let missed = 0;
@@ -3038,6 +3071,7 @@
                 daysMissedEl.textContent = missed;
             }
 
+            // ✅ Render calendar days
             function renderCalendar(date) {
                 calendar.innerHTML = "";
                 const year = date.getFullYear();
@@ -3068,6 +3102,7 @@
                     cell.textContent = day;
                     cell.classList.add("adherence-calendar-day");
 
+                    // ✅ Apply adherence status color & icon
                     if (adherenceData[dateStr]) {
                         cell.classList.add("adherence-" + adherenceData[dateStr]);
                         const icon = document.createElement("i");
@@ -3078,6 +3113,14 @@
                         );
                         cell.appendChild(icon);
                     }
+
+                    // ✅ Allow clicking a date to log adherence
+                    cell.addEventListener("click", () => {
+                        const status = confirm(`Mark ${dateStr} as TAKEN?\nClick Cancel to mark as MISSED.`)
+                            ? "taken"
+                            : "missed";
+                        saveAdherence(patientId, dateStr, status);
+                    });
 
                     calendar.appendChild(cell);
                 }
@@ -3095,10 +3138,11 @@
                 renderCalendar(currentDate);
             });
 
-            // ✅ Fetch automatically when profile loads
+            // ✅ Fetch data automatically when profile loads
             fetchAdherenceData();
         })();
         </script>
+
 
 
 
