@@ -248,13 +248,13 @@
                           <a 
                             class="dropdown-item d-flex align-items-center btn-view-details"
                             href="#" 
-                            data-patient-id="{{ $patient->id }}"
-                            data-patient-username="{{ $patient->username }}" {{-- add this --}}
+                            data-patient-id="{{ $patient->id }}" {{-- ✅ use patient_id --}}
                             title="Patient Details"
                           >
                             <i class="fas fa-eye me-2"></i> View Details
                           </a>
                         </li>
+
 
 
                         <!-- Edit -->

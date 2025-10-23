@@ -2998,11 +2998,10 @@
             let adherenceData = {};
             let currentUsername = null; // <-- dynamic username
 
-            async function fetchAdherenceData(username) {
-                if (!username) return;
-                currentUsername = username;
+            async function fetchAdherenceData(patientId) {
+                if (!patientId) return;
                 try {
-                    const response = await fetch(`/api/adherence/${username}`);
+                    const response = await fetch(`/api/adherence/${patientId}`);
                     if (!response.ok) throw new Error("Failed to fetch adherence");
 
                     const data = await response.json();
@@ -3017,6 +3016,7 @@
                     calendar.innerHTML = `<p style="color:red; text-align:center;">Failed to load adherence data.</p>`;
                 }
             }
+
 
             function calculateStats(year, month) {
                 let taken = 0;
@@ -3103,10 +3103,11 @@
             document.querySelectorAll(".btn-view-details").forEach(btn => {
                 btn.addEventListener("click", (e) => {
                     e.preventDefault();
-                    const username = btn.dataset.patientUsername;
-                    fetchAdherenceData(username);
+                    const patientId = btn.dataset.patientId;
+                    fetchAdherenceData(patientId);
                 });
             });
+
         })();
         </script>
 
