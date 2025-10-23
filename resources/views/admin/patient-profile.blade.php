@@ -2995,16 +2995,17 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {}; // make this reassignable
+            let adherenceData = {};
+            let currentUsername = null; // <-- dynamic username
 
-            //  Sample: replace with actual logged-in username dynamically
-            const username = "Syramae123"; // or fetch this from your backend/session
-
-            async function fetchAdherenceData() {
+            async function fetchAdherenceData(username) {
+                if (!username) return;
+                currentUsername = username;
                 try {
                     const response = await fetch(`/api/adherence/${username}`);
-                    const data = await response.json();
+                    if (!response.ok) throw new Error("Failed to fetch adherence");
 
+                    const data = await response.json();
                     adherenceData = {};
                     data.forEach(item => {
                         adherenceData[item.date] = item.status;
@@ -3012,7 +3013,8 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error(" Error fetching adherence data:", error);
+                    console.error("❌ Error fetching adherence data:", error);
+                    calendar.innerHTML = `<p style="color:red; text-align:center;">Failed to load adherence data.</p>`;
                 }
             }
 
@@ -3042,11 +3044,11 @@
                 const month = date.getMonth();
                 const firstDay = new Date(year, month, 1);
                 const lastDay = new Date(year, month + 1, 0);
-
                 const monthName = date.toLocaleString("default", { month: "long" });
+
                 monthYear.textContent = `${monthName} ${year}`;
 
-                // Day headers
+                // Week headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3055,18 +3057,17 @@
                     calendar.appendChild(header);
                 });
 
-                // Empty cells for offset
+                // Empty cells before 1st day
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
-                // Calendar days with adherence status
+                // Days of month
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
                     cell.textContent = day;
                     cell.classList.add("adherence-calendar-day");
 
@@ -3087,6 +3088,7 @@
                 calculateStats(year, month);
             }
 
+            // Navigation buttons
             document.getElementById("prevMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
                 renderCalendar(currentDate);
@@ -3097,10 +3099,17 @@
                 renderCalendar(currentDate);
             });
 
-            // Initial fetch and render
-            fetchAdherenceData();
+            // 🔹 When "View Details" is clicked
+            document.querySelectorAll(".btn-view-details").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const username = btn.dataset.patientUsername;
+                    fetchAdherenceData(username);
+                });
+            });
         })();
         </script>
+
 
 
     <script>
