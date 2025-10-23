@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\PhysicianController;
 use App\Http\Controllers\DiagnosingFacilityController;
-use App\Http\Controllers\MedicationAdherenceController;
+use App\Http\Controllers\Api\MedicationAdherenceController;
 use App\Http\Controllers\AdherenceController;
 use App\Http\Controllers\SputumMonitoringController;
 use App\Http\Controllers\CloseContactController;

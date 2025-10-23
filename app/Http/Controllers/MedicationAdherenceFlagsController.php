@@ -7,38 +7,36 @@ use App\Models\MedicationAdherence;
 
 class MedicationAdherenceFlagsController extends Controller
 {
-    public function index ()
-    {
-        return view ('medication.index');
-    }
+    // public function index ()
+    // {
+    //     return view ('medication.index');
+    // }
 
-    // POST /api/adherence/log
-    public function logAdherence(Request $request)
-    {
-        $validated = $request->validate([
-            'username' => 'required|string',
-            'date' => 'required|date',
-            'status' => 'required|in:taken,missed',
-        ]);
+    // public function logAdherence(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'username' => 'required|string',
+    //         'date' => 'required|date',
+    //         'status' => 'required|in:taken,missed',
+    //     ]);
 
-        MedicationAdherence::updateOrCreate(
-            ['username' => $validated['username'], 'date' => $validated['date']],
-            ['status' => $validated['status']]
-        );
+    //     MedicationAdherence::updateOrCreate(
+    //         ['username' => $validated['username'], 'date' => $validated['date']],
+    //         ['status' => $validated['status']]
+    //     );
 
-        return response()->json([
-            'message' => 'Adherence logged successfully',
-            'data' => $validated
-        ]);
-    }
+    //     return response()->json([
+    //         'message' => 'Adherence logged successfully',
+    //         'data' => $validated
+    //     ]);
+    // }
 
-    // GET /api/adherence/{username}
-    public function getAdherence($username)
-    {
-        $logs = MedicationAdherence::where('username', $username)
-            ->orderBy('date', 'asc')
-            ->get();
+    // public function getAdherence($username)
+    // {
+    //     $logs = MedicationAdherence::where('username', $username)
+    //         ->orderBy('date', 'asc')
+    //         ->get();
 
-        return response()->json($logs);
-    }
+    //     return response()->json($logs);
+    // }
 }
