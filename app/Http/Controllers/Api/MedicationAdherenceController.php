@@ -16,24 +16,15 @@ class MedicationAdherenceController extends Controller
     }
 
     // GET /api/auth/current-user
+    // Sa MedicationAdherenceController
     public function getCurrentUser(Request $request)
     {
-        // Check if user is authenticated
         if (Auth::check()) {
             $user = Auth::user();
             return response()->json([
                 'success' => true,
-                'username' => $user->username, // or $user->name, depending on your User model
-                'user_id' => $user->id,
-                'email' => $user->email
-            ]);
-        }
-
-        // If using session-based auth without Auth facade
-        if ($request->session()->has('username')) {
-            return response()->json([
-                'success' => true,
-                'username' => $request->session()->get('username')
+                'username' => $user->username, // or $user->name
+                'user_id' => $user->id
             ]);
         }
 
