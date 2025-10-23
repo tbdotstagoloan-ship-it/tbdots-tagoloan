@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DiagnosingFacilityController;
 use App\Http\Controllers\Api\PatientAuthController;
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\MedicationAdherenceController;
+use App\Http\Controllers\Api\MedicationAdherenceController;
 
 
 
