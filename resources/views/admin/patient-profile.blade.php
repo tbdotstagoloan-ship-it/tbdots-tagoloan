@@ -2987,6 +2987,10 @@
     </script>
 
     <script>
+        const username = "{{ $patient->username }}";
+    </script>
+
+    <script>
         (function () {
             const calendar = document.getElementById("calendar");
             const monthYear = document.getElementById("monthYear");
@@ -2996,9 +3000,6 @@
 
             let currentDate = new Date();
             let adherenceData = {}; // make this reassignable
-
-            //  Sample: replace with actual logged-in username dynamically
-            const username = "Syra123"; // or fetch this from your backend/session
 
             async function fetchAdherenceData() {
                 try {
