@@ -40,27 +40,6 @@ class AdminController extends Controller
         ));
     }
 
-    // public function patient(Request $request)
-    // {
-    //     $patients = DB::table('tbl_patients as p')
-    //         ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-    //         ->select(
-    //             'p.id',
-    //             'p.pat_full_name',
-    //             'p.pat_sex',
-    //             DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-    //             'p.pat_current_address',
-    //             'p.pat_contact_number',
-    //             'd.diag_diagnosis_date',
-    //         )
-    //         ->orderBy('d.diag_diagnosis_date', 'desc')
-    //         ->paginate(10);
-
-    //     $totalPatients = DB::table('tbl_patients')->count();
-
-    //     return view('admin.patient', compact('patients', 'totalPatients'));
-    // }
-
     public function patient(Request $request)
     {
         $search = $request->input('search');
@@ -94,10 +73,12 @@ class AdminController extends Controller
     }
 
 
-    public function patientProfile()
+    public function patientProfile($id)
     {
-        return view('admin.patient-profile');
+        $patient = Patient::findOrFail($id);
+        return view('admin.patient-profile', compact('patient'));
     }
+
 
     public function page1()
     {
