@@ -29,21 +29,28 @@ class PatientAuthController extends Controller
         // ✅ Generate Sanctum token
         $token = $account->createToken('patient_token')->plainTextToken;
 
-        // ✅ Get linked patient record
         $patient = Patient::find($account->patient_id);
 
-        // ✅ Return both account + patient info for Flutter
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'token' => $token,
-            'patient' => [ // ← you’ll use this in Flutter
-                'id' => $patient->id ?? $account->patient_id, // this is the patient_id
+            'user' => [
+                'id' => $account->id,
                 'username' => $account->acc_username,
+                'patient_id' => $account->patient_id,
                 'full_name' => $patient->pat_full_name ?? null,
                 'contact_number' => $patient->pat_contact_number ?? null,
             ],
         ]);
     }
 
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logout successful',
+        ]);
+    }
 }
