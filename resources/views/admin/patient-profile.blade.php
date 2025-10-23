@@ -2995,14 +2995,14 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {}; // make this reassignable
+            let adherenceData = {};
 
-            //  Sample: replace with actual logged-in username dynamically
-            const username = "Testing123"; // or fetch this from your backend/session
+            // ✅ Dynamically read patient ID from the blade
+            const patientId = "{{ $patient->id }}"; 
 
             async function fetchAdherenceData() {
                 try {
-                    const response = await fetch(`/api/adherence/${username}`);
+                    const response = await fetch(`/api/adherence/patient/${patientId}`);
                     const data = await response.json();
 
                     adherenceData = {};
@@ -3012,13 +3012,12 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error(" Error fetching adherence data:", error);
+                    console.error("❌ Error fetching adherence data:", error);
                 }
             }
 
             function calculateStats(year, month) {
-                let taken = 0;
-                let missed = 0;
+                let taken = 0, missed = 0;
 
                 Object.keys(adherenceData).forEach(dateStr => {
                     const date = new Date(dateStr);
@@ -3046,7 +3045,7 @@
                 const monthName = date.toLocaleString("default", { month: "long" });
                 monthYear.textContent = `${monthName} ${year}`;
 
-                // Day headers
+                // Headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3055,14 +3054,14 @@
                     calendar.appendChild(header);
                 });
 
-                // Empty cells for offset
+                // Empty slots
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
-                // Calendar days with adherence status
+                // Days with adherence
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
@@ -3097,10 +3096,11 @@
                 renderCalendar(currentDate);
             });
 
-            // Initial fetch and render
+            // Initial render
             fetchAdherenceData();
         })();
         </script>
+
 
 
     <script>

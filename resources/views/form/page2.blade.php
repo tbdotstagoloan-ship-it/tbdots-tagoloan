@@ -439,8 +439,14 @@
                   </div>
                   <div class="col-md-3">
                     <label for="base_relationship">Relationship <span style="color: red;">*</span></label>
-                    <input type="text" name="base_relationship" id="base_relationship" class="form-control"
-                      placeholder="Relationship" required>
+                    <!-- <input type="text" name="base_relationship" id="base_relationship" class="form-control"
+                      placeholder="Relationship" required> -->
+                      <select name="base_relationship" id="base_relationship" class="form-control form-select" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="Guardian">Guardian</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                      </select>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
