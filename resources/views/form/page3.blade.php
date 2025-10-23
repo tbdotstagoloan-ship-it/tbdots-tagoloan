@@ -295,7 +295,13 @@
                       </div>
                       <div class="col-md-3">
                         <label for="con_relationship">Relationship <span style="color: #6b7280;">(Optional)</span></label>
-                        <input type="text" name="con_relationship[]" id="con_relationship" class="form-control" placeholder="Relationship">
+                        <!-- <input type="text" name="con_relationship[]" id="con_relationship" class="form-control" placeholder="Relationship"> -->
+                         <select name="con_relationship[]" id="con_relationship" class="form-control form-select">
+                          <option value="" disabled selected>Select</option>
+                          <option value="Guardian">Guardian</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                         </select>
                       </div>
                     </div>
 

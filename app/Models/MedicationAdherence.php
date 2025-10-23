@@ -12,8 +12,15 @@ class MedicationAdherence extends Model
     protected $table = 'tbl_medication_adherences';
 
     protected $fillable = [
+        'patient_id',
         'username',
         'date',
         'status',
     ];
+
+    public function patient()
+    {
+        return $this->belongsTo(Patient::class, 'patient_id');
+    }
+
 }
