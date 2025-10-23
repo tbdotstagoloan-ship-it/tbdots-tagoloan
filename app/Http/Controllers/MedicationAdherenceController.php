@@ -72,4 +72,10 @@ class MedicationAdherenceController extends Controller
         ]);
     }
 
+    public function getPatientAdherence($id)
+    {
+        $adherences = MedicationAdherence::where('patient_id', $id)->get(['date', 'status']);
+        return response()->json($adherences);
+    }
+
 }
