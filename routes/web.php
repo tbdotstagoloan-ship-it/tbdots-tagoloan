@@ -180,3 +180,5 @@ Route::delete('/facilities/{id}', [DiagnosingFacilityController::class, 'destroy
 // Medication
 Route::get('medication-adherence-flags', [MedicationAdherenceController::class,'index'])->middleware(['auth'])->name('medication.index');
 
+Route::get('/adherence/{patient_id}', [MedicationAdherenceController::class, 'getAdherenceByPatientId']);
+Route::post('/adherence/log', [MedicationAdherenceController::class, 'logAdherence']);

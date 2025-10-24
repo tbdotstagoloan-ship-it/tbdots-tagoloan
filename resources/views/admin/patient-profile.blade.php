@@ -2987,7 +2987,7 @@
     </script>
 
     <script>
-        (function () {
+        document.addEventListener('DOMContentLoaded', function () {
             const calendar = document.getElementById("calendar");
             const monthYear = document.getElementById("monthYear");
             const adherenceRateEl = document.getElementById("adherenceRate");
@@ -2997,104 +2997,81 @@
             let currentDate = new Date();
             let adherenceData = {};
 
-            const patientId = "{{ $patient->id }}"; // 👈 dynamic patient ID
+            const patientId = "{{ $patient->id }}"; // ✅ Blade variable for current patient
 
-            async function fetchAdherenceData() {
-                try {
-                    const response = await fetch(`/api/adherence/${patientId}`);
-                    const data = await response.json();
-
-                    adherenceData = {};
-                    data.forEach(item => {
-                        adherenceData[item.date] = item.status;
-                    });
-
-                    renderCalendar(currentDate);
-                } catch (error) {
-                    console.error("❌ Error fetching adherence data:", error);
-                }
+            function fetchAdherenceData() {
+                fetch(`/adherence/${patientId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        adherenceData = {};
+                        data.forEach(item => {
+                            adherenceData[item.date] = item.status;
+                        });
+                        renderCalendar();
+                    })
+                    .catch(err => console.error("❌ Error fetching adherence data:", err));
             }
 
-            function calculateStats(year, month) {
-                let taken = 0, missed = 0;
-
-                Object.keys(adherenceData).forEach(dateStr => {
-                    const date = new Date(dateStr);
-                    if (date.getFullYear() === year && date.getMonth() === month) {
-                        if (adherenceData[dateStr] === "taken") taken++;
-                        if (adherenceData[dateStr] === "missed") missed++;
-                    }
-                });
-
-                const total = taken + missed;
-                const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
-
-                adherenceRateEl.textContent = rate + "%";
-                daysTakenEl.textContent = taken;
-                daysMissedEl.textContent = missed;
-            }
-
-            function renderCalendar(date) {
-                calendar.innerHTML = "";
-                const year = date.getFullYear();
-                const month = date.getMonth();
+            function renderCalendar() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
                 const firstDay = new Date(year, month, 1);
                 const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
 
-                const monthName = date.toLocaleString("default", { month: "long" });
-                monthYear.textContent = `${monthName} ${year}`;
-
-                const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                daysOfWeek.forEach(day => {
-                    const header = document.createElement("div");
-                    header.textContent = day;
-                    header.classList.add("adherence-day-header");
-                    calendar.appendChild(header);
+                monthYear.textContent = currentDate.toLocaleDateString('en-US', {
+                    month: 'long',
+                    year: 'numeric'
                 });
 
-                for (let i = 0; i < firstDay.getDay(); i++) {
-                    const empty = document.createElement("div");
-                    empty.classList.add("adherence-calendar-day", "adherence-empty");
-                    calendar.appendChild(empty);
-                }
+                calendar.innerHTML = '';
+                let daysTaken = 0;
+                let daysMissed = 0;
 
-                for (let day = 1; day <= lastDay.getDate(); day++) {
-                    const cell = document.createElement("div");
-                    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const status = adherenceData[dateStr];
 
-                    cell.textContent = day;
-                    cell.classList.add("adherence-calendar-day");
+                    const dayDiv = document.createElement("div");
+                    dayDiv.classList.add("adherence-day");
 
-                    if (adherenceData[dateStr]) {
-                        cell.classList.add("adherence-" + adherenceData[dateStr]);
-                        const icon = document.createElement("i");
-                        icon.classList.add(
-                            "fa",
-                            adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
-                            "adherence-status-icon"
-                        );
-                        cell.appendChild(icon);
+                    if (status === "taken") {
+                        dayDiv.classList.add("adherence-taken");
+                        dayDiv.innerHTML = `<i class="fa fa-check"></i>`;
+                        daysTaken++;
+                    } else if (status === "missed") {
+                        dayDiv.classList.add("adherence-missed");
+                        dayDiv.innerHTML = `<i class="fa fa-times"></i>`;
+                        daysMissed++;
+                    } else {
+                        dayDiv.textContent = day;
                     }
 
-                    calendar.appendChild(cell);
+                    calendar.appendChild(dayDiv);
                 }
 
-                calculateStats(year, month);
+                const totalDays = daysTaken + daysMissed;
+                const adherenceRate = totalDays > 0 ? Math.round((daysTaken / totalDays) * 100) : 0;
+
+                adherenceRateEl.textContent = adherenceRate + "%";
+                daysTakenEl.textContent = daysTaken;
+                daysMissedEl.textContent = daysMissed;
             }
 
             document.getElementById("prevMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
-                renderCalendar(currentDate);
+                renderCalendar();
             });
 
             document.getElementById("nextMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() + 1);
-                renderCalendar(currentDate);
+                renderCalendar();
             });
 
             fetchAdherenceData();
-        })();
-        </script>
+        });
+    </script>
+
 
 
 
