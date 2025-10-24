@@ -38,15 +38,26 @@ class MedicationAdherenceController extends Controller
     // GET /api/adherence/{username}
     // MedicationAdherenceController.php
     public function getAdherence($patient_id)
-    {
-        // Find the patient first to get their username
+{
+    try {
         $patient = Patient::findOrFail($patient_id);
         
-        // Then get their adherence logs using the username
+        \Log::info('Fetching for patient:', [
+            'patient_id' => $patient_id, 
+            'username' => $patient->username
+        ]);
+        
         $logs = MedicationAdherence::where('username', $patient->username)
             ->orderBy('date', 'asc')
             ->get();
-
+        
+        \Log::info('Found logs:', ['count' => $logs->count()]);
+        
         return response()->json($logs);
+        
+    } catch (\Exception $e) {
+        \Log::error('Error:', ['message' => $e->getMessage()]);
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
 }

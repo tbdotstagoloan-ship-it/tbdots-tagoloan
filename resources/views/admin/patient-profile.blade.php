@@ -2984,6 +2984,12 @@
             });
         });
     </script>
+    
+    <script>
+    // Debug: Check if patient ID is available
+    console.log('Patient ID from blade:', {{ $patient->id }});
+    console.log('Calendar element exists:', !!document.getElementById('calendar'));
+</script>
 
     <script>
 (function () {
