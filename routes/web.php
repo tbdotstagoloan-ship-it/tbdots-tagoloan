@@ -48,7 +48,10 @@ Route::get('/', function () {
 // Admin
 Route::get('admin/dashboard', [AdminController::class,'index'])->middleware(['auth'])->name('admin.index');
 Route::get('patient', [AdminController::class, 'patient'])->middleware(['auth'])->name('admin.patient');
-Route::get('patient-profile', [AdminController::class, 'patientProfile'])->middleware(['auth']);
+Route::get('patient-profile/{id}', [AdminController::class, 'patientProfile'])
+    ->middleware(['auth'])
+    ->name('admin.patientProfile');
+
 Route::get('form/page1', [AdminController::class, 'page1'])->middleware(['auth']);
 Route::post('submitpage1', [AdminController::class, 'submitpage1'])->middleware(['auth']);
 Route::get('form/page2', [AdminController::class, 'page2'])->middleware(['auth']);

@@ -250,8 +250,8 @@
                             title="Patient Details">
                             <i class="fas fa-eye me-2"></i> View Details
                           </a>
-
                         </li>
+
 
                         <!-- Edit -->
                         <li>
