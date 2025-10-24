@@ -2995,10 +2995,10 @@
             const daysMissedEl = document.getElementById("daysMissed");
 
             let currentDate = new Date();
-            let adherenceData = {}; // make this reassignable
+            let adherenceData = {};
 
-            //  Sample: replace with actual logged-in username dynamically
-            const username = "Syra123"; // or fetch this from your backend/session
+            // Replace this with dynamic username from backend/session
+            const username = "{{ $patient->username ?? 'Syra123' }}";
 
             async function fetchAdherenceData() {
                 try {
@@ -3012,7 +3012,7 @@
 
                     renderCalendar(currentDate);
                 } catch (error) {
-                    console.error(" Error fetching adherence data:", error);
+                    console.error("Error fetching adherence data:", error);
                 }
             }
 
@@ -3034,6 +3034,32 @@
                 adherenceRateEl.textContent = rate + "%";
                 daysTakenEl.textContent = taken;
                 daysMissedEl.textContent = missed;
+            }
+
+            async function logAdherence(dateStr, status) {
+                try {
+                    const response = await fetch(`/api/adherence/log`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+                        },
+                        body: JSON.stringify({
+                            username,
+                            date: dateStr,
+                            status,
+                        }),
+                    });
+
+                    const data = await response.json();
+                    console.log("Logged adherence:", data);
+
+                    // Update local data and re-render
+                    adherenceData[dateStr] = status;
+                    renderCalendar(currentDate);
+                } catch (error) {
+                    console.error("Error logging adherence:", error);
+                }
             }
 
             function renderCalendar(date) {
@@ -3066,10 +3092,10 @@
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
                     cell.textContent = day;
                     cell.classList.add("adherence-calendar-day");
 
+                    // Existing status
                     if (adherenceData[dateStr]) {
                         cell.classList.add("adherence-" + adherenceData[dateStr]);
                         const icon = document.createElement("i");
@@ -3080,6 +3106,16 @@
                         );
                         cell.appendChild(icon);
                     }
+
+                    // 👇 Add click handler for manual input
+                    cell.addEventListener("click", () => {
+                        const choice = prompt(`Mark medication for ${dateStr} as:\nType "taken" or "missed"`);
+                        if (choice === "taken" || choice === "missed") {
+                            logAdherence(dateStr, choice);
+                        } else if (choice !== null) {
+                            alert("Invalid input. Please type only 'taken' or 'missed'.");
+                        }
+                    });
 
                     calendar.appendChild(cell);
                 }
@@ -3097,10 +3133,10 @@
                 renderCalendar(currentDate);
             });
 
-            // Initial fetch and render
             fetchAdherenceData();
         })();
         </script>
+
 
 
     <script>
