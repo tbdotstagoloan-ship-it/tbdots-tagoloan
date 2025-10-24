@@ -2950,7 +2950,6 @@
 
     </main>
 
-    <script src="{{ url('assets/js/medication-adherence-calendar.js') }}"></script>
 
     <script src="{{ url('assets/js/patientProfile.js') }}"></script>
 
