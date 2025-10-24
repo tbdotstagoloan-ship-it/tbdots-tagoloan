@@ -35,12 +35,36 @@ class MedicationAdherenceController extends Controller
     }
 
     // GET /api/adherence/{username}
-    public function getAdherence($username)
+    // public function getAdherence($username)
+    // {
+    //     $logs = MedicationAdherence::where('username', $username)
+    //         ->orderBy('date', 'asc')
+    //         ->get();
+
+    //     return response()->json($logs);
+    // }
+
+    public function getAdherenceByPatient($id)
     {
-        $logs = MedicationAdherence::where('username', $username)
+        $logs = MedicationAdherence::where('patient_id', $id)
             ->orderBy('date', 'asc')
             ->get();
 
-        return response()->json($logs);
+        // Compute adherence stats
+        $daysTaken = $logs->where('status', 'taken')->count();
+        $daysMissed = $logs->where('status', 'missed')->count();
+        $totalDays = $daysTaken + $daysMissed;
+        $adherenceRate = $totalDays > 0 ? round(($daysTaken / $totalDays) * 100, 2) : 0;
+
+        return response()->json([
+            'logs' => $logs,
+            'stats' => [
+                'daysTaken' => $daysTaken,
+                'daysMissed' => $daysMissed,
+                'adherenceRate' => $adherenceRate
+            ]
+        ]);
     }
+
+
 }
