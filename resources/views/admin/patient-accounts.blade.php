@@ -137,6 +137,19 @@
     <div class="card shadow-sm border-0">
       <div class="card-body p-0">
         <div class="table-responsive">
+          
+        <form method="GET" action="{{ url('patient-accounts') }}" class="d-flex align-items-center">
+            <select name="per_page" id="per_page" class="form-select form-select-sm w-auto"
+              onchange="this.form.submit()">
+              <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+              <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
+              <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+              <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+              <option value="250" {{ $perPage == 250 ? 'selected' : '' }}>250</option>
+              <option value="500" {{ $perPage == 500 ? 'selected' : '' }}>500</option>
+            </select>
+            <span class="ms-2"></span>
+          </form>
 
           <table class="table">
             <thead>

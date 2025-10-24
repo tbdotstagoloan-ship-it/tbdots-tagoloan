@@ -1164,9 +1164,8 @@
                                                                 <th>Height</th>
                                                                 <th>Weight</th>
                                                                 <th>Blood Pressure</th>
-                                                                <th>Heart Rate</th>
+                                                                <th>Pulse Rate</th>
                                                                 <th>Temperature</th>
-                                                                <th>Occupation</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -1174,9 +1173,8 @@
                                                                 <td>{{ $info->base_height ?? '—' }}</td>
                                                                 <td>{{ $info->base_weight ?? '—' }}</td>
                                                                 <td>{{ $info->base_blood_pressure ?? '—' }}</td>
-                                                                <td>{{ $info->base_heart_rate ?? '-' }}</td>
+                                                                <td>{{ $info->base_pulse_rate ?? '-' }}</td>
                                                                 <td>{{ $info->base_temperature ?? '—' }}</td>
-                                                                <td>{{ $info->base_occupation ?? '—' }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1219,6 +1217,7 @@
                                                                 <th>Name</th>
                                                                 <th>Relationship</th>
                                                                 <th>Contact Info</th>
+                                                                <th>Occupation</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -1226,6 +1225,7 @@
                                                                 <td>{{ $info->base_emergency_contact_name ?? '—' }}</td>
                                                                 <td>{{ $info->base_relationship ?? '—' }}</td>
                                                                 <td>{{ $info->base_contact_info ?? '—' }}</td>
+                                                                <td>{{ $info->base_occupation ?? '—' }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1432,10 +1432,10 @@
                                                 <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and
                                                     continuation phases.</p>
                                             </div>
-                                            <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                                                 data-bs-target="#editPrescribedDrugsModal">
                                                 <i class="fas fa-plus"></i> Add Record
-                                            </button> -->
+                                            </button>
                                         </div>
 
                                         @if ($patient->prescribedDrugs->isNotEmpty())
@@ -1447,6 +1447,7 @@
                                                         <tr>
                                                             <th>Date Start</th>
                                                             <th>Drug</th>
+                                                            <th>No. of Tablets</th>
                                                             <th>Strength</th>
                                                             <th>Unit</th>
                                                         </tr>
@@ -1461,6 +1462,7 @@
                                                                 @endif
                                                             </td>
                                                             <td>{{ $patient->prescribedDrugs->first()->drug_name ?? '—' }}</td>
+                                                            <td>{{ $patient->prescribedDrugs->first()->drug_no_of_tablets ?? '—' }}</td>
                                                             <td>{{ $patient->prescribedDrugs->first()->drug_strength ?? '—' }}</td>
                                                             <td>{{ $patient->prescribedDrugs->first()->drug_unit ?? '—' }}</td>
                                                         </tr>
@@ -1476,6 +1478,7 @@
                                                         <tr>
                                                             <th>Date</th>
                                                             <th>Drug</th>
+                                                            <th>No. of Tablets</th>
                                                             <th>Strength</th>
                                                             <th>Unit</th>
                                                         </tr>
@@ -1490,6 +1493,7 @@
                                                                 @endif
                                                             </td>
                                                             <td>{{ $patient->prescribedDrugs->first()->drug_con_name ?? '—' }}</td>
+                                                            <td>{{ $patient->prescribedDrugs->first()->drug_con_no_of_tablets ?? '—' }}</td>
                                                             <td>{{ $patient->prescribedDrugs->first()->drug_con_strength ?? '—' }}</td>
                                                             <td>{{ $patient->prescribedDrugs->first()->drug_con_unit ?? '—' }}</td>
                                                         </tr>
@@ -2073,8 +2077,15 @@
 
                                                 <div class="col-md-6 mb-3">
                                                         <label class="form-label">Xpert MTB/RIF Result</label>
-                                                        <input type="text" class="form-control" name="lab_xpert_result"
+                                                        <!-- <input type="text" class="form-control" name="lab_xpert_result"
+                                                            value="{{ $labTest->lab_xpert_result }}"> -->
+                                                            <select name="lab_xpert_result" id="lab_xpert_result" class="form-control form-select"
                                                             value="{{ $labTest->lab_xpert_result }}">
+                                                                <option value="MTB HIGH">MTB HIGH</option>
+                                                                <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                                                <option value="MTB LOW">MTB LOW</option>
+                                                                <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                                            </select>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -2086,8 +2097,16 @@
 
                                                     <div class="col-md-6 mb-3">
                                                         <label class="form-label">Smear Microscopy Result</label>
-                                                        <input type="text" class="form-control" name="lab_smear_result"
+                                                        <!-- <input type="text" class="form-control" name="lab_smear_result"
+                                                            value="{{ $labTest->lab_smear_result }}"> -->
+                                                            <select name="lab_smear_result" id="lab_smear_result" class="form-control form-select"
                                                             value="{{ $labTest->lab_smear_result }}">
+                                                                <option value="" disabled selected>Select</option>
+                                                                <option value="MTB HIGH">MTB HIGH</option>
+                                                                <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                                                <option value="MTB LOW">MTB LOW</option>
+                                                                <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                                            </select>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -2099,8 +2118,14 @@
 
                                                     <div class="col-md-6 mb-3">
                                                         <label class="form-label">Chest X-ray Result</label>
-                                                        <input type="text" class="form-control" name="lab_cxray_result"
+                                                        <!-- <input type="text" class="form-control" name="lab_cxray_result"
+                                                            value="{{ $labTest->lab_cxray_result }}"> -->
+                                                            <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select"
                                                             value="{{ $labTest->lab_cxray_result }}">
+                                                                <option value="PTB BOTH RIGHT UPPER LOBE">PTB BOTH RIGHT UPPER LOBE</option>
+                                                                <option value="PTB BOTH LOWER LOBE">PTB BOTH LOWER LOBE</option>
+                                                                <option value="PTB SUGGESTIVE POSTIVE TUBERCULOSIS">PTB SUGGESTIVE POSTIVE TUBERCULOSIS</option>
+                                                            </select>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -2117,8 +2142,14 @@
 
                                                 <div class="col-md-6 mb-3">
                                                         <label class="form-label">Tuberculin Skin Test Result</label>
-                                                        <input type="text" class="form-control" name="lab_tst_result"
+                                                        <!-- <input type="text" class="form-control" name="lab_tst_result"
+                                                            value="{{ $labTest->lab_tst_result }}"> -->
+                                                            <select name="lab_tst_result" id="lab_tst_result" class="form-control form-select"
                                                             value="{{ $labTest->lab_tst_result }}">
+                                                                <option value="" disabled selected>Select</option>
+                                                                <option value="POSITIVE">POSITIVE</option>
+                                                                <option value="NEGATIVE">NEGATIVE</option>
+                                                            </select>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -2135,8 +2166,13 @@
 
                                                 <div class="col-md-6 mb-3">
                                                         <label class="form-label">Other Test Result (Specify)</label>
-                                                        <input type="text" class="form-control" name="lab_other_result"
-                                                            value="{{ $labTest->lab_other_result }}">
+                                                        <!-- <input type="text" class="form-control" name="lab_other_result"
+                                                            value="{{ $labTest->lab_other_result }}"> -->
+                                                            <select name="lab_other_result" id="lab_other_result" class="form-control form-select">
+                                                                <option value=""disabled selected>Select</option>
+                                                                <option value="POSITIVE">POSITIVE</option>
+                                                                <option value="NEGATIVE">NEGATIVE</option>
+                                                            </select>
                                                     </div>
 
                                                     <div class="col-md-6 mb-3">
@@ -2204,7 +2240,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_referred_to" class="form-label">Referred to</label>
                                     <input type="text" class="form-control" id="diag_referred_to"
-                                        name="diag_referred_to" placeholder="Referred to"
+                                        name="diag_referred_to" placeholder="Hospital / Barangay Name"
                                         value="{{ old('diag_referred_to', $patient->diagnosis->diag_referred_to ?? '') }}">
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -2454,7 +2490,6 @@
                                 <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
                                     value="{{ old('out_outcome', $patient->treatmentOutcomes->first()->out_outcome ?? '') }}"
                                     required>
-                                    <option value="">Please Select</option>
                                     <option value="Cured">Cured</option>
                                     <option value="Treatment Completed">Treatment Completed</option>
                                     <option value="Lost to Follow-up">Lost to Follow-up</option>
@@ -2496,7 +2531,7 @@
             aria-labelledby="editPrescribedDrugsModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editPrescribedDrugsModalLabel">Prescribed Drugs</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -2507,26 +2542,33 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="drug_con_date" class="form-label">Intensive Date</label>
-                                    <input type="date" class="form-control" id="drug_con_date" name="drug_con_date"
+                                    <label for="drug_date" class="form-label">Intensive Date</label>
+                                    <input type="date" class="form-control" id="drug_date" name="drug_con_date"
                                         max="<?php echo date('Y-m-d'); ?>" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="drug_con_name" class="form-label">Drug</label>
+                                    <label for="drug_name" class="form-label">Drug</label>
                                     <input type="text" class="form-control" id="drug_con_name" name="drug_con_name"
                                         readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="drug_con_strength" class="form-label">Strength</label>
-                                    <input type="text" class="form-control" id="drug_con_strength"
-                                        name="drug_con_strength" readonly>
+                                    <label for="drug_no_of_tablets" class="form-label">Drug</label>
+                                    <input type="text" class="form-control" id="drug_no_of_tablets" name="drug_no_of_tablets"
+                                        readonly>
+                                </div>
+                                
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="drug_strength" class="form-label">Strength</label>
+                                    <input type="text" class="form-control" id="drug_strength"
+                                        name="drug_strength" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="drug_con_unit" class="form-label">Unit</label>
-                                    <input type="text" class="form-control" id="drug_con_unit" name="drug_con_unit"
+                                    <label for="drug_unit" class="form-label">Unit</label>
+                                    <input type="text" class="form-control" id="drug_unit" name="drug_unit"
                                         readonly>
                                 </div>
                             </div>
@@ -2541,6 +2583,12 @@
                                     <label for="drug_con_name" class="form-label">Drug</label>
                                     <input type="text" class="form-control" id="drug_con_name" name="drug_con_name"
                                         placeholder="Drug name" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="drug_con_no_of_tablets" class="form-label">No. of Tablets</label>
+                                    <input type="text" class="form-control" id="drug_con_name" name="drug_co_no_of_tablets"
+                                         required>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -2996,7 +3044,7 @@
             let adherenceData = {}; // make this reassignable
 
             //  Sample: replace with actual logged-in username dynamically
-            const username = "Syra123"; // or fetch this from your backend/session
+            const username = "Syra12345"; // or fetch this from your backend/session
 
             async function fetchAdherenceData() {
                 try {

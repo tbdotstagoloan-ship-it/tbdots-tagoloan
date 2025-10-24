@@ -17,15 +17,15 @@ return new class extends Migration
             $table->decimal('base_weight', 5,2);
             $table->decimal('base_height', 5,2);
             $table->string('base_blood_pressure');
-            $table->string('base_heart_rate');
+            $table->string('base_pulse_rate');
             $table->string('base_temperature');
             $table->string('base_emergency_contact_name');
             $table->string('base_relationship');
             $table->string('base_contact_info');
             $table->string('base_diabetes_screening');
             $table->string('base_four_ps_beneficiary');
-            $table->string('base_fbs_screening');
-            $table->date('base_date_tested');
+            $table->string('base_fbs_screening')->nullable();
+            $table->date('base_date_tested')->nullable();
             $table->string('base_occupation');
 
             $table->foreign('patient_id')

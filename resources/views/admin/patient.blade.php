@@ -152,14 +152,24 @@
   </div>
 
   <div class="main-content py-4" id="mainContent">
-    <h4 style="margin-bottom: 10px; color: #2c3e50; font-weight: 600;">
+    <div style="margin-bottom: 50px;">
+      <h4 style="color: #2c3e50; font-weight: 600;">
       Patient List
     </h4>
     <p class="text-muted mb-3">
       You have total {{ $totalPatients }} patients in TB DOTS.
     </p>
+    </div>
 
-    <div class="d-flex justify-content-end mb-2">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+
+      <form method="GET" action="{{ url('patient') }}" class="d-flex">
+        <input type="hidden" name="per_page" value="{{ $perPage }}">
+        <input type="text" name="search" value="{{ request('search') }}" class="form-control searchBtn me-2"
+            placeholder="Search patients...">
+          <button type="submit" class="btn btn-secondary search-btn">Search</button>
+      </form>
+
       <!-- Add Patient button -->
       <a href="{{ url('form/page1') }}" class="btn btn-success">
         <i class="fas fa-plus me-2"></i>Add New Patient
@@ -185,26 +195,17 @@
             <span class="ms-2"></span>
           </form>
 
-            <!-- Left side: Entries per page -->
-            <form method="GET" action="{{ url('patient') }}" class="d-flex">
-              <input type="hidden" name="per_page" value="{{ $perPage }}">
-              <input type="text" name="search" value="{{ request('search') }}" class="form-control searchBtn me-2"
-                placeholder="Search patients...">
-              <button type="submit" class="btn btn-secondary search-btn">Search</button>
-            </form>
-
           </div>
 
 
           <table class="table">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>TB Case No</th>
                 <th>Full Name</th>
                 <th>Sex</th>
                 <th>Age</th>
                 <th>Address</th>
-                <th>TB Case #</th>
                 <th>Date Registered</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -213,12 +214,11 @@
             <tbody>
               @foreach ($patients as $patient)
                 <tr>
-                  <td>{{ $patient->id }}</td>
+                  <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ $patient->pat_full_name }}</td>
                   <td>{{ $patient->pat_sex }}</td>
                   <td>{{ $patient->pat_age }}</td>
                   <td>{{ $patient->pat_current_address }}</td>
-                  <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
                   <td>
                       @php

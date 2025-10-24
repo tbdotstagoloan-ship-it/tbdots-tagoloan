@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 
 class PhysicianController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
 
-        $physicians = Physician::paginate(10);
+        $perPage = $request->input('per_page', 10);
 
-        return view('admin.physician', compact('physicians'));
+        $physicians = Physician::paginate($perPage);
+
+        return view('admin.physician', compact('physicians', 'perPage'));
     }
 
     public function show()

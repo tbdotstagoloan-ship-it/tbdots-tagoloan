@@ -12,7 +12,7 @@ class BaselineInfo extends Model
         'base_weight',
         'base_height',
         'base_blood_pressure',
-        'base_heart_rate',
+        'base_pulse_rate',
         'base_temperature',
         'base_emergency_contact_name',
         'base_relationship',

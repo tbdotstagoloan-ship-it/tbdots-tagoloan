@@ -16,10 +16,12 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->date('drug_start_date');
             $table->string('drug_name');
+            $table->integer('drug_no_of_tablets');
             $table->string('drug_strength');
             $table->string('drug_unit');
             $table->date('drug_con_date')->nullable();
             $table->string('drug_con_name')->nullable();
+            $table->integer('drug_con_no_of_tablets')->nullable();
             $table->string('drug_con_strength')->nullable();
             $table->string('drug_con_unit')->nullable();
 
