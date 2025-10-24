@@ -166,33 +166,33 @@ class AdminController extends Controller
     }
 
     // View
-    public function view($id)
-    {
-        $patient = Patient::with([
-            'diagnosingFacility',
-            'screenings.labTests',
-            'diagnosis.tbClassification',
-            'treatmentFacilities',
-            'treatmentHistories',
-            'hivInfos',
-            'baselineInfos',
-            'comorbidities',
-            'treatmentRegimens',
-            'treatmentOutcomes',
-            'prescribedDrugs',
-            'txSupporters',
-            'adherences',
-            'adverseEvents',
-            'progress',
-            'close_contacts',
-            'sputum_monitorings',
-            'chestXrays',
-            'postTreatment'
+    // public function view($id)
+    // {
+    //     $patient = Patient::with([
+    //         'diagnosingFacility',
+    //         'screenings.labTests',
+    //         'diagnosis.tbClassification',
+    //         'treatmentFacilities',
+    //         'treatmentHistories',
+    //         'hivInfos',
+    //         'baselineInfos',
+    //         'comorbidities',
+    //         'treatmentRegimens',
+    //         'treatmentOutcomes',
+    //         'prescribedDrugs',
+    //         'txSupporters',
+    //         'adherences',
+    //         'adverseEvents',
+    //         'progress',
+    //         'close_contacts',
+    //         'sputum_monitorings',
+    //         'chestXrays',
+    //         'postTreatment'
 
-        ])->findOrFail($id);
+    //     ])->findOrFail($id);
 
-        return view('admin.patient-profile', compact('patient'));
-    }
+    //     return view('admin.patient-profile', compact('patient'));
+    // }
 
     // Delete
     public function destroy($id)
