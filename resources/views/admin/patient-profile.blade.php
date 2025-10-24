@@ -2998,7 +2998,7 @@
             let adherenceData = {}; // make this reassignable
 
             //  Sample: replace with actual logged-in username dynamically
-            const username = "Syra123"; // or fetch this from your backend/session
+            const username = username; // or fetch this from your backend/session
 
             async function fetchAdherenceData() {
                 try {
