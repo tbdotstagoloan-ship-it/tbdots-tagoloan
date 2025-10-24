@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\MedicationAdherence;
-use App\Models\Patient;
 
 class MedicationAdherenceController extends Controller
 {
@@ -36,28 +35,12 @@ class MedicationAdherenceController extends Controller
     }
 
     // GET /api/adherence/{username}
-    // MedicationAdherenceController.php
-    public function getAdherence($patient_id)
-{
-    try {
-        $patient = Patient::findOrFail($patient_id);
-        
-        \Log::info('Fetching for patient:', [
-            'patient_id' => $patient_id, 
-            'username' => $patient->username
-        ]);
-        
-        $logs = MedicationAdherence::where('username', $patient->username)
+    public function getAdherence($username)
+    {
+        $logs = MedicationAdherence::where('username', $username)
             ->orderBy('date', 'asc')
             ->get();
-        
-        \Log::info('Found logs:', ['count' => $logs->count()]);
-        
+
         return response()->json($logs);
-        
-    } catch (\Exception $e) {
-        \Log::error('Error:', ['message' => $e->getMessage()]);
-        return response()->json(['error' => $e->getMessage()], 500);
     }
-}
 }
