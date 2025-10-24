@@ -372,47 +372,6 @@
                 align-items: center;
             }
         }
-        .adherence-day {
-            width: 40px;
-            height: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: 4px;
-            border-radius: 6px;
-            color: white;
-            font-weight: bold;
-            }
-            .adherence-day.taken { background-color: #28a745; }
-            .adherence-day.missed { background-color: #dc3545; }
-
-            .adherence-calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-  margin-top: 10px;
-}
-.calendar-day {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  font-weight: 500;
-  background-color: #f8f9fa;
-}
-.calendar-day.taken {
-  background-color: #28a745;
-  color: white;
-}
-.calendar-day.missed {
-  background-color: #dc3545;
-  color: white;
-}
-.calendar-day.empty {
-  background-color: transparent;
-}
-
     </style>
 </head>
 
@@ -3028,84 +2987,121 @@
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const patientId = "{{ $patient->id }}"; // current viewed patient
+        (function () {
             const calendar = document.getElementById("calendar");
+            const monthYear = document.getElementById("monthYear");
             const adherenceRateEl = document.getElementById("adherenceRate");
             const daysTakenEl = document.getElementById("daysTaken");
             const daysMissedEl = document.getElementById("daysMissed");
-            const monthYear = document.getElementById("monthYear");
-            const prevMonthBtn = document.getElementById("prevMonth");
-            const nextMonthBtn = document.getElementById("nextMonth");
 
             let currentDate = new Date();
-            let adherenceData = [];
+            let adherenceData = {}; // make this reassignable
 
-            // Fetch adherence logs
-            fetch(`/api/adherence/patient/${patientId}`)
-                .then(response => response.json())
-                .then(data => {
-                    adherenceData = data.logs;
-                    updateStats(data.stats);
+            //  Sample: replace with actual logged-in username dynamically
+            const username = "Syra123"; // or fetch this from your backend/session
+
+            async function fetchAdherenceData() {
+                try {
+                    const response = await fetch(`/api/adherence/${username}`);
+                    const data = await response.json();
+
+                    adherenceData = {};
+                    data.forEach(item => {
+                        adherenceData[item.date] = item.status;
+                    });
+
                     renderCalendar(currentDate);
-                })
-                .catch(error => console.error("❌ Error fetching adherence logs:", error));
+                } catch (error) {
+                    console.error(" Error fetching adherence data:", error);
+                }
+            }
 
-            function updateStats(stats) {
-                adherenceRateEl.textContent = `${stats.adherenceRate}%`;
-                daysTakenEl.textContent = stats.daysTaken;
-                daysMissedEl.textContent = stats.daysMissed;
+            function calculateStats(year, month) {
+                let taken = 0;
+                let missed = 0;
+
+                Object.keys(adherenceData).forEach(dateStr => {
+                    const date = new Date(dateStr);
+                    if (date.getFullYear() === year && date.getMonth() === month) {
+                        if (adherenceData[dateStr] === "taken") taken++;
+                        if (adherenceData[dateStr] === "missed") missed++;
+                    }
+                });
+
+                const total = taken + missed;
+                const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
+
+                adherenceRateEl.textContent = rate + "%";
+                daysTakenEl.textContent = taken;
+                daysMissedEl.textContent = missed;
             }
 
             function renderCalendar(date) {
+                calendar.innerHTML = "";
                 const year = date.getFullYear();
                 const month = date.getMonth();
-                const firstDay = new Date(year, month, 1).getDay();
-                const lastDate = new Date(year, month + 1, 0).getDate();
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
 
-                monthYear.textContent = date.toLocaleString('default', { month: 'long', year: 'numeric' });
-                calendar.innerHTML = "";
+                const monthName = date.toLocaleString("default", { month: "long" });
+                monthYear.textContent = `${monthName} ${year}`;
 
-                // Create blank cells before the 1st of the month
-                for (let i = 0; i < firstDay; i++) {
-                    const blankCell = document.createElement("div");
-                    blankCell.className = "calendar-day empty";
-                    calendar.appendChild(blankCell);
+                // Day headers
+                const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                daysOfWeek.forEach(day => {
+                    const header = document.createElement("div");
+                    header.textContent = day;
+                    header.classList.add("adherence-day-header");
+                    calendar.appendChild(header);
+                });
+
+                // Empty cells for offset
+                for (let i = 0; i < firstDay.getDay(); i++) {
+                    const empty = document.createElement("div");
+                    empty.classList.add("adherence-calendar-day", "adherence-empty");
+                    calendar.appendChild(empty);
                 }
 
-                // Create day cells
-                for (let day = 1; day <= lastDate; day++) {
+                // Calendar days with adherence status
+                for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
-                    const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-                    const log = adherenceData.find(l => l.date === formattedDate);
                     cell.textContent = day;
-                    cell.classList.add("calendar-day");
+                    cell.classList.add("adherence-calendar-day");
 
-                    if (log) {
-                        if (log.status === "taken") {
-                            cell.classList.add("taken");
-                        } else if (log.status === "missed") {
-                            cell.classList.add("missed");
-                        }
+                    if (adherenceData[dateStr]) {
+                        cell.classList.add("adherence-" + adherenceData[dateStr]);
+                        const icon = document.createElement("i");
+                        icon.classList.add(
+                            "fa",
+                            adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
+                            "adherence-status-icon"
+                        );
+                        cell.appendChild(icon);
                     }
 
                     calendar.appendChild(cell);
                 }
+
+                calculateStats(year, month);
             }
 
-            // Navigation buttons
-            prevMonthBtn.addEventListener("click", () => {
+            document.getElementById("prevMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
                 renderCalendar(currentDate);
             });
 
-            nextMonthBtn.addEventListener("click", () => {
+            document.getElementById("nextMonth").addEventListener("click", () => {
                 currentDate.setMonth(currentDate.getMonth() + 1);
                 renderCalendar(currentDate);
             });
-        });
+
+            // Initial fetch and render
+            fetchAdherenceData();
+        })();
         </script>
+
 
     <script>
         function editOutcome(id, outcome, date, reason) {
