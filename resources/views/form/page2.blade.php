@@ -417,9 +417,9 @@
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="base_heart_rate">Heart Rate <span style="color: red;">*</span></label>
-                    <input type="text" name="base_heart_rate" id="base_heart_rate" class="form-control"
-                      placeholder="Heart Rate" required>
+                    <label for="base_pulse_rate">Pulse Rate <span style="color: red;">*</span></label>
+                    <input type="text" name="base_pulse_rate" id="base_pulse_rate" class="form-control"
+                      placeholder="Pulse Rate" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -485,17 +485,17 @@
                   </div>
 
                   <div class="col-md-3">
-                    <label for="base_fbs_screening">FBS Screening <span style="color: red;">*</span></label>
-                      <select name="base_fbs_screening" id="base_fbs_screening" class="form-control form-select" required>
+                    <label for="base_fbs_screening">FBS Screening <span style="color: #6b7280;">(Optional)</span></label>
+                      <select name="base_fbs_screening" id="base_fbs_screening" class="form-control form-select">
                         <option value="" disabled selected>Select</option>
                         <option value="Normal">Normal</option>
                       </select>
                       <div class="error"></div>
                   </div>
                   <div class="col-md-3">
-                    <label for="base_date_tested">Date Tested <span style="color: red;">*</span></label>
+                    <label for="base_date_tested">Date Tested <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="base_date_tested" id="base_date_tested" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required>
+                      max="<?php echo date('Y-m-d'); ?>">
                     <div class="error"></div>
                   </div>
                   </div>
@@ -633,15 +633,15 @@
               <div class="tab-pane fade" id="medicine" role="tabpanel">
                 <h5 class="mb-4">Prescribed Drugs</h5>
                 <div class="row mb-2">
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <label for="drug_start_date">Date Start <span style="color: red;">*</span></label>
                     <input type="date" name="drug_start_date" id="drug_start_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>" required>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="drug_name">Drug <span style="color: red;">*</span></label>
-                    <select name="drug_name" id="drug_name" class="form-control form-select" required>
+                  <div class="col-md-4">
+                    <label for="drug_name">Drug</label>
+                    <!-- <select name="drug_name" id="drug_name" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="4FDC">4FDC</option>
                       <option value="2FDC">2FDC</option>
@@ -649,41 +649,47 @@
                       <option value="R">R</option>
                       <option value="Z">Z</option>
                       <option value="E">E</option>
-                    </select>
+                    </select> -->
+                    <input type="text" name="drug_name" id="drug_name" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="drug_strength">Strength <span style="color: red;">*</span></label>
-                      <select name="drug_strength" id="drug_strength" class="form-control form-select" required>
+                  <div class="col-md-4">
+                    <label for="drug_no_of_tablets">No. of Tablets</label>
+                    <input type="text" name="drug_no_of_tablets" id="drug_no_of_tablets" class="form-control" readonly>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="drug_strength">Strength</label>
+                      <!-- <select name="drug_strength" id="drug_strength" class="form-control form-select" readonly>
                         <option value="" disabled selected>Select</option>
                         <option value="400mg">400mg</option>
-                        <option value="350mg">350mg</option>
-                        <option value="300mg">300mg</option>
-                        <option value="250mg">250mg</option>
-                        <option value="200mg">200mg</option>
-                      </select>
+                        <option value="275mg">275mg</option>
+                        <option value="150mg">150mg</option>
+                        <option value="75mg">75mg</option>
+                      </select> -->
+                      <input type="text" name="drug_strength" id="drug_strength" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="drug_unit">Unit <span style="color: red;">*</span></label>
-                     <select name="drug_unit" id="drug_unit" class="form-control form-select" required>
+                  <div class="col-md-4">
+                    <label for="drug_unit">Unit</label>
+                     <!-- <select name="drug_unit" id="drug_unit" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Tablet">Tablet</option>
-                      <option value="Capsule">Capsule</option>
-                     </select>
+                     </select> -->
+                     <input type="text" name="drug_unit" id="drug_unit" class="form-control" readonly>
                     <div class="error"></div>
                   </div>
                 </div>
 
                 <div class="row mb-2">
-                  <div class="col-md-3">
-                    <label for="drug_con_date">Continuation</label>
-                    <input type="date" name="drug_con_date" id="drug_con_date" class="form-control" readonly>
+                  <div class="col-md-4">
+                    <label for="drug_con_date">Continuation <span style="color: #6b7280;">(Optional)</span></label>
+                    <input type="date" name="drug_con_date" id="drug_con_date" class="form-control"
+                      max="<?php echo date('Y-m-d'); ?>">
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="drug_con_name">Drug <span style="color: red;">*</span></label>
-                    <select name="drug_con_name" id="drug_con_name" class="form-control form-select" required>
+                  <div class="col-md-4">
+                    <label for="drug_con_name">Drug <span style="color: #6b7280;">(Optional)</span></label>
+                    <select name="drug_con_name" id="drug_con_name" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="2FDC">2FDC</option>
                       <option value="H">H</option>
@@ -693,23 +699,24 @@
                     </select>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="drug_con_strength">Strength <span style="color: red;">*</span></label>
-                      <select name="drug_con_strength" id="drug_con_strength" class="form-control form-select" required>
+                  <div class="col-md-4">
+                    <label for="drug_con_no_of_tablets">No. of Tablets <span style="color: #6b7280;">(Optional)</span></label>
+                    <input type="text" name="drug_con_no_tabs" id="drug_con_no_tabs" class="form-control" readonly>
+                  </div>
+                  <div class="col-md-4">
+                    <label for="drug_con_strength">Strength <span style="color: #6b7280;">(Optional)</span></label>
+                      <select name="drug_con_strength" id="drug_con_strength" class="form-control form-select">
                         <option value="" disabled selected>Select</option>
                         <option value="150mg">150mg</option>
-                        <option value="100mg">100mg</option>
                         <option value="75mg">75mg</option>
-                        <option value="50mg">50mg</option>
                       </select>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="drug_con_unit">Unit <span style="color: red;">*</span></label>
-                      <select name="drug_con_unit" id="drug_con_unit" class="form-control form-select" required>
+                  <div class="col-md-4">
+                    <label for="drug_con_unit">Unit <span style="color: #6b7280;">(Optional)</span></label>
+                      <select name="drug_con_unit" id="drug_con_unit" class="form-control form-select">
                         <option value="" disabled selected>Select</option>
                         <option value="Tablet">Tablet</option>
-                        <option value="Capsule">Capsule</option>
                       </select>
                     <div class="error"></div>
                   </div>
@@ -788,29 +795,30 @@
                     <div class="error"></div>
                   </div>
                 </div>
+                <hr>
                 <div class="row mb-3">
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                     <label for="pha_intensive_start">Intensive Phase Start Date</label>
                     <input type="date" name="pha_intensive_start" id="pha_intensive_start" class="form-control"
                       readonly>
                     <div class="error"></div>
                   </div>
 
-                  <div class="col-md-3">
-                    <label for="pha_intensive_end">IP End Date</label>
+                  <div class="col-md-6">
+                    <label for="pha_intensive_end">Intensive Phase End Date</label>
                     <input type="date" name="pha_intensive_end" id="pha_intensive_end" class="form-control"
                       readonly>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="pha_continuation_start">Continuation Phase Start</label>
+                  <div class="col-md-6">
+                    <label for="pha_continuation_start">Continuation Phase Start <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="pha_continuation_start" id="pha_continuation_start" class="form-control"
                       readonly>
                     <div class="error"></div>
                   </div>
 
-                  <div class="col-md-3">
-                    <label for="pha_continuation_end">CP End Date</label>
+                  <div class="col-md-6">
+                    <label for="pha_continuation_end">Continuation Phase End Date <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="pha_continuation_end" id="pha_continuation_end" class="form-control"
                       readonly>
                     <div class="error"></div>
@@ -818,12 +826,12 @@
                 </div>
 
                 <div class="row mb-3">
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                     <label for="pha_weight">Weight <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="pha_weight" id="pha_weight" class="form-control" placeholder="kg">
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                     <label for="pha_child_height">Height for Children <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="pha_child_height" id="pha_child_height" class="form-control"
                       placeholder="cm">
@@ -890,7 +898,7 @@
     const base_height = document.getElementById('base_height');
     const base_weight = document.getElementById('base_weight');
     const base_blood_pressure = document.getElementById('base_blood_pressure');
-    const base_heart_rate = document.getElementById('base_heart_rate');
+    const base_pulse_rate = document.getElementById('base_pulse_rate');
     const base_temperature = document.getElementById('base_temperature');
     const base_emergency_contact_name = document.getElementById('base_emergency_contact_name');
     const base_relationship = document.getElementById('base_relationship');
@@ -925,7 +933,7 @@
       base_height,
       base_weight,
       base_blood_pressure,
-      base_heart_rate,
+      base_pulse_rate,
       base_temperature,
       base_emergency_contact_name,
       base_relationship,
@@ -933,8 +941,6 @@
       base_occupation,
       base_diabetes_screening,
       base_four_ps_beneficiary,
-      base_fbs_screening,
-      base_date_tested,
       reg_start_type,
       reg_start_date,
       drug_start_date,
@@ -994,7 +1000,7 @@
                     <tr><th>Height</th><td>${form.base_height.value}</td></tr>
                     <tr><th>Weight</th><td>${form.base_weight.value}</td></tr>
                     <tr><th>Blood Pressure</th><td>${form.base_blood_pressure.value}</td></tr>
-                    <tr><th>Heart Rate</th><td>${form.base_heart_rate.value}</td></tr>
+                    <tr><th>Pulse Rate</th><td>${form.base_pulse_rate.value}</td></tr>
                     <tr><th>Temperature (°C)</th><td>${form.base_temperature.value}</td></tr>
                     <tr><th>Emergency Contact</th><td>${form.base_emergency_contact_name.value}</td></tr>
                     <tr><th>Relationship</th><td>${form.base_relationship.value}</td></tr>
@@ -1048,9 +1054,11 @@
                   <tbody>
                     <tr><th>Date Start</th><td>${form.drug_start_date.value}</td></tr>
                     <tr><th>Drug</th><td>${form.drug_name.value}</td></tr>
+                    <tr><th>No. of Tablets</th><td>${form.drug_no_of_tablets.value}</td></tr>
                     <tr><th>Strength</th><td>${form.drug_strength.value}</td></tr>
                     <tr><th>Unit</th><td>${form.drug_unit.value}</td></tr>
                     <tr><th>Continuation Date</th><td>${form.drug_con_date.value}</td></tr>
+                    <tr><th>Continuation No. of Tablets</th><td>${form.drug_con_no_tabs.value}</td></tr>
                     <tr><th>Continuation Drug</th><td>${form.drug_con_name.value}</td></tr>
                     <tr><th>Continuation Strength</th><td>${form.drug_con_strength.value}</td></tr>
                     <tr><th>Continuation Unit</th><td>${form.drug_con_unit.value}</td></tr>
@@ -1252,6 +1260,7 @@
       const contStart = document.getElementById('pha_continuation_start');
       const contEnd = document.getElementById('pha_continuation_end');
 
+      // ✅ Calculate Intensive Phase (56 days)
       drugStart.addEventListener('change', function () {
         if (this.value) {
           const startDate = new Date(this.value);
@@ -1263,23 +1272,25 @@
           const intensiveEndDate = new Date(startDate);
           intensiveEndDate.setDate(startDate.getDate() + 56);
           intensiveEnd.value = intensiveEndDate.toISOString().split('T')[0];
-
-          // Drug Continuation = Start + 57 days (day after Intensive End)
-          const drugConDate = new Date(startDate);
-          drugConDate.setDate(startDate.getDate() + 56 + 1);
-          drugContinuation.value = drugConDate.toISOString().split('T')[0];
-
-          // Continuation Phase Start = same as Drug Continuation
-          contStart.value = drugContinuation.value;
-
-          // Continuation Phase End = Continuation Start + 6 months
-          const contEndDate = new Date(drugConDate);
-          contEndDate.setMonth(contEndDate.getMonth() + 6);
-          contEnd.value = contEndDate.toISOString().split('T')[0];
         } else {
           intensiveStart.value = '';
           intensiveEnd.value = '';
-          drugContinuation.value = '';
+        }
+      });
+
+      // ✅ Calculate Continuation Phase (180 days)
+      drugContinuation.addEventListener('change', function () {
+        if (this.value) {
+          const conDate = new Date(this.value);
+
+          // Continuation Phase Start = selected continuation date
+          contStart.value = this.value;
+
+          // Continuation Phase End = Continuation Start + 180 days
+          const contEndDate = new Date(conDate);
+          contEndDate.setDate(conDate.getDate() + 180);
+          contEnd.value = contEndDate.toISOString().split('T')[0];
+        } else {
           contStart.value = '';
           contEnd.value = '';
         }
@@ -1396,6 +1407,56 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const baseWeight = document.getElementById('base_weight');
+    const drugName = document.getElementById('drug_name');
+    const noOfTablets = document.getElementById('drug_no_of_tablets');
+    const strength = document.getElementById('drug_strength');
+    const unit = document.getElementById('drug_unit');
+
+    baseWeight.addEventListener('input', function () {
+      const weight = parseFloat(this.value);
+
+      // Reset if invalid input
+      if (isNaN(weight)) {
+        drugName.value = '';
+        noOfTablets.value = '';
+        strength.value = '';
+        unit.value = '';
+        return;
+      }
+
+      // Set drug to 4FDC for intensive phase
+      drugName.value = '4FDC';
+
+      // Determine values based on weight
+      if (weight >= 25 && weight <= 37) {
+        noOfTablets.value = '2';
+        strength.value = '75mg';
+        unit.value = 'Tablet';
+      } else if (weight >= 38 && weight <= 54) {
+        noOfTablets.value = '3';
+        strength.value = '150mg';
+        unit.value = 'Tablet';
+      } else if (weight >= 55 && weight <= 70) {
+        noOfTablets.value = '4';
+        strength.value = '275mg';
+        unit.value = 'Tablet';
+      } else if (weight > 70) {
+        noOfTablets.value = '5';
+        strength.value = '400mg';
+        unit.value = 'Tablet';
+      } else {
+        drugName.value = '';
+        noOfTablets.value = '';
+        strength.value = '';
+        unit.value = '';
+      }
+    });
+  });
 </script>
 
 

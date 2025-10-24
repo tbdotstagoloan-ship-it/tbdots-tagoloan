@@ -232,15 +232,15 @@ class PatientController extends Controller
                 'base_weight' => 'required',
                 'base_height' => 'required',
                 'base_blood_pressure' => 'required',
-                'base_heart_rate' => 'required',
+                'base_pulse_rate' => 'required',
                 'base_temperature' => 'required',
                 'base_emergency_contact_name' => 'required',
                 'base_relationship' => 'required',
                 'base_contact_info' => 'required',
                 'base_diabetes_screening' => 'required',
                 'base_four_ps_beneficiary' => 'required',
-                'base_fbs_screening' => 'required',
-                'base_date_tested' => 'required',
+                'base_fbs_screening' => 'nullable',
+                'base_date_tested' => 'nullable',
                 'base_occupation' => 'required'
             ]);
 
@@ -282,12 +282,14 @@ class PatientController extends Controller
             $prescribed_drug_validate = $request->validate([
                 'drug_start_date' => 'required',
                 'drug_name' => 'required',
+                'drug_no_of_tablets' => 'required',
                 'drug_strength' => 'required',
                 'drug_unit' => 'required',
                 'drug_con_date' => 'nullable',
-                'drug_con_name' => 'required',
-                'drug_con_strength' => 'required',
-                'drug_con_unit' => 'required'
+                'drug_con_name' => 'nullable',
+                'drug_con_no_of_tablets' => 'nullable',
+                'drug_con_strength' => 'nullable',
+                'drug_con_unit' => 'nullable'
             ]);
 
             $prescribed_drug_validate['patient_id'] = $patientId;
@@ -470,6 +472,7 @@ class PatientController extends Controller
 
         public function patientAccount(Request $request)
     {
+        $perPage = $request->input('per_page', 10);
         $patientAccount = DB::table('tbl_patients as p')
             ->join('tbl_patient_accounts as a', 'p.id', '=', 'a.patient_id')
             ->select(
@@ -482,9 +485,9 @@ class PatientController extends Controller
                 'p.pat_permanent_address',
             )
             ->orderBy('p.id', 'desc')
-            ->paginate(10);
+            ->paginate($perPage);
 
-        return view ('admin.patient-accounts', compact('patientAccount'));
+        return view ('admin.patient-accounts', compact('patientAccount', 'perPage'));
     }
     
 

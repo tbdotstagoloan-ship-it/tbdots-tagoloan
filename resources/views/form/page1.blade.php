@@ -551,7 +551,10 @@
                         style="color: red;">*</span></label>
                     <select name="lab_xpert_result" id="lab_xpert_result" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
-                      <option value="Positive">Positive</option>
+                      <option value="MTB HIGH">MTB HIGH</option>
+                      <option value="MTB MEDIUM">MTB MEDIUM</option>
+                      <option value="MTB LOW">MTB LOW</option>
+                      <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                     </select>
                     <div class="error"></div>
                   </div>
@@ -589,8 +592,9 @@
                         style="color: red;">*</span></label>
                     <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
-                      <option value="PTB Confirmed">PTB Confirmed</option>
-                      <option value="Suggestive of TB">Suggestive of TB</option>
+                      <option value="PTB BOTH RIGHT UPPER LOBE">PTB BOTH RIGHT UPPER LOBE</option>
+                      <option value="PTB BOTH LOWER LOBE">PTB BOTH LOWER LOBE</option>
+                      <option value="SUGGESTIVE POSITIVE TUBERCULOSIS">SUGGESTIVE POSITIVE TUBERCULOSIS</option>
                     </select>
                     <div class="error"></div>
                   </div>
@@ -705,18 +709,20 @@
                   </div>
                   <div class="col-md-4">
                     <label for="diag_region">Region <span style="color: #6b7280;">(Optional)</span></label>
-                    <select id="diag_region" class="form-control form-select">
+                    <input type="text" name="diag_region" id="diag_region" class="form-control" placeholder="Region">
+                    <!-- <select id="diag_region" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                     </select>
-                    <input type="hidden" name="diag_region" id="diag_region_text">
+                    <input type="hidden" name="diag_region" id="diag_region_text"> -->
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="diag_province">Province/HUC <span style="color: #6b7280;">(Optional)</span></label>
-                    <select id="diag_province" class="form-control form-select">
+                    <input type="text" name="diag_province" id="diag_province" class="form-control" placeholder="Province/HUC">
+                    <!-- <select id="diag_province" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                     </select>
-                    <input type="hidden" name="diag_province" id="diag_province_text">
+                    <input type="hidden" name="diag_province" id="diag_province_text"> -->
                     <div class="error"></div>
                   </div>
                 </div>
@@ -1159,13 +1165,13 @@
       const currBrgyText = currBrgy.options[currBrgy.selectedIndex].text;
       document.getElementById("pat_current_address_text").value = currBrgyText;
 
-      const diagRegion = document.getElementById("diag_region");
-      const diagRegionText = diagRegion.options[diagRegion.selectedIndex].text;
-      document.getElementById("diag_region_text").value = diagRegionText;
+      // const diagRegion = document.getElementById("diag_region");
+      // const diagRegionText = diagRegion.options[diagRegion.selectedIndex].text;
+      // document.getElementById("diag_region_text").value = diagRegionText;
 
-      const diagProvince = document.getElementById("diag_province");
-      const diagProvinceText = diagProvince.options[diagProvince.selectedIndex].text;
-      document.getElementById("diag_province_text").value = diagProvinceText;
+      // const diagProvince = document.getElementById("diag_province");
+      // const diagProvinceText = diagProvince.options[diagProvince.selectedIndex].text;
+      // document.getElementById("diag_province_text").value = diagProvinceText;
       
 
       // If checkbox is checked, temporarily enable current address fields for submission
@@ -1459,8 +1465,8 @@
       const currBrgy = document.getElementById("pat_current_address");
       const currZip = document.getElementById("pat_current_zip_code");
 
-      const diagRegion = document.getElementById("diag_region");
-      const diagProvince = document.getElementById("diag_province");
+      // const diagRegion = document.getElementById("diag_region");
+      // const diagProvince = document.getElementById("diag_province");
 
       const sameCheckbox = document.getElementById("sameAsPermanent");
 
@@ -1471,7 +1477,7 @@
           data.forEach(region => {
             permRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
             currRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
-            diagRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
+            // diagRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
           });
         });
 
@@ -1598,16 +1604,16 @@
       });
 
       // --- Diagnosing Facility Dropdown Logic 👇
-    diagRegion.addEventListener("change", () => {
-      fetch(`/api/provinces/${diagRegion.value}`)
-        .then(res => res.json())
-        .then(data => {
-          diagProvince.innerHTML = '<option value="">Select</option>';
-          data.forEach(prov => {
-            diagProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
-          });
-        });
-    });
+    // diagRegion.addEventListener("change", () => {
+    //   fetch(`/api/provinces/${diagRegion.value}`)
+    //     .then(res => res.json())
+    //     .then(data => {
+    //       diagProvince.innerHTML = '<option value="">Select</option>';
+    //       data.forEach(prov => {
+    //         diagProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
+    //       });
+    //     });
+    // });
 
       // --- Checkbox logic (use readonly instead of disabled) ---
       sameCheckbox.addEventListener("change", () => {
