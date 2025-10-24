@@ -35,13 +35,17 @@ class MedicationAdherenceController extends Controller
     }
 
     // GET /api/adherence/{username}
-    public function getAdherence($patient_id)
+    public function getAdherence($username)
     {
-        $logs = MedicationAdherence::where('patient_id', $patient_id)
-            ->orderBy('date', 'asc')
-            ->get();
+        $adherences = MedicationAdherence::where('username', $username)
+            ->get()
+            ->map(function ($item) {
+                $item->date = \Carbon\Carbon::parse($item->date)->format('Y-m-d');
+                return $item;
+            });
 
-        return response()->json($logs);
+        return response()->json($adherences);
     }
+
 
 }
