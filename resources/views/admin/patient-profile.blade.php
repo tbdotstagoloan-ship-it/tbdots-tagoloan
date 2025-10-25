@@ -1429,8 +1429,7 @@
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <div>
                                                 <h5 class="fw-bold mb-1">Prescribed Drugs</h5>
-                                                <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and
-                                                    continuation phases.</p>
+                                                <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and continuation phases.</p>
                                             </div>
                                             <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                                                 data-bs-target="#editPrescribedDrugsModal">
@@ -1438,7 +1437,11 @@
                                             </button>
                                         </div>
 
-                                        @if ($patient->prescribedDrugs->isNotEmpty())
+                                        @php
+                                            $firstDrug = $patient->prescribedDrugs->first();
+                                        @endphp
+
+                                        @if ($firstDrug)
                                             {{-- Table 1: Intensive Phase --}}
                                             <small class="fw-semibold mt-3">Intensive Phase</small>
                                             <div class="table-responsive mb-4">
@@ -1455,16 +1458,16 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                @if(!empty($patient->prescribedDrugs->first()->drug_start_date))
-                                                                    {{ \Carbon\Carbon::parse($patient->prescribedDrugs->first()->drug_start_date)->format('F j, Y') }}
+                                                                @if(!empty($firstDrug->drug_start_date))
+                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_start_date)->format('F j, Y') }}
                                                                 @else
                                                                     —
                                                                 @endif
                                                             </td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_name ?? '—' }}</td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_no_of_tablets ?? '—' }}</td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_strength ?? '—' }}</td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_unit ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_name ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_no_of_tablets ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_strength ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_unit ?? '—' }}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -1486,16 +1489,16 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                @if(!empty($patient->prescribedDrugs->first()->drug_con_date))
-                                                                    {{ \Carbon\Carbon::parse($patient->prescribedDrugs->first()->drug_con_date)->format('F j, Y') }}
+                                                                @if(!empty($firstDrug->drug_con_date))
+                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_con_date)->format('F j, Y') }}
                                                                 @else
                                                                     —
                                                                 @endif
                                                             </td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_con_name ?? '—' }}</td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_con_no_of_tablets ?? '—' }}</td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_con_strength ?? '—' }}</td>
-                                                            <td>{{ $patient->prescribedDrugs->first()->drug_con_unit ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_con_name ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_con_no_of_tablets ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_con_strength ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_con_unit ?? '—' }}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -1515,10 +1518,10 @@
                                                 <p class="text-muted small mb-0">Details of treatment supporter, treatment schedules, and
                                                     patient measurements.</p>
                                             </div>
-                                            <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                                                 data-bs-target="#editAdministrationModal">
                                                 <i class="fas fa-plus"></i> Add Record
-                                            </button> -->
+                                            </button>
                                         </div>
 
                                         {{-- Table 1: Treatment Supporter Information --}}
@@ -2526,7 +2529,7 @@
         </div>
 
 
-        <!-- Prescribed Drugs Modal -->
+        <!-- ✅ Prescribed Drugs Modal -->
         <div class="modal fade" id="editPrescribedDrugsModal" tabindex="-1"
             aria-labelledby="editPrescribedDrugsModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -2536,71 +2539,87 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <!-- ✅ Form with route -->
-                    <form method="POST" action="{{ route('prescribed-drugs.store', $patient->id) }}">
+                    <!-- ✅ Use patient ID in route -->
+                    <form method="POST" action="{{ route('prescribed-drugs.update', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="drug_date" class="form-label">Intensive Date</label>
-                                    <input type="date" class="form-control" id="drug_date" name="drug_con_date"
-                                        max="<?php echo date('Y-m-d'); ?>" readonly>
+                                    <label for="drug_start_date" class="form-label">Intensive Date</label>
+                                    <input type="date" class="form-control" id="drug_start_date" name="drug_start_date"
+                                        max="{{ date('Y-m-d') }}"
+                                        value="{{ old('drug_start_date', $firstDrug->drug_start_date ?? '') }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_name" class="form-label">Drug</label>
-                                    <input type="text" class="form-control" id="drug_con_name" name="drug_con_name"
-                                        readonly>
+                                    <input type="text" class="form-control" id="drug_name" name="drug_name"
+                                        value="{{ old('drug_name', $firstDrug->drug_name ?? '') }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
-                                    <label for="drug_no_of_tablets" class="form-label">Drug</label>
+                                    <label for="drug_no_of_tablets" class="form-label">No. of Tablets</label>
                                     <input type="text" class="form-control" id="drug_no_of_tablets" name="drug_no_of_tablets"
-                                        readonly>
+                                        value="{{ old('drug_no_of_tablets', $firstDrug->drug_no_of_tablets ?? '') }}" readonly>
                                 </div>
-                                
 
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_strength" class="form-label">Strength</label>
-                                    <input type="text" class="form-control" id="drug_strength"
-                                        name="drug_strength" readonly>
+                                    <input type="text" class="form-control" id="drug_strength" name="drug_strength"
+                                        value="{{ old('drug_strength', $firstDrug->drug_strength ?? '') }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_unit" class="form-label">Unit</label>
                                     <input type="text" class="form-control" id="drug_unit" name="drug_unit"
-                                        readonly>
+                                        value="{{ old('drug_unit', $firstDrug->drug_unit ?? '') }}" readonly>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_con_date" class="form-label">Continuation Date</label>
                                     <input type="date" class="form-control" id="drug_con_date" name="drug_con_date"
-                                        max="<?php echo date('Y-m-d'); ?>" required>
+                                        max="{{ date('Y-m-d') }}" 
+                                        value="{{ old('drug_con_date', $firstDrug->drug_con_date ?? '') }}" required>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_con_name" class="form-label">Drug</label>
-                                    <input type="text" class="form-control" id="drug_con_name" name="drug_con_name"
-                                        placeholder="Drug name" required>
+                                    <select name="drug_con_name" id="drug_con_name" class="form-control form-select"
+                                    value="{{ old('drug_con_name', $firstDrug->drug_con_name ?? '') }}">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="2FDC">2FDC</option>
+                                        <option value="H">H</option>
+                                        <option value="R">R</option>
+                                        <option value="Z">Z</option>
+                                        <option value="E">E</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_con_no_of_tablets" class="form-label">No. of Tablets</label>
-                                    <input type="text" class="form-control" id="drug_con_name" name="drug_co_no_of_tablets"
-                                         required>
+                                    <input type="number" class="form-control" id="drug_con_no_of_tablets" name="drug_con_no_of_tablets" 
+                                    value="{{ old('drug_con_no_of_tablets', $firstDrug->drug_con_no_of_tablets ?? '') }}" required>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_con_strength" class="form-label">Strength</label>
-                                    <input type="text" class="form-control" id="drug_con_strength"
-                                        name="drug_con_strength" placeholder="Strength (e.g. 500mg)">
+                                    <select name="drug_con_strength" id="drug_con_strength" class="form-control form-select"
+                                    value="{{ old('drug_con_strength', $firstDrug->drug_con_strength ?? '') }}">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="150mg">150mg</option>
+                                        <option value="75mg">75mg</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_con_unit" class="form-label">Unit</label>
-                                    <input type="text" class="form-control" id="drug_con_unit" name="drug_con_unit"
-                                        placeholder="Unit (e.g. tablet, capsule)">
+                                    <select name="drug_con_unit" id="drug_con_unit" class="form-control form-select"
+                                    value="{{ old('drug_con_unit', $firstDrug->drug_con_unit ?? '') }}">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="Tablet">Tablet</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -2620,59 +2639,123 @@
             aria-labelledby="editAdministrationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editAdministrationModalLabel">Administration of Drugs</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="POST">
+
+                    <!-- ✅ Form with update route -->
+                    <form method="POST" action="{{ route('adherence.update', $patient->id) }}">
                         @csrf
+                        @method('PUT')
+
                         <div class="modal-body">
+                            {{-- ========================= --}}
+                            {{-- 🟩 TREATMENT SUPPORTER INFO --}}
+                            {{-- ========================= --}}
+                            <h6 class="fw-semibold mt-2">Treatment Supporter Information</h6>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="pha_intensive_end" class="form-label">Intensive Phase End
-                                        Date</label>
-                                    <input type="date" class="form-control" id="pha_intensive_end"
-                                        name="pha_intensive_end" max="<?php echo date('Y-m-d'); ?>">
+                                    <label for="sup_location" class="form-label">Location of Treatment</label>
+                                    <input type="text" class="form-control" id="sup_location" name="sup_location"
+                                        value="{{ $patient->txSupporters->first()->sup_location ?? '' }}">
                                 </div>
+
                                 <div class="col-md-6 mb-3">
-                                    <label for="pha_continuation_start" class="form-label">Continuation Phase Start
-                                        Date</label>
-                                    <input type="date" class="form-control" id="pha_continuation_start"
-                                        name="pha_continuation_start" max="<?php echo date('Y-m-d'); ?>">
+                                    <label for="sup_name" class="form-label">Supporter Name</label>
+                                    <input type="text" class="form-control" id="sup_name" name="sup_name"
+                                        value="{{ $patient->txSupporters->first()->sup_name ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="sup_designation" class="form-label">Designation</label>
+                                    <input type="text" class="form-control" id="sup_designation" name="sup_designation"
+                                        value="{{ $patient->txSupporters->first()->sup_designation ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="sup_type" class="form-label">Supporter Type</label>
+                                    <input type="text" class="form-control" id="sup_type" name="sup_type"
+                                        value="{{ $patient->txSupporters->first()->sup_type ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="sup_contact_info" class="form-label">Contact Information</label>
+                                    <input type="text" class="form-control" id="sup_contact_info" name="sup_contact_info"
+                                        value="{{ $patient->txSupporters->first()->sup_contact_info ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="sup_dat_used" class="form-label">Name of DAT/s Used</label>
+                                    <input type="text" class="form-control" id="sup_dat_used" name="sup_dat_used"
+                                        value="{{ $patient->txSupporters->first()->sup_dat_used ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="sup_treatment_schedule" class="form-label">Schedule of Treatment</label>
+                                    <input type="text" class="form-control" id="sup_treatment_schedule" name="sup_treatment_schedule"
+                                        value="{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '' }}">
                                 </div>
                             </div>
+
+                            {{-- ========================= --}}
+                            {{-- 🟦 TREATMENT SCHEDULE DETAILS --}}
+                            {{-- ========================= --}}
+                            <h6 class="fw-semibold mt-3">Treatment Schedule Details</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="pha_intensive_start" class="form-label">Intensive Phase Start Date</label>
+                                    <input type="date" class="form-control" id="pha_intensive_start" name="pha_intensive_start"
+                                        value="{{ $patient->adherences->first()->pha_intensive_start ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pha_intensive_end" class="form-label">Intensive Phase End Date</label>
+                                    <input type="date" class="form-control" id="pha_intensive_end" name="pha_intensive_end"
+                                        value="{{ $patient->adherences->first()->pha_intensive_end ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pha_continuation_start" class="form-label">Continuation Phase Start Date</label>
+                                    <input type="date" class="form-control" id="pha_continuation_start" name="pha_continuation_start"
+                                        value="{{ $patient->adherences->first()->pha_continuation_start ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pha_continuation_end" class="form-label">Continuation Phase End Date</label>
+                                    <input type="date" class="form-control" id="pha_continuation_end" name="pha_continuation_end"
+                                        value="{{ $patient->adherences->first()->pha_continuation_end ?? '' }}">
+                                </div>
+                            </div>
+
+                            {{-- ========================= --}}
+                            {{-- 🟨 MEASUREMENTS --}}
+                            {{-- ========================= --}}
+                            <h6 class="fw-semibold mt-3">Measurements</h6>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="pha_weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" step="0.01" class="form-control" id="pha_weight"
-                                        name="pha_weight">
+                                    <input type="number" step="0.01" class="form-control" id="pha_weight" name="pha_weight"
+                                        value="{{ $patient->adherences->first()->pha_weight ?? '' }}">
                                 </div>
+
                                 <div class="col-md-6 mb-3">
-                                    <label for="pha_continuation_end" class="form-label">Continuation Phase End
-                                        Date</label>
-                                    <input type="date" class="form-control" id="pha_continuation_end"
-                                        name="pha_continuation_end" max="<?php echo date('Y-m-d'); ?>">
+                                    <label for="pha_child_height" class="form-label">Height (cm) for Children</label>
+                                    <input type="number" step="0.01" class="form-control" id="pha_child_height" name="pha_child_height"
+                                        value="{{ $patient->adherences->first()->pha_child_height ?? '' }}">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_child_height" class="form-label">Height (cm) for
-                                        Children</label>
-                                    <input type="number" step="0.01" class="form-control" id="pha_child_height"
-                                        name="pha_child_height">
-                                </div>
-                            </div>
-
-
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
 
         <!-- Adverse Events Modal -->
         <div class="modal fade" id="editAdverseEventModal" tabindex="-1" aria-labelledby="editAdverseEventModalLabel"
@@ -3031,6 +3114,74 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('editPrescribedDrugsModal');
+            modal.addEventListener('shown.bs.modal', function () {
+                document.getElementById('drug_start_date').focus();
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // ✅ When clicking edit button
+            document.querySelectorAll(".btn-edit-admin").forEach((button) => {
+                button.addEventListener("click", function () {
+                    const patientId = this.getAttribute("data-id");
+
+                    // Fetch patient data via AJAX
+                    fetch(`/admin/administration/${patientId}/edit`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data) return;
+
+                            // 🟩 Treatment Supporter Information
+                            document.getElementById("sup_location").value = data.sup_location ?? "";
+                            document.getElementById("sup_name").value = data.sup_name ?? "";
+                            document.getElementById("sup_designation").value = data.sup_designation ?? "";
+                            document.getElementById("sup_type").value = data.sup_type ?? "";
+                            document.getElementById("sup_contact_info").value = data.sup_contact_info ?? "";
+                            document.getElementById("sup_dat_used").value = data.sup_dat_used ?? "";
+                            document.getElementById("sup_treatment_schedule").value = data.sup_treatment_schedule ?? "";
+
+                            // 🟦 Treatment Schedule Details
+                            document.getElementById("pha_intensive_start").value = data.pha_intensive_start ?? "";
+                            document.getElementById("pha_intensive_end").value = data.pha_intensive_end ?? "";
+                            document.getElementById("pha_continuation_start").value = data.pha_continuation_start ?? "";
+                            document.getElementById("pha_continuation_end").value = data.pha_continuation_end ?? "";
+
+                            // 🟨 Measurements
+                            document.getElementById("pha_weight").value = data.pha_weight ?? "";
+                            document.getElementById("pha_child_height").value = data.pha_child_height ?? "";
+
+                            // ✅ Update form action dynamically
+                            const form = document.querySelector("#editAdministrationModal form");
+                            form.action = `/admin/administration/${patientId}`;
+
+                            // ✅ Show modal
+                            const modal = new bootstrap.Modal(document.getElementById("editAdministrationModal"));
+                            modal.show();
+                        })
+                        .catch(error => console.error("Error loading data:", error));
+                });
+            });
+
+            // ✅ Optional: form validation before submit
+            const form = document.querySelector("#editAdministrationModal form");
+            form.addEventListener("submit", function (e) {
+                const weight = document.getElementById("pha_weight").value;
+                if (weight === "" || weight <= 0) {
+                    e.preventDefault();
+                    alert("Please enter a valid weight before saving.");
+                }
+            });
+        });
+        </script>
+
+
+    
 
     <script>
         (function () {

@@ -144,7 +144,7 @@ Route::post('/patients/{id}/treatment-history', [TreatmentHistoryController::cla
 Route::post('/patients/{id}/comorbidities', [ComorbidityController::class, 'store'])->name('comorbidities.store');
 Route::post('/patients/{id}/hiv', [HivController::class, 'store'])->name('hiv.store');
 // Route::post('/patients/{id}/treatment-outcome', [TreatmentOutcomeController::class, 'store'])->name('treatment-outcome.store');
-Route::post('/patients/{id}/prescribed-drugs', [PrescribedDrugsController::class, 'store'])->name('prescribed-drugs.store');
+Route::post('/patients/{id}/prescribed-drugs', [PrescribedDrugsController::class, 'update'])->name('prescribed-drugs.update');
 
 Route::post('/patients/{id}/laboratory-tests', [LaboratoryTestController::class, 'store'])->name('laboratory-tests.store');
 Route::put('/laboratory-tests/{id}', [LaboratoryTestController::class, 'update'])->name('laboratory-tests.update');
