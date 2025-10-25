@@ -30,3 +30,4 @@ Route::get('/adherence/{username}', [MedicationAdherenceController::class, 'getA
 Route::get('/adherence/{patient_id}', [MedicationAdherenceController::class, 'getAdherence']);
 
 
+Route::get('/adherence/patient/{id}', [MedicationAdherenceController::class, 'getAdherenceByPatientId']);

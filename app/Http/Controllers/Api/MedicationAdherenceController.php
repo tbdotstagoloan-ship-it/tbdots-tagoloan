@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\MedicationAdherence;
+use App\Models\PatientAccount;
 
 class MedicationAdherenceController extends Controller
 {
@@ -42,5 +43,18 @@ class MedicationAdherenceController extends Controller
             ->get();
 
         return response()->json($logs);
+    }
+
+    public function getAdherenceByPatientId($id)
+    {
+        // try to find the account username for this patient
+        $account = PatientAccount::where('patient_id', $id)->first();
+
+        if (! $account) {
+            return response()->json([]);
+        }
+
+        // reuse existing method logic: query by username
+        return $this->getAdherence($account->acc_username);
     }
 }
