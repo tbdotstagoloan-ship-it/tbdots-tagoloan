@@ -3184,120 +3184,51 @@
     
 
     <script>
-        (function () {
-            const calendar = document.getElementById("calendar");
-            const monthYear = document.getElementById("monthYear");
-            const adherenceRateEl = document.getElementById("adherenceRate");
-            const daysTakenEl = document.getElementById("daysTaken");
-            const daysMissedEl = document.getElementById("daysMissed");
+(function () {
+    const calendar = document.getElementById("calendar");
+    const monthYear = document.getElementById("monthYear");
+    const adherenceRateEl = document.getElementById("adherenceRate");
+    const daysTakenEl = document.getElementById("daysTaken");
+    const daysMissedEl = document.getElementById("daysMissed");
 
-            let currentDate = new Date();
-            let adherenceData = {}; // make this reassignable
+    let currentDate = new Date();
+    let adherenceData = {}; // reassignable
 
-            //  Sample: replace with actual logged-in username dynamically
-            const username = "Syra12345"; // or fetch this from your backend/session
+    // pass server-side username if available, otherwise null
+    const username = @json(
+        // try adherence record username, then patient account username, otherwise null
+        $patient->adherences->first()->username ?? $patient->patientAccount->acc_username ?? null
+    );
 
-            async function fetchAdherenceData() {
-                try {
-                    const response = await fetch(`/api/adherence/${username}`);
-                    const data = await response.json();
-
-                    adherenceData = {};
-                    data.forEach(item => {
-                        adherenceData[item.date] = item.status;
-                    });
-
-                    renderCalendar(currentDate);
-                } catch (error) {
-                    console.error(" Error fetching adherence data:", error);
-                }
+    async function fetchAdherenceData() {
+        try {
+            let url;
+            if (username) {
+                url = `/api/adherence/${encodeURIComponent(username)}`;
+            } else {
+                // fallback: fetch by patient id (needs server route)
+                url = `/api/adherence/patient/{{ $patient->id }}`;
             }
 
-            function calculateStats(year, month) {
-                let taken = 0;
-                let missed = 0;
+            const response = await fetch(url);
+            const data = await response.json();
 
-                Object.keys(adherenceData).forEach(dateStr => {
-                    const date = new Date(dateStr);
-                    if (date.getFullYear() === year && date.getMonth() === month) {
-                        if (adherenceData[dateStr] === "taken") taken++;
-                        if (adherenceData[dateStr] === "missed") missed++;
-                    }
-                });
-
-                const total = taken + missed;
-                const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
-
-                adherenceRateEl.textContent = rate + "%";
-                daysTakenEl.textContent = taken;
-                daysMissedEl.textContent = missed;
-            }
-
-            function renderCalendar(date) {
-                calendar.innerHTML = "";
-                const year = date.getFullYear();
-                const month = date.getMonth();
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-
-                const monthName = date.toLocaleString("default", { month: "long" });
-                monthYear.textContent = `${monthName} ${year}`;
-
-                // Day headers
-                const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-                daysOfWeek.forEach(day => {
-                    const header = document.createElement("div");
-                    header.textContent = day;
-                    header.classList.add("adherence-day-header");
-                    calendar.appendChild(header);
-                });
-
-                // Empty cells for offset
-                for (let i = 0; i < firstDay.getDay(); i++) {
-                    const empty = document.createElement("div");
-                    empty.classList.add("adherence-calendar-day", "adherence-empty");
-                    calendar.appendChild(empty);
-                }
-
-                // Calendar days with adherence status
-                for (let day = 1; day <= lastDay.getDate(); day++) {
-                    const cell = document.createElement("div");
-                    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
-                    cell.textContent = day;
-                    cell.classList.add("adherence-calendar-day");
-
-                    if (adherenceData[dateStr]) {
-                        cell.classList.add("adherence-" + adherenceData[dateStr]);
-                        const icon = document.createElement("i");
-                        icon.classList.add(
-                            "fa",
-                            adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
-                            "adherence-status-icon"
-                        );
-                        cell.appendChild(icon);
-                    }
-
-                    calendar.appendChild(cell);
-                }
-
-                calculateStats(year, month);
-            }
-
-            document.getElementById("prevMonth").addEventListener("click", () => {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                renderCalendar(currentDate);
+            adherenceData = {};
+            data.forEach(item => {
+                adherenceData[item.date] = item.status;
             });
 
-            document.getElementById("nextMonth").addEventListener("click", () => {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                renderCalendar(currentDate);
-            });
+            renderCalendar(currentDate);
+        } catch (error) {
+            console.error("Error fetching adherence data:", error);
+        }
+    }
 
-            // Initial fetch and render
-            fetchAdherenceData();
-        })();
-        </script>
+    // ...existing functions calculateStats, renderCalendar, nav handlers...
+    // Initial fetch and render
+    fetchAdherenceData();
+})();
+</script>
 
 
     <script>
