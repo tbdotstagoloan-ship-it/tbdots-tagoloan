@@ -904,6 +904,47 @@
     // const lab_cxray_test_date = document.getElementById('lab_cxray_test_date');
     // const lab_cxray_result = document.getElementById('lab_cxray_result');
 
+    // Safely query optional fields used in preview (may be absent)
+    function el(id){ return document.getElementById(id) || null; }
+    const pat_age = el('pat_age');
+    const pat_sex = el('pat_sex');
+    const pat_civil_status = el('pat_civil_status');
+    const pat_philhealth_no = el('pat_philhealth_no');
+
+    const pat_permanent_region = el('pat_permanent_region');
+    const pat_permanent_province = el('pat_permanent_province');
+    const pat_permanent_city_mun = el('pat_permanent_city_mun');
+    const pat_permanent_address = el('pat_permanent_address');
+    const pat_permanent_zip_code = el('pat_permanent_zip_code');
+
+    const pat_current_region = el('pat_current_region');
+    const pat_current_province = el('pat_current_province');
+    const pat_current_city_mun = el('pat_current_city_mun');
+    const pat_current_address = el('pat_current_address');
+    const pat_current_zip_code = el('pat_current_zip_code');
+
+    const lab_xpert_test_date = el('lab_xpert_test_date');
+    const lab_xpert_result = el('lab_xpert_result');
+    const lab_smear_test_date = el('lab_smear_test_date');
+    const lab_smear_result = el('lab_smear_result');
+    const lab_cxray_test_date = el('lab_cxray_test_date');
+    const lab_cxray_result = el('lab_cxray_result');
+    const lab_tst_test_date = el('lab_tst_test_date');
+    const lab_tst_result = el('lab_tst_result');
+    const lab_other_test_date = el('lab_other_test_date');
+    const lab_other_result = el('lab_other_result');
+
+    const diag_notification_date = el('diag_notification_date');
+    const diag_tb_case_no = el('diag_tb_case_no');
+    const diag_referred_to = el('diag_referred_to');
+    const diag_address = el('diag_address');
+    const diag_facility_code = el('diag_facility_code');
+    const diag_region = el('diag_region');
+    const diag_province = el('diag_province');
+
+    const clas_other_drug_resistant = el('clas_other_drug_resistant');
+    const clas_site_other = el('clas_site_other');
+
     // Get ALL inputs and selects in the form
     const allInputs = form.querySelectorAll("input, select");
 
