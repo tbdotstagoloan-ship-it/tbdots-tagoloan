@@ -201,11 +201,12 @@
           <table class="table">
             <thead>
               <tr>
-                <th>TB Case No</th>
+                <th>ID</th>
                 <th>Full Name</th>
                 <th>Sex</th>
                 <th>Age</th>
-                <th>Address</th>
+                <th>Barangay</th>
+                <th>TB Case No</th>
                 <th>Date Registered</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -214,11 +215,12 @@
             <tbody>
               @foreach ($patients as $patient)
                 <tr>
-                  <td>{{ $patient->diag_tb_case_no }}</td>
+                  <td>{{ $patient->id }}</td>
                   <td>{{ $patient->pat_full_name }}</td>
                   <td>{{ $patient->pat_sex }}</td>
                   <td>{{ $patient->pat_age }}</td>
                   <td>{{ $patient->pat_current_address }}</td>
+                  <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
                   <td>
                       @php

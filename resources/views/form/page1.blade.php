@@ -1095,8 +1095,8 @@
                   <tr><th>Referred to</th><td>${diag_referred_to.value}</td></tr>
                   <tr><th>Address</th><td>${diag_address.value}</td></tr>
                   <tr><th>Facility Code</th><td>${diag_facility_code.value}</td></tr>
-                  <tr><th>Province</th><td>${diag_province}</td></tr>
-                  <tr><th>Region</th><td>${diag_region}</td></tr>
+                  <tr><th>Province</th><td>${diag_province.value}</td></tr>
+                  <tr><th>Region</th><td>${diag_region.value}</td></tr>
                 </tbody>
               </table>
             </div>
