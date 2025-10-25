@@ -2066,7 +2066,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header bg-success text-white">
                                             <h5 class="modal-title" id="editLabTestsModalLabel{{ $labTest->id }}">Edit Laboratory Tests</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
 
                                         <!-- ✅ Connect to update route -->
@@ -2189,7 +2189,7 @@
                                             </div>
 
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                                                 <button type="submit" class="btn btn-success">Submit</button>
                                             </div>
                                         </form>
@@ -2206,7 +2206,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editDiagnosisModalLabel">Referral Information</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Add action route -->
@@ -2280,7 +2280,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2296,7 +2296,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editTreatmentHistoryModalLabel">History of TB Treatment</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Add route for storing treatment history -->
@@ -2335,7 +2335,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2351,7 +2351,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editComorbiditiesModalLabel">Co-morbidities</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Add form action for saving co-morbidity -->
@@ -2392,7 +2392,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2408,7 +2408,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editBaselineModalLabel">HIV Baseline Information</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Form with action route -->
@@ -2465,7 +2465,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2481,7 +2481,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editTreatmentOutcomeModalLabel">Edit Treatment Outcome</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <form method="POST" id="editOutcomeForm">
@@ -2516,7 +2516,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
                                 Close
                             </button>
                             <button type="submit" class="btn btn-success">
@@ -2536,7 +2536,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editPrescribedDrugsModalLabel">Prescribed Drugs</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Use patient ID in route -->
@@ -2624,7 +2624,7 @@
                             </div>
 
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-success">Submit</button>
                             </div>
                         </div>
@@ -2641,7 +2641,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editAdministrationModalLabel">Administration of Drugs</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Form with update route -->
@@ -2748,7 +2748,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Save Changes</button>
                         </div>
                     </form>
@@ -2767,7 +2767,7 @@
                         <h5 class="modal-title" id="editAdverseEventModalLabel">
                             Serious Adverse Event
                         </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- IMPORTANT: action points to adverse.store route -->
@@ -2798,7 +2798,7 @@
 
                         <!-- Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2815,7 +2815,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editProgressModalLabel">Patient Progress Report Form</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- Laravel Route for storing progress -->
@@ -2844,7 +2844,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2860,7 +2860,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editCloseContactModalLabel">Close Contact</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- Laravel Route for storing close contact -->
@@ -2914,7 +2914,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2931,7 +2931,7 @@
 
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editSputumModalLabel">Sputum Monitoring</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- Important: route should point to sputum.store (create new) -->
@@ -2962,7 +2962,7 @@
 
                         <!-- Footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -2978,7 +2978,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editChestXrayModalLabel">Chest X-ray</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- Laravel route for storing chest x-ray -->
@@ -3009,7 +3009,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
@@ -3025,7 +3025,7 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editPostTreatmentModalLabel">Post Treatment Follow-up</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Add action route -->
@@ -3069,7 +3069,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                     </form>
