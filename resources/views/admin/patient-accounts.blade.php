@@ -160,7 +160,7 @@
                 <th>Contact Information</th>
                 <th>Date of Birth</th>
                 <th>Gender</th>
-                <th>Address</th>
+                <th>Barangay</th>
                 <!-- <th>Action</th> -->
               </tr>
             </thead>
