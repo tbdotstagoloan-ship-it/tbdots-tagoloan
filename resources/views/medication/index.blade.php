@@ -185,9 +185,9 @@
               <tr>
                 <th>ID</th>
                 <th>Full Name</th>
-                <th>Sex</th>
-                <th>TB Case #</th>
-                <th>Address</th>
+                <th>Contact Number</th>
+                <th>Username</th>
+                <th>Last Missed</th>
                 <th>Status</th>
               </tr>
             </thead>
