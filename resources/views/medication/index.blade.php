@@ -197,7 +197,7 @@
                 <tr>
                   <td>{{ $row['patient_id'] }}</td>
                   <td>
-                    <a href="{{ url('admin/patient-profile/'.$row['patient_id']) }}" style="text-decoration: none;">
+                    <a href="{{ url('admin/patient-profile/'.$row['patient_id']) }}" style="text-decoration: none; color: #212529;">
                       {{ $row['full_name'] }}
                     </a>
                   </td>
