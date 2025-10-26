@@ -204,7 +204,7 @@
                   <td>{{ $row['contact'] ?? '—' }}</td>
                   <td>{{ $row['username'] }}</td>
                   <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
-                  <td><span class="badge bg-danger">Missed</span></td>
+                  <td><span class="status-badge bg-danger">Missed</span></td>
                 </tr>
               @endforeach
             @else
