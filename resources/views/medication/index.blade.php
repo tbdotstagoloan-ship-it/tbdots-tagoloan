@@ -102,6 +102,13 @@
         <a href="{{url('medication-adherence-flags')}}">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Medication Adherence Flags</span>
+          @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
+            <!-- red dot -->
+            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" 
+                  title="{{ $missedAdherenceCount }} missed">
+              <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
+            </span>
+          @endif
         </a>
       </li>
 
