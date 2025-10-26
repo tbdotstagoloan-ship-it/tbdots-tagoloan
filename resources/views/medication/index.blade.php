@@ -100,7 +100,7 @@
 
       <li class="menu-item" data-tooltip="Meidication Adherence Flags">
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
-        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
+        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Medication Adherence Flags</span>
 
