@@ -41,8 +41,8 @@ class MedicationAdherenceFlagsController extends Controller
                 'contact' => $patient->pat_contact_number ?? null,
                 'last_missed' => MedicationAdherence::where('username', $acc->acc_username)
                     ->where('status', 'missed')
-                    ->orderByDesc('id')
-                    ->value('id'),
+                    ->orderByDesc('date')
+                    ->value('date'),
             ];
         })->filter(function ($row) {
             return ! is_null($row['patient_id']);
