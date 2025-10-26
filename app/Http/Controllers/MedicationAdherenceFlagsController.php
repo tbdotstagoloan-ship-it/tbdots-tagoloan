@@ -4,39 +4,53 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MedicationAdherence;
+use App\Models\PatientAccount;
+use App\Models\Patient;
+use Carbon\Carbon;
 
 class MedicationAdherenceFlagsController extends Controller
 {
-    // public function index ()
-    // {
-    //     return view ('medication.index');
-    // }
+    /**
+     * Show patients flagged for missed medication.
+     * Optional query param `days` controls lookback window (default 7).
+     */
+    public function index(Request $request)
+    {
+        $days = (int) $request->input('days', 7);
+        $since = Carbon::now()->subDays($days)->toDateString();
 
-    // public function logAdherence(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'username' => 'required|string',
-    //         'date' => 'required|date',
-    //         'status' => 'required|in:taken,missed',
-    //     ]);
+        // get usernames that have at least one 'missed' in the lookback window
+        $usernames = MedicationAdherence::where('status', 'missed')
+            ->whereDate('date', '>=', $since)
+            ->pluck('username')
+            ->unique()
+            ->values();
 
-    //     MedicationAdherence::updateOrCreate(
-    //         ['username' => $validated['username'], 'date' => $validated['date']],
-    //         ['status' => $validated['status']]
-    //     );
+        // get patient accounts for those usernames and eager load patient
+        $accounts = PatientAccount::whereIn('acc_username', $usernames)
+            ->with('patient')
+            ->get();
 
-    //     return response()->json([
-    //         'message' => 'Adherence logged successfully',
-    //         'data' => $validated
-    //     ]);
-    // }
+        // map to view-friendly rows
+        $flagged = $accounts->map(function ($acc) {
+            $patient = $acc->patient;
+            return [
+                'patient_id' => $patient->id ?? null,
+                'full_name' => $patient->pat_full_name ?? $acc->acc_username,
+                'username' => $acc->acc_username,
+                'contact' => $patient->pat_contact_number ?? null,
+                'last_missed' => MedicationAdherence::where('username', $acc->acc_username)
+                    ->where('status', 'missed')
+                    ->orderByDesc('date')
+                    ->value('date'),
+            ];
+        })->filter(function ($row) {
+            return ! is_null($row['patient_id']);
+        })->values();
 
-    // public function getAdherence($username)
-    // {
-    //     $logs = MedicationAdherence::where('username', $username)
-    //         ->orderBy('date', 'asc')
-    //         ->get();
-
-    //     return response()->json($logs);
-    // }
+        return view('medication.index', [
+            'flagged' => $flagged,
+            'days' => $days,
+        ]);
+    }
 }

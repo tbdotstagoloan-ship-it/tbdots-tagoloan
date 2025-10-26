@@ -192,19 +192,27 @@
               </tr>
             </thead>
             <tbody>
-
-
+            @if(!empty($flagged) && $flagged->count() > 0)
+              @foreach($flagged as $row)
                 <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  
-                  
+                  <td>{{ $row['patient_id'] }}</td>
+                  <td>
+                    <a href="{{ url('admin/patient-profile/'.$row['patient_id']) }}">
+                      {{ $row['full_name'] }}
+                    </a>
+                  </td>
+                  <td>{{ $row['contact'] ?? '—' }}</td>
+                  <td>{{ $row['username'] }}</td>
+                  <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
+                  <td><span class="badge bg-danger">Missed</span></td>
                 </tr>
-            </tbody>
+              @endforeach
+            @else
+              <tr>
+                <td colspan="6" class="text-center text-muted">No flagged patients (no missed logs in last {{ $days ?? 7 }} days).</td>
+              </tr>
+            @endif
+          </tbody>
           </table>
 
         </div>

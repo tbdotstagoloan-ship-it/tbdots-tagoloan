@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PhysicianController;
 use App\Http\Controllers\DiagnosingFacilityController;
+use App\Http\Controllers\MedicationAdherenceFlagsController;
 use App\Http\Controllers\Api\MedicationAdherenceController;
 use App\Http\Controllers\AdherenceController;
 use App\Http\Controllers\SputumMonitoringController;
@@ -175,5 +176,5 @@ Route::put('/facilities/edit/{id}', [DiagnosingFacilityController::class, 'updat
 Route::delete('/facilities/{id}', [DiagnosingFacilityController::class, 'destroy'])->name('facilities.destroy');
 
 // Medication
-Route::get('medication-adherence-flags', [MedicationAdherenceController::class,'index'])->middleware(['auth'])->name('medication.index');
-
+Route::get('medication-adherence-flags', [MedicationAdherenceFlagsController::class, 'index'])
+    ->name('medication.flags');
