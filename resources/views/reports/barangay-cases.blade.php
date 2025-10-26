@@ -181,7 +181,7 @@
                       N/A
                   @endif
                 </td>
-                <td>{{ $patient->out_outcome }}</td>
+                <td><span class="status-badge bg-success">{{ $patient->out_outcome }}</span></td>
             </tr>
         @empty
             <tr>

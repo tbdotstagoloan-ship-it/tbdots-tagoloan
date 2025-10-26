@@ -200,7 +200,7 @@
                       <td>{{ \Carbon\Carbon::parse($patient->pha_intensive_start)->format('F j, Y') }}</td>
                       <td>{{ $patient->treatment_day }}</td>
                       <td>{{ \Carbon\Carbon::parse($patient->pha_intensive_end)->format('F j, Y') }}</td>
-                      <td>{{ $patient->outcome }}</td>
+                      <td><span class="status-badge bg-success">{{ $patient->outcome }}</span></td>
                   </tr>
                   @endforeach
               </tbody>

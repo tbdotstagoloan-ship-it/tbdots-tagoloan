@@ -200,7 +200,7 @@
                   <td>{{ $patients->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patients->outcome_date)->format('F j, Y') }}</td>
                   <td>{{ $patients->out_reason }}</td>
-                  <td>{{ $patients->outcome }}</td>
+                  <td><span class="status-badge bg-success">{{ $patients->outcome }}</span></td>
                 </tr>
 
                 @endforeach

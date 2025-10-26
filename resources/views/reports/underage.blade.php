@@ -182,7 +182,7 @@
                     N/A
                   @endif
                 </td>
-                  <td>{{ $patient->outcome }}</td>
+                  <td><span class="status-badge bg-primary"></span></td>
                 </tr>
 
                 @endforeach

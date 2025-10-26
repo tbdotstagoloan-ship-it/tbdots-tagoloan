@@ -177,7 +177,7 @@
                   <td>{{ $patient->barangay }}</td>
                   <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
-                  <td>{{ $patient->clas_registration_group }}</td>
+                  <td><span class="status-badge bg-success">{{ $patient->clas_registration_group }}</span></td>
                 </tr>
                 @endforeach
               </tbody>

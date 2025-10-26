@@ -184,7 +184,7 @@
                   <td>{{ $patient->barangay }}</td>
                   <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
-                  <td>{{ $patient->anatomical_site }}</td>
+                  <td><span class="status-badge bg-success">{{ $patient->anatomical_site }}</span></td>
                   <td>{{ $patient->site_other }}</td>
                 </tr>
 
