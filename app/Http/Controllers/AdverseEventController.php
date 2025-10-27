@@ -30,12 +30,10 @@ class AdverseEventController extends Controller
     public function submit(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            // accept patient_id or username
             'patient_id'   => 'nullable|integer|exists:patients,id',
             'username'     => 'nullable|string',
             'symptom'      => 'nullable|string',
             'description'  => 'nullable|string',
-            // optional reported date if client sends it
             'adv_fda_reported_date' => 'nullable|date',
         ]);
 
@@ -43,11 +41,9 @@ class AdverseEventController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Resolve patient_id from input
         $patientId = $request->input('patient_id');
 
         if (!$patientId && $request->filled('username')) {
-            // adjust field name on your patients table (e.g. username or patient_code)
             $patient = Patient::where('username', $request->input('username'))->first();
             if ($patient) {
                 $patientId = $patient->id;
@@ -61,9 +57,9 @@ class AdverseEventController extends Controller
         }
 
         $ae = AdverseEvent::create([
-            'adv_ae_date' => now(), // event date = now; change if client provides a date
+            'adv_ae_date' => now(),
             'adv_specific_ae' => $request->input('description') ?? $request->input('symptom') ?? '',
-            'adv_fda_reported_date' => $request->input('adv_fda_reported_date'), // nullable
+            'adv_fda_reported_date' => $request->input('adv_fda_reported_date'),
             'patient_id' => $patientId,
         ]);
 
