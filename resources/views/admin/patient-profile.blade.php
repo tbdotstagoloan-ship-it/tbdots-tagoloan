@@ -535,11 +535,11 @@
                 </button>
                 <button class="nav-tab" onclick="switchTab(this, 'lab')">
                     <img src="{{ url('assets/img/check-up.png') }}" class="menu-icons" alt="">
-                    <span>Monitoring</span>
+                    <span>Follow Ups</span>
                 </button>
                 <button class="nav-tab" onclick="switchTab(this, 'adherence')">
                     <img src="{{ url('assets/img/schedule.png') }}" class="menu-icons" alt="">
-                    <span>Adherence</span>
+                    <span>Monitoring</span>
                 </button>
             </div>
 
