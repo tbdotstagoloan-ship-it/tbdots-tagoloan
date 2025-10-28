@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\PatientAuthController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdverseEventController;
 use App\Http\Controllers\Api\MedicationAdherenceController;
-use App\Http\Controllers\PatientController;
 
 
 
@@ -37,4 +36,3 @@ Route::get('/adherence/patient/{id}', [MedicationAdherenceController::class, 'ge
 // Adverse Event
 Route::post('patients/{username}/adverse-events', [AdverseEventController::class, 'storeFromMobile']);
 
-Route::get('patients/{username}', [PatientController::class, 'show']);

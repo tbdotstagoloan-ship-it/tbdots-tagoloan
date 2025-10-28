@@ -153,9 +153,5 @@ class Patient extends Model
         return $this->hasMany(MedicationAdherence::class, 'patient_id');
     }
 
-    public function account()
-    {
-        return $this->belongsTo(PatientAccount::class, 'user_id', 'user_id');
-    }
 
 }
