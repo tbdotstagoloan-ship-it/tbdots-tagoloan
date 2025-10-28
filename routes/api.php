@@ -34,4 +34,4 @@ Route::get('/adherence/{patient_id}', [MedicationAdherenceController::class, 'ge
 Route::get('/adherence/patient/{id}', [MedicationAdherenceController::class, 'getAdherenceByPatientId']);
 
 // Adverse Event
-Route::post('patients/{username}/adverse-events', [AdverseEventController::class, 'store']);
+Route::post('patients/{username}/adverse-events', [AdverseEventController::class, 'storeFromMobile']);
