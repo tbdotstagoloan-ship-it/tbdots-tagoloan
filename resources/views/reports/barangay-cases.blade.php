@@ -181,7 +181,23 @@
                       N/A
                   @endif
                 </td>
-                <td><span class="status-badge bg-success">{{ $patient->out_outcome }}</span></td>
+                <td>
+                    @php
+                        $status = strtolower($patient->out_outcome ?? '');
+                        $badgeClass = match ($status) {
+                            'cured' => 'bg-success',
+                            'treatment completed' => 'bg-success',
+                            'lost to follow-up' => 'bg-warning text-dark',
+                            'died' => 'bg-danger',
+                            default => 'bg-secondary',
+                        };
+                    @endphp
+
+                    <span class="status-badge badge {{ $badgeClass }}" style="font-size: 0.85rem;">
+                        {{ ucfirst($patient->out_outcome) }}
+                    </span>
+                  </td>
+
             </tr>
         @empty
             <tr>
