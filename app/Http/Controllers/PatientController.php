@@ -490,6 +490,23 @@ class PatientController extends Controller
         return view ('admin.patient-accounts', compact('patientAccount', 'perPage'));
     }
     
+    public function show($username)
+    {
+        $patient = Patient::where('username', $username)->first();
+
+        if (!$patient) {
+            return response()->json(['message' => 'Patient not found'], 404);
+        }
+
+        return response()->json([
+            'pat_full_name' => $patient->pat_full_name,
+            'pat_contact_number' => $patient->pat_contact_number,
+            'acc_username' => $patient->username,
+            'base_contact_info' => $patient->emergency_contact,
+            'pha_intensive_start' => $patient->treatment_start,
+            'pha_continuation_end' => $patient->treatment_end,
+        ]);
+    }
 
 
 }
