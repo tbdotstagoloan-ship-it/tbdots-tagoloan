@@ -204,7 +204,7 @@
     <!-- SIGNATURE -->
     <div class="signature-section">
         <div class="signature">
-            <div class="signature-title">Dr. Juan Dela Cruz</div>
+            <div class="signature-title">Marife Labeste</div>
             <div class="signature-subtitle">TB DOTS Program Coordinator</div>
         </div>
     </div>

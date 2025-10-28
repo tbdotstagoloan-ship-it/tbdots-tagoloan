@@ -1620,8 +1620,8 @@
                                                 <table class="table align-middle">
                                                     <thead class="table-light">
                                                         <tr>
-                                                            <th>Weight</th>
-                                                            <th>Height (Children)</th>
+                                                            <th>Weight (kg)</th>
+                                                            <th>Height (cm) for Children</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -2416,7 +2416,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editBaselineModalLabel">HIV Baseline Information</h5>
+                        <h5 class="modal-title" id="editBaselineModalLabel">HIV Information</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 

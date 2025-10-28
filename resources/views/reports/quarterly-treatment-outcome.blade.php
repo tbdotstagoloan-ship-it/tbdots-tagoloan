@@ -170,7 +170,7 @@
           <select id="statusRedirect" class="form-select mb-2" style="width: 210px;">
             <option value="" disabled selected>Select Quarter Report</option>
             <option value="{{ url('quarterly-cases-notification') }}">Cases Notification</option>
-            <option value="{{ url('quarterly-tb-classification') }}">TB Classification</option>
+            <option value="{{ url('quarterly-tb-classification') }}">TB Disease Classification</option>
             <option value="{{ url('quarterly-anatomical-site') }}">Anatomical Site</option>
             <option value="{{ url('quarterly-treatment-outcome') }}">Treatment Outcome</option>
             </select>
