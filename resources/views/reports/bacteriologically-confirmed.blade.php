@@ -183,7 +183,7 @@
                   <td>{{ $patient->barangay }}</td>
                   <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
-                  <td><span class="status-badge bg-success">{{ $patient->tb_classification }}</span></td>
+                  <td>{{ $patient->tb_classification }}</td>
                 </tr>
 
                 @endforeach
