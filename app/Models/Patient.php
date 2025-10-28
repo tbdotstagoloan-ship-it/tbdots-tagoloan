@@ -33,7 +33,6 @@ class Patient extends Model
         'pat_nationality',
         'user_id',
         'diagfacility_id',
-        'pha_continuation_end'
     ];
 
     public function user()
