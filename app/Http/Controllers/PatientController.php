@@ -490,32 +490,23 @@ class PatientController extends Controller
         return view ('admin.patient-accounts', compact('patientAccount', 'perPage'));
     }
     
-    public function show($username)
+    public function show($acc_username)
     {
-        try {
-            $patient = Patient::where('pat_full_name', $username)->first(); // or another unique field
+        $patient = Patient::whereHas('tbl_patient_accounts', function ($q) use ($acc_username) {
+            $q->where('acc_username', $acc_username);
+        })->first();
 
-            if (!$patient) {
-                return response()->json(['message' => 'Patient not found'], 404);
-            }
-
-            return response()->json([
-                'pat_full_name' => $patient->pat_full_name,
-                'pat_contact_number' => $patient->pat_contact_number,
-                'username' => $patient->user->username ?? 'N/A', // if using user relationship
-                'emergency_contact' => $patient->pat_other_contact ?? 'N/A',
-                'treatment_start' => optional($patient->treatmentHistories()->first())->start_date ?? 'N/A',
-                'treatment_end' => optional($patient->treatmentHistories()->first())->end_date ?? 'N/A',
-            ], 200);
-        } catch (\Exception $e) {
-            \Log::error('Failed fetching patient info', [
-                'username' => $username,
-                'error' => $e->getMessage(),
-            ]);
-
-            return response()->json([
-                'message' => 'Server error fetching patient info'
-            ], 500);
+        if (!$patient) {
+            return response()->json(['message' => 'Patient not found'], 404);
         }
+
+        return response()->json([
+            'pat_full_name' => $patient->pat_full_name,
+            'pat_contact_number' => $patient->pat_contact_number,
+            'acc_username' => $patient->tbl_patient_accounts->acc_username ?? 'N/A',
+            'emergency_contact' => $patient->pat_other_contact ?? 'N/A',
+            'treatment_start' => optional($patient->treatmentHistories()->first())->start_date ?? 'N/A',
+            'treatment_end' => optional($patient->treatmentHistories()->first())->end_date ?? 'N/A',
+        ], 200);
     }
 }
