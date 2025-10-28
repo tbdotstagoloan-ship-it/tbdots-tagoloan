@@ -51,6 +51,7 @@ class AdverseEventController extends Controller
 
         $ae = AdverseEvent::create([
             'patient_id' => $patient->id,
+            'username' => $username,  // Add this line
             'adv_ae_date' => $request->adv_ae_date,
             'adv_specific_ae' => $request->adv_specific_ae,
             'adv_fda_reported_date' => $request->adv_fda_reported_date,
@@ -58,7 +59,6 @@ class AdverseEventController extends Controller
 
         \Log::info('Mobile adverse event created', ['id' => $ae->id]);
 
-        // For API requests, return JSON
         return response()->json([
             'message' => 'Adverse Event saved successfully.',
             'data' => $ae
