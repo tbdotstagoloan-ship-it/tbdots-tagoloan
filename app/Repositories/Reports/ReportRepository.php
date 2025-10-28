@@ -172,6 +172,7 @@ class ReportRepository implements ReportRepositoryInterface
                 'p.pat_full_name',
                 'p.pat_sex',
                 'pd.drug_name',
+                'pd.drug_no_of_tablets',
                 'pd.drug_strength',
                 'pd.drug_unit',
                 'a.pha_intensive_start',
@@ -203,6 +204,7 @@ class ReportRepository implements ReportRepositoryInterface
                 'p.pat_full_name',
                 'p.pat_sex',
                 'pd.drug_con_name',
+                'pd.drug_con_no_of_tablets',
                 'pd.drug_con_strength',
                 'pd.drug_con_unit',
                 'a.pha_continuation_start',
@@ -220,7 +222,7 @@ class ReportRepository implements ReportRepositoryInterface
                 $q->whereNull('t.out_outcome')->orWhere('t.out_outcome', 'Ongoing');
             })
             // 👉 Para lumabas lang kapag Day 1 or higher
-            ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
+            // ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
             ->orderBy('a.pha_continuation_start')
             ->paginate($perPage);
     }

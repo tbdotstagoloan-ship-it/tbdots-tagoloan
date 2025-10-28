@@ -152,7 +152,7 @@
 
     <div class="main-content py-4" id="mainContent">
       <h4 style="margin-bottom: 10px; color: #2c3e50; font-weight: 600;">
-        Quarterly TB Classification
+        Quarterly TB Disease Classification
       </h4>
       <p class="text-muted mb-3">
         Shows the distribution of TB cases by classification reported each quarter.
@@ -171,7 +171,7 @@
           <select id="statusRedirect" class="form-select mb-2" style="width: 210px;">
             <option value="" disabled selected>Select Quarter Report</option>
             <option value="{{ url('quarterly-cases-notification') }}">Cases Notification</option>
-            <option value="{{ url('quarterly-tb-classification') }}">TB Classification</option>
+            <option value="{{ url('quarterly-tb-classification') }}">TB Disease Classification</option>
             <option value="{{ url('quarterly-anatomical-site') }}">Anatomical Site</option>
             <option value="{{ url('quarterly-treatment-outcome') }}">Treatment Outcome</option>
             </select>
