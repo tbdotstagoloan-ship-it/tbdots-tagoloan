@@ -338,7 +338,8 @@ class ReportRepository implements ReportRepositoryInterface
                 'p.pat_permanent_address as barangay',
                 'd.diag_tb_case_no',
                 't.out_date as outcome_date',
-                't.out_reason'
+                't.out_reason',
+                't.out_outcome as out_outcome'
             )
             ->where('t.out_outcome', 'Died')
             ->orderBy('d.diag_tb_case_no', 'desc')

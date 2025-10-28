@@ -29,7 +29,6 @@ class AdverseEventController extends Controller
     public function storeFromMobile(Request $request, $username)
     {
         \Log::info('Mobile adverse event request', [
-            'username' => $username,
             'body' => $request->all()
         ]);
 
@@ -39,19 +38,28 @@ class AdverseEventController extends Controller
             'adv_fda_reported_date' => 'nullable|date',
         ]);
 
-        // Find patient by username
-        $patient = Patient::where('username', $username)->first();
-        
-        if (!$patient) {
-            \Log::error('Patient not found', ['username' => $username]);
+        // 🔍 Find the patient using PatientAccount
+        $account = \App\Models\PatientAccount::where('acc_username', $username)->first();
+
+        if (!$account) {
+            \Log::error('Account not found', ['username' => $username]);
             return response()->json([
-                'message' => 'Patient not found with username: ' . $username
+                'message' => 'Account not found for username: ' . $username
             ], 404);
         }
 
+        $patient = \App\Models\Patient::find($account->patient_id);
+
+        if (!$patient) {
+            \Log::error('Patient not found for account', ['username' => $username]);
+            return response()->json([
+                'message' => 'Patient not found for account username: ' . $username
+            ], 404);
+        }
+
+        // 💾 Save the Adverse Event
         $ae = AdverseEvent::create([
             'patient_id' => $patient->id,
-            'username' => $username,  // Add this line
             'adv_ae_date' => $request->adv_ae_date,
             'adv_specific_ae' => $request->adv_specific_ae,
             'adv_fda_reported_date' => $request->adv_fda_reported_date,
@@ -64,4 +72,5 @@ class AdverseEventController extends Controller
             'data' => $ae
         ], 201);
     }
+
 }
