@@ -13,6 +13,7 @@ class AdverseEvent extends Model
         'adv_specific_ae',
         'adv_fda_reported_date',
         'patient_id',
+        'username',
     ];
 
     public function patient()
