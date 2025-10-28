@@ -48,7 +48,7 @@ class AdverseEventController extends Controller
             ], 404);
         }
 
-        $patient = \App\Models\Patient::find($account->patient_id);
+        $patient = Patient::find($account->patient_id);
 
         if (!$patient) {
             \Log::error('Patient not found for account', ['username' => $username]);
