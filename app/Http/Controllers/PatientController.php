@@ -492,21 +492,30 @@ class PatientController extends Controller
     
     public function show($username)
     {
-        $patient = Patient::where('username', $username)->first();
+        try {
+            $patient = Patient::where('pat_full_name', $username)->first(); // or another unique field
 
-        if (!$patient) {
-            return response()->json(['message' => 'Patient not found'], 404);
+            if (!$patient) {
+                return response()->json(['message' => 'Patient not found'], 404);
+            }
+
+            return response()->json([
+                'pat_full_name' => $patient->pat_full_name,
+                'pat_contact_number' => $patient->pat_contact_number,
+                'username' => $patient->user->username ?? 'N/A', // if using user relationship
+                'emergency_contact' => $patient->pat_other_contact ?? 'N/A',
+                'treatment_start' => optional($patient->treatmentHistories()->first())->start_date ?? 'N/A',
+                'treatment_end' => optional($patient->treatmentHistories()->first())->end_date ?? 'N/A',
+            ], 200);
+        } catch (\Exception $e) {
+            \Log::error('Failed fetching patient info', [
+                'username' => $username,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => 'Server error fetching patient info'
+            ], 500);
         }
-
-        return response()->json([
-            'pat_full_name' => $patient->pat_full_name,
-            'pat_contact_number' => $patient->pat_contact_number,
-            'acc_username' => $patient->username,
-            'base_contact_info' => $patient->emergency_contact,
-            'pha_intensive_start' => $patient->treatment_start,
-            'pha_continuation_end' => $patient->treatment_end,
-        ]);
     }
-
-
 }
