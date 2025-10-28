@@ -492,9 +492,9 @@ class PatientController extends Controller
     
     public function show($acc_username)
     {
-        $patient = Patient::whereHas('tbl_patient_accounts', function ($q) use ($acc_username) {
+        $patient = Patient::whereHas('account', function ($q) use ($acc_username) {
             $q->where('acc_username', $acc_username);
-        })->first();
+        })->with('account', 'treatmentHistories')->first();
 
         if (!$patient) {
             return response()->json(['message' => 'Patient not found'], 404);
@@ -503,10 +503,11 @@ class PatientController extends Controller
         return response()->json([
             'pat_full_name' => $patient->pat_full_name,
             'pat_contact_number' => $patient->pat_contact_number,
-            'acc_username' => $patient->tbl_patient_accounts->acc_username ?? 'N/A',
+            'acc_username' => $patient->account->acc_username ?? 'N/A',
             'emergency_contact' => $patient->pat_other_contact ?? 'N/A',
-            'treatment_start' => optional($patient->treatmentHistories()->first())->start_date ?? 'N/A',
-            'treatment_end' => optional($patient->treatmentHistories()->first())->end_date ?? 'N/A',
+            'treatment_start' => optional($patient->treatmentHistories->first())->start_date ?? 'N/A',
+            'treatment_end' => optional($patient->treatmentHistories->first())->end_date ?? 'N/A',
         ], 200);
     }
+
 }
