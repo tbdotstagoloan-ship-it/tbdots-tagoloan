@@ -99,9 +99,18 @@
       </li>
 
       <li class="menu-item" data-tooltip="Meidication Adherence Flags">
-        <a href="{{url('medication-adherence-flags')}}">
+        <!-- make the anchor position-relative and give some right padding (pe-4) -->
+        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Medication Adherence Flags</span>
+
+          @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
+            <!-- dot positioned relative to the anchor -->
+            <span class="position-absolute top-50 end-0 translate-middle-y me-3 p-1 bg-danger border border-light rounded-circle" 
+                  style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
+              <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
+            </span>
+          @endif
         </a>
       </li>
 
@@ -185,26 +194,34 @@
               <tr>
                 <th>ID</th>
                 <th>Full Name</th>
-                <th>Sex</th>
-                <th>TB Case #</th>
-                <th>Address</th>
+                <th>Contact Number</th>
+                <th>Username</th>
+                <th>Last Missed</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-
-
+            @if(!empty($flagged) && $flagged->count() > 0)
+              @foreach($flagged as $row)
                 <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  
-                  
+                  <td>{{ $row['patient_id'] }}</td>
+                  <td>
+                    <a href="{{ url('admin/patient-profile/'.$row['patient_id']) }}" style="text-decoration: none; color: #212529;">
+                      {{ $row['full_name'] }}
+                    </a>
+                  </td>
+                  <td>{{ $row['contact'] ?? '—' }}</td>
+                  <td>{{ $row['username'] }}</td>
+                  <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
+                  <td><span class="status-badge bg-danger">Missed</span></td>
                 </tr>
-            </tbody>
+              @endforeach
+            @else
+              <tr>
+                <td colspan="6" class="text-center text-muted">No flagged patients (no missed logs in last {{ $days ?? 7 }} days).</td>
+              </tr>
+            @endif
+          </tbody>
           </table>
 
         </div>

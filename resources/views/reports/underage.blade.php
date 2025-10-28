@@ -57,9 +57,18 @@
       </li>
 
       <li class="menu-item" data-tooltip="Meidication Adherence Flags">
-        <a href="{{url('medication-adherence-flags')}}">
+        <!-- make the anchor position-relative and give some right padding (pe-4) -->
+        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Medication Adherence Flags</span>
+
+          @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
+            <!-- dot positioned relative to the anchor -->
+            <span class="position-absolute top-50 end-0 translate-middle-y me-3 p-1 bg-danger border border-light rounded-circle" 
+                  style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
+              <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
+            </span>
+          @endif
         </a>
       </li>
 
@@ -173,7 +182,7 @@
                     N/A
                   @endif
                 </td>
-                  <td>{{ $patient->outcome }}</td>
+                  <td><span class="status-badge bg-primary"></span></td>
                 </tr>
 
                 @endforeach
