@@ -230,19 +230,19 @@
               </li>
               <li class="nav-item">
                 <button class="nav-link" id="regimen-tab" data-bs-toggle="tab" data-bs-target="#regimen" type="button"
-                  role="tab">B. Treatment Regimen</button>
+                  role="tab">Treatment Regimen</button>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <button class="nav-link" id="outcome-tab" data-bs-toggle="tab" data-bs-target="#outcome" type="button"
                   role="tab">C. Treatment Outcome</button>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <button class="nav-link" id="medicine-tab" data-bs-toggle="tab" data-bs-target="#medicine" type="button"
                   role="tab">Prescribed Drugs</button>
               </li>
               <li class="nav-item">
                 <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button"
-                  role="tab">D. Administration of Drugs</button>
+                  role="tab">Administration of Drugs</button>
               </li>
             </ul>
 
@@ -587,8 +587,14 @@
                   </div>
                   <div class="col-md-4">
                     <label for="reg_end_type">Regimen Type at End of Treatment <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="reg_end_type" id="reg_end_type" class="form-control"
-                      placeholder="Regimen type at end of treatment" max="<?php echo date('Y-m-d'); ?>">
+                    <!-- <input type="text" name="reg_end_type" id="reg_end_type" class="form-control"
+                      placeholder="Regimen type at end of treatment"> -->
+                      <select name="reg_end_type" id="reg_end_type"
+                      class="form-control form-select" required>
+                      <option value="" disabled selected>Select</option>
+                      <option value="Regimen 1 - 2HRZE/4HR">Regimen 1 - 2HRZE/4HR</option>
+                      <option value="Regimen 2 - 2HRZE/10HR">Regimen 2 - 2HRZE/10HR</option>
+                    </select>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -603,7 +609,7 @@
               </div>
 
               <!-- TAB 4: Outcome -->
-              <div class="tab-pane fade" id="outcome" role="tabpanel">
+              <!-- <div class="tab-pane fade" id="outcome" role="tabpanel">
                 <h5 class="mb-4">C. Treatment Outcome</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
@@ -636,7 +642,7 @@
                     Next <i class="fas fa-arrow-right"></i>
                   </button>
                 </div>
-              </div>
+              </div> -->
 
               <!-- TAB 5: Medicine -->
               <div class="tab-pane fade" id="medicine" role="tabpanel">
@@ -1036,20 +1042,6 @@
                     <tr><th>Start Regimen Type</th><td>${form.reg_start_type.value}</td></tr>
                     <tr><th>Treatment Start Date</th><td>${form.reg_start_date.value}</td></tr>
                     <tr><th>End Regimen Type</th><td>${form.reg_end_type.value}</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Treatment Outcome -->
-            <div class="card shadow-sm border-0 rounded-3 mb-4">
-              <div class="card-body">
-                <h6 class="fw-bold mb-2">Treatment Outcome</h6>
-                <table class="table table-borderless preview-table align-middle mb-0">
-                  <tbody>
-                    <tr><th>Outcome</th><td>${form.out_outcome.value}</td></tr>
-                    <tr><th>Date of Outcome</th><td>${form.out_date.value}</td></tr>
-                    <tr><th>Reason</th><td>${form.out_reason.value}</td></tr>
                   </tbody>
                 </table>
               </div>

@@ -261,6 +261,49 @@
 
     </div>
 
+    <!-- Table for Patients with 2 or More Consecutive Missed Doses -->
+    <div class="card mt-5">
+      <div class="card-body">
+        <h5 class="card-title text-danger">
+          Patients with 2 or More Consecutive Missed Doses
+        </h5>
+
+        <div class="table-responsive mt-3">
+          <table class="table table-bordered align-middle text-center">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Contact</th>
+                <th>No. of Consecutive Missed</th>
+                <th>Last Missed Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @forelse($patientsWithConsecutiveMissed as $index => $patient)
+                <tr>
+                  <td>{{ $index + 1 }}</td>
+                  <td>{{ $patient['full_name'] }}</td>
+                  <td>{{ $patient['username'] }}</td>
+                  <td>{{ $patient['contact'] ?? '-' }}</td>
+                  <td>
+                    <span style="color:red; font-weight:bold;">
+                      {{ $patient['consecutive_missed'] }}
+                    </span>
+                  </td>
+                  <td>{{ $patient['last_missed'] ?? '-' }}</td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="6" class="text-muted">No patients with consecutive missed doses.</td>
+                </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
 
   </div>

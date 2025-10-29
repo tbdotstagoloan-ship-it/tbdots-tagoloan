@@ -10,6 +10,8 @@ use App\Models\Patient;
 use App\Models\Diagnosis;
 use App\Models\Treatment;
 use App\Models\Outcome;
+use App\Models\PatientAccount;
+use App\Models\MedicationAdherence;
 
 class AdminController extends Controller
 {
@@ -30,14 +32,50 @@ class AdminController extends Controller
 
         $totalFacility = DB::table('tbl_diagnosing_facilities')->count();
 
-        return view('admin.index', compact(
-            'totalPatients',
-            'totalPhysician',
-            'totalStaff',
-            'pulmonary',
-            'extra',
-            'totalFacility'
-        ));
+        $accounts = PatientAccount::with('patient')->get();
+
+            $patientsWithConsecutiveMissed = $accounts->map(function ($acc) {
+                $patient = $acc->patient;
+                if (!$patient) return null;
+
+                $adherenceLogs = MedicationAdherence::where('username', $acc->acc_username)
+                    ->orderBy('date', 'desc')
+                    ->pluck('status', 'date');
+
+                $consecutiveMissed = 0;
+                foreach ($adherenceLogs as $status) {
+                    if ($status === 'missed') {
+                        $consecutiveMissed++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if ($consecutiveMissed >= 2) {
+                    return [
+                        'full_name' => $patient->pat_full_name,
+                        'username' => $acc->acc_username,
+                        'contact' => $patient->pat_contact_number,
+                        'consecutive_missed' => $consecutiveMissed,
+                        'last_missed' => MedicationAdherence::where('username', $acc->acc_username)
+                            ->where('status', 'missed')
+                            ->orderByDesc('date')
+                            ->value('date'),
+                    ];
+                }
+
+                return null;
+            })->filter()->values();
+
+            return view('admin.index', compact(
+                'totalPatients',
+                'totalPhysician',
+                'totalStaff',
+                'pulmonary',
+                'extra',
+                'totalFacility',
+                'patientsWithConsecutiveMissed'
+            ));
     }
 
     public function patient(Request $request)

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PatientProfileController;
 use App\Http\Controllers\PhysicianController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,3 +37,5 @@ Route::get('/adherence/patient/{id}', [MedicationAdherenceController::class, 'ge
 // Adverse Event
 Route::post('patients/{username}/adverse-events', [AdverseEventController::class, 'storeFromMobile']);
 
+// Get Patient Details
+Route::get('/patient/details/{username}', [PatientProfileController::class, 'getPatientDetails']);

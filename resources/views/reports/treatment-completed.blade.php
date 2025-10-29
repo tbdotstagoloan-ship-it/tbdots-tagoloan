@@ -158,9 +158,42 @@
         Completed treatment despite inconsistent medication intake.
       </p>
 
-      <div class="d-flex justify-content-end mb-2 gap-1">
-        <a href="{{ route('pdf.treatment-completed.pdf') }}" target="_blank" class="btn btn-danger">
-          <i class="fas fa-file-pdf me-1"></i> Generate Report
+      <div class="d-flex justify-content-end align-items-center mb-3 position-relative">
+        <div class="dropdown">
+          <button class="btn btn-light border-0 shadow-sm rounded-circle d-flex align-items-center justify-content-center" 
+                  type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  style="width:40px; height:40px;">
+            <i class="fas fa-filter text-secondary"></i>
+          </button>
+
+          <div class="dropdown-menu dropdown-menu-end p-4 shadow-lg border-0 rounded-4" style="width: 320px;">
+            <h6 class="fw-semibold text-dark mb-3">Filter by Date</h6>
+            <form method="GET" action="{{ url('treatment-completed') }}" class="row g-3">
+              <div class="col-12">
+                <label class="form-label small text-muted mb-1">Start Date</label>
+                <input type="date" class="form-control form-control-sm" id="start_date" name="start_date"
+                      value="{{ $startDate ?? '' }}">
+              </div>
+              <div class="col-12">
+                <label class="form-label small text-muted mb-1">End Date</label>
+                <input type="date" class="form-control form-control-sm" id="end_date" name="end_date"
+                      value="{{ $endDate ?? '' }}">
+              </div>
+              <div class="col-12 d-flex justify-content-between align-items-center mt-2">
+                <a href="{{ url('treatment-completed') }}" class="btn btn-outline-secondary btn-sm px-3">
+                  Reset
+                </a>
+                <button type="submit" class="btn btn-primary btn-sm px-3">
+                  Filter
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <a href="{{ route('treatment-completed.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}" 
+          target="_blank" class="btn btn-danger ms-2 d-flex align-items-center gap-1">
+          <i class="fas fa-file-pdf"></i> Generate Report
         </a>
       </div>
       

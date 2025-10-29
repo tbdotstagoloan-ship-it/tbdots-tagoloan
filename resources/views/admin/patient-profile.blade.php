@@ -749,15 +749,15 @@
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                            <h5 class="fw-bold mb-1">Laboratory Tests</h5>
+                            <h5 class="fw-bold mb-1">Initial Laboratory Tests</h5>
                             <p class="text-muted small mb-0">Patient’s laboratory test details, dates, and results.</p>
                         </div>
                         @foreach($patient->labTests as $labTest)
                                             <!-- Edit button -->
-                                            <button class="btn btn-sm btn-success d-flex align-items-center gap-1" data-bs-toggle="modal"
+                                            <!-- <button class="btn btn-sm btn-success d-flex align-items-center gap-1" data-bs-toggle="modal"
                                                 data-bs-target="#editLabTestsModal{{ $labTest->id }}">
                                                 <i class="fas fa-plus"></i> Add Result
-                                            </button>
+                                            </button> -->
                                         </div>
 
                                         @if ($patient->screenings->isNotEmpty() && $patient->screenings->first()->labTests->isNotEmpty())
@@ -1039,10 +1039,10 @@
                                                 <h5 class="fw-bold mb-1">History of TB Treatment</h5>
                                                 <p class="text-muted small mb-0">Previous TB treatment information and outcomes.</p>
                                             </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                                            <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                                                 data-bs-target="#editTreatmentHistoryModal">
                                                 <i class="fas fa-plus"></i> Add Record
-                                            </button>
+                                            </button> -->
                                         </div>
 
                                         @if ($patient->treatmentHistories->isNotEmpty())
@@ -1377,66 +1377,6 @@
                                     <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <div>
-                                                <h5 class="fw-bold mb-1">Treatment Outcome</h5>
-                                                <p class="text-muted small mb-0">List of all recorded treatment outcomes and reasons.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" onclick="editOutcome(
-                                                    {{ $patient->treatmentOutcomes->first()->id ?? 0 }}, 
-                                                    '{{ addslashes($patient->treatmentOutcomes->first()->out_outcome ?? '') }}', 
-                                                    '{{ $patient->treatmentOutcomes->first()->out_date ?? '' }}', 
-                                                    '{{ addslashes($patient->treatmentOutcomes->first()->out_reason ?? '') }}'
-                                                )" data-bs-toggle="modal" data-bs-target="#editTreatmentOutcomeModal"
-                                                @if($patient->treatmentOutcomes->isEmpty()) disabled @endif>
-                                                <i class="fas fa-edit"></i> Edit Outcome
-                                            </button>
-                                        </div>
-
-                                        @if ($patient->treatmentOutcomes->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Outcome</th>
-                                                            <th>Date of Outcome</th>
-                                                            <th>Reason</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->treatmentOutcomes as $outcome)
-                                                            @php
-                                                                $hasData = !empty($outcome->out_outcome)
-                                                                    || !empty($outcome->out_date)
-                                                                    || !empty($outcome->out_reason);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>{{ $outcome->out_outcome ?? '—' }}</td>
-                                                                    <td>
-                                                                        @if (!empty($outcome->out_date))
-                                                                            {{ \Carbon\Carbon::parse($outcome->out_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $outcome->out_reason ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">
-                                                No treatment outcome recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
                                                 <h5 class="fw-bold mb-1">Prescribed Drugs</h5>
                                                 <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and continuation phases.</p>
                                             </div>
@@ -1637,6 +1577,65 @@
                                         @if ($patient->txSupporters->isEmpty() && $patient->adherences->isEmpty())
                                             <p class="text-muted fst-italic mt-2">
                                                 No administration of drugs recorded for this patient.
+                                            </p>
+                                        @endif
+                                    </div>
+
+                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <h5 class="fw-bold mb-1">Treatment Outcome</h5>
+                                                <p class="text-muted small mb-0">List of all recorded treatment outcomes and reasons.</p>
+                                            </div>
+                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" onclick="editOutcome(
+                                                    {{ $patient->treatmentOutcomes->first()->id ?? 0 }}, 
+                                                    '{{ addslashes($patient->treatmentOutcomes->first()->out_outcome ?? '') }}', 
+                                                    '{{ $patient->treatmentOutcomes->first()->out_date ?? '' }}', 
+                                                    '{{ addslashes($patient->treatmentOutcomes->first()->out_reason ?? '') }}'
+                                                )" data-bs-toggle="modal" data-bs-target="#editTreatmentOutcomeModal"
+                                                @if($patient->treatmentOutcomes->isEmpty()) disabled @endif>
+                                                <i class="fas fa-edit"></i> Edit Outcome
+                                            </button>
+                                        </div>
+
+                                        @if ($patient->treatmentOutcomes->isNotEmpty())
+                                            <div class="table-responsive">
+                                                <table class="table align-middle">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Outcome</th>
+                                                            <th>Date of Outcome</th>
+                                                            <th>Reason</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($patient->treatmentOutcomes as $outcome)
+                                                            @php
+                                                                $hasData = !empty($outcome->out_outcome)
+                                                                    || !empty($outcome->out_date)
+                                                                    || !empty($outcome->out_reason);
+                                                            @endphp
+
+                                                            @if ($hasData)
+                                                                <tr>
+                                                                    <td>{{ $outcome->out_outcome ?? '—' }}</td>
+                                                                    <td>
+                                                                        @if (!empty($outcome->out_date))
+                                                                            {{ \Carbon\Carbon::parse($outcome->out_date)->format('F j, Y') }}
+                                                                        @else
+                                                                            —
+                                                                        @endif
+                                                                    </td>
+                                                                    <td>{{ $outcome->out_reason ?? '—' }}</td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @else
+                                            <p class="text-muted fst-italic mt-2">
+                                                No treatment outcome recorded for this patient.
                                             </p>
                                         @endif
                                     </div>
@@ -2299,7 +2298,7 @@
 
 
         <!-- History of TB Treatment Modal -->
-        <div class="modal fade" id="editTreatmentHistoryModal" tabindex="-1"
+        <!-- <div class="modal fade" id="editTreatmentHistoryModal" tabindex="-1"
             aria-labelledby="editTreatmentHistoryModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -2308,7 +2307,6 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <!-- ✅ Add route for storing treatment history -->
                     <form method="POST" action="{{ route('treatment-history.store', $patient->id) }}">
                         @csrf
 
@@ -2350,7 +2348,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <!-- Co-morbidities Modal -->
