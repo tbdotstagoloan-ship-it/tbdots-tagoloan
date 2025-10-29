@@ -73,12 +73,16 @@ class PatientSummaryController extends Controller
         return $pdf->stream('Patient Summary Report' . '.pdf');
     }
 
-    public function newlyDiagnosedPDF()
+    public function newlyDiagnosedPDF(Request $request)
     {
         ini_set('memory_limit', '512M');
         set_time_limit(300);
 
-        $patients = DB::table('tbl_patients as p')
+        // Get optional date filters from request
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -90,20 +94,22 @@ class PatientSummaryController extends Controller
                 'd.diag_tb_case_no',
                 't.clas_registration_group'
             )
-            ->where('t.clas_registration_group', 'New')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->cursor();
+            ->where('t.clas_registration_group', 'New');
 
-        // Efficient memory usage
-        $data = collect();
-        foreach ($patients as $record) {
-            $data->push($record);
+        // Apply date filters if provided
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
         }
 
-        $pdf = PDF::loadView('pdf.newly-diagnosed-report', ['new' => $data])
+        $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = PDF::loadView('pdf.newly-diagnosed-report', ['new' => $patients])
             ->setPaper('A4', 'landscape');
 
-        // Add page number
+        // Add page numbers
         $pdf->output(); // Force render
         $canvas = $pdf->getDomPDF()->getCanvas();
         $w = $canvas->get_width();
@@ -112,6 +118,7 @@ class PatientSummaryController extends Controller
 
         return $pdf->stream('Newly Diagnosed Report.pdf');
     }
+
 
 
     public function relapsePDF()

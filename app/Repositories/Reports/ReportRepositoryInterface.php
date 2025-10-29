@@ -6,7 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface ReportRepositoryInterface
 {
-    public function newlyDiagnosed(int $perPage = 10): LengthAwarePaginator;
+    public function newlyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator;
     public function relapse(int $perPage = 10): LengthAwarePaginator;
     public function bacteriologicallyConfirmed(int $perPage = 10): LengthAwarePaginator;
     public function clinicallyDiagnosed(int $perPage = 10): LengthAwarePaginator;

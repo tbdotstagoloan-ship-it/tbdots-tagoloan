@@ -12,8 +12,12 @@ class ReportGenerationController extends Controller
     public function newlyDiagnosed(Request $request)
     {
         $perPage = (int) $request->query('per_page', 10);
-        $new = $this->reports->newlyDiagnosed($perPage);
-        return view('reports.newly-diagnosed', compact('new'));
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        
+        $new = $this->reports->newlyDiagnosed($perPage, $startDate, $endDate);
+        
+        return view('reports.newly-diagnosed', compact('new', 'startDate', 'endDate'));
     }
 
     public function relapse(Request $request)

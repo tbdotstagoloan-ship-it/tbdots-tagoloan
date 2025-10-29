@@ -7,9 +7,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ReportRepository implements ReportRepositoryInterface
 {
-    public function newlyDiagnosed(int $perPage = 10): LengthAwarePaginator
+    public function newlyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -21,8 +21,18 @@ class ReportRepository implements ReportRepositoryInterface
                 'd.diag_tb_case_no',
                 't.clas_registration_group'
             )
-            ->where('t.clas_registration_group', 'new')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('t.clas_registration_group', 'new');
+
+        // Apply date filters if provided
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
+
+        return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 

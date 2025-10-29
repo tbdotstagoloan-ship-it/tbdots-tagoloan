@@ -144,8 +144,35 @@
         List of patients recently diagnosed with TB for monitoring and reporting.
       </p>
 
+      <!-- Date Filter Form -->
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+          <form method="GET" action="{{ url('newly-diagnosed') }}" class="row g-3">
+            <div class="col-md-4">
+              <label for="start_date" class="form-label">Start Date</label>
+              <input type="date" class="form-control" id="start_date" name="start_date" 
+                     value="{{ $startDate ?? '' }}">
+            </div>
+            <div class="col-md-4">
+              <label for="end_date" class="form-label">End Date</label>
+              <input type="date" class="form-control" id="end_date" name="end_date" 
+                     value="{{ $endDate ?? '' }}">
+            </div>
+            <div class="col-md-4 d-flex align-items-end gap-2 mb-3">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-filter me-1"></i> Filter
+              </button>
+              <a href="{{ url('newly-diagnosed') }}" class="btn btn-secondary">
+                <i class="fas fa-redo me-1"></i> Reset
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="d-flex justify-content-end mb-2 gap-1">
-        <a href="{{ route('pdf.newly-diagnosed.pdf') }}" target="_blank" class="btn btn-danger">
+        <a href="{{ route('newly-diagnosed.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
+          class="btn btn-danger">
           <i class="fas fa-file-pdf me-1"></i> Generate Report
         </a>
       </div>

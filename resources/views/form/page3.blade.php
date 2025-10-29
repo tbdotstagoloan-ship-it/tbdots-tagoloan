@@ -187,17 +187,17 @@
                     E. Serious Adverse Events
                   </button>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <button class="nav-link" id="progress-tab" data-bs-toggle="tab" data-bs-target="#progress" type="button" role="tab">
                     F. Patient Progress Report
                   </button>
-                </li>
+                </li> -->
                 <li class="nav-item">
                   <button class="nav-link" id="close-tab" data-bs-toggle="tab" data-bs-target="#close" type="button" role="tab">
                     G. Close Contacts
                   </button>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <button class="nav-link" id="sputum-tab" data-bs-toggle="tab" data-bs-target="#sputum" type="button" role="tab">
                     H. Sputum Monitoring
                   </button>
@@ -211,7 +211,7 @@
                   <button class="nav-link" id="followup-tab" data-bs-toggle="tab" data-bs-target="#followup" type="button" role="tab">
                     J. Post Treatment Follow-up
                   </button>
-                </li>
+                </li> -->
               </ul>
 
             <!-- Tab Content -->
@@ -244,7 +244,7 @@
               </div>
 
               <!-- TAB 2: Patient Progress-->
-              <div class="tab-pane fade" id="progress" role="tabpanel">
+              <!-- <div class="tab-pane fade" id="progress" role="tabpanel">
                 <h5 class="mb-4">F. Patient Progress Report Form</h5>
                 <div class="row mb-2">
                   <div class="col-md-3">
@@ -272,7 +272,7 @@
                   Next <i class="fas fa-arrow-right"></i>
                 </button>
                 </div>
-              </div>
+              </div> -->
 
               <!-- TAB 3: Close Contact -->
               <div class="tab-pane fade" id="close" role="tabpanel">
@@ -340,14 +340,12 @@
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                   <i class="fas fa-arrow-left"></i> Back
                 </button>
-                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
+                  <button type="submit" class="btn btn-success">Submit</button>
                 </div>
               </div>
 
               <!-- TAB 4: Sputum Monitoring -->
-              <div class="tab-pane fade" id="sputum" role="tabpanel">
+              <!-- <div class="tab-pane fade" id="sputum" role="tabpanel">
                 <h5 class="mb-4">H. Sputum Monitoring</h5>
                 <div class="row mb-2">
                   <div class="col-md-4">
@@ -373,10 +371,10 @@
                   Next <i class="fas fa-arrow-right"></i>
                 </button>
                 </div>
-              </div>
+              </div> -->
 
               <!-- TAB 5: Chest Xray -->
-              <div class="tab-pane fade" id="xray" role="tabpanel">
+              <!-- <div class="tab-pane fade" id="xray" role="tabpanel">
                 <h5 class="mb-4">I. Chest X-ray</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
@@ -411,10 +409,10 @@
                   Next <i class="fas fa-arrow-right"></i>
                 </button>
                 </div>
-              </div>
+              </div> -->
 
               <!-- TAB 6: Follow Up -->
-              <div class="tab-pane fade" id="followup" role="tabpanel">
+              <!-- <div class="tab-pane fade" id="followup" role="tabpanel">
                 <h5 class="mb-4">J. Post Treatment Follow-up</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
@@ -446,7 +444,7 @@
                 </button>
                   <button type="submit" class="btn btn-success">Submit</button>
                 </div>
-              </div>
+              </div> -->
 
           </form>
 
@@ -643,70 +641,11 @@
           </div>
         </div>
 
-        <!-- Patient Progress Report Form -->
-        <div class="card shadow-sm border-0 rounded-3 mb-4">
-          <div class="card-body">
-            <h6 class="fw-bold mb-1">F. Patient Progress Report Form</h6>
-            <table class="table table-borderless preview-table align-middle mb-0">
-              <tbody>
-                <tr><th>Date</th><td>${p.prog_date.value || '-'}</td></tr>
-                <tr><th>Problem</th><td>${p.prog_problem.value || '-'}</td></tr>
-                <tr><th>Action Taken</th><td>${p.prog_action_taken.value || '-'}</td></tr>
-                <tr><th>Plan</th><td>${p.prog_plan.value || '-'}</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
         <!-- Close Contacts -->
         <div class="card shadow-sm border-0 rounded-3 mb-4">
           <div class="card-body">
             <h6 class="fw-bold mb-1">G. Close Contacts</h6>
             ${closeContactsHTML}
-          </div>
-        </div>
-
-        <!-- Sputum Monitoring -->
-        <div class="card shadow-sm border-0 rounded-3 mb-4">
-          <div class="card-body">
-            <h6 class="fw-bold mb-1">H. Sputum Monitoring</h6>
-            <table class="table table-borderless preview-table align-middle mb-0">
-              <tbody>
-                <tr><th>Date Collected</th><td>${p.sput_date_collected.value || '-'}</td></tr>
-                <tr><th>Smear Microscopy / TB LAMP</th><td>${p.sput_smear_result.value || '-'}</td></tr>
-                <tr><th>Xpert MTB/RIF</th><td>${p.sput_xpert_result.value || '-'}</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Chest X-ray -->
-        <div class="card shadow-sm border-0 rounded-3 mb-4">
-          <div class="card-body">
-            <h6 class="fw-bold mb-1">I. Chest X-ray</h6>
-            <table class="table table-borderless preview-table align-middle mb-0">
-              <tbody>
-                <tr><th>Date Examined</th><td>${p.xray_date_examined.value || '-'}</td></tr>
-                <tr><th>Impression / Comparative Reading</th><td>${p.xray_impression.value || '-'}</td></tr>
-                <tr><th>Descriptive Comments</th><td>${p.xray_descriptive_comment.value || '-'}</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Post Treatment Follow-up -->
-        <div class="card shadow-sm border-0 rounded-3 mb-4">
-          <div class="card-body">
-            <h6 class="fw-bold mb-1">J. Post Treatment Follow-up</h6>
-            <table class="table table-borderless preview-table align-middle mb-0">
-              <tbody>
-                <tr><th>Months After Treatment</th><td>${p.fol_months_after_tx.value || '-'}</td></tr>
-                <tr><th>Date</th><td>${p.fol_date.value || '-'}</td></tr>
-                <tr><th>CXR Findings</th><td>${p.fol_cxr_findings.value || '-'}</td></tr>
-                <tr><th>Smear / Xpert</th><td>${p.fol_smear_xpert.value || '-'}</td></tr>
-                <tr><th>TBC & DST</th><td>${p.fol_tbc_dst.value || '-'}</td></tr>
-              </tbody>
-            </table>
           </div>
         </div>
 

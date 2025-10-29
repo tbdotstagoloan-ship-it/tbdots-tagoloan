@@ -178,3 +178,6 @@ Route::delete('/facilities/{id}', [DiagnosingFacilityController::class, 'destroy
 // Medication
 Route::get('medication-adherence-flags', [MedicationAdherenceFlagsController::class, 'index'])
     ->name('medication.flags');
+
+Route::get('newly-diagnosed/pdf', [PatientSummaryController::class, 'newlyDiagnosedPDF'])
+     ->name('newly-diagnosed.pdf');
