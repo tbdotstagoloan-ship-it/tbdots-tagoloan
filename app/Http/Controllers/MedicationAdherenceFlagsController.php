@@ -50,7 +50,7 @@ class MedicationAdherenceFlagsController extends Controller
             }
 
             // Only include if 2 or more consecutive missed
-            if ($consecutiveMissed < 2) {
+            if ($consecutiveMissed <= 2) {
                 return null;
             }
 
