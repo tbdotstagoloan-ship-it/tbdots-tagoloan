@@ -261,7 +261,39 @@
 
     </div>
 
-
+    <!-- Missed Doses Table -->
+    <div class="card mt-4">
+      <div class="card-body">
+        <h5 class="card-title">Patients Who Missed 2 or More Consecutive Doses</h5>
+        @if(count($missedPatients) > 0)
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>#</th>
+                  <th>TB Case Number</th>
+                  <th>Patient Name</th>
+                  <th>Total Missed</th>
+                  <th>Last Missed Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($missedPatients as $index => $missed)
+                  <tr>
+                    <td>{{ $missed->diag_tb_case_no }}</td>
+                    <td>{{ $missed->pat_full_name }}</td>
+                    <td>{{ $missed->total_missed }}</td>
+                    <td>{{ \Carbon\Carbon::parse($missed->last_missed_date)->format('M d, Y') }}</td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        @else
+          <p class="text-muted mb-0">No patients have missed 2 or more consecutive doses.</p>
+        @endif
+      </div>
+    </div>
 
   </div>
 

@@ -30,13 +30,36 @@ class AdminController extends Controller
 
         $totalFacility = DB::table('tbl_diagnosing_facilities')->count();
 
+        $missedPatients = DB::select("
+            SELECT 
+                p.pat_full_name, 
+                d.diag_tb_case_no, 
+                COUNT(m.id) AS total_missed, 
+                MAX(m.date) AS last_missed_date
+            FROM tbl_medication_adherences m
+            JOIN tbl_patients p ON p.id = m.patient_id
+            JOIN tbl_diagnosis d ON d.patient_id = p.id
+            WHERE m.status = 'missed'
+            AND EXISTS (
+                SELECT 1 
+                FROM tbl_medication_adherences m2
+                WHERE m2.patient_id = m.patient_id
+                    AND m2.status = 'missed'
+                    AND ABS(DATEDIFF(m.date, m2.date)) = 1
+            )
+            GROUP BY p.id, p.pat_full_name, d.diag_tb_case_no
+            ORDER BY last_missed_date DESC
+        ");
+
+
         return view('admin.index', compact(
             'totalPatients',
             'totalPhysician',
             'totalStaff',
             'pulmonary',
             'extra',
-            'totalFacility'
+            'totalFacility',
+            'missedPatients'
         ));
     }
 
