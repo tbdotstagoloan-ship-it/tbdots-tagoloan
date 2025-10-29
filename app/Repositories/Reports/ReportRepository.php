@@ -36,9 +36,9 @@ class ReportRepository implements ReportRepositoryInterface
             ->paginate($perPage);
     }
 
-    public function relapse(int $perPage = 10): LengthAwarePaginator
+    public function relapse(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -50,14 +50,22 @@ class ReportRepository implements ReportRepositoryInterface
                 'd.diag_tb_case_no',
                 't.clas_registration_group'
             )
-            ->where('t.clas_registration_group', 'Relapse')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->paginate($perPage);
+            ->where('t.clas_registration_group', 'Relapse');
+
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
+
+        return $query->orderBy('d.diag_tb_case_no', 'desc')->paginate($perPage);
     }
 
-    public function bacteriologicallyConfirmed(int $perPage = 10): LengthAwarePaginator
+
+    public function bacteriologicallyConfirmed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -69,14 +77,22 @@ class ReportRepository implements ReportRepositoryInterface
                 'd.diag_diagnosis_date',
                 'c.clas_bacteriological_status as tb_classification'
             )
-            ->where('c.clas_bacteriological_status', 'Bacteriologically-confirmed TB')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('c.clas_bacteriological_status', 'Bacteriologically-confirmed TB');
+
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function clinicallyDiagnosed(int $perPage = 10): LengthAwarePaginator
+    public function clinicallyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -88,14 +104,22 @@ class ReportRepository implements ReportRepositoryInterface
                 'd.diag_diagnosis_date',
                 'c.clas_bacteriological_status as tb_classification'
             )
-            ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
+
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function pulmonary(int $perPage = 10): LengthAwarePaginator
+    public function pulmonary(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -107,14 +131,22 @@ class ReportRepository implements ReportRepositoryInterface
                 'd.diag_diagnosis_date',
                 'c.clas_anatomical_site as anatomical_site'
             )
-            ->where('c.clas_anatomical_site', 'Pulmonary')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('c.clas_anatomical_site', 'Pulmonary');
+
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function extraPulmonary(int $perPage = 10): LengthAwarePaginator
+    public function extraPulmonary(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -127,14 +159,22 @@ class ReportRepository implements ReportRepositoryInterface
                 'c.clas_anatomical_site as anatomical_site',
                 'c.clas_site_other as site_other'
             )
-            ->where('c.clas_anatomical_site', 'Extra-pulmonary')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('c.clas_anatomical_site', 'Extra-pulmonary');
+
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function ongoingTreatment(int $perPage = 10): LengthAwarePaginator
+    public function ongoingTreatment(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
@@ -147,14 +187,26 @@ class ReportRepository implements ReportRepositoryInterface
                 'r.reg_start_date',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Ongoing')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('t.out_outcome', 'Ongoing');
+
+            if ($startDate) {
+                $query->whereDate('r.reg_start_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('r.reg_start_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function barangayCases(int $perPage = 10): LengthAwarePaginator
-    {
-        return DB::table('tbl_patients as p')
+    public function barangayCases(
+    int $perPage = 10,
+    ?string $startDate = null,
+    ?string $endDate = null,
+    ?string $barangay = null
+    ): LengthAwarePaginator {
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -166,14 +218,27 @@ class ReportRepository implements ReportRepositoryInterface
                 'd.diag_diagnosis_date',
                 'd.diag_tb_case_no',
                 't.out_outcome'
-            )
-            ->orderBy('barangay')
+            );
+
+        // Optional filters
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
+        if ($barangay) {
+            $query->where('p.pat_permanent_address', $barangay);
+        }
+
+        return $query->orderBy('barangay')
+            ->orderByDesc('d.diag_tb_case_no')
             ->paginate($perPage);
     }
 
-    public function intensiveTreatment(int $perPage = 10): LengthAwarePaginator
+    public function intensiveTreatment(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
             ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
@@ -198,14 +263,22 @@ class ReportRepository implements ReportRepositoryInterface
             ->where('pd.drug_name', '4FDC')
             ->where(function($q){
                 $q->whereNull('t.out_outcome')->orWhere('t.out_outcome', 'Ongoing');
-            })
-            ->orderBy('a.pha_intensive_start', 'desc')
+            });
+
+            if ($startDate) {
+                $query->whereDate('a.pha_intensive_start', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('a.pha_intensive_end', '<=', $endDate);
+            }
+
+            return $query->orderBy('a.pha_intensive_start', 'desc')
             ->paginate($perPage);
     }
 
-    public function maintenanceTreatment(int $perPage = 10): LengthAwarePaginator
+    public function maintenanceTreatment(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
             ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
@@ -230,16 +303,24 @@ class ReportRepository implements ReportRepositoryInterface
             ->where('pd.drug_con_name', '2FDC')
             ->where(function($q){
                 $q->whereNull('t.out_outcome')->orWhere('t.out_outcome', 'Ongoing');
-            })
+            });
+
+            if ($startDate) {
+                $query->whereDate('a.pha_continuation_start', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('a.pha_continuation_end', '<=', $endDate);
+            }
+
             // 👉 Para lumabas lang kapag Day 1 or higher
             // ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
-            ->orderBy('a.pha_continuation_start')
+            return $query->orderBy('a.pha_continuation_start')
             ->paginate($perPage);
     }
 
-    public function underage(int $perPage = 10): LengthAwarePaginator
+    public function underage(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->leftJoin('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -249,16 +330,24 @@ class ReportRepository implements ReportRepositoryInterface
                 'p.pat_permanent_address as barangay',
                 'd.diag_tb_case_no',
                 'd.diag_diagnosis_date',
-                't.out_outcome as outcome'
+                't.out_outcome as out_outcome'
             )
-            ->whereRaw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) < 18')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->whereRaw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) < 18');
+
+            if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function sputumMonitoring(int $perPage = 10): LengthAwarePaginator
+    public function sputumMonitoring(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_sputum_monitorings as s', 'p.id', '=', 's.patient_id')
             ->select(
                 'p.pat_full_name',
@@ -266,15 +355,24 @@ class ReportRepository implements ReportRepositoryInterface
                 's.sput_smear_result',
                 's.sput_xpert_result'
             )
-            ->where('s.sput_xpert_result', 'Positive')
-            ->orderBy('p.pat_full_name')
-            ->orderBy('s.sput_date_collected', 'desc')
+            ->where('s.sput_xpert_result', 'Positive');
+
+        if ($startDate) {
+            $query->whereDate('s.sput_date_collected', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('s.sput_date_collected', '<=', $endDate);
+        }
+
+        return $query->orderBy('p.pat_full_name')
+            ->orderByDesc('s.sput_date_collected')
             ->paginate($perPage);
     }
 
-    public function cured(int $perPage = 10): LengthAwarePaginator
+
+    public function cured(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
@@ -288,14 +386,22 @@ class ReportRepository implements ReportRepositoryInterface
                 't.out_date as outcome_date',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Cured')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('t.out_outcome', 'Cured');
+
+            if ($startDate) {
+                $query->whereDate('r.reg_start_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('r.reg_start_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function treatmentCompleted(int $perPage = 10): LengthAwarePaginator
+    public function treatmentCompleted(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query=  DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
@@ -310,14 +416,22 @@ class ReportRepository implements ReportRepositoryInterface
                 't.out_reason',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Treatment Completed')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('t.out_outcome', 'Treatment Completed');
+
+            if ($startDate) {
+                $query->whereDate('r.reg_start_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('r.reg_start_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function lostToFollowUp(int $perPage = 10): LengthAwarePaginator
+    public function lostToFollowUp(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -330,14 +444,22 @@ class ReportRepository implements ReportRepositoryInterface
                 't.out_reason',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Lost to Follow-Up')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('t.out_outcome', 'Lost to Follow-Up');
+
+            if ($startDate) {
+                $query->whereDate('t.out_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('t.out_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 
-    public function expired(int $perPage = 10): LengthAwarePaginator
+    public function expired(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        return DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -351,8 +473,16 @@ class ReportRepository implements ReportRepositoryInterface
                 't.out_reason',
                 't.out_outcome as out_outcome'
             )
-            ->where('t.out_outcome', 'Died')
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->where('t.out_outcome', 'Died');
+
+            if ($startDate) {
+                $query->whereDate('t.out_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('t.out_date', '<=', $endDate);
+            }
+
+            return $query->orderBy('d.diag_tb_case_no', 'desc')
             ->paginate($perPage);
     }
 

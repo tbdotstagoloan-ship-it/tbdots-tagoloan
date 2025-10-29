@@ -121,9 +121,15 @@ class PatientSummaryController extends Controller
 
 
 
-    public function relapsePDF()
+    public function relapsePDF(Request $request)
     {
-        $relapse = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -135,39 +141,39 @@ class PatientSummaryController extends Controller
                 'd.diag_tb_case_no',
                 't.clas_registration_group'
             )
-            ->where('t.clas_registration_group', 'Relapse')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('t.clas_registration_group', 'Relapse');
 
-        $pdf = Pdf::loadView('pdf.relapse-report', compact('relapse'))
-        ->setPaper('A4', 'landscape');
-
-         // 📝 Force render to get the canvas
-        $pdf->output();
-        $canvas = $pdf->getDomPDF()->getCanvas();
-
-        $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
-            return $pdf->stream('Relapse Report.pdf');
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
         }
 
-    public function bacteriologicallyConfirmedPDF()
+        $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.relapse-report', ['relapse' => $patients])
+            ->setPaper('A4', 'landscape');
+
+        $pdf->output();
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $w = $canvas->get_width();
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
+
+        return $pdf->stream('Relapse Report.pdf');
+    }
+
+
+    public function bacteriologicallyConfirmedPDF(Request $request)
     {
-        $bacteriologicallyConfirmed = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -179,39 +185,38 @@ class PatientSummaryController extends Controller
                 'd.diag_diagnosis_date',
                 'c.clas_bacteriological_status as tb_classification'
             )
-            ->where('c.clas_bacteriological_status', 'Bacteriologically-confirmed TB')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('c.clas_bacteriological_status', 'Bacteriologically-confirmed TB');
 
-        $pdf = Pdf::loadView('pdf.bacteriologically-confirmed-report', compact('bacteriologicallyConfirmed'))
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.bacteriologically-confirmed-report', ['bacteriologicallyConfirmed' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Bacteriologically-Confirmed TB Report.pdf');
     }
 
-    public function clinicallyDiagnosedPDF()
+    public function clinicallyDiagnosedPDF(Request $request)
     {
-        $clinicallyDiagnosed = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -223,39 +228,39 @@ class PatientSummaryController extends Controller
                 'd.diag_diagnosis_date',
                 'c.clas_bacteriological_status as tb_classification'
             )
-            ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
 
-        $pdf = Pdf::loadView('pdf.clinically-diagnosed-report', compact('clinicallyDiagnosed'))
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            $patient = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.clinically-diagnosed-report', ['clinicallyDiagnosed' => $patient])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Clinically Diagnosed Report.pdf');
     }
 
-    public function pulmonaryPDF()
+    public function pulmonaryPDF(Request $request)
     {
-        $pulmonary = DB::table('tbl_patients as p')
+
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -267,39 +272,38 @@ class PatientSummaryController extends Controller
                 'd.diag_diagnosis_date',
                 'c.clas_anatomical_site as anatomical_site'
             )
-            ->where('c.clas_anatomical_site', 'Pulmonary')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('c.clas_anatomical_site', 'Pulmonary');
 
-        $pdf = Pdf::loadView('pdf.pulmonary-report', compact('pulmonary'))
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.pulmonary-report', ['pulmonary' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Pulmonary TB Report.pdf');
     }
 
-    public function extraPulmonaryPDF()
+    public function extraPulmonaryPDF(Request $request)
     {
-        $extraPulmonary = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
             ->select(
@@ -312,39 +316,38 @@ class PatientSummaryController extends Controller
                 'c.clas_anatomical_site as anatomical_site',
                 'c.clas_site_other as site_other'
             )
-            ->where('c.clas_anatomical_site', 'Extra-pulmonary')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('c.clas_anatomical_site', 'Extra-pulmonary');
 
-        $pdf = Pdf::loadView('pdf.extra-pulmonary-report', compact('extraPulmonary'))
+            if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.extra-pulmonary-report', ['extraPulmonary' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Extra Pulmonary TB Report.pdf');
     }
 
-    public function ongoingTreatmentPDF()
+    public function ongoingTreatmentPDF(Request $request)
     {
-        $ongoingPatients = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
@@ -357,39 +360,39 @@ class PatientSummaryController extends Controller
                 'r.reg_start_date',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Ongoing')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('t.out_outcome', 'Ongoing');
 
-        $pdf = Pdf::loadView('pdf.ongoing-treatment-report', compact('ongoingPatients'))
+            if ($startDate) {
+                $query->whereDate('r.reg_start_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('r.reg_start_date', '<=', $endDate);
+            }
+
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.ongoing-treatment-report', ['ongoingPatients' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Ongoing Treatment Report.pdf');
     }
 
-    public function barangayCasesPDF()
+    public function barangayCasesPDF(Request $request)
     {
-        $brgyCases = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        $barangay = $request->query('barangay');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -401,40 +404,46 @@ class PatientSummaryController extends Controller
                 'd.diag_diagnosis_date',
                 'd.diag_tb_case_no',
                 't.out_outcome'
-            )
+            );
+
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
+        if ($barangay) {
+            $query->where('p.pat_permanent_address', $barangay);
+        }
+
+        $brgyCases = $query
             ->orderBy('barangay')
-            ->orderBy('d.diag_tb_case_no','desc')
+            ->orderByDesc('d.diag_tb_case_no')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.barangay-cases-report', compact('brgyCases'))
-        ->setPaper('A4', 'landscape');
+        $pdf = Pdf::loadView('pdf.barangay-cases-report', compact('brgyCases', 'barangay', 'startDate', 'endDate'))
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
         $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $fontMetrics->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Barangay Cases Report.pdf');
     }
 
-    public function intensiveTreatmentPDF()
+
+    public function intensiveTreatmentPDF(Request $request)
     {
-        $intensive = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
             ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
@@ -443,6 +452,7 @@ class PatientSummaryController extends Controller
                 'p.pat_full_name',
                 'p.pat_sex',
                 'pd.drug_name',
+                'pd.drug_no_of_tablets',
                 'pd.drug_strength',
                 'pd.drug_unit',
                 'a.pha_intensive_start',
@@ -460,40 +470,39 @@ class PatientSummaryController extends Controller
             ->where(function($query) {
                 $query->whereNull('t.out_outcome')
                     ->orWhere('t.out_outcome', 'Ongoing'); // only ongoing patients
-            })
-            // ->orderBy('p.pat_full_name')
-            ->orderBy('a.pha_intensive_start', 'desc')
-            ->get();
+            });
 
-        $pdf = Pdf::loadView('pdf.intensive-treatment-report', compact('intensive'))
+            if ($startDate) {
+                $query->whereDate('a.pha_intensive_start', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('a.pha_intensive_end', '<=', $endDate);
+            }
+
+            // ->orderBy('p.pat_full_name')
+            $patients = $query->orderBy('a.pha_intensive_start', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.intensive-treatment-report', ['intensive' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Intensive Treatment Report.pdf'); 
     }
 
-    public function maintenanceTreatmentPDF()
+    public function maintenanceTreatmentPDF(Request $request)
     {
-        $maintenanceTreatment = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
             ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
@@ -502,6 +511,7 @@ class PatientSummaryController extends Controller
                 'p.pat_full_name',
                 'p.pat_sex',
                 'pd.drug_con_name',
+                'pd.drug_no_of_tablets',
                 'pd.drug_con_strength',
                 'pd.drug_con_unit',
                 'a.pha_continuation_start',
@@ -519,42 +529,41 @@ class PatientSummaryController extends Controller
             ->where(function($query) {
                 $query->whereNull('t.out_outcome')
                     ->orWhere('t.out_outcome', 'Ongoing'); // only ongoing patients
-            })
-            // ->orderBy('p.pat_full_name')
-            ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
-            ->orderBy('a.pha_continuation_start')
-            ->get();
+            });
 
-        $pdf = Pdf::loadView('pdf.maintenance-treatment-report', compact('maintenanceTreatment'))
+            if ($startDate) {
+                $query->whereDate('a.pha_continuation_start', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('a.pha_continuation_end', '<=', $endDate);
+            }
+
+            // ->orderBy('p.pat_full_name')
+            // ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
+            $patients = $query->orderBy('a.pha_continuation_start')->get();
+
+        $pdf = Pdf::loadView('pdf.maintenance-treatment-report', ['maintenanceTreatment' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Maintenance Treatment Report.pdf');
 
     }
 
-    public function underagePDF()
+    public function underagePDF(Request $request)
     {
-        $underage = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->leftJoin('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -564,41 +573,40 @@ class PatientSummaryController extends Controller
                 'p.pat_permanent_address as barangay',
                 'd.diag_tb_case_no',
                 'd.diag_diagnosis_date',
-                't.out_outcome as outcome'
+                't.out_outcome as out_outcome'
             )
-            ->whereRaw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) < 18')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->whereRaw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) < 18');
 
-        $pdf = Pdf::loadView('pdf.underage-report', compact('underage'))
-        ->setPaper('A4', 'landscape');
+             if ($startDate) {
+                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+            }
+
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.underage-report', ['underage' => $patients])
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Underage Patients Report.pdf');
     }
 
-    public function sputumMonitoringPDF()
+    public function sputumMonitoringPDF(Request $request)
     {
-        $sputum = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_sputum_monitorings as s', 'p.id', '=', 's.patient_id')
             ->select(
                 'p.pat_full_name',
@@ -606,40 +614,41 @@ class PatientSummaryController extends Controller
                 's.sput_smear_result',
                 's.sput_xpert_result'
             )
-            ->where('s.sput_xpert_result', 'Positive')
-            ->orderBy('p.pat_full_name')
-            ->orderBy('s.sput_date_collected')
+            ->where('s.sput_xpert_result', 'Positive');
+
+        if ($startDate) {
+            $query->whereDate('s.sput_date_collected', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('s.sput_date_collected', '<=', $endDate);
+        }
+
+        $patients = $query->orderBy('p.pat_full_name')
+            ->orderByDesc('s.sput_date_collected')
             ->get();
 
-        $pdf = Pdf::loadView('pdf.sputum-monitoring-report', compact('sputum'))
-        ->setPaper('A4', 'landscape');
+        $pdf = Pdf::loadView('pdf.sputum-monitoring-report', ['sputum' => $patients])
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Sputum Monitoring Report.pdf');
     }
 
-    public function curedPDF()
+
+    public function curedPDF(Request $request)
     {
-        $cured = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
@@ -653,39 +662,38 @@ class PatientSummaryController extends Controller
                 't.out_date as outcome_date',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Cured')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('t.out_outcome', 'Cured');
+            
+            if ($startDate) {
+                $query->whereDate('r.reg_start_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('r.reg_start_date', '<=', $endDate);
+            }
 
-        $pdf = Pdf::loadView('pdf.cured-report', compact('cured'))
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.cured-report', ['cured' => $patients])
         ->setPaper('A4', 'landscape');
         
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Cured Patients Report.pdf'); 
     }
 
-    public function treatmentCompletedPDF()
+    public function treatmentCompletedPDF(Request $request)
     {
-        $treatmentCompleted = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
@@ -700,39 +708,38 @@ class PatientSummaryController extends Controller
                 't.out_reason',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Treatment Completed')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('t.out_outcome', 'Treatment Completed');
 
-        $pdf = Pdf::loadView('pdf.treatment-completed-report', compact('treatmentCompleted'))
+            if ($startDate) {
+                $query->whereDate('r.reg_start_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('r.reg_start_date', '<=', $endDate);
+            }
+
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.treatment-completed-report', ['treatmentCompleted' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Treatment Completed Report.pdf'); 
     }
 
-    public function lostToFollowUpPDF()
+    public function lostToFollowUpPDF(Request $request)
     {
-        $lostToFollowUp = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->select(
@@ -745,39 +752,38 @@ class PatientSummaryController extends Controller
                 't.out_reason',
                 't.out_outcome as outcome'
             )
-            ->where('t.out_outcome', 'Lost to follow-up')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('t.out_outcome', 'Lost to follow-up');
 
-        $pdf = Pdf::loadView('pdf.lost-to-follow-up-report', compact('lostToFollowUp'))
+            if ($startDate) {
+                $query->whereDate('t.out_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('t.out_date', '<=', $endDate);
+            }
+
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.lost-to-follow-up-report', ['lostToFollowUp' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Lost to Follow Up Report.pdf');
     }
 
-    public function expiredPDF()
+    public function expiredPDF(Request $request)
     {
-        $expired = DB::table('tbl_patients as p')
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
             ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
@@ -792,32 +798,25 @@ class PatientSummaryController extends Controller
                 't.out_date as outcome_date',
                 't.out_reason'
             )
-            ->where('t.out_outcome', 'Died')
-            ->orderBy('d.diag_tb_case_no', 'desc')
-            ->get();
+            ->where('t.out_outcome', 'Died');
+            
+            if ($startDate) {
+                $query->whereDate('t.out_date', '>=', $startDate);
+            }
+            if ($endDate) {
+                $query->whereDate('t.out_date', '<=', $endDate);
+            }
 
-        $pdf = Pdf::loadView('pdf.expired-report', compact('expired'))
+            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+
+        $pdf = Pdf::loadView('pdf.expired-report', ['expired' => $patients])
         ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
-
         $w = $canvas->get_width();
-        $h = $canvas->get_height();
-
-        // ✅ Get font using font metrics (this works in most Dompdf versions)
-        $fontMetrics = $pdf->getDomPDF()->getFontMetrics();
-        $font = $fontMetrics->getFont('helvetica', 'normal'); // 'times' is equivalent to Times New Roman
-
-        // ✅ Page number at upper right corner
-        $canvas->page_text(
-            $w - 50,             // adjust X position
-            30,                   // Y position (top)
-            "{PAGE_NUM}",
-            $font,                // formal font
-            11,                   // font size
-            [0, 0, 0]             // black text
-        );
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Expired Patients Report.pdf');
     }

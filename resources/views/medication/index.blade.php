@@ -197,31 +197,44 @@
                 <th>Contact Number</th>
                 <th>Username</th>
                 <th>Last Missed</th>
+                <th>Total Missed Doses</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-            @if(!empty($flagged) && $flagged->count() > 0)
-              @foreach($flagged as $row)
+              @if(!empty($flagged) && $flagged->count() > 0)
+                @foreach($flagged as $row)
+                  <tr>
+                    <td>{{ $row['patient_id'] }}</td>
+                    <td>
+                      <a href="{{ url('admin/patient-profile/'.$row['patient_id']) }}" style="text-decoration: none; color: #212529;">
+                        {{ $row['full_name'] }}
+                      </a>
+                    </td>
+                    <td>{{ $row['contact'] ?? '—' }}</td>
+                    <td>{{ $row['username'] }}</td>
+                    <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
+                    <td>
+                      @if($row['consecutive_missed'] >= 2)
+                        <span style="color:red;">{{ $row['consecutive_missed'] }}</span>
+                      @elseif($row['consecutive_missed'] == 1)
+                        <span>{{ $row['consecutive_missed'] }}</span>
+                      @else
+                        <span>{{ $row['consecutive_missed'] }}</span>
+                      @endif
+                    </td>
+                    <td><span class="status-badge bg-danger">Missed</span></td>
+                  </tr>
+                @endforeach
+              @else
                 <tr>
-                  <td>{{ $row['patient_id'] }}</td>
-                  <td>
-                    <a href="{{ url('admin/patient-profile/'.$row['patient_id']) }}" style="text-decoration: none; color: #212529;">
-                      {{ $row['full_name'] }}
-                    </a>
+                  <td colspan="7" class="text-center text-muted">
+                    No flagged patients (no missed logs in last {{ $days ?? 7 }} days).
                   </td>
-                  <td>{{ $row['contact'] ?? '—' }}</td>
-                  <td>{{ $row['username'] }}</td>
-                  <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
-                  <td><span class="status-badge bg-danger">Missed</span></td>
                 </tr>
-              @endforeach
-            @else
-              <tr>
-                <td colspan="6" class="text-center text-muted">No flagged patients (no missed logs in last {{ $days ?? 7 }} days).</td>
-              </tr>
-            @endif
-          </tbody>
+              @endif
+            </tbody>
+
           </table>
 
         </div>

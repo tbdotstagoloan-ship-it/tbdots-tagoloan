@@ -162,8 +162,8 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Sex</th>
                 <th>Drug</th>
+                <th>No. of Tablets</th>
                 <th>Strength</th>
                 <th>Unit</th>
                 <th>Intensive Start</th>
@@ -176,8 +176,8 @@
             @forelse($maintenanceTreatment as $patient)
             <tr>
                 <td>{{ $patient->pat_full_name }}</td>
-                <td>{{ $patient->pat_sex }}</td>
                 <td>{{ $patient->drug_con_name }}</td>
+                <td>{{ $patient->drug_con_no_of_tablets }}</td>
                 <td>{{ $patient->drug_con_strength }}</td>
                 <td>{{ $patient->drug_con_unit }}</td>
                 <td>{{ \Carbon\Carbon::parse($patient->pha_continuation_start)->format('F j, Y') }}</td>

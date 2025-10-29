@@ -179,5 +179,51 @@ Route::delete('/facilities/{id}', [DiagnosingFacilityController::class, 'destroy
 Route::get('medication-adherence-flags', [MedicationAdherenceFlagsController::class, 'index'])
     ->name('medication.flags');
 
+// Filtered PDF Routes
 Route::get('newly-diagnosed/pdf', [PatientSummaryController::class, 'newlyDiagnosedPDF'])
-     ->name('newly-diagnosed.pdf');
+    ->name('newly-diagnosed.pdf');
+
+Route::get('relapse/pdf', [PatientSummaryController::class, 'relapsePDF'])
+    ->name('relapse.pdf');
+
+Route::get('underage/pdf', [PatientSummaryController::class, 'underagePDF'])
+    ->name('underage.pdf');
+
+Route::get('bacteriologically-confirmed/pdf', [PatientSummaryController::class, 'bacteriologicallyConfirmedPDF'])
+    ->name('bacteriologically-confirmed.pdf');
+
+Route::get('clinically-diagnosed/pdf', [PatientSummaryController::class, 'clinicallyDiagnosedPDF'])
+    ->name('clinically-diagnosed.pdf');
+
+Route::get('pulmonary/pdf', [PatientSummaryController::class, 'pulmonaryPDF'])
+    ->name('pulmonary.pdf');
+
+Route::get('extra-pulmonary/pdf', [PatientSummaryController::class, 'extraPulmonaryPDF'])
+    ->name('extra-pulmonary.pdf');
+
+Route::get('ongoing-treatment/pdf', [PatientSummaryController::class, 'ongoingTreatmentPDF'])
+    ->name('ongoing-treatment.pdf');
+
+Route::get('intensive-treatment/pdf', [PatientSummaryController::class, 'intensiveTreatmentPDF'])
+    ->name('intensive-treatment.pdf');
+
+Route::get('maintenance-treatment/pdf', [PatientSummaryController::class, 'maintenanceTreatmentPDF'])
+    ->name('maintenance-treatment.pdf');
+
+Route::get('sputum-monitoring/pdf', [PatientSummaryController::class, 'sputumMonitoringPDF'])
+    ->name('sputum-monitoring.pdf');
+
+Route::get('cured/pdf', [PatientSummaryController::class, 'curedPDF'])
+    ->name('cured.pdf');
+
+Route::get('treatment-completed/pdf', [PatientSummaryController::class, 'treatmentCompletedPDF'])
+    ->name('treatment-completed.pdf');
+
+Route::get('lost-to-follow-up/pdf', [PatientSummaryController::class, 'lostToFollowUpPDF'])
+    ->name('lost-to-follow-up.pdf');
+
+Route::get('expired/pdf', [PatientSummaryController::class, 'expiredPDF'])
+    ->name('expired.pdf');
+
+Route::get('barangay-cases/pdf', [PatientSummaryController::class, 'barangayCasesPDF'])
+    ->name('barangay-cases.pdf');

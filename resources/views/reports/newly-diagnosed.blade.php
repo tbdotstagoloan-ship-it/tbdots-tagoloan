@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
     <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+    
   </head>
 
   <body>
@@ -144,38 +145,46 @@
         List of patients recently diagnosed with TB for monitoring and reporting.
       </p>
 
-      <!-- Date Filter Form -->
-      <div class="card shadow-sm border-0 mb-3">
-        <div class="card-body">
-          <form method="GET" action="{{ url('newly-diagnosed') }}" class="row g-3">
-            <div class="col-md-4">
-              <label for="start_date" class="form-label">Start Date</label>
-              <input type="date" class="form-control" id="start_date" name="start_date" 
-                     value="{{ $startDate ?? '' }}">
-            </div>
-            <div class="col-md-4">
-              <label for="end_date" class="form-label">End Date</label>
-              <input type="date" class="form-control" id="end_date" name="end_date" 
-                     value="{{ $endDate ?? '' }}">
-            </div>
-            <div class="col-md-4 d-flex align-items-end gap-2 mb-3">
-              <button type="submit" class="btn btn-primary">
-                <i class="fas fa-filter me-1"></i> Filter
-              </button>
-              <a href="{{ url('newly-diagnosed') }}" class="btn btn-secondary">
-                <i class="fas fa-redo me-1"></i> Reset
-              </a>
-            </div>
-          </form>
-        </div>
-      </div>
+      <!-- Floating Date Filter (Fixed & Polished) -->
+      <div class="d-flex justify-content-end align-items-center mb-3 position-relative">
+        <div class="dropdown">
+          <button class="btn btn-light border-0 shadow-sm rounded-circle d-flex align-items-center justify-content-center" 
+                  type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  style="width:40px; height:40px;">
+            <i class="fas fa-filter text-secondary"></i>
+          </button>
 
-      <div class="d-flex justify-content-end mb-2 gap-1">
-        <a href="{{ route('newly-diagnosed.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}" target="_blank"
-          class="btn btn-danger">
-          <i class="fas fa-file-pdf me-1"></i> Generate Report
+          <div class="dropdown-menu dropdown-menu-end p-4 shadow-lg border-0 rounded-4" style="width: 320px;">
+            <h6 class="fw-semibold text-dark mb-3">Filter by Date</h6>
+            <form method="GET" action="{{ url('newly-diagnosed') }}" class="row g-3">
+              <div class="col-12">
+                <label class="form-label small text-muted mb-1">Start Date</label>
+                <input type="date" class="form-control form-control-sm" id="start_date" name="start_date"
+                      value="{{ $startDate ?? '' }}">
+              </div>
+              <div class="col-12">
+                <label class="form-label small text-muted mb-1">End Date</label>
+                <input type="date" class="form-control form-control-sm" id="end_date" name="end_date"
+                      value="{{ $endDate ?? '' }}">
+              </div>
+              <div class="col-12 d-flex justify-content-between align-items-center mt-2">
+                <a href="{{ url('newly-diagnosed') }}" class="btn btn-outline-secondary btn-sm px-3">
+                  Reset
+                </a>
+                <button type="submit" class="btn btn-primary btn-sm px-3">
+                  Filter
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <a href="{{ route('newly-diagnosed.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}" 
+          target="_blank" class="btn btn-danger ms-2 d-flex align-items-center gap-1">
+          <i class="fas fa-file-pdf"></i> Generate Report
         </a>
       </div>
+
       
       <div class="card shadow-sm border-0">
         <div class="card-body p-0">

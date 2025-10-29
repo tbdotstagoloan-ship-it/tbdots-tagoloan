@@ -931,3 +931,26 @@ pointer-events: auto !important; /* ensures cursor still shows */
     border-color: #28a745;
     box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
   }
+  .dropdown-menu {
+    background: #fff;
+    }
+
+  /* .form-control {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    } */
+
+    /* .btn {
+    border-radius: 8px;
+    font-size: 14px;
+    } */
+
+    .btn-light:hover {
+    background-color: #bec0c4ff;
+    }
+
+    .dropdown-menu h6 {
+    font-size: 15px;
+    font-weight: 600;
+    }
