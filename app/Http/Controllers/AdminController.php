@@ -30,69 +30,13 @@ class AdminController extends Controller
 
         $totalFacility = DB::table('tbl_diagnosing_facilities')->count();
 
-        // Get patients with 2 or more consecutive missed doses
-        $missedPatients = DB::select("
-            WITH OrderedMissed AS (
-                SELECT 
-                    m.patient_id,
-                    m.date,
-                    m.status,
-                    LAG(m.date) OVER (PARTITION BY m.patient_id ORDER BY m.date) AS prev_date
-                FROM tbl_medication_adherences m
-                WHERE m.status = 'Missed'
-            ),
-            ConsecutiveGroups AS (
-                SELECT 
-                    patient_id,
-                    date,
-                    CASE 
-                        WHEN DATEDIFF(date, prev_date) = 1 THEN 0
-                        ELSE 1
-                    END AS is_new_group
-                FROM OrderedMissed
-            ),
-            GroupedMissed AS (
-                SELECT 
-                    patient_id,
-                    date,
-                    SUM(is_new_group) OVER (PARTITION BY patient_id ORDER BY date) AS group_id
-                FROM ConsecutiveGroups
-            ),
-            ConsecutiveCounts AS (
-                SELECT 
-                    patient_id,
-                    group_id,
-                    COUNT(*) AS consecutive_count,
-                    MIN(date) AS first_missed_date,
-                    MAX(date) AS last_missed_date
-                FROM GroupedMissed
-                GROUP BY patient_id, group_id
-                HAVING COUNT(*) >= 2
-            )
-            SELECT 
-                p.pat_full_name,
-                d.diag_tb_case_no,
-                MAX(cc.consecutive_count) AS total_missed,
-                MAX(cc.last_missed_date) AS last_missed_date
-            FROM ConsecutiveCounts cc
-            JOIN tbl_patients p ON p.id = cc.patient_id
-            JOIN tbl_diagnosis d ON d.patient_id = p.id
-            GROUP BY p.id, p.pat_full_name, d.diag_tb_case_no
-            ORDER BY last_missed_date DESC
-        ");
-
-        // Count for the notification badge
-        $missedAdherenceCount = count($missedPatients);
-
         return view('admin.index', compact(
             'totalPatients',
             'totalPhysician',
             'totalStaff',
             'pulmonary',
             'extra',
-            'totalFacility',
-            'missedPatients',
-            'missedAdherenceCount'
+            'totalFacility'
         ));
     }
 
