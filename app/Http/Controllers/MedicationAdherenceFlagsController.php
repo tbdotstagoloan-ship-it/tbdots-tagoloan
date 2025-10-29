@@ -19,63 +19,38 @@ class MedicationAdherenceFlagsController extends Controller
         $days = (int) $request->input('days', 7);
         $since = Carbon::now()->subDays($days)->toDateString();
 
-        // Find usernames that missed a dose recently
+        // get usernames that have at least one 'missed' in the lookback window
         $usernames = MedicationAdherence::where('status', 'missed')
             ->whereDate('date', '>=', $since)
             ->pluck('username')
             ->unique()
             ->values();
 
-        // Load patient accounts with patient info
+        // get patient accounts for those usernames and eager load patient
         $accounts = PatientAccount::whereIn('acc_username', $usernames)
             ->with('patient')
             ->get();
 
+        // map to view-friendly rows
         $flagged = $accounts->map(function ($acc) {
             $patient = $acc->patient;
-
-            // Get logs (newest first)
-            $adherenceLogs = MedicationAdherence::where('username', $acc->acc_username)
-                ->orderBy('date', 'desc')
-                ->pluck('status', 'date');
-
-            // Count consecutive missed starting from latest
-            $consecutiveMissed = 0;
-            foreach ($adherenceLogs as $status) {
-                if ($status === 'missed') {
-                    $consecutiveMissed++;
-                } else {
-                    break;
-                }
-            }
-
-            // Only include if 2 or more consecutive missed
-            if ($consecutiveMissed <= 2) {
-                return null;
-            }
-
-            $lastMissed = MedicationAdherence::where('username', $acc->acc_username)
-                ->where('status', 'missed')
-                ->orderByDesc('date')
-                ->value('date');
-
             return [
                 'patient_id' => $patient->id ?? null,
                 'full_name' => $patient->pat_full_name ?? $acc->acc_username,
                 'username' => $acc->acc_username,
                 'contact' => $patient->pat_contact_number ?? null,
-                'last_missed' => $lastMissed,
-                'consecutive_missed' => $consecutiveMissed,
+                'last_missed' => MedicationAdherence::where('username', $acc->acc_username)
+                    ->where('status', 'missed')
+                    ->orderByDesc('date')
+                    ->value('date'),
             ];
-        })
-        ->filter() // remove nulls
-        ->sortByDesc('consecutive_missed') // sort highest first
-        ->values();
+        })->filter(function ($row) {
+            return ! is_null($row['patient_id']);
+        })->values();
 
         return view('medication.index', [
             'flagged' => $flagged,
             'days' => $days,
         ]);
     }
-
 }

@@ -197,7 +197,6 @@
                 <th>Contact Number</th>
                 <th>Username</th>
                 <th>Last Missed</th>
-                <th>Consecutive Missed</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -214,9 +213,6 @@
                   <td>{{ $row['contact'] ?? '—' }}</td>
                   <td>{{ $row['username'] }}</td>
                   <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
-                  <td style="font-weight: 600; color: #dc3545;">
-                    {{ $row['consecutive_missed'] ?? '—' }}
-                  </td>
                   <td><span class="status-badge bg-danger">Missed</span></td>
                 </tr>
               @endforeach
