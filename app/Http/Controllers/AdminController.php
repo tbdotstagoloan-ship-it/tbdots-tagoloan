@@ -30,30 +30,13 @@ class AdminController extends Controller
 
         $totalFacility = DB::table('tbl_diagnosing_facilities')->count();
 
-        // Get patients with 2 consecutive missed doses
-        $patientsWithMissedDoses = DB::table('tbl_patients as p')
-            ->join('tbl_medication_adherences as ma', 'p.id', '=', 'ma.id')
-            ->select(
-                'p.id',
-                'p.pat_full_name',
-                'p.pat_contact_number',
-                DB::raw('COUNT(CASE WHEN ma.status = "missed" THEN 1 END) as missed_count'),
-                DB::raw('MAX(ma.scheduled_date) as last_missed_date')
-            )
-            ->where('ma.status', 'missed')
-            ->groupBy('p.id', 'p.pat_full_name', 'p.pat_contact_number')
-            ->havingRaw('COUNT(CASE WHEN ma.status = "missed" THEN 1 END) >= 2')
-            ->orderBy('last_missed_date', 'desc')
-            ->get();
-
         return view('admin.index', compact(
             'totalPatients',
             'totalPhysician',
             'totalStaff',
             'pulmonary',
             'extra',
-            'totalFacility',
-            'patientsWithMissedDoses'
+            'totalFacility'
         ));
     }
 

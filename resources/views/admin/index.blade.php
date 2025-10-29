@@ -48,27 +48,6 @@
         flex-direction: column;
       }
     }
-    .table-hover tbody tr:hover {
-    background-color: #f8f9fa;
-    transition: background-color 0.3s ease;
-  }
-
-  .badge {
-    padding: 0.5em 0.75em;
-    font-size: 0.875rem;
-  }
-
-  .btn-sm {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
-    border-radius: 6px;
-  }
-
-  .btn-outline-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
-    transition: all 0.3s ease;
-  }
   </style>
 </head>
 
@@ -281,81 +260,6 @@
       </div>
 
     </div>
-
-    <div class="mt-4">
-    <div class="card" style="border-radius: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02); border: 2px solid #f1f3f4;">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="card-title mb-0" style="color: #2c3e50; font-weight: 600;">
-            <i class="fas fa-exclamation-triangle text-danger me-2"></i>
-            Patients with Consecutive Missed Doses
-          </h5>
-          <span class="badge bg-danger">
-            {{ count($patientsWithMissedDoses) }} Patient(s)
-          </span>
-        </div>
-
-        @if(count($patientsWithMissedDoses) > 0)
-          <div class="table-responsive">
-            <table class="table table-hover align-middle">
-              <thead style="background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);">
-                <tr>
-                  <th scope="col" style="color: #2c3e50; font-weight: 600;">#</th>
-                  <th scope="col" style="color: #2c3e50; font-weight: 600;">Patient ID</th>
-                  <th scope="col" style="color: #2c3e50; font-weight: 600;">Full Name</th>
-                  <th scope="col" style="color: #2c3e50; font-weight: 600;">Contact Number</th>
-                  <th scope="col" style="color: #2c3e50; font-weight: 600;">Missed Doses</th>
-                  <th scope="col" style="color: #2c3e50; font-weight: 600;">Last Missed</th>
-                  <th scope="col" style="color: #2c3e50; font-weight: 600; text-align: center;">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($patientsWithMissedDoses as $index => $patient)
-                  <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>
-                      <span class="badge bg-secondary">{{ $patient->pat_id }}</span>
-                    </td>
-                    <td style="font-weight: 500;">
-                      {{ $patient->pat_first_name }} 
-                      {{ $patient->pat_middle_name ? $patient->pat_middle_name . ' ' : '' }}
-                      {{ $patient->pat_last_name }}
-                    </td>
-                    <td>
-                      <i class="fas fa-phone text-muted me-1"></i>
-                      {{ $patient->pat_contact_number ?? 'N/A' }}
-                    </td>
-                    <td>
-                      <span class="badge bg-danger rounded-pill">
-                        {{ $patient->missed_count }} doses
-                      </span>
-                    </td>
-                    <td>
-                      <small class="text-muted">
-                        {{ \Carbon\Carbon::parse($patient->last_missed_date)->format('M d, Y') }}
-                      </small>
-                    </td>
-                    <td class="text-center">
-                      <a href="{{ url('patient/' . $patient->pat_id) }}" 
-                        class="btn btn-sm btn-outline-primary" 
-                        title="View Patient Details">
-                        <i class="fas fa-eye"></i> View
-                      </a>
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
-        @else
-          <div class="text-center py-5">
-            <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
-            <p class="mt-3 text-muted">No patients with consecutive missed doses found.</p>
-          </div>
-        @endif
-      </div>
-    </div>
-  </div>
 
 
 
