@@ -32,7 +32,7 @@ class AdminController extends Controller
 
         // Get patients with 2 consecutive missed doses
         $patientsWithMissedDoses = DB::table('tbl_patients as p')
-            ->join('tbl_medication_adherence as ma', 'p.id', '=', 'ma.id')
+            ->join('tbl_medication_adherences as ma', 'p.id', '=', 'ma.id')
             ->select(
                 'p.id',
                 'p.pat_full_name',
