@@ -214,14 +214,8 @@
                   <td>{{ $row['contact'] ?? '—' }}</td>
                   <td>{{ $row['username'] }}</td>
                   <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
-                  <td>
-                    @if($row['consecutive_missed'] >= 2)
-                      <span class="badge bg-danger">{{ $row['consecutive_missed'] }}</span>
-                    @elseif($row['consecutive_missed'] == 1)
-                      <span class="badge bg-warning text-dark">{{ $row['consecutive_missed'] }}</span>
-                    @else
-                      <span class="badge bg-secondary">{{ $row['consecutive_missed'] }}</span>
-                    @endif
+                  <td style="font-weight: 600; color: #dc3545;">
+                    {{ $row['consecutive_missed'] ?? '—' }}
                   </td>
                   <td><span class="status-badge bg-danger">Missed</span></td>
                 </tr>
