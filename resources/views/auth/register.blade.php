@@ -138,11 +138,11 @@
             </div>
 
             <!-- Address -->
-            <div class="input-control">
+            <!-- <div class="input-control">
                 <label for="address">Address</label>
                 <input id="address" name="address" type="text" placeholder="Enter Address" value="{{ old('address') }}">
                 <div class="error"></div>
-            </div>
+            </div> -->
 
             <!-- Password -->
             <div class="input-control" style="position: relative;">
@@ -181,7 +181,7 @@
         const name = document.getElementById('name');
         const email = document.getElementById('email');
         const phone = document.getElementById('phone');
-        const address = document.getElementById('address');
+        // const address = document.getElementById('address');
         const password = document.getElementById('password');
         const password_confirmation = document.getElementById('password_confirmation');
 
@@ -249,11 +249,11 @@
                     break;
 
 
-                case "address":
-                    if (value === "") setError(field, "Address is required");
-                    else if (allSpecialChars.test(value)) setError(field, "Special characters are not allowed");
-                    else setSuccess(field);
-                    break;
+                // case "address":
+                //     if (value === "") setError(field, "Address is required");
+                //     else if (allSpecialChars.test(value)) setError(field, "Special characters are not allowed");
+                //     else setSuccess(field);
+                //     break;
 
                 case "password":
                     if (value === "") setError(field, "Password is required");
@@ -282,7 +282,7 @@
         };
 
         // ✅ real-time validation (only after typing)
-        [name, email, phone, address, password, password_confirmation].forEach(input => {
+        [name, email, phone, password, password_confirmation].forEach(input => {
             input.addEventListener("input", () => {
                 if (input.value.trim().length > 0) {
                     validateField(input);
@@ -301,7 +301,7 @@
             validateField(name);
             validateField(email);
             validateField(phone);
-            validateField(address);
+            // validateField(address);
             validateField(password);
             validateField(password_confirmation);
 
