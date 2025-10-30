@@ -264,9 +264,9 @@
     <!-- Table for Patients with 2 or More Consecutive Missed Doses -->
     <div class="card mt-5">
       <div class="card-body">
-        <h5 class="card-title">
+        <h6 class="card-title">
           Patients with 2 or More Consecutive Missed Doses
-        </h5>
+        </h6>
 
         <div class="table-responsive">
           <table class="table">
