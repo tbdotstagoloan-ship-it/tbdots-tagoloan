@@ -276,7 +276,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>#</th>
+                <th>ID</th>
                 <th>Full Name</th>
                 <th>Username</th>
                 <th>Contact</th>
@@ -296,7 +296,7 @@
                       {{ $patient['consecutive_missed'] }}
                     </span>
                   </td>
-                  <td>{{ $patient['last_missed'] ?? '-' }}</td>
+                  <td>{{ Carbon\Carbon::parse($patient['last_missed'])->format('F j, Y') ?? '-' }}</td>
                 </tr>
               @empty
                 <tr>
