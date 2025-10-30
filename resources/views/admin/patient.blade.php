@@ -247,6 +247,7 @@
                               'treatment completed' => 'bg-success',
                               'lost to follow-up' => 'bg-warning text-dark',
                               'died' => 'bg-danger',
+                              'relapse' => 'bg-warning text-dark',
                               default => 'bg-secondary'
                           };
                       @endphp
