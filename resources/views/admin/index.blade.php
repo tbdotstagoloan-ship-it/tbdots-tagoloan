@@ -264,13 +264,13 @@
     <!-- Table for Patients with 2 or More Consecutive Missed Doses -->
     <div class="card mt-5">
       <div class="card-body">
-        <h5 class="card-title text-danger">
+        <h5 class="card-title">
           Patients with 2 or More Consecutive Missed Doses
         </h5>
 
-        <div class="table-responsive mt-3">
-          <table class="table table-bordered align-middle text-center">
-            <thead class="table-light">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
               <tr>
                 <th>#</th>
                 <th>Full Name</th>
