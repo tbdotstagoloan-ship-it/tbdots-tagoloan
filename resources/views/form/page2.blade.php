@@ -590,7 +590,7 @@
                     <!-- <input type="text" name="reg_end_type" id="reg_end_type" class="form-control"
                       placeholder="Regimen type at end of treatment"> -->
                       <select name="reg_end_type" id="reg_end_type"
-                      class="form-control form-select" required>
+                      class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Regimen 1 - 2HRZE/4HR">Regimen 1 - 2HRZE/4HR</option>
                       <option value="Regimen 2 - 2HRZE/10HR">Regimen 2 - 2HRZE/10HR</option>
