@@ -165,7 +165,7 @@
                 <th>Age</th>
                 <th>Sex</th>
                 <th>Barangay</th>
-                <th>TB Case #</th>
+                <!-- <th>TB Case #</th> -->
                 <th>Last Seen</th>
                 <th>Reason</th>
                 <th>Status</th>
@@ -178,7 +178,7 @@
                 <td>{{ $patient->pat_age }}</td>
                 <td>{{ $patient->pat_sex }}</td>
                 <td>{{ $patient->barangay }}</td>
-                <td>{{ $patient->diag_tb_case_no }}</td>
+                <!-- <td>{{ $patient->diag_tb_case_no }}</td> -->
                 <td>{{ \Carbon\Carbon::parse($patient->outcome_date)->format('F j, Y') }}</td>
                 <td>{{ $patient->out_reason }}</td>
                 <td>{{ $patient->outcome }}</td>
