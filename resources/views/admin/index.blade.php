@@ -269,7 +269,7 @@
     <div class="card mt-5">
       <div class="card-body">
         <h6 class="card-title">
-          Patients with 2 or More Consecutive Missed Doses
+          Patients Consecutive Missed Doses
         </h6>
 
         <div class="table-responsive">
@@ -288,7 +288,12 @@
               @forelse($patientsWithConsecutiveMissed as $index => $patient)
                 <tr>
                   <td>{{ $index + 1 }}</td>
-                  <td>{{ $patient['full_name'] }}</td>
+                  <td>
+                    <a href="{{ url('admin/patient-profile/' . $patient['patient_id']) }}" 
+                      style="text-decoration: none; color: #212529;">
+                      {{ $patient['full_name'] }}
+                    </a>
+                  </td>
                   <td>{{ $patient['username'] }}</td>
                   <td>{{ $patient['contact'] ?? '-' }}</td>
                   <td>
@@ -296,7 +301,7 @@
                       {{ $patient['consecutive_missed'] }}
                     </span>
                   </td>
-                  <td>{{ Carbon\Carbon::parse($patient['last_missed'])->format('F j, Y') ?? '-' }}</td>
+                  <td>{{ isset($patient['last_missed']) ? \Carbon\Carbon::parse($patient['last_missed'])->format('F j, Y') : '-' }}</td>
                 </tr>
               @empty
                 <tr>
@@ -304,6 +309,7 @@
                 </tr>
               @endforelse
             </tbody>
+
           </table>
         </div>
       </div>

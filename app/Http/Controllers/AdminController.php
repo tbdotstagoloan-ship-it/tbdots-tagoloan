@@ -53,6 +53,7 @@ class AdminController extends Controller
 
                 if ($consecutiveMissed >= 2) {
                     return [
+                        'patient_id' => $patient->id ?? null,
                         'full_name' => $patient->pat_full_name,
                         'username' => $acc->acc_username,
                         'contact' => $patient->pat_contact_number,
