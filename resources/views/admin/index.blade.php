@@ -9,6 +9,10 @@
   <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
   <style>
+    .card {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+      border: 2px solid #f1f3f4;
+    }
     .charts-row {
       display: flex;
       gap: 20px;
