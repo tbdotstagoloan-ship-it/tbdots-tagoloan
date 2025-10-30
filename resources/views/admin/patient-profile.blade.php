@@ -767,13 +767,14 @@
                                                         <thead class="table-light">
                                                             <tr>
                                                                 <th>Laboratory Test</th>
-                                                                <th>Date Conducted</th>
                                                                 <th>Result</th>
+                                                                <th>Date Conducted</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
                                                                 <td>Xpert MTB/RIF</td>
+                                                                <td>{{ $lab->lab_xpert_result ?? '—' }}</td>
                                                                 <td>
                                                                     @if(!empty($lab->lab_xpert_test_date))
                                                                         {{ \Carbon\Carbon::parse($lab->lab_xpert_test_date)->format('F j, Y') }}
@@ -781,10 +782,10 @@
                                                                         —
                                                                     @endif
                                                                 </td>
-                                                                <td>{{ $lab->lab_xpert_result ?? '—' }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Smear Microscopy</td>
+                                                                <td>{{ $lab->lab_smear_result ?? '—' }}</td>
                                                                 <td>
                                                                     @if(!empty($lab->lab_smear_test_date))
                                                                         {{ \Carbon\Carbon::parse($lab->lab_smear_test_date)->format('F j, Y') }}
@@ -792,10 +793,10 @@
                                                                         —
                                                                     @endif
                                                                 </td>
-                                                                <td>{{ $lab->lab_smear_result ?? '—' }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Chest X-ray</td>
+                                                                <td>{{ $lab->lab_cxray_result ?? '—' }}</td>
                                                                 <td>
                                                                     @if(!empty($lab->lab_cxray_test_date))
                                                                         {{ \Carbon\Carbon::parse($lab->lab_cxray_test_date)->format('F j, Y') }}
@@ -803,10 +804,10 @@
                                                                         —
                                                                     @endif
                                                                 </td>
-                                                                <td>{{ $lab->lab_cxray_result ?? '—' }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Tuberculin Skin Test</td>
+                                                                <td>{{ $lab->lab_tst_result ?? '—' }}</td>
                                                                 <td>
                                                                     @if(!empty($lab->lab_tst_test_date))
                                                                         {{ \Carbon\Carbon::parse($lab->lab_tst_test_date)->format('F j, Y') }}
@@ -814,10 +815,10 @@
                                                                         —
                                                                     @endif
                                                                 </td>
-                                                                <td>{{ $lab->lab_tst_result ?? '—' }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Other Test</td>
+                                                                <td>{{ $lab->lab_other_result ?? '—' }}</td>
                                                                 <td>
                                                                     @if(!empty($lab->lab_other_test_date))
                                                                         {{ \Carbon\Carbon::parse($lab->lab_other_test_date)->format('F j, Y') }}
@@ -825,7 +826,6 @@
                                                                         —
                                                                     @endif
                                                                 </td>
-                                                                <td>{{ $lab->lab_other_result ?? '—' }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
