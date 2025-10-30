@@ -58,7 +58,10 @@ class PrescribedDrugsController extends Controller
             ));
         }
 
-        return redirect()->back()->with('success', 'Prescribed drug updated successfully!');
+        return redirect()
+            ->back()
+            ->with('success', 'Prescribed drug updated successfully!')
+            ->with('stay_on_tab', 'treatment');
     }
 
 }

@@ -16,7 +16,9 @@
 
     .chart-card {
       flex: 1;
+      /* hati sila sa lapad (50/50) */
       min-width: 0;
+      /* para hindi mag-overflow */
       border-radius: 12px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
       border: 2px solid #f1f3f4;
@@ -155,12 +157,6 @@
         </ul>
       </li>
 
-      <!-- <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('profile')}}">
-          <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Settings</span>
-        </a>
-      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -181,26 +177,27 @@
         <i class="fas fa-bars"></i>
       </button>
     </div>
+
   </div>
 
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 50px; color: #2c3e50; font-weight: 600;">
-        Facilities Management
+      Personnel
     </h4>
 
     <div class="d-flex justify-content-end mb-2">
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFacilityModal">
-            <i class="fas fa-plus me-2"></i>Add New Facility
-        </button>
-    </div>
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPersonnelModal">
+        <i class="fas fa-plus me-2"></i>Add Personnel
+      </button>
 
+    </div>
 
     <div class="card shadow-sm border-0">
       <div class="card-body p-0">
         <div class="table-responsive">
-
-        <form method="GET" action="{{ url('facilities') }}" class="d-flex align-items-center">
+          
+        <form method="GET" action="{{ url('personnel') }}" class="d-flex align-items-center">
             <select name="per_page" id="per_page" class="form-select form-select-sm w-auto"
               onchange="this.form.submit()">
               <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
@@ -217,23 +214,21 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Facility Name</th>
-                <th>NTP Facility Code</th>
-                <th>Province</th>
-                <th>Region</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
 
-                @foreach ($facilities as $facility)
-
+              @foreach ($personnels as $personnel)
+              
                 <tr>
-                  <td>{{ $facility->id }}</td>
-                  <td>{{ $facility->fac_name }}</td>
-                  <td>{{ $facility->fac_ntp_code }}</td>
-                  <td>{{ $facility->fac_province }}</td>
-                  <td>{{ $facility->fac_region }}</td>
+                  <td>{{ $personnel->id }}</td>
+                  <td>{{ $personnel->name }}</td>
+                  <td>{{ $personnel->email }}</td>
+                  <td>{{ $personnel->phone }}</td>
                   <td class="text-center">
                     <div class="dropdown">
                       <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown"
@@ -242,156 +237,148 @@
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
 
-                        <!-- Edit Button -->
+                        <!-- Edit -->
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal"
-                            data-bs-target="#editFacilityModal{{ $facility->id }}" title="Edit Details">
+                          <a href="#" 
+                            class="dropdown-item d-flex align-items-center btn-edit"
+                            data-id="{{ $personnel->id }}"
+                            data-name="{{ $personnel->name }}"
+                            data-email="{{ $personnel->email }}"
+                            data-phone="{{ $personnel->phone }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editPersonnelModal">
                             <i class="fas fa-edit me-2"></i> Edit
-                            </a>
+                          </a>
                         </li>
 
-                        <!-- Delete Button -->
+                        <!-- Delete -->
                         <li>
-                            <form action="{{ route('facilities.destroy', $facility->id) }}" method="POST" class="d-inline">
+                          <form action="{{ route('personnel.destroy', $personnel->id) }}" method="POST" class="d-inline delete-form">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="dropdown-item d-flex align-items-center btn-delete">
-                                <i class="fas fa-trash-alt me-2"></i> Delete
+                              <i class="fas fa-trash-alt me-2"></i> Delete
                             </button>
-                            </form>
+                          </form>
                         </li>
+
                         
                       </ul>
                     </div>
                   </td>
                   
                 </tr>
-
                 @endforeach
-
             </tbody>
           </table>
 
+        </div>
+        
+        <!-- Add Personnel Modal -->
+      <div class="modal fade" id="addPersonnelModal" tabindex="-1" aria-labelledby="addPersonnelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title" id="addPersonnelModalLabel">Add Personnel</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <form id="addPersonnelForm" action="{{ route('personnel.store') }}" method="POST">
+              @csrf
+              <div class="modal-body">
+                <div class="row g-3">
+                  
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter full name" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter email" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                    <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter phone number" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="address" class="form-label">Address <span class="text-danger">*</span></label>
+                    <input type="text" id="address" name="address" class="form-control" placeholder="Enter address" required>
+                  </div>
+
+                  <!-- <div class="col-md-6">
+                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+                  </div> -->
+
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success">Submit</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
 
-      <div class="card-footer">Showing {{ $facilities->firstItem() }} to {{ $facilities->lastItem() }} of
-        {{ $facilities->total() }} entries
+      <!-- Edit Personnel Modal -->
+      <div class="modal fade" id="editPersonnelModal" tabindex="-1" aria-labelledby="editPersonnelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-success text-white">
+              <h5 class="modal-title" id="editPersonnelModalLabel">Edit Personnel</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form id="editPersonnelForm" method="POST">
+              @csrf
+              @method('PUT')
+              <div class="modal-body">
+                <div class="row g-3">
+
+                  <div class="col-md-6">
+                    <label for="edit_name" class="form-label">Full Name</label>
+                    <input type="text" id="edit_name" name="name" class="form-control" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="edit_email" class="form-label">Email</label>
+                    <input type="email" id="edit_email" name="email" class="form-control" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label for="edit_phone" class="form-label">Phone</label>
+                    <input type="text" id="edit_phone" name="phone" class="form-control" required>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      </div>
+
+      <div class="card-footer">Showing {{ $personnels->firstItem() }} to {{ $personnels->lastItem() }} of
+        {{ $personnels->total() }} entries
         <div class="mt-2">
-          {{ $facilities->links() }}
+          {{ $personnels->links() }}
         </div>
       </div>
 
     </div>
   </div>
-
-  <!-- Add New Facility Modal (moved outside the loop) -->
-  <div class="modal fade" id="addFacilityModal" tabindex="-1" aria-labelledby="addFacilityModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-3 shadow-lg border-0">
-        <div class="modal-header bg-success text-white">
-            <h5 class="modal-title" id="addFacilityModalLabel">
-             Add New Facility
-            </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <form action="{{ route('facilities.store') }}" method="POST">
-            @csrf
-            <div class="modal-body">
-            <div class="row g-3">
-                <!-- Facility Name -->
-                <div class="col-md-6">
-                <label for="fac_name" class="form-label">Facility Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_name" id="fac_name" placeholder="Facility Name" required>
-                </div>
-
-                <!-- NTP Code -->
-                <div class="col-md-6">
-                <label for="fac_ntp_code" class="form-label">NTP Facility Code <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_ntp_code" id="fac_ntp_code" placeholder="NTP Facility Code" required>
-                </div>
-
-                <!-- Province -->
-                <div class="col-md-6">
-                <label for="fac_province" class="form-label">Province / HUC <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_province" id="fac_province" placeholder="Province / HUC" required>
-                </div>
-
-                <!-- Region -->
-                <div class="col-md-6">
-                <label for="fac_region" class="form-label">Region <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_region" id="fac_region" placeholder="Region" required>
-                </div>
-            </div>
-            </div>
-
-            <div class="modal-footer">
-            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success">
-                Save Facility
-            </button>
-            </div>
-        </form>
-        </div>
-    </div>
-  </div>
-  <!-- End of Add New Facility Modal -->
-
-  <!-- Edit Modals (moved outside the loop) -->
-  @foreach ($facilities as $facility)
-  <div class="modal fade" id="editFacilityModal{{ $facility->id }}" tabindex="-1" aria-labelledby="editFacilityModalLabel{{ $facility->id }}" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content rounded-3 shadow-lg border-0">
-        <div class="modal-header bg-success text-white">
-            <h5 class="modal-title" id="editFacilityModalLabel{{ $facility->id }}">
-            Edit Facility
-            </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <form action="{{ route('facilities.update', $facility->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="modal-body">
-            <div class="row g-3">
-                <!-- Facility Name -->
-                <div class="col-md-6">
-                <label for="fac_name_{{ $facility->id }}" class="form-label">Facility Name</label>
-                <input type="text" class="form-control" name="fac_name" id="fac_name_{{ $facility->id }}" value="{{ $facility->fac_name }}" required>
-                </div>
-
-                <!-- NTP Code -->
-                <div class="col-md-6">
-                <label for="fac_ntp_code_{{ $facility->id }}" class="form-label">NTP Facility Code</label>
-                <input type="text" class="form-control" name="fac_ntp_code" id="fac_ntp_code_{{ $facility->id }}" value="{{ $facility->fac_ntp_code }}" required>
-                </div>
-
-                <!-- Province -->
-                <div class="col-md-6">
-                <label for="fac_province_{{ $facility->id }}" class="form-label">Province / HUC</label>
-                <input type="text" class="form-control" name="fac_province" id="fac_province_{{ $facility->id }}" value="{{ $facility->fac_province }}" required>
-                </div>
-
-                <!-- Region -->
-                <div class="col-md-6">
-                <label for="fac_region_{{ $facility->id }}" class="form-label">Region</label>
-                <input type="text" class="form-control" name="fac_region" id="fac_region_{{ $facility->id }}" value="{{ $facility->fac_region }}" required>
-                </div>
-            </div>
-            </div>
-
-            <div class="modal-footer">
-            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-success">Save Changes</button>
-            </div>
-        </form>
-        </div>
-    </div>
-  </div>
-  @endforeach
-  <!-- End of Edit Modals -->
 
 
 
@@ -428,7 +415,7 @@
 
         Swal.fire({
           title: "Are you sure?",
-          text: "This facility will be permanently deleted!",
+          text: "This patient will be permanently deleted!",
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#d33",
@@ -442,6 +429,43 @@
       });
     });
   </script>
+
+  <script>
+  // Handle edit modal
+  document.querySelectorAll('.btn-edit').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id = this.dataset.id;
+      const form = document.getElementById('editPersonnelForm');
+      form.action = `/personnel/${id}`;
+
+      document.getElementById('edit_name').value = this.dataset.name;
+      document.getElementById('edit_email').value = this.dataset.email;
+      document.getElementById('edit_phone').value = this.dataset.phone;
+      
+    });
+  });
+
+  // Delete confirmation
+  document.querySelectorAll('.delete-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      Swal.fire({
+        title: "Are you sure?",
+        text: "This personnel will be permanently deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it!"
+      }).then(result => {
+        if (result.isConfirmed) {
+          this.submit();
+        }
+      });
+    });
+  });
+</script>
+
 
 </body>
 

@@ -43,7 +43,10 @@ class TreatmentOutcomeController extends Controller
                 'out_reason' => $request->out_reason,
             ]);
 
-            return redirect()->back()->with('success', 'Treatment outcome updated successfully.');
+            return redirect()
+                ->back()
+                ->with('success', 'Treatment outcome updated successfully.')
+                ->with('stay_on_tab', 'treatment');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update treatment outcome: ' . $e->getMessage());
         }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\PhysicianController;
 use App\Http\Controllers\DiagnosingFacilityController;
 use App\Http\Controllers\MedicationAdherenceFlagsController;
@@ -227,3 +228,10 @@ Route::get('expired/pdf', [PatientSummaryController::class, 'expiredPDF'])
 
 Route::get('barangay-cases/pdf', [PatientSummaryController::class, 'barangayCasesPDF'])
     ->name('barangay-cases.pdf');
+
+// Personnel
+Route::get('personnel', [PersonnelController::class, 'index'])->middleware(['auth'])->name('personnel.index');
+Route::post('/personnel', [PersonnelController::class, 'store'])->name('personnel.store');
+Route::put('/personnel/{id}', [PersonnelController::class, 'update'])->name('personnel.update');
+Route::delete('/personnel/{id}', [PersonnelController::class, 'destroy'])->name('personnel.destroy');
+

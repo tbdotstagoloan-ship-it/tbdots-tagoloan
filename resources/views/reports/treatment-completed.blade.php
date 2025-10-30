@@ -56,11 +56,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -122,12 +129,12 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
+      <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -233,8 +240,8 @@
                   <td>{{ $patient->pat_sex }}</td>
                   <td>{{ $patient->barangay }}</td>
                   <td>{{ $patient->diag_tb_case_no }}</td>
-                  <td>{{ \Carbon\Carbon::parse($patient->reg_start_date)->format('F j, Y') }}</td>
-                  <td>{{ \Carbon\Carbon::parse($patient->outcome_date)->format('F j, Y') }}</td>
+                  <td>{{ \Carbon\Carbon::parse($patient->reg_start_date)->format('M j, Y') }}</td>
+                  <td>{{ \Carbon\Carbon::parse($patient->outcome_date)->format('M j, Y') }}</td>
                   <td>{{ $patient->out_reason ?? 'N/A' }}</td>
                   <td><span class="status-badge bg-success">{{ $patient->outcome }}</span></td>
                 </tr>

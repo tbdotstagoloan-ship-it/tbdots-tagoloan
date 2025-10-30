@@ -26,6 +26,9 @@ class PostTreatmentFollowUpController extends Controller
             'fol_tbc_dst' => $request->fol_tbc_dst,
         ]);
 
-        return redirect()->back()->with('success', 'Follow-up record added successfully.');
+        return redirect()
+            ->back()
+            ->with('success', 'Follow-up record added successfully.')
+            ->with('stay_on_tab', 'lab');
     }
 }

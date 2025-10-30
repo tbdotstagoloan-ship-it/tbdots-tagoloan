@@ -88,11 +88,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -154,12 +161,12 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
+      <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -220,7 +227,22 @@
       </div>
       </a>
 
-      <!-- Staff -->
+      <!-- Personnel -->
+      <a href="{{ url('personnel') }}" style="text-decoration: none;">
+        <div class="card-dashboard personnel">
+        <div class="card-body">
+          <div class="card-info">
+            <div class="card-title">Personnel</div>
+            <div class="card-value">{{ $totalPersonnel }}</div>
+          </div>
+          <div class="card-icon">
+            <img src="{{ url('assets/img/teamwork.png') }}" alt="">
+          </div>
+        </div>
+      </div>
+      </a>
+
+      <!-- Facility -->
       <a href="{{ url('facilities') }}" style="text-decoration: none;">
         <div class="card-dashboard staff">
         <div class="card-body">

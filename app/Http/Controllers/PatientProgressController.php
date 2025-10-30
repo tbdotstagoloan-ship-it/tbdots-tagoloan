@@ -24,6 +24,9 @@ class PatientProgressController extends Controller
             'prog_plan' => $request->prog_plan,
         ]);
 
-        return redirect()->back()->with('success', 'Patient progress added successfully.');
+        return redirect()
+            ->back()
+            ->with('success', 'Patient progress added successfully.')
+            ->with('stay_on_tab', 'lab');
     }
 }

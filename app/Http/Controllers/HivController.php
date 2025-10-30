@@ -28,6 +28,9 @@ class HivController extends Controller
             'hiv_cpt_started' => $request->hiv_cpt_started,
         ]);
 
-        return redirect()->back()->with('success', 'HIV information saved successfully.');
+        return redirect()
+            ->back()
+            ->with('success', 'HIV information saved successfully.')
+            ->with('stay_on_tab', 'treatment');
     }
 }

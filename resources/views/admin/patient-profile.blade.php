@@ -408,11 +408,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -474,12 +481,12 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
+      <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -761,79 +768,80 @@
                                         </div>
 
                                         @if ($patient->screenings->isNotEmpty() && $patient->screenings->first()->labTests->isNotEmpty())
-                                            @foreach ($patient->screenings->first()->labTests as $lab)
-                                                <div class="table-responsive">
-                                                    <table class="table align-middle">
-                                                        <thead class="table-light">
-                                                            <tr>
-                                                                <th>Laboratory Test</th>
-                                                                <th>Result</th>
-                                                                <th>Date Conducted</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
+                                        @foreach ($patient->screenings->first()->labTests as $lab)
+                                            @php
+                                                $hasXpert = !empty($lab->lab_xpert_result);
+                                                $hasSmear = !empty($lab->lab_smear_result);
+                                                $hasXray = !empty($lab->lab_cxray_result);
+                                                $hasTst = !empty($lab->lab_tst_result);
+                                                $hasOther = !empty($lab->lab_other_result);
+                                            @endphp
+
+                                            @if ($hasXpert || $hasSmear || $hasXray || $hasTst || $hasOther)
+                                            <div class="table-responsive">
+                                                <table class="table align-middle">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Laboratory Test</th>
+                                                            <th>Result</th>
+                                                            <th>Date Conducted</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if ($hasXpert)
                                                             <tr>
                                                                 <td>Xpert MTB/RIF</td>
-                                                                <td>{{ $lab->lab_xpert_result ?? '—' }}</td>
-                                                                <td>
-                                                                    @if(!empty($lab->lab_xpert_test_date))
-                                                                        {{ \Carbon\Carbon::parse($lab->lab_xpert_test_date)->format('F j, Y') }}
-                                                                    @else
-                                                                        —
-                                                                    @endif
-                                                                </td>
+                                                                <td>{{ $lab->lab_xpert_result }}</td>
+                                                                <td>{{ $lab->lab_xpert_test_date ? \Carbon\Carbon::parse($lab->lab_xpert_test_date)->format('F j, Y') : '—' }}</td>
                                                             </tr>
+                                                        @endif
+
+                                                        @if ($hasSmear)
                                                             <tr>
                                                                 <td>Smear Microscopy</td>
-                                                                <td>{{ $lab->lab_smear_result ?? '—' }}</td>
-                                                                <td>
-                                                                    @if(!empty($lab->lab_smear_test_date))
-                                                                        {{ \Carbon\Carbon::parse($lab->lab_smear_test_date)->format('F j, Y') }}
-                                                                    @else
-                                                                        —
-                                                                    @endif
-                                                                </td>
+                                                                <td>{{ $lab->lab_smear_result }}</td>
+                                                                <td>{{ $lab->lab_smear_test_date ? \Carbon\Carbon::parse($lab->lab_smear_test_date)->format('F j, Y') : '—' }}</td>
                                                             </tr>
+                                                        @endif
+
+                                                        @if ($hasXray)
                                                             <tr>
                                                                 <td>Chest X-ray</td>
-                                                                <td>{{ $lab->lab_cxray_result ?? '—' }}</td>
-                                                                <td>
-                                                                    @if(!empty($lab->lab_cxray_test_date))
-                                                                        {{ \Carbon\Carbon::parse($lab->lab_cxray_test_date)->format('F j, Y') }}
-                                                                    @else
-                                                                        —
-                                                                    @endif
-                                                                </td>
+                                                                <td>{{ $lab->lab_cxray_result }}</td>
+                                                                <td>{{ $lab->lab_cxray_test_date ? \Carbon\Carbon::parse($lab->lab_cxray_test_date)->format('F j, Y') : '—' }}</td>
                                                             </tr>
+                                                        @endif
+
+                                                        @if ($hasTst)
                                                             <tr>
                                                                 <td>Tuberculin Skin Test</td>
-                                                                <td>{{ $lab->lab_tst_result ?? '—' }}</td>
-                                                                <td>
-                                                                    @if(!empty($lab->lab_tst_test_date))
-                                                                        {{ \Carbon\Carbon::parse($lab->lab_tst_test_date)->format('F j, Y') }}
-                                                                    @else
-                                                                        —
-                                                                    @endif
-                                                                </td>
+                                                                <td>{{ $lab->lab_tst_result }}</td>
+                                                                <td>{{ $lab->lab_tst_test_date ? \Carbon\Carbon::parse($lab->lab_tst_test_date)->format('F j, Y') : '—' }}</td>
                                                             </tr>
+                                                        @endif
+
+                                                        @if ($hasOther)
                                                             <tr>
                                                                 <td>Other Test</td>
-                                                                <td>{{ $lab->lab_other_result ?? '—' }}</td>
-                                                                <td>
-                                                                    @if(!empty($lab->lab_other_test_date))
-                                                                        {{ \Carbon\Carbon::parse($lab->lab_other_test_date)->format('F j, Y') }}
-                                                                    @else
-                                                                        —
-                                                                    @endif
-                                                                </td>
+                                                                <td>{{ $lab->lab_other_result }}</td>
+                                                                <td>{{ $lab->lab_other_test_date ? \Carbon\Carbon::parse($lab->lab_other_test_date)->format('F j, Y') : '—' }}</td>
                                                             </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            @endforeach
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No laboratory test records available for this patient.</p>
-                                        @endif
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            @else
+                                                <p class="text-muted fst-italic mt-2">
+                                                    No laboratory test results recorded for this patient.
+                                                </p>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <p class="text-muted fst-italic mt-2">
+                                            No laboratory test records available for this patient.
+                                        </p>
+                                    @endif
+
                                     </div>
 
 
@@ -2222,21 +2230,21 @@
                         @csrf
                         @method('PUT')
                         <div class="modal-body">
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_diagnosis_date" class="form-label">Diagnosis Date</label>
-                                    <input type="date" class="form-control" id="diag_diagnosis_date"
+                                    <input type="text" class="form-control" id="diag_diagnosis_date"
                                         name="diag_diagnosis_date"
-                                        value="{{ old('diag_diagnosis_date', $patient->diagnosis->diag_diagnosis_date ?? '') }}">
+                                        value="{{ old('diag_diagnosis_date', $patient->diagnosis->diag_diagnosis_date ?? '') }}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_notification_date" class="form-label">Notification Date</label>
-                                    <input type="date" class="form-control" id="diag_notification_date"
+                                    <input type="text" class="form-control" id="diag_notification_date"
                                         name="diag_notification_date"
-                                        value="{{ old('diag_notification_date', $patient->diagnosis->diag_notification_date ?? '') }}">
+                                        value="{{ old('diag_notification_date', $patient->diagnosis->diag_notification_date ?? '') }}" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="diag_tb_case_no" class="form-label">TB Case #</label>
+                                    <label for="diag_tb_case_no" class="form-label">TB Case No.</label>
                                     <input type="text" class="form-control" id="diag_tb_case_no" name="diag_tb_case_no"
                                         value="{{ old('diag_tb_case_no', $patient->diagnosis->diag_tb_case_no ?? '') }}"
                                         readonly>
@@ -2260,9 +2268,32 @@
                                         placeholder="Address"
                                         value="{{ old('diag_address', $patient->diagnosis->diag_address ?? '') }}">
                                 </div>
-                            </div>
+                            </div> -->
+                                        <input type="hidden" class="form-control" id="diag_diagnosis_date"
+                                        name="diag_diagnosis_date"
+                                        value="{{ old('diag_diagnosis_date', $patient->diagnosis->diag_diagnosis_date ?? '') }}" readonly>
+                                        <input type="hidden" class="form-control" id="diag_notification_date"
+                                        name="diag_notification_date"
+                                        value="{{ old('diag_notification_date', $patient->diagnosis->diag_notification_date ?? '') }}" readonly>
+                                        <input type="hidden" class="form-control" id="diag_tb_case_no" name="diag_tb_case_no"
+                                        value="{{ old('diag_tb_case_no', $patient->diagnosis->diag_tb_case_no ?? '') }}" readonly>
+                                        <input type="hidden" class="form-control" id="diag_attending_physician"
+                                        name="diag_attending_physician"
+                                        value="{{ old('diag_attending_physician', $patient->diagnosis->diag_attending_physician ?? '') }}" readonly>
 
                             <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="diag_referred_to" class="form-label">Referred to</label>
+                                    <input type="text" class="form-control" id="diag_referred_to"
+                                        name="diag_referred_to" placeholder="Hospital / Barangay Name"
+                                        value="{{ old('diag_referred_to', $patient->diagnosis->diag_referred_to ?? '') }}">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="diag_address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="diag_address" name="diag_address"
+                                        placeholder="Address"
+                                        value="{{ old('diag_address', $patient->diagnosis->diag_address ?? '') }}">
+                                </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="diag_facility_code" class="form-label">Facility Code</label>
                                     <input type="text" class="form-control" id="diag_facility_code"
@@ -2354,7 +2385,7 @@
         <!-- Co-morbidities Modal -->
         <div class="modal fade" id="editComorbiditiesModal" tabindex="-1" aria-labelledby="editComorbiditiesModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editComorbiditiesModalLabel">Co-morbidities</h5>
@@ -2366,13 +2397,14 @@
                         @csrf
 
                         <div class="modal-body">
-                            <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
                                 <label for="com_date_diagnosed" class="form-label">Date Diagnosed</label>
                                 <input type="date" class="form-control" id="com_date_diagnosed"
                                     name="com_date_diagnosed" max="<?php echo date('Y-m-d'); ?>" required>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="com_type" class="form-label">Type</label>
                                 <select class="form-control form-select" id="com_type" name="com_type" required>
                                     <option value="">Please Select</option>
@@ -2385,16 +2417,17 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="com_other" class="form-label">Other (Optional)</label>
                                 <input type="text" class="form-control" id="com_other" name="com_other"
                                     placeholder="Specify">
                             </div>
 
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="com_treatment" class="form-label">Treatment</label>
                                 <input type="text" class="form-control" id="com_treatment" name="com_treatment"
                                     placeholder="Treatment">
+                            </div>
                             </div>
                         </div>
 
@@ -2550,7 +2583,7 @@
                     <form method="POST" action="{{ route('prescribed-drugs.update', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_start_date" class="form-label">Intensive Date</label>
                                     <input type="date" class="form-control" id="drug_start_date" name="drug_start_date"
@@ -2581,7 +2614,19 @@
                                     <input type="text" class="form-control" id="drug_unit" name="drug_unit"
                                         value="{{ old('drug_unit', $firstDrug->drug_unit ?? '') }}" readonly>
                                 </div>
-                            </div>
+                            </div> -->
+                            
+                                        <input type="hidden" class="form-control" id="drug_start_date" name="drug_start_date"
+                                        max="{{ date('Y-m-d') }}"
+                                        value="{{ old('drug_start_date', $firstDrug->drug_start_date ?? '') }}" readonly>
+                                        <input type="hidden" class="form-control" id="drug_name" name="drug_name"
+                                        value="{{ old('drug_name', $firstDrug->drug_name ?? '') }}" readonly>
+                                        <input type="hidden" class="form-control" id="drug_no_of_tablets" name="drug_no_of_tablets"
+                                        value="{{ old('drug_no_of_tablets', $firstDrug->drug_no_of_tablets ?? '') }}" readonly>
+                                        <input type="hidden" class="form-control" id="drug_strength" name="drug_strength"
+                                        value="{{ old('drug_strength', $firstDrug->drug_strength ?? '') }}" readonly>
+                                        <input type="hidden" class="form-control" id="drug_unit" name="drug_unit"
+                                        value="{{ old('drug_unit', $firstDrug->drug_unit ?? '') }}" readonly>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -2595,7 +2640,6 @@
                                     <label for="drug_con_name" class="form-label">Drug</label>
                                     <select name="drug_con_name" id="drug_con_name" class="form-control form-select"
                                     value="{{ old('drug_con_name', $firstDrug->drug_con_name ?? '') }}">
-                                        <option value="" disabled selected>Select</option>
                                         <option value="2FDC">2FDC</option>
                                         <option value="H">H</option>
                                         <option value="R">R</option>
@@ -2614,7 +2658,6 @@
                                     <label for="drug_con_strength" class="form-label">Strength</label>
                                     <select name="drug_con_strength" id="drug_con_strength" class="form-control form-select"
                                     value="{{ old('drug_con_strength', $firstDrug->drug_con_strength ?? '') }}">
-                                        <option value="" disabled selected>Select</option>
                                         <option value="150mg">150mg</option>
                                         <option value="75mg">75mg</option>
                                     </select>
@@ -2624,7 +2667,6 @@
                                     <label for="drug_con_unit" class="form-label">Unit</label>
                                     <select name="drug_con_unit" id="drug_con_unit" class="form-control form-select"
                                     value="{{ old('drug_con_unit', $firstDrug->drug_con_unit ?? '') }}">
-                                        <option value="" disabled selected>Select</option>
                                         <option value="Tablet">Tablet</option>
                                     </select>
                                 </div>
@@ -2660,36 +2702,36 @@
                             {{-- ========================= --}}
                             {{-- 🟩 TREATMENT SUPPORTER INFO --}}
                             {{-- ========================= --}}
-                            <h6 class="fw-semibold mt-2">Treatment Supporter Information</h6>
-                            <div class="row">
+                            <!-- <h5 class="fw-semibold">Treatment Supporter Information</h5>
+                            <div class="row mt-4">
                                 <div class="col-md-6 mb-3">
                                     <label for="sup_location" class="form-label">Location of Treatment</label>
                                     <input type="text" class="form-control" id="sup_location" name="sup_location"
-                                        value="{{ $patient->txSupporters->first()->sup_location ?? '' }}">
+                                        value="{{ $patient->txSupporters->first()->sup_location ?? '' }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="sup_name" class="form-label">Supporter Name</label>
                                     <input type="text" class="form-control" id="sup_name" name="sup_name"
-                                        value="{{ $patient->txSupporters->first()->sup_name ?? '' }}">
+                                        value="{{ $patient->txSupporters->first()->sup_name ?? '' }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="sup_designation" class="form-label">Designation</label>
                                     <input type="text" class="form-control" id="sup_designation" name="sup_designation"
-                                        value="{{ $patient->txSupporters->first()->sup_designation ?? '' }}">
+                                        value="{{ $patient->txSupporters->first()->sup_designation ?? '' }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="sup_type" class="form-label">Supporter Type</label>
                                     <input type="text" class="form-control" id="sup_type" name="sup_type"
-                                        value="{{ $patient->txSupporters->first()->sup_type ?? '' }}">
+                                        value="{{ $patient->txSupporters->first()->sup_type ?? '' }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="sup_contact_info" class="form-label">Contact Information</label>
                                     <input type="text" class="form-control" id="sup_contact_info" name="sup_contact_info"
-                                        value="{{ $patient->txSupporters->first()->sup_contact_info ?? '' }}">
+                                        value="{{ $patient->txSupporters->first()->sup_contact_info ?? '' }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -2701,25 +2743,38 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="sup_treatment_schedule" class="form-label">Schedule of Treatment</label>
                                     <input type="text" class="form-control" id="sup_treatment_schedule" name="sup_treatment_schedule"
-                                        value="{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '' }}">
+                                        value="{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '' }}" readonly>
                                 </div>
-                            </div>
+                            </div> -->
+                                        <input type="hidden" class="form-control" id="sup_location" name="sup_location"
+                                        value="{{ $patient->txSupporters->first()->sup_location ?? '' }}" readonly>
+                                        <input type="hidden" class="form-control" id="sup_name" name="sup_name"
+                                        value="{{ $patient->txSupporters->first()->sup_name ?? '' }}" readonly>
+                                        <input type="hidden" class="form-control" id="sup_designation" name="sup_designation"
+                                        value="{{ $patient->txSupporters->first()->sup_designation ?? '' }}" readonly>
+                                        <input type="hidden" class="form-control" id="sup_type" name="sup_type"
+                                        value="{{ $patient->txSupporters->first()->sup_type ?? '' }}" readonly>
+                                        <input type="hidden" class="form-control" id="sup_contact_info" name="sup_contact_info"
+                                        value="{{ $patient->txSupporters->first()->sup_contact_info ?? '' }}" readonly>
+                                        <input type="hidden" class="form-control" id="sup_dat_used" name="sup_dat_used"
+                                        value="{{ $patient->txSupporters->first()->sup_dat_used ?? '' }}">
+                                        <input type="hidden" class="form-control" id="sup_treatment_schedule" name="sup_treatment_schedule"
+                                        value="{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '' }}" readonly>
 
                             {{-- ========================= --}}
                             {{-- 🟦 TREATMENT SCHEDULE DETAILS --}}
                             {{-- ========================= --}}
-                            <h6 class="fw-semibold mt-3">Treatment Schedule Details</h6>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="pha_intensive_start" class="form-label">Intensive Phase Start Date</label>
                                     <input type="date" class="form-control" id="pha_intensive_start" name="pha_intensive_start"
-                                        value="{{ $patient->adherences->first()->pha_intensive_start ?? '' }}">
+                                        value="{{ $patient->adherences->first()->pha_intensive_start ?? '' }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="pha_intensive_end" class="form-label">Intensive Phase End Date</label>
                                     <input type="date" class="form-control" id="pha_intensive_end" name="pha_intensive_end"
-                                        value="{{ $patient->adherences->first()->pha_intensive_end ?? '' }}">
+                                        value="{{ $patient->adherences->first()->pha_intensive_end ?? '' }}" readonly>
                                 </div>
 
                                 <div class="col-md-6 mb-3">
@@ -2738,8 +2793,8 @@
                             {{-- ========================= --}}
                             {{-- 🟨 MEASUREMENTS --}}
                             {{-- ========================= --}}
-                            <h6 class="fw-semibold mt-3">Measurements</h6>
-                            <div class="row">
+                            <h5 class="fw-semibold mt-3">Measurements</h5>
+                            <div class="row mt-4">
                                 <div class="col-md-6 mb-3">
                                     <label for="pha_weight" class="form-label">Weight (kg)</label>
                                     <input type="number" step="0.01" class="form-control" id="pha_weight" name="pha_weight"
@@ -2818,7 +2873,7 @@
         <!-- Patient Progress Modal -->
         <div class="modal fade" id="editProgressModal" tabindex="-1" aria-labelledby="editProgressModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editProgressModalLabel">Patient Progress Report Form</h5>
@@ -2829,25 +2884,27 @@
                     <form method="POST" action="{{ route('patient-progress.store', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
-                            <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
                                 <label for="prog_date" class="form-label">Date</label>
                                 <input type="date" class="form-control" id="prog_date" name="prog_date"
                                     max="<?php echo date('Y-m-d'); ?>" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="prog_problem" class="form-label">Problem</label>
                                 <input type="text" class="form-control" id="prog_problem" name="prog_problem"
                                     placeholder="Problem" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="prog_action_taken" class="form-label">Action Taken</label>
                                 <input type="text" class="form-control" id="prog_action_taken" name="prog_action_taken"
                                     placeholder="Action taken" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label for="prog_plan" class="form-label">Plan</label>
                                 <input type="text" class="form-control" id="prog_plan" name="prog_plan"
                                     placeholder="Plan" required>
+                            </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -2955,15 +3012,29 @@
                             <!-- Smear Microscopy -->
                             <div class="mb-3">
                                 <label for="sput_smear_result" class="form-label">Smear Microscopy /TB LAMP</label>
-                                <input type="text" class="form-control" id="sput_smear_result" name="sput_smear_result"
-                                    placeholder="Smear microscopy / tb lamp">
+                                <!-- <input type="text" class="form-control" id="sput_smear_result" name="sput_smear_result"
+                                    placeholder="Smear microscopy / tb lamp"> -->
+                                    <select name="sput_smear_result" id="sput_smear_result" class="form-control form-select">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="MTB HIGH">MTB HIGH</option>
+                                        <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                        <option value="MTB LOW">MTB LOW</option>
+                                        <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                    </select>
                             </div>
 
                             <!-- Xpert MTB/RIF -->
                             <div class="mb-3">
                                 <label for="sput_xpert_result" class="form-label">Xpert MTB/RIF</label>
-                                <input type="text" class="form-control" id="sput_xpert_result" name="sput_xpert_result"
-                                    placeholder="Xpert mtb / rif" required>
+                                <!-- <input type="text" class="form-control" id="sput_xpert_result" name="sput_xpert_result"
+                                    placeholder="Xpert mtb / rif" required> -->
+                                    <select name="sput_xpert_result" id="sput_xpert_result" class="form-control form-select">
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="MTB HIGH">MTB HIGH</option>
+                                        <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                        <option value="MTB LOW">MTB LOW</option>
+                                        <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                    </select>
                             </div>
                         </div>
 
@@ -3012,7 +3083,7 @@
                             <div class="mb-3">
                                 <label for="xray_descriptive_comment" class="form-label">Descriptive Comments</label>
                                 <input type="text" class="form-control" id="xray_descriptive_comment"
-                                    name="xray_descriptive_comment" placeholder="Descriptive comments">
+                                    name="xray_descriptive_comment" placeholder="Descriptive Comments">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -3044,7 +3115,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_months_after_tx" class="form-label">Months After Treatment</label>
                                     <input type="number" class="form-control" id="fol_months_after_tx"
-                                        name="fol_months_after_tx" placeholder="Mo. after treatment" required>
+                                        name="fol_months_after_tx" placeholder="Months After Treatment" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_date" class="form-label">Date</label>
@@ -3057,12 +3128,12 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_cxr_findings" class="form-label">CXR Findings</label>
                                     <input type="text" class="form-control" id="fol_cxr_findings"
-                                        name="fol_cxr_findings" placeholder="Cxr findings">
+                                        name="fol_cxr_findings" placeholder="Cxr Findings">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_smear_xpert" class="form-label">Smear / Xpert</label>
                                     <input type="text" class="form-control" id="fol_smear_xpert" name="fol_smear_xpert"
-                                        placeholder="Smear /xpert">
+                                        placeholder="Smear / Xpert">
                                 </div>
                             </div>
 
@@ -3070,7 +3141,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="fol_tbc_dst" class="form-label">TBC & DST</label>
                                     <input type="text" class="form-control" id="fol_tbc_dst" name="fol_tbc_dst"
-                                        placeholder="Tbc & dst">
+                                        placeholder="Tbc & Dst">
                                 </div>
                             </div>
                         </div>
@@ -3345,6 +3416,19 @@
             document.getElementById('editOutcomeForm').reset();
         });
     </script>
+
+    @if (session('stay_on_tab'))
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabName = @json(session('stay_on_tab'));
+        // Apply tab
+        applyTab(tabName);
+        // Save in sessionStorage so that reload/back keeps it active
+        sessionStorage.setItem(STORAGE_KEY, tabName);
+    });
+    </script>
+    @endif
+
 
 </body>
 

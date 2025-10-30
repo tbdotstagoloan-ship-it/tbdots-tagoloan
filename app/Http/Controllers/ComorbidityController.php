@@ -24,6 +24,9 @@ class ComorbidityController extends Controller
             'com_treatment' => $request->com_treatment,
         ]);
 
-        return redirect()->back()->with('success', 'Co-morbidity added successfully.');
+        return redirect()
+            ->back()
+            ->with('success', 'Co-morbidity added successfully.')
+            ->with('stay_on_tab', 'treatment');
     }
 }

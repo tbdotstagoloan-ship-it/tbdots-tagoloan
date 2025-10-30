@@ -62,7 +62,10 @@ class AdherenceController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Administration of drugs record updated successfully!');
+        return redirect()
+            ->back()
+            ->with('success', 'Administration of drugs record updated successfully!')
+            ->with('stay_on_tab', 'treatment');
     }
 
 
