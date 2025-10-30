@@ -223,7 +223,7 @@
                   <th>Age</th>
                   <th>Sex</th>
                   <th>Barangay</th>
-                  <th>TB Case #</th>
+                  <!-- <th>TB Case #</th> -->
                   <th>Last Seen Date</th>
                   <th>Reason</th>
                   <th>Status</th>
