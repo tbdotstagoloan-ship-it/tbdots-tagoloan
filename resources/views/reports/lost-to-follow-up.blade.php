@@ -238,7 +238,7 @@
                   <td>{{ $patients->pat_age }}</td>
                   <td>{{ $patients->pat_sex }}</td>
                   <td>{{ $patients->barangay }}</td>
-                  <td>{{ $patients->diag_tb_case_no }}</td>
+                  <!-- <td>{{ $patients->diag_tb_case_no }}</td> -->
                   <td>{{ \Carbon\Carbon::parse($patients->outcome_date)->format('F j, Y') }}</td>
                   <td>{{ $patients->out_reason }}</td>
                   <td><span class="status-badge bg-warning">{{ $patients->outcome }}</span></td>
