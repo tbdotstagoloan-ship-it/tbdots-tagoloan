@@ -224,7 +224,23 @@
                     N/A
                   @endif
                 </td>
-                  <td><span class="status-badge bg-secondary">{{ $patient->out_outcome }}</span></td>
+                  <!-- <td><span class="status-badge bg-secondary">{{ $patient->out_outcome }}</span></td> -->
+                  <td>
+                      @php
+                          $out_outcome = strtolower($patient->out_outcome);
+                          $badgeClass = match($out_outcome) {
+                              'ongoing' => 'bg-secondary',
+                              'cured' => 'bg-success',
+                              'treatment completed' => 'bg-success',
+                              'lost to follow-up' => 'bg-warning text-dark',
+                              'died' => 'bg-danger',
+                              'relapse' => 'bg-warning text-dark',
+                              default => 'bg-secondary'
+                          };
+                      @endphp
+
+                      <span class="status-badge badge {{ $badgeClass }}">{{ ucfirst($patient->out_outcome) }}</span>
+                  </td>
                 </tr>
 
                 @endforeach

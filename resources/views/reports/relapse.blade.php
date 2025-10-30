@@ -219,23 +219,7 @@
                   <td>{{ $patient->barangay }}</td>
                   <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
-                  <!-- <td><span class="status-badge bg-warning">{{ $patient->clas_registration_group }}</span></td> -->
-                  <td>
-                      @php
-                          $clas_registration_group = strtolower($patient->clas_registration_group);
-                          $badgeClass = match($clas_registration_group) {
-                              'ongoing' => 'bg-secondary',
-                              'cured' => 'bg-success',
-                              'treatment completed' => 'bg-success',
-                              'lost to follow-up' => 'bg-warning text-dark',
-                              'died' => 'bg-danger',
-                              'relapse' => 'bg-warning text-dark',
-                              default => 'bg-secondary'
-                          };
-                      @endphp
-
-                      <span class="status-badge badge {{ $badgeClass }}">{{ ucfirst($patient->clas_registration_group) }}</span>
-                  </td>
+                  <td><span class="status-badge bg-warning">{{ $patient->clas_registration_group }}</span></td>
                 </tr>
 
                 @endforeach
