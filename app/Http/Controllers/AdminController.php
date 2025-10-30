@@ -103,7 +103,7 @@ class AdminController extends Controller
                     ->orWhere('p.pat_contact_number', 'LIKE', "%{$search}%")
                     ->orWhere('p.pat_current_address', 'LIKE', "%{$search}%");
             })
-            ->orderBy('d.diag_tb_case_no', 'desc')
+            ->orderBy('p.id', 'desc')
             ->paginate($perPage);
 
         $totalPatients = DB::table('tbl_patients')->count();
