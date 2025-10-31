@@ -32,6 +32,8 @@ class AdminController extends Controller
 
         $totalFacility = DB::table('tbl_diagnosing_facilities')->count();
 
+        $totalPersonnel = DB::table('users')->count();
+
         $accounts = PatientAccount::with('patient')->get();
 
             $patientsWithConsecutiveMissed = $accounts->map(function ($acc) {
@@ -75,6 +77,7 @@ class AdminController extends Controller
                 'pulmonary',
                 'extra',
                 'totalFacility',
+                'totalPersonnel',
                 'patientsWithConsecutiveMissed'
             ));
     }

@@ -84,11 +84,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -150,12 +157,6 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('profile')}}">
-          <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Settings</span>
-        </a>
-      </li>
     </ul>
 
     <div class="logout-section">
@@ -182,12 +183,12 @@
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 50px; color: #2c3e50; font-weight: 600;">
-      Physician / Personnel
+      Physician
     </h4>
 
     <div class="d-flex justify-content-end mb-2">
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPhysicianModal">
-        <i class="fas fa-plus me-2"></i>Add Physician / Personnel
+        <i class="fas fa-plus me-2"></i>Add Physician
       </button>
 
     </div>
@@ -309,12 +310,12 @@
             </tbody>
           </table>
           
-          <!-- Add Physician / Personnel Modal -->
+          <!-- Add Physician Modal -->
           <div class="modal fade" id="addPhysicianModal" tabindex="-1" aria-labelledby="addPhysicianModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-success text-white">
-                  <h5 class="modal-title" id="addPhysicianModalLabel">Add Physician / Personnel</h5>
+                  <h5 class="modal-title" id="addPhysicianModalLabel">Add Physician</h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -352,13 +353,12 @@
                         <select id="phy_designation" name="phy_designation" class="form-control form-select" required>
                           <option value="" disabled selected>Select</option>
                           <option value="Doctor">Doctor</option>
-                          <option value="Personnel">Personnel</option>
                         </select>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="phy_specialty" class="form-label">Specialty <span class="text-muted">(Optional)</span></label>
-                        <select id="phy_specialty" name="phy_specialty" class="form-control form-select">
+                        <label for="phy_specialty" class="form-label">Specialty <span class="text-danger">*</span></label>
+                        <select id="phy_specialty" name="phy_specialty" class="form-control form-select" required>
                           <option value="" disabled selected>Select</option>
                           <option value="Pulmonologist">Pulmonologist</option>
                           <option value="Infectious Disease Specialist">Infectious Disease Specialist</option>
@@ -392,7 +392,7 @@
             </div>
           </div>
           
-          <!-- View Physician / Personnel Modal -->
+          <!-- View Physician Modal -->
           <div class="modal fade" id="viewPhysicianModal" tabindex="-1" aria-labelledby="viewPhysicianModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content border-0 shadow">
@@ -457,7 +457,7 @@
             </div>
           </div>
 
-          <!-- Edit Physician / Personnel Modal -->
+          <!-- Edit Physician Modal -->
           <div class="modal fade" id="editPhysicianModal" tabindex="-1" aria-labelledby="editPhysicianModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content border-0 shadow">
@@ -500,12 +500,11 @@
                         <label for="edit_phy_designation" class="form-label">Designation <span class="text-danger">*</span></label>
                         <select id="edit_phy_designation" name="phy_designation" class="form-control form-select" required>
                           <option value="Doctor">Doctor</option>
-                          <option value="Personnel">Personnel</option>
                         </select>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_specialty" class="form-label">Specialty</label>
+                        <label for="edit_phy_specialty" class="form-label">Specialty <span class="text-danger">*</span></label>
                         <select id="edit_phy_specialty" name="phy_specialty" class="form-control form-select">
                           <option value="" disabled selected>Select</option>
                           <option value="Pulmonologist">Pulmonologist</option>

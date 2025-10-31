@@ -22,6 +22,9 @@ class SputumMonitoringController extends Controller
             'sput_xpert_result' => $request->sput_xpert_result,
         ]);
 
-        return redirect()->back()->with('success', 'Sputum monitoring result added successfully!');
+        return redirect()
+            ->back()
+            ->with('success', 'Sputum monitoring result added successfully!')
+            ->with('stay_on_tab', 'lab');
     }
 }

@@ -488,7 +488,7 @@ body {
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
+    gap: 16px;
     margin-bottom: 32px;
 }
 
@@ -596,6 +596,10 @@ body {
 }
 
 .staff .card-icon {
+  background-color: rgba(220, 252, 231, 0.8);
+}
+
+.personnel .card-icon {
   background-color: rgba(220, 252, 231, 0.8);
 }
 

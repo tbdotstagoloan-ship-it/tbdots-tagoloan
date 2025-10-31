@@ -796,7 +796,8 @@ class PatientSummaryController extends Controller
                 'd.diag_tb_case_no',
                 'r.reg_start_date',
                 't.out_date as outcome_date',
-                't.out_reason'
+                't.out_reason',
+                't.out_outcome as outcome'
             )
             ->where('t.out_outcome', 'Died');
             

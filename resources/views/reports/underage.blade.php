@@ -42,11 +42,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -108,12 +115,12 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
+      <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -217,7 +224,23 @@
                     N/A
                   @endif
                 </td>
-                  <td><span class="status-badge bg-secondary">{{ $patient->out_outcome }}</span></td>
+                  <!-- <td><span class="status-badge bg-secondary">{{ $patient->out_outcome }}</span></td> -->
+                  <td>
+                      @php
+                          $out_outcome = strtolower($patient->out_outcome);
+                          $badgeClass = match($out_outcome) {
+                              'ongoing' => 'bg-secondary',
+                              'cured' => 'bg-success',
+                              'treatment completed' => 'bg-success',
+                              'lost to follow-up' => 'bg-warning text-dark',
+                              'died' => 'bg-danger',
+                              'relapse' => 'bg-warning text-dark',
+                              default => 'bg-secondary'
+                          };
+                      @endphp
+
+                      <span class="status-badge badge {{ $badgeClass }}">{{ ucfirst($patient->out_outcome) }}</span>
+                  </td>
                 </tr>
 
                 @endforeach

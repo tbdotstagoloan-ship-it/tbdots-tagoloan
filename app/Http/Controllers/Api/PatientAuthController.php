@@ -17,7 +17,7 @@ class PatientAuthController extends Controller
             'password' => 'required',
         ]);
 
-        $account = PatientAccount::where('acc_username', $request->username)->first();
+        $account = PatientAccount::whereRaw('BINARY acc_username = ?', [$request->username])->first();
 
         if (!$account || !Hash::check($request->password, $account->acc_password)) {
             return response()->json([

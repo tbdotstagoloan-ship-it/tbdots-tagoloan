@@ -31,6 +31,9 @@ class CloseContactController extends Controller
             'con_remarks' => $request->con_remarks,
         ]);
 
-        return redirect()->back()->with('success', 'Close contact added successfully!');
+        return redirect()
+            ->back()
+            ->with('success', 'Close contact added successfully!')
+            ->with('stay_on_tab', 'lab');
     }
 }

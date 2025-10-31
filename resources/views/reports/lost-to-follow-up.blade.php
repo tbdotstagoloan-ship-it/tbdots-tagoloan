@@ -56,11 +56,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -122,12 +129,12 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
+      <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -216,7 +223,7 @@
                   <th>Age</th>
                   <th>Sex</th>
                   <th>Barangay</th>
-                  <th>TB Case #</th>
+                  <!-- <th>TB Case #</th> -->
                   <th>Last Seen Date</th>
                   <th>Reason</th>
                   <th>Status</th>
@@ -231,7 +238,7 @@
                   <td>{{ $patients->pat_age }}</td>
                   <td>{{ $patients->pat_sex }}</td>
                   <td>{{ $patients->barangay }}</td>
-                  <td>{{ $patients->diag_tb_case_no }}</td>
+                  <!-- <td>{{ $patients->diag_tb_case_no }}</td> -->
                   <td>{{ \Carbon\Carbon::parse($patients->outcome_date)->format('F j, Y') }}</td>
                   <td>{{ $patients->out_reason }}</td>
                   <td><span class="status-badge bg-warning">{{ $patients->outcome }}</span></td>

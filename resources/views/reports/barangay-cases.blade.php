@@ -42,11 +42,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -108,12 +115,12 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
+      <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -243,7 +250,7 @@
                         };
                     @endphp
 
-                    <span class="status-badge badge {{ $badgeClass }}" style="font-size: 0.85rem;">
+                    <span class="status-badge badge {{ $badgeClass }}">
                         {{ ucfirst($patient->out_outcome) }}
                     </span>
                   </td>
@@ -254,8 +261,8 @@
                 <td colspan="7" class="text-center">No data found</td>
             </tr>
         @endforelse
-    </tbody>
-</table>
+        </tbody>
+        </table>
                 </div>
               </div>
 

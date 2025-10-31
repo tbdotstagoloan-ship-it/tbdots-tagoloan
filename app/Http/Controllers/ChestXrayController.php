@@ -22,6 +22,9 @@ class ChestXrayController extends Controller
             'xray_descriptive_comment' => $request->xray_descriptive_comment,
         ]);
 
-        return redirect()->back()->with('success', 'Chest X-ray record added successfully.');
+        return redirect()
+            ->back()
+            ->with('success', 'Chest X-ray record added successfully.')
+            ->with('stay_on_tab', 'lab');
     }
 }

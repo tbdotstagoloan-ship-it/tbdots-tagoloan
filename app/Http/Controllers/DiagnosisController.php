@@ -24,7 +24,10 @@ class DiagnosisController extends Controller
         $diagnosis = Diagnosis::findOrFail($id);
         $diagnosis->update($request->all());
 
-        return redirect()->back()->with('success', 'Diagnosis updated successfully!');
+        return redirect()
+            ->back()
+            ->with('success', 'Referral saved successfully!')
+            ->with('stay_on_tab', 'diagnosis');
     }
 
 

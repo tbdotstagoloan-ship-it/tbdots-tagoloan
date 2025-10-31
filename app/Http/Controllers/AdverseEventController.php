@@ -23,7 +23,10 @@ class AdverseEventController extends Controller
             'adv_fda_reported_date' => $request->adv_fda_reported_date,
         ]);
 
-        return redirect()->back()->with('success', 'Adverse Event saved successfully.');
+        return redirect()
+            ->back()
+            ->with('success', 'Adverse Event saved successfully.')
+            ->with('stay_on_tab', 'lab');
     }
 
     public function storeFromMobile(Request $request, $username)

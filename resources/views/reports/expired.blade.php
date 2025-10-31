@@ -56,11 +56,18 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician / Personnel">
+      <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
           <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician / Personnel</span>
+          <span class="menu-text">Physician</span>
           </a>
+      </li>
+
+      <li class="menu-item" data-tooltip="Personnel">
+        <a href="{{url('personnel')}}">
+          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Personnel</span>
+        </a>
       </li>
 
       <li class="menu-item" data-tooltip="Facilities">
@@ -122,12 +129,12 @@
         </ul>
       </li>
 
-      <li class="menu-item" data-tooltip="Settings">
+      <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li>
+      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -216,7 +223,7 @@
                   <th>Age</th>
                   <th>Sex</th>
                   <th>Barangay</th>
-                  <th>TB Case #</th>
+                  <!-- <th>TB Case #</th> -->
                   <th>Date of Death</th>
                   <th>Cause</th>
                   <th>Status</th>
@@ -231,7 +238,7 @@
                   <td>{{ $patient->pat_age }}</td>
                   <td>{{ $patient->pat_sex }}</td>
                   <td>{{ $patient->barangay }}</td>
-                  <td>{{ $patient->diag_tb_case_no }}</td>
+                  <!-- <td>{{ $patient->diag_tb_case_no }}</td> -->
                   <td>{{ \Carbon\Carbon::parse($patient->outcome_date)->format('F j, Y') }}</td>
                   <td>{{ $patient->out_reason }}</td>
                   <td><span class="status-badge bg-danger">{{ $patient->out_outcome }}</span></td>
