@@ -57,6 +57,7 @@ class AdminController extends Controller
                     return [
                         'patient_id' => $patient->id ?? null,
                         'full_name' => $patient->pat_full_name,
+                        'barangay' => $patient->pat_current_address,
                         'username' => $acc->acc_username,
                         'contact' => $patient->pat_contact_number,
                         'consecutive_missed' => $consecutiveMissed,

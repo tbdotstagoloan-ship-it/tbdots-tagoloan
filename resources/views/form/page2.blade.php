@@ -702,7 +702,7 @@
                   </div>
                 </div>
 
-                <div class="row mb-2">
+                <!-- <div class="row mb-2">
                   <div class="col-md-4">
                     <label for="drug_con_date">Continuation <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="drug_con_date" id="drug_con_date" class="form-control"
@@ -742,7 +742,7 @@
                       </select>
                     <div class="error"></div>
                   </div>
-                </div>
+                </div> -->
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back
@@ -757,7 +757,7 @@
               <div class="tab-pane fade" id="admin" role="tabpanel">
                 <h5 class="mb-4">D. Administration of Drugs</h5>
                 <div class="row mb-3">
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <label for="sup_location">Location of Treatment <span style="color: red;">*</span></label>
                     <select name="sup_location" id="sup_location" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
@@ -767,13 +767,13 @@
                     </select>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <label for="sup_name">Name of Tx Supporter <span style="color: red;">*</span></label>
                     <input type="text" name="sup_name" id="sup_name" class="form-control"
                       placeholder="Name" required>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <label for="sup_designation">Designation <span style="color: red;">*</span></label>
                       <select name="sup_designation" id="sup_designation" class="form-control form-select" required>
                         <option value="" disabled selected>Select</option>
@@ -782,7 +782,7 @@
                       </select>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <label for="sup_type">Type of Tx Supporter <span style="color: red;">*</span></label>
                     <select name="sup_type" id="sup_type" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
@@ -794,15 +794,15 @@
                     </select>
                     <div class="error"></div>
                   </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-md-3">
+
+                <!-- <div class="row mb-3"> -->
+                  <div class="col-md-4">
                     <label for="sup_contact_info">Tx Supporter Contact <span style="color: red;">*</span></label>
                     <input type="text" name="sup_contact_info" id="sup_contact_info" class="form-control"
                       placeholder="Tx Supporter Contact" maxlength="11" required>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <label for="sup_treatment_schedule">Schedule of Treatment <span style="color: red;">*</span></label>
                       <select name="sup_treatment_schedule" id="sup_treatment_schedule" class="form-control form-select">
                         <option value="" disabled selected>Select</option>
@@ -810,29 +810,32 @@
                       </select>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-3">
-                    <label for="sup_dat_used">Name of DAT/s Used <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="sup_dat_used" id="sup_dat_used" class="form-control"
-                      placeholder="Name of DAT/s Used">
-                    <div class="error"></div>
-                  </div>
-                </div>
-                <hr>
-                <div class="row mb-3">
-                  <div class="col-md-6">
+                  <!-- <div class="row mb-3"> -->
+                  <div class="col-md-4">
                     <label for="pha_intensive_start">Intensive Phase Start Date</label>
                     <input type="date" name="pha_intensive_start" id="pha_intensive_start" class="form-control"
                       readonly>
                     <div class="error"></div>
                   </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label for="pha_intensive_end">Intensive Phase End Date</label>
                     <input type="date" name="pha_intensive_end" id="pha_intensive_end" class="form-control"
                       readonly>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-6">
+
+                <!-- </div> -->
+                <!-- <hr> -->
+                 <div class="col-md-4">
+                    <label for="sup_dat_used">Name of DAT/s Used <span style="color: #6b7280;">(Optional)</span></label>
+                    <input type="text" name="sup_dat_used" id="sup_dat_used" class="form-control"
+                      placeholder="Name of DAT/s Used">
+                    <div class="error"></div>
+                  </div>
+                  </div>
+                
+                  <!-- <div class="col-md-6">
                     <label for="pha_continuation_start">Continuation Phase Start <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="pha_continuation_start" id="pha_continuation_start" class="form-control"
                       readonly>
@@ -844,10 +847,10 @@
                     <input type="date" name="pha_continuation_end" id="pha_continuation_end" class="form-control"
                       readonly>
                     <div class="error"></div>
-                  </div>
-                </div>
+                  </div> -->
+                <!-- </div> -->
 
-                <div class="row mb-3">
+                <!-- <div class="row mb-3">
                   <div class="col-md-6">
                     <label for="pha_weight">Weight <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="pha_weight" id="pha_weight" class="form-control" placeholder="kg">
@@ -859,7 +862,7 @@
                       placeholder="cm">
                     <div class="error"></div>
                   </div>
-                </div>
+                </div> -->
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back
@@ -1065,11 +1068,6 @@
                     <tr><th>No. of Tablets</th><td>${form.drug_no_of_tablets.value}</td></tr>
                     <tr><th>Strength</th><td>${form.drug_strength.value}</td></tr>
                     <tr><th>Unit</th><td>${form.drug_unit.value}</td></tr>
-                    <tr><th>Continuation Date</th><td>${form.drug_con_date.value}</td></tr>
-                    <tr><th>Continuation No. of Tablets</th><td>${form.drug_con_no_tabs.value}</td></tr>
-                    <tr><th>Continuation Drug</th><td>${form.drug_con_name.value}</td></tr>
-                    <tr><th>Continuation Strength</th><td>${form.drug_con_strength.value}</td></tr>
-                    <tr><th>Continuation Unit</th><td>${form.drug_con_unit.value}</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1090,10 +1088,6 @@
                     <tr><th>DAT/s Used</th><td>${form.sup_dat_used.value}</td></tr>
                     <tr><th>Intensive Phase Start</th><td>${form.pha_intensive_start.value}</td></tr>
                     <tr><th>Intensive Phase End</th><td>${form.pha_intensive_end.value}</td></tr>
-                    <tr><th>Continuation Phase Start</th><td>${form.pha_continuation_start.value}</td></tr>
-                    <tr><th>Continuation Phase End</th><td>${form.pha_continuation_end.value}</td></tr>
-                    <tr><th>Weight</th><td>${form.pha_weight.value}</td></tr>
-                    <tr><th>Children Height</th><td>${form.pha_child_height.value}</td></tr>
                   </tbody>
                 </table>
               </div>

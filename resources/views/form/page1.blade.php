@@ -674,27 +674,26 @@
               <div class="tab-pane fade" id="diag" role="tabpanel">
                 <h5 class="mb-4">D. Diagnosis</h5>
                 <div class="row mb-3">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <label for="diag_diagnosis_date">Date of Diagnosis <span style="color: red;">*</span></label>
                     <input type="date" name="diag_diagnosis_date" id="diag_diagnosis_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>" required>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <label for="diag_notification_date">Date of Notification</label>
                     <input type="date" name="diag_notification_date" id="diag_notification_date" class="form-control"
                       readonly>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <label for="diag_tb_case_no">TB Case Number</label>
                     <input type="text" name="diag_tb_case_no" id="diag_tb_case_no" class="form-control"
                       value="{{ $tbCaseNo }}" readonly>
                   </div>
-                </div>
 
-                <div class="row mb-3">
-                  <div class="col-md-4">
+                <!-- <div class="row mb-3"> -->
+                  <div class="col-md-3">
                     <label for="diag_attending_physician">Attending Physician <span style="color: red;">*</span></label>
                     <select name="diag_attending_physician" id="diag_attending_physician"
                       class="form-control form-select" required>
@@ -702,7 +701,8 @@
                     </select>
                     <div class="error"></div>
                   </div>
-                  <div class="col-md-4">
+                  </div>
+                  <!-- <div class="col-md-4">
                     <label for="diag_referred_to">Referred To <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="diag_referred_to" id="diag_referred_to" class="form-control"
                       placeholder="Name of Treatment Facility">
@@ -712,10 +712,10 @@
                     <label for="diag_address">Address <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="diag_address" id="diag_address" class="form-control" placeholder="Address">
                     <div class="error"></div>
-                  </div>
-                </div>
+                  </div> -->
+                <!-- </div> -->
 
-                <div class="row mb-2">
+                <!-- <div class="row mb-2">
                   <div class="col-md-4">
                     <label for="diag_facility_code">Facility Code <span
                         style="color: #6b7280;">(Optional)</span></label>
@@ -726,22 +726,22 @@
                   <div class="col-md-4">
                     <label for="diag_region">Region <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="diag_region" id="diag_region" class="form-control" placeholder="Region">
-                    <!-- <select id="diag_region" class="form-control form-select">
+                    <select id="diag_region" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                     </select>
-                    <input type="hidden" name="diag_region" id="diag_region_text"> -->
+                    <input type="hidden" name="diag_region" id="diag_region_text">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="diag_province">Province/HUC <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="diag_province" id="diag_province" class="form-control" placeholder="Province/HUC">
-                    <!-- <select id="diag_province" class="form-control form-select">
+                    <select id="diag_province" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                     </select>
-                    <input type="hidden" name="diag_province" id="diag_province_text"> -->
+                    <input type="hidden" name="diag_province" id="diag_province_text">
                     <div class="error"></div>
                   </div>
-                </div>
+                </div> -->
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back
@@ -1108,11 +1108,6 @@
                   <tr><th>Notification Date</th><td>${diag_notification_date.value}</td></tr>
                   <tr><th>TB Case Number</th><td>${diag_tb_case_no.value}</td></tr>
                   <tr><th>Attending Physician</th><td>${diag_attending_physician.options[diag_attending_physician.selectedIndex]?.text || 'N/A'}</td></tr>
-                  <tr><th>Referred to</th><td>${diag_referred_to.value}</td></tr>
-                  <tr><th>Address</th><td>${diag_address.value}</td></tr>
-                  <tr><th>Facility Code</th><td>${diag_facility_code.value}</td></tr>
-                  <tr><th>Province</th><td>${diag_province.value}</td></tr>
-                  <tr><th>Region</th><td>${diag_region.value}</td></tr>
                 </tbody>
               </table>
             </div>

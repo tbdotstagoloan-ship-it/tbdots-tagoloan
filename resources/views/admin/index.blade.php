@@ -300,7 +300,7 @@
               <tr>
                 <th>ID</th>
                 <th>Full Name</th>
-                <th>Username</th>
+                <th>Barangay</th>
                 <th>Contact</th>
                 <th>No. of Consecutive Missed</th>
                 <th>Last Missed Date</th>
@@ -316,7 +316,7 @@
                       {{ $patient['full_name'] }}
                     </a>
                   </td>
-                  <td>{{ $patient['username'] }}</td>
+                  <td>{{ $patient['barangay'] }}</td>
                   <td>{{ $patient['contact'] ?? '-' }}</td>
                   <td>
                     <span style="color:red; font-weight:bold;">
