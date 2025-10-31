@@ -20,12 +20,12 @@ class MedicationAdherenceController extends Controller
     {
         $validated = $request->validate([
             'username' => 'required|string',
-            'date' => 'required|date',
+            'datetime' => 'required|date',
             'status' => 'required|in:taken,missed',
         ]);
 
         MedicationAdherence::updateOrCreate(
-            ['username' => $validated['username'], 'date' => $validated['date']],
+            ['username' => $validated['username'], 'datetime' => $validated['datetime']],
             ['status' => $validated['status']]
         );
 
