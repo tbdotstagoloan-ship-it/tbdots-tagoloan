@@ -14,7 +14,7 @@ class MedicationAdherence extends Model
     protected $fillable = [
         'patient_id',
         'username',
-        'datetime',
+        'date',
         'status',
     ];
 
