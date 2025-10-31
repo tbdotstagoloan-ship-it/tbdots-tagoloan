@@ -250,7 +250,7 @@
                         };
                     @endphp
 
-                    <span class="status-badge badge {{ $badgeClass }}" style="font-size: 0.85rem;">
+                    <span class="status-badge badge {{ $badgeClass }}">
                         {{ ucfirst($patient->out_outcome) }}
                     </span>
                   </td>
@@ -261,8 +261,8 @@
                 <td colspan="7" class="text-center">No data found</td>
             </tr>
         @endforelse
-    </tbody>
-</table>
+        </tbody>
+        </table>
                 </div>
               </div>
 
