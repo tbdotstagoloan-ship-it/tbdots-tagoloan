@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adherence;
+use App\Models\PrescribedDrug;
 use Illuminate\Http\Request;
 use App\Models\Patient;
 
@@ -10,7 +11,7 @@ class AdherenceController extends Controller
 {
     public function update(Request $request, $id)
     {
-        // ✅ Validate all fields from all 3 tables (Supporter Info, Schedule, Measurements)
+        // ✅ Validate all fields from all 3 tables
         $validated = $request->validate([
             // Treatment Supporter Information
             'sup_location' => 'nullable|string|max:255',
@@ -30,9 +31,16 @@ class AdherenceController extends Controller
             // Measurements
             'pha_weight' => 'nullable|numeric|min:0',
             'pha_child_height' => 'nullable|numeric|min:0',
+
+            // Prescribed Drugs
+            'drug_con_date' => 'nullable|date',
+            'drug_con_name' => 'nullable|string|max:255',
+            'drug_con_no_of_tablets' => 'nullable|string|max:255',
+            'drug_con_strength' => 'nullable|string|max:255',
+            'drug_con_unit' => 'nullable|string|max:255',
         ]);
 
-        // ✅ Find existing records
+        // ✅ Find existing patient
         $patient = Patient::findOrFail($id);
 
         // --- Update Treatment Supporter Info ---
@@ -62,12 +70,18 @@ class AdherenceController extends Controller
             ]);
         }
 
+        // --- Update or Create Prescribed Drugs ---
+        $prescribedDrug = PrescribedDrug::firstOrNew(['patient_id' => $patient->id]);
+        $prescribedDrug->drug_con_date = $request->drug_con_date;
+        $prescribedDrug->drug_con_name = $request->drug_con_name;
+        $prescribedDrug->drug_con_no_of_tablets = $request->drug_con_no_of_tablets;
+        $prescribedDrug->drug_con_strength = $request->drug_con_strength;
+        $prescribedDrug->drug_con_unit = $request->drug_con_unit;
+        $prescribedDrug->save();
+
         return redirect()
             ->back()
             ->with('success', 'Administration of drugs record updated successfully!')
             ->with('stay_on_tab', 'treatment');
     }
-
-
-
 }

@@ -1385,92 +1385,6 @@
                                     <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                                         <div class="d-flex justify-content-between align-items-center mb-3">
                                             <div>
-                                                <h5 class="fw-bold mb-1">Prescribed Drugs</h5>
-                                                <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and continuation phases.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editPrescribedDrugsModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
-
-                                        @php
-                                            $firstDrug = $patient->prescribedDrugs->first();
-                                        @endphp
-
-                                        @if ($firstDrug)
-                                            {{-- Table 1: Intensive Phase --}}
-                                            <small class="fw-semibold mt-3">Intensive Phase</small>
-                                            <div class="table-responsive mb-4">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date Start</th>
-                                                            <th>Drug</th>
-                                                            <th>No. of Tablets</th>
-                                                            <th>Strength</th>
-                                                            <th>Unit</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                @if(!empty($firstDrug->drug_start_date))
-                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_start_date)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ $firstDrug->drug_name ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_no_of_tablets ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_strength ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_unit ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
-                                            {{-- Table 2: Continuation Phase --}}
-                                            <small class="fw-semibold mt-3">Continuation Phase</small>
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date</th>
-                                                            <th>Drug</th>
-                                                            <th>No. of Tablets</th>
-                                                            <th>Strength</th>
-                                                            <th>Unit</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                @if(!empty($firstDrug->drug_con_date))
-                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_con_date)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ $firstDrug->drug_con_name ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_con_no_of_tablets ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_con_strength ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_con_unit ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2 mb-0">
-                                                No prescribed drugs recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
                                                 <h5 class="fw-bold mb-1">Administration of Drugs</h5>
                                                 <p class="text-muted small mb-0">Details of treatment supporter, treatment schedules, and
                                                     patient measurements.</p>
@@ -1585,6 +1499,91 @@
                                         @if ($patient->txSupporters->isEmpty() && $patient->adherences->isEmpty())
                                             <p class="text-muted fst-italic mt-2">
                                                 No administration of drugs recorded for this patient.
+                                            </p>
+                                        @endif
+                                    </div>
+
+                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <h5 class="fw-bold mb-1">Prescribed Drugs</h5>
+                                                <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and continuation phases.</p>
+                                            </div>
+                                            <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                                                data-bs-target="#editPrescribedDrugsModal">
+                                                <i class="fas fa-plus"></i> Add Record
+                                            </button> -->
+                                        </div>
+
+                                        @php
+                                            $firstDrug = $patient->prescribedDrugs->first();
+                                        @endphp
+
+                                        @if ($firstDrug)
+                                            {{-- Table 1: Intensive Phase --}}
+                                            <small class="fw-semibold mt-3">Intensive Phase</small>
+                                            <div class="table-responsive mb-4">
+                                                <table class="table align-middle">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Date Start</th>
+                                                            <th>Drug</th>
+                                                            <th>No. of Tablets</th>
+                                                            <th>Strength</th>
+                                                            <th>Unit</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                @if(!empty($firstDrug->drug_start_date))
+                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_start_date)->format('F j, Y') }}
+                                                                @else
+                                                                    —
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ $firstDrug->drug_name ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_no_of_tablets ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_strength ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_unit ?? '—' }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                            {{-- Table 2: Continuation Phase --}}
+                                            <small class="fw-semibold mt-3">Continuation Phase</small>
+                                            <div class="table-responsive">
+                                                <table class="table align-middle">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Drug</th>
+                                                            <th>No. of Tablets</th>
+                                                            <th>Strength</th>
+                                                            <th>Unit</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                @if(!empty($firstDrug->drug_con_date))
+                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_con_date)->format('F j, Y') }}
+                                                                @else
+                                                                    —
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ $firstDrug->drug_con_name ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_con_no_of_tablets ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_con_strength ?? '—' }}</td>
+                                                            <td>{{ $firstDrug->drug_con_unit ?? '—' }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @else
+                                            <p class="text-muted fst-italic mt-2 mb-0">
+                                                No prescribed drugs recorded for this patient.
                                             </p>
                                         @endif
                                     </div>
@@ -2040,10 +2039,6 @@
 
                                             <div class="adherence-stats-container mt-4">
                                                 <div class="adherence-stat-card adherence-stat-success">
-                                                    <div class="adherence-stat-label">Adherence Rate</div>
-                                                    <div class="adherence-stat-value" id="adherenceRate">0%</div>
-                                                </div>
-                                                <div class="adherence-stat-card adherence-stat-success">
                                                     <div class="adherence-stat-label">Days Taken</div>
                                                     <div class="adherence-stat-value" id="daysTaken">0</div>
                                                 </div>
@@ -2051,7 +2046,26 @@
                                                     <div class="adherence-stat-label">Days Missed</div>
                                                     <div class="adherence-stat-value" id="daysMissed">0</div>
                                                 </div>
+                                                <div class="adherence-stat-card adherence-stat-success">
+                                                    <div class="adherence-stat-label">Adherence Rate</div>
+                                                    <div class="adherence-stat-value" id="adherenceRate">0%</div>
+                                                </div>
                                             </div>
+
+                                            <div class="adherence-stats-container mt-4">
+                                            <div class="adherence-stat-card adherence-stat-info">
+                                                <div class="adherence-stat-label">Total Days Taken</div>
+                                                <div class="adherence-stat-value" id="totalDaysTaken">0</div>
+                                            </div>
+                                            <div class="adherence-stat-card adherence-stat-info">
+                                                <div class="adherence-stat-label">Total Days Missed</div>
+                                                <div class="adherence-stat-value" id="totalDaysMissed">0</div>
+                                            </div>
+                                            <div class="adherence-stat-card adherence-stat-primary">
+                                                <div class="adherence-stat-label">Overall Adherence Rate</div>
+                                                <div class="adherence-stat-value" id="totalAdherenceRate">0%</div>
+                                            </div>
+                                        </div>
 
                                             <div class="adherence-legend-container">
                                                 <div class="adherence-legend">
@@ -2069,6 +2083,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -2570,7 +2585,7 @@
 
 
         <!-- ✅ Prescribed Drugs Modal -->
-        <div class="modal fade" id="editPrescribedDrugsModal" tabindex="-1"
+        <!-- <div class="modal fade" id="editPrescribedDrugsModal" tabindex="-1"
             aria-labelledby="editPrescribedDrugsModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -2579,11 +2594,11 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <!-- ✅ Use patient ID in route -->
+                    
                     <form method="POST" action="{{ route('prescribed-drugs.update', $patient->id) }}">
                         @csrf
                         <div class="modal-body">
-                            <!-- <div class="row">
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="drug_start_date" class="form-label">Intensive Date</label>
                                     <input type="date" class="form-control" id="drug_start_date" name="drug_start_date"
@@ -2614,7 +2629,7 @@
                                     <input type="text" class="form-control" id="drug_unit" name="drug_unit"
                                         value="{{ old('drug_unit', $firstDrug->drug_unit ?? '') }}" readonly>
                                 </div>
-                            </div> -->
+                            </div>
                             
                                         <input type="hidden" class="form-control" id="drug_start_date" name="drug_start_date"
                                         max="{{ date('Y-m-d') }}"
@@ -2680,7 +2695,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <!-- Administration of Drugs Modal -->
@@ -2760,12 +2775,16 @@
                                         value="{{ $patient->txSupporters->first()->sup_dat_used ?? '' }}">
                                         <input type="hidden" class="form-control" id="sup_treatment_schedule" name="sup_treatment_schedule"
                                         value="{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '' }}" readonly>
+                                        <input type="hidden" class="form-control" id="pha_intensive_start" name="pha_intensive_start"
+                                        value="{{ $patient->adherences->first()->pha_intensive_start ?? '' }}" readonly>
+                                        <input type="hidden" class="form-control" id="pha_intensive_end" name="pha_intensive_end"
+                                        value="{{ $patient->adherences->first()->pha_intensive_end ?? '' }}" readonly>
 
                             {{-- ========================= --}}
                             {{-- 🟦 TREATMENT SCHEDULE DETAILS --}}
                             {{-- ========================= --}}
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
+                            <!-- <div class="row"> -->
+                                <!-- <div class="col-md-6 mb-3">
                                     <label for="pha_intensive_start" class="form-label">Intensive Phase Start Date</label>
                                     <input type="date" class="form-control" id="pha_intensive_start" name="pha_intensive_start"
                                         value="{{ $patient->adherences->first()->pha_intensive_start ?? '' }}" readonly>
@@ -2775,26 +2794,15 @@
                                     <label for="pha_intensive_end" class="form-label">Intensive Phase End Date</label>
                                     <input type="date" class="form-control" id="pha_intensive_end" name="pha_intensive_end"
                                         value="{{ $patient->adherences->first()->pha_intensive_end ?? '' }}" readonly>
-                                </div>
+                                </div> -->
 
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_continuation_start" class="form-label">Continuation Phase Start Date</label>
-                                    <input type="date" class="form-control" id="pha_continuation_start" name="pha_continuation_start"
-                                        value="{{ $patient->adherences->first()->pha_continuation_start ?? '' }}">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_continuation_end" class="form-label">Continuation Phase End Date</label>
-                                    <input type="date" class="form-control" id="pha_continuation_end" name="pha_continuation_end"
-                                        value="{{ $patient->adherences->first()->pha_continuation_end ?? '' }}">
-                                </div>
-                            </div>
+                            <!-- </div> -->
 
                             {{-- ========================= --}}
-                            {{-- 🟨 MEASUREMENTS --}}
+                            {{-- MEASUREMENTS --}}
                             {{-- ========================= --}}
-                            <h5 class="fw-semibold mt-3">Measurements</h5>
-                            <div class="row mt-4">
+                            <!-- <h5 class="fw-semibold mt-3">Measurements</h5> -->
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="pha_weight" class="form-label">Weight (kg)</label>
                                     <input type="number" step="0.01" class="form-control" id="pha_weight" name="pha_weight"
@@ -2806,6 +2814,50 @@
                                     <input type="number" step="0.01" class="form-control" id="pha_child_height" name="pha_child_height"
                                         value="{{ $patient->adherences->first()->pha_child_height ?? '' }}">
                                 </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pha_continuation_start" class="form-label">Continuation Phase Start Date</label>
+                                    <input type="date" class="form-control" id="pha_continuation_start" name="pha_continuation_start"
+                                        value="{{ $patient->adherences->first()->pha_continuation_start ?? '' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="pha_continuation_end" class="form-label">Continuation Phase End Date</label>
+                                    <input type="date" class="form-control" id="pha_continuation_end" name="pha_continuation_end"
+                                        value="{{ $patient->adherences->first()->pha_continuation_end ?? '' }}" readonly>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="drug_con_date">Continuation Date</label>
+                                    <input type="text" class="form-control" id="drug_con_date" name="drug_con_date"
+                                        max="{{ date('Y-m-d') }}" 
+                                        value="{{ old('drug_con_date', $firstDrug->drug_con_date ?? '') }}" readonly>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="drug_con_name" class="form-label">Drug</label>
+                                    <input type="text" name="drug_con_name" id="drug_con_name" class="form-control"
+                                        value="{{ old('drug_con_name', $firstDrug->drug_con_name ?? '') }}" readonly>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="drug_con_no_of_tablets">No. of Tablets</label>
+                                    <input type="text" class="form-control" id="drug_con_no_of_tablets" name="drug_con_no_of_tablets" 
+                                        value="{{ old('drug_con_no_of_tablets', $firstDrug->drug_con_no_of_tablets ?? '') }}" readonly>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="drug_con_strength" class="form-label">Strength</label>
+                                    <input type="text" name="drug_con_strength" id="drug_con_strength" class="form-control"
+                                        value="{{ old('drug_con_strength', $firstDrug->drug_con_strength ?? '') }}" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="drug_con_unit" class="form-label">Unit</label>
+                                     <input type="text" name="drug_con_unit" id="drug_con_unit" class="form-control"
+                                        value="{{ old('drug_con_unit', $firstDrug->drug_con_unit ?? '') }}" readonly>
+                                </div>
+
                             </div>
                         </div>
 
@@ -3269,37 +3321,51 @@
             const daysTakenEl = document.getElementById("daysTaken");
             const daysMissedEl = document.getElementById("daysMissed");
 
-            if (!calendar || !monthYear || !adherenceRateEl || !daysTakenEl || !daysMissedEl) {
-                console.warn('Adherence calendar elements not found; skipping calendar init.');
-                return;
-            }
+            // new total stat elements
+            const totalDaysTakenEl = document.getElementById("totalDaysTaken");
+            const totalDaysMissedEl = document.getElementById("totalDaysMissed");
+            const totalAdherenceRateEl = document.getElementById("totalAdherenceRate");
+
+            if (!calendar || !monthYear) return;
 
             let currentDate = new Date();
-            let adherenceData = {}; // reassignable
+            let adherenceData = {};
 
-            // pass server-side username if available, otherwise null
             const username = @json(
                 $patient->adherences->first()->username ?? $patient->patientAccount->acc_username ?? null
             );
 
             function calculateStats(year, month) {
-                let taken = 0;
-                let missed = 0;
+                let taken = 0, missed = 0;
+                let totalTaken = 0, totalMissed = 0;
 
                 Object.keys(adherenceData).forEach(dateStr => {
                     const date = new Date(dateStr);
+
+                    // count monthly
                     if (date.getFullYear() === year && date.getMonth() === month) {
                         if (adherenceData[dateStr] === "taken") taken++;
                         if (adherenceData[dateStr] === "missed") missed++;
                     }
+
+                    // count overall totals
+                    if (adherenceData[dateStr] === "taken") totalTaken++;
+                    if (adherenceData[dateStr] === "missed") totalMissed++;
                 });
 
-                const total = taken + missed;
-                const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
-
-                adherenceRateEl.textContent = rate + "%";
+                // per-month
+                const monthTotal = taken + missed;
+                const monthRate = monthTotal > 0 ? Math.round((taken / monthTotal) * 100) : 0;
+                adherenceRateEl.textContent = monthRate + "%";
                 daysTakenEl.textContent = taken;
                 daysMissedEl.textContent = missed;
+
+                // total
+                const totalDays = totalTaken + totalMissed;
+                const totalRate = totalDays > 0 ? Math.round((totalTaken / totalDays) * 100) : 0;
+                totalDaysTakenEl.textContent = totalTaken;
+                totalDaysMissedEl.textContent = totalMissed;
+                totalAdherenceRateEl.textContent = totalRate + "%";
             }
 
             function renderCalendar(date) {
@@ -3312,7 +3378,6 @@
                 const monthName = date.toLocaleString("default", { month: "long" });
                 monthYear.textContent = `${monthName} ${year}`;
 
-                // Day headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3321,18 +3386,15 @@
                     calendar.appendChild(header);
                 });
 
-                // Empty cells for offset
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
-                // Calendar days with adherence status
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
                     cell.textContent = day;
                     cell.classList.add("adherence-calendar-day");
 
@@ -3365,12 +3427,9 @@
 
             async function fetchAdherenceData() {
                 try {
-                    let url;
-                    if (username) {
-                        url = `/api/adherence/${encodeURIComponent(username)}`;
-                    } else {
-                        url = `/api/adherence/patient/{{ $patient->id }}`;
-                    }
+                    let url = username
+                        ? `/api/adherence/${encodeURIComponent(username)}`
+                        : `/api/adherence/patient/{{ $patient->id }}`;
 
                     const response = await fetch(url, { credentials: 'same-origin' });
                     if (!response.ok) {
@@ -3379,10 +3438,8 @@
                     }
 
                     const data = await response.json();
-
                     adherenceData = {};
                     (data || []).forEach(item => {
-                        // ensure date format YYYY-MM-DD
                         const d = item.date ? item.date.split(' ')[0] : null;
                         if (d) adherenceData[d] = item.status;
                     });
@@ -3393,11 +3450,9 @@
                 }
             }
 
-            // Initial fetch and render
             fetchAdherenceData();
         })();
         </script>
-
 
     <script>
         function editOutcome(id, outcome, date, reason) {
@@ -3428,6 +3483,118 @@
     });
     </script>
     @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // 🟩 Elements
+    const weightInput = document.getElementById('pha_weight');
+    const heightInput = document.getElementById('pha_child_height');
+    const drugName = document.getElementById('drug_con_name');
+    const noOfTablets = document.getElementById('drug_con_no_of_tablets');
+    const strength = document.getElementById('drug_con_strength');
+    const unit = document.getElementById('drug_con_unit');
+
+    // 🚫 Function to block invalid keys
+    function preventInvalidKeys(input) {
+        input.addEventListener('keydown', function (event) {
+        if (['-', 'e', 'E', '+'].includes(event.key)) {
+            event.preventDefault();
+        }
+        });
+
+        // 🚫 Prevent negative or invalid values
+        input.addEventListener('input', function () {
+        const value = parseFloat(this.value);
+        if (isNaN(value) || value < 0) {
+            this.value = '';
+        }
+        });
+    }
+
+    // Apply validation to both weight & height
+    if (weightInput) preventInvalidKeys(weightInput);
+    if (heightInput) preventInvalidKeys(heightInput);
+
+    // 🧮 Weight-based drug logic
+    if (weightInput) {
+        weightInput.addEventListener('input', function () {
+        const weight = parseFloat(this.value);
+
+        // 🧹 Reset if invalid
+        if (isNaN(weight) || this.value.trim() === '') {
+            drugName.value = '';
+            noOfTablets.value = '';
+            strength.value = '';
+            unit.value = '';
+            return;
+        }
+
+        // ✅ Set base drug name
+        drugName.value = '2FDC';
+
+        // ✅ Determine dosage by weight range
+        if (weight >= 25 && weight <= 37) {
+            noOfTablets.value = '2';
+            strength.value = '75mg';
+            unit.value = 'Tablet';
+        } else if (weight >= 38 && weight <= 54) {
+            noOfTablets.value = '3';
+            strength.value = '150mg';
+            unit.value = 'Tablet';
+        } else if (weight >= 55 && weight <= 70) {
+            noOfTablets.value = '4';
+            strength.value = '275mg';
+            unit.value = 'Tablet';
+        } else if (weight > 70) {
+            noOfTablets.value = '5';
+            strength.value = '400mg';
+            unit.value = 'Tablet';
+        } else {
+            // For weight below 25
+            drugName.value = '';
+            noOfTablets.value = '';
+            strength.value = '';
+            unit.value = '';
+        }
+        });
+    }
+
+    // 🟦 Continuation Phase Date Logic
+    const conStart = document.getElementById('pha_continuation_start');
+    const conEnd = document.getElementById('pha_continuation_end');
+    const drugConDate = document.getElementById('drug_con_date');
+
+    if (conStart) {
+        conStart.addEventListener('change', function () {
+        const startDate = new Date(this.value);
+
+        // 🧹 Clear when invalid
+        if (isNaN(startDate.getTime()) || this.value.trim() === '') {
+            if (conEnd) conEnd.value = '';
+            if (drugConDate) drugConDate.value = '';
+            return;
+        }
+
+        // ✅ Auto-fill drug_con_date
+        if (drugConDate) {
+            drugConDate.value = this.value;
+        }
+
+        // ✅ Compute end date (+4 months)
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 4);
+
+        // Fix for month overflow (e.g. Jan 31)
+        if (endDate.getDate() !== startDate.getDate()) {
+            endDate.setDate(0);
+        }
+
+        const formattedEnd = endDate.toISOString().split('T')[0];
+        conEnd.value = formattedEnd;
+        });
+    }
+    });
+    </script>
 
 
 </body>
