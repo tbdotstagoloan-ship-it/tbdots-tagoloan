@@ -7,7 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
-  <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
   <style>
     .card {
       background-color: #fff;
@@ -779,6 +779,7 @@
                       <option value="Bacteriologically-confirmed XDR-TB">Bacteriologically-confirmed XDR-TB</option>
                       <option value="Clinically-diagnosed MDR-TB">Clinically-diagnosed MDR-TB</option>
                     </select>
+                    <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label for="clas_other_drug_resistant">Other Drug-resistant TB <span

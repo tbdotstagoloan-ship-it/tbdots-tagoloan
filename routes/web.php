@@ -235,3 +235,4 @@ Route::post('/personnel', [PersonnelController::class, 'store'])->name('personne
 Route::put('/personnel/{id}', [PersonnelController::class, 'update'])->name('personnel.update');
 Route::delete('/personnel/{id}', [PersonnelController::class, 'destroy'])->name('personnel.destroy');
 
+// Search Patient for Relapse Registration
