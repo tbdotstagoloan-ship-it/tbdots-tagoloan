@@ -403,7 +403,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -2319,19 +2319,27 @@
                                         value="{{ old('diag_facility_code', $patient->diagnosis->diag_facility_code ?? '') }}">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="diag_province" class="form-label">Province</label>
-                                    <input type="text" class="form-control" id="diag_province" name="diag_province"
-                                        placeholder="Province"
-                                        value="{{ old('diag_province', $patient->diagnosis->diag_province ?? '') }}">
+                                    <label for="diag_region" class="form-label">Region</label>
+                                    <!-- <input type="text" class="form-control" id="diag_region" name="diag_region"
+                                        placeholder="Region"
+                                        value="{{ old('diag_region', $patient->diagnosis->diag_region ?? '') }}"> -->
+                                        <select id="diag_region" class="form-control form-select" required>
+                                            <option value="" disabled selected>Select</option>
+                                        </select>
+                                        <input type="hidden" name="diag_region" id="diag_region_text">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="diag_region" class="form-label">Region</label>
-                                    <input type="text" class="form-control" id="diag_region" name="diag_region"
-                                        placeholder="Region"
-                                        value="{{ old('diag_region', $patient->diagnosis->diag_region ?? '') }}">
+                                    <label for="diag_province" class="form-label">Province</label>
+                                    <!-- <input type="text" class="form-control" id="diag_province" name="diag_province"
+                                        placeholder="Province"
+                                        value="{{ old('diag_province', $patient->diagnosis->diag_province ?? '') }}"> -->
+                                        <select id="diag_province" class="form-control form-select" required>
+                                            <option value="" disabled selected>Select</option>
+                                        </select>
+                                        <input type="hidden" name="diag_province" id="diag_province_text">
                                 </div>
                             </div>
                         </div>
@@ -3599,6 +3607,47 @@
     });
     </script>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const diagRegion = document.getElementById("diag_region");
+      const diagProvince = document.getElementById("diag_province");
+      const diagRegionText = document.getElementById("diag_region_text");
+      const diagProvinceText = document.getElementById("diag_province_text");
+
+      // --- Load Regions ---
+      fetch("/api/regions")
+        .then(res => res.json())
+        .then(data => {
+          data.forEach(region => {
+            diagRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
+          });
+        });
+
+      // --- When Region changes, load Provinces ---
+      diagRegion.addEventListener("change", () => {
+        const regionCode = diagRegion.value;
+        const regionName = diagRegion.options[diagRegion.selectedIndex].text;
+
+        diagRegionText.value = regionName; // Store selected text
+        diagProvince.innerHTML = '<option value="" disabled selected>Loading...</option>';
+
+        fetch(`/api/provinces/${regionCode}`)
+          .then(res => res.json())
+          .then(data => {
+            diagProvince.innerHTML = '<option value="" disabled selected>Select</option>';
+            data.forEach(prov => {
+              diagProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
+            });
+          });
+      });
+
+      // --- When Province changes, store province name ---
+      diagProvince.addEventListener("change", () => {
+        const provinceName = diagProvince.options[diagProvince.selectedIndex].text;
+        diagProvinceText.value = provinceName;
+      });
+    });
+  </script>
 
 </body>
 

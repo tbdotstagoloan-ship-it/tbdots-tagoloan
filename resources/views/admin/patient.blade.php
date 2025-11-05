@@ -61,7 +61,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -170,7 +170,7 @@
   <div class="main-content py-4" id="mainContent">
     <div style="margin-bottom: 50px;">
       <h4 style="color: #2c3e50; font-weight: 600;">
-      Patient List
+      New Cases
     </h4>
     <p class="text-muted mb-3">
       You have total {{ $totalPatients }} patients in TB DOTS.
@@ -247,10 +247,10 @@
                       @php
                           $status = strtolower($patient->status);
                           $badgeClass = match($status) {
-                              'ongoing' => 'bg-secondary',
+                              'ongoing' => 'bg-warning text-dark',
                               'cured' => 'bg-success',
                               'treatment completed' => 'bg-success',
-                              'lost to follow-up' => 'bg-warning text-dark',
+                              'lost to follow-up' => 'bg-secondary',
                               'died' => 'bg-danger',
                               'relapse' => 'bg-warning text-dark',
                               default => 'bg-secondary'
@@ -376,12 +376,17 @@
                             </div>
                           </div>
 
-                          <div class="row mb-3">
+                          <!-- <div class="row mb-3">
                             <div class="col-md-4">
-                              <label for="pat_permanent_address{{ $patient->id }}" class="form-label">Permanent
-                                Address</label>
-                              <input type="text" name="pat_permanent_address" id="pat_permanent_address{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_permanent_address ?? '' }}">
+                              <label for="pat_permanent_region{{ $patient->id }}" class="form-label">Region</label>
+                              <input type="text" name="pat_permanent_region" id="pat_permanent_region{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_permanent_region ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_permanent_province{{ $patient->id }}" class="form-label">Province</label>
+                              <input type="text" name="pat_permanent_province"
+                                id="pat_permanent_province{{ $patient->id }}" class="form-control"
+                                value="{{ $patient->pat_permanent_province ?? '' }}">
                             </div>
                             <div class="col-md-4">
                               <label for="pat_permanent_city_mun{{ $patient->id }}" class="form-label">City/
@@ -390,19 +395,14 @@
                                 id="pat_permanent_city_mun{{ $patient->id }}" class="form-control"
                                 value="{{ $patient->pat_permanent_city_mun ?? '' }}">
                             </div>
-                            <div class="col-md-4">
-                              <label for="pat_permanent_province{{ $patient->id }}" class="form-label">Province</label>
-                              <input type="text" name="pat_permanent_province"
-                                id="pat_permanent_province{{ $patient->id }}" class="form-control"
-                                value="{{ $patient->pat_permanent_province ?? '' }}">
-                            </div>
-                          </div>
+                            
+                          </div> -->
 
-                          <div class="row mb-3">
+                          <!-- <div class="row mb-3">
                             <div class="col-md-4">
-                              <label for="pat_permanent_region{{ $patient->id }}" class="form-label">Region</label>
-                              <input type="text" name="pat_permanent_region" id="pat_permanent_region{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_permanent_region ?? '' }}">
+                              <label for="pat_permanent_address{{ $patient->id }}" class="form-label">Barangay</label>
+                              <input type="text" name="pat_permanent_address" id="pat_permanent_address{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_permanent_address ?? '' }}">
                             </div>
                             <div class="col-md-4">
                               <label for="pat_permanent_zip_code{{ $patient->id }}" class="form-label">Zip Code</label>
@@ -410,27 +410,7 @@
                                 id="pat_permanent_zip_code{{ $patient->id }}" class="form-control"
                                 value="{{ $patient->pat_permanent_zip_code ?? '' }}">
                             </div>
-                          </div>
-
-                          <div class="row mb-3">
-                            <div class="col-md-4">
-                              <label for="pat_current_address{{ $patient->id }}" class="form-label">Current
-                                Address</label>
-                              <input type="text" name="pat_current_address" id="pat_current_address{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_current_address ?? '' }}">
-                            </div>
-                            <div class="col-md-4">
-                              <label for="pat_current_city_mun{{ $patient->id }}" class="form-label">City/
-                                Municipality</label>
-                              <input type="text" name="pat_current_city_mun" id="pat_current_city_mun{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_current_city_mun ?? '' }}">
-                            </div>
-                            <div class="col-md-4">
-                              <label for="pat_current_province{{ $patient->id }}" class="form-label">Province</label>
-                              <input type="text" name="pat_current_province" id="pat_current_province{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_current_province ?? '' }}">
-                            </div>
-                          </div>
+                          </div> -->
 
                           <div class="row mb-3">
                             <div class="col-md-4">
@@ -439,30 +419,50 @@
                                 class="form-control" value="{{ $patient->pat_current_region ?? '' }}">
                             </div>
                             <div class="col-md-4">
+                              <label for="pat_current_province{{ $patient->id }}" class="form-label">Province</label>
+                              <input type="text" name="pat_current_province" id="pat_current_province{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_province ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_current_city_mun{{ $patient->id }}" class="form-label">City/
+                                Municipality</label>
+                              <input type="text" name="pat_current_city_mun" id="pat_current_city_mun{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_city_mun ?? '' }}">
+                            </div>
+
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="pat_current_address{{ $patient->id }}" class="form-label">Barangay</label>
+                              <input type="text" name="pat_current_address" id="pat_current_address{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_address ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
                               <label for="pat_current_zip_code{{ $patient->id }}" class="form-label">Zip Code</label>
                               <input type="text" name="pat_current_zip_code" id="pat_current_zip_code{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_current_zip_code ?? '' }}">
                             </div>
-                          </div>
-
-                          <div class="row mb-3">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <label for="pat_contact_number{{ $patient->id }}" class="form-label">Contact Number</label>
                               <input type="text" name="pat_contact_number" id="pat_contact_number{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_contact_number ?? '' }}">
                             </div>
-                            <div class="col-md-3">
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
                               <label for="pat_other_contact{{ $patient->id }}" class="form-label">Other Contact
                                 Information</label>
                               <input type="text" name="pat_other_contact" id="pat_other_contact{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_other_contact ?? '' }}">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <label for="pat_philhealth_no{{ $patient->id }}" class="form-label">PhilHealth No.</label>
                               <input type="text" name="pat_philhealth_no" id="pat_philhealth_no{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_philhealth_no ?? '' }}">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <label for="pat_nationality{{ $patient->id }}" class="form-label">Nationality</label>
                               <input type="text" name="pat_nationality" id="pat_nationality{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_nationality ?? '' }}">

@@ -83,9 +83,16 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
+      </li>
+
+      <li class="nav-item menu-item" data-tooltip="Relapse">
+        <a href="{{ url('error') }}">
+          <img src="{{ url('assets/img/user-list.png') }}" class="menu-icon" alt="">
+          <span class="menu-text">Relapse Cases</span>
+          </a>
       </li>
 
       <li class="nav-item menu-item" data-tooltip="Physician">

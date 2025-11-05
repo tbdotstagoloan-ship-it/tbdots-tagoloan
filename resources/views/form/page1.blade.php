@@ -108,7 +108,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -380,9 +380,9 @@
                     <select id="pat_permanent_region" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_permanent_region" id="pat_permanent_region_text">
                     <!-- <input type="text" name="pat_permanent_region" id="pat_permanent_region" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
@@ -391,9 +391,9 @@
                       required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_permanent_province" id="pat_permanent_province_text">
                     <!-- <input type="text" name="pat_permanent_province" id="pat_permanent_province" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
@@ -402,9 +402,9 @@
                       required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_permanent_city_mun" id="pat_permanent_city_mun_text">
                     <!-- <input type="text" name="pat_permanent_city_mun" id="pat_permanent_city_mun" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
@@ -413,15 +413,15 @@
                       required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_permanent_address" id="pat_permanent_address_text">
                     <!-- <input type="text" name="pat_permanent_address" id="pat_permanent_address" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
                     <label for="pat_permanent_zip_code">Zip Code</label>
-                    <input type="text" id="pat_permanent_zip_code" name="pat_permanent_zip_code" class="form-control" readonly>
                     <div class="error"></div>
+                    <input type="text" id="pat_permanent_zip_code" name="pat_permanent_zip_code" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -442,9 +442,9 @@
                     <select id="pat_current_region" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_current_region" id="pat_current_region_text">
                     <!-- <input type="text" id="pat_current_region" name="pat_current_region" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
@@ -453,9 +453,9 @@
                       required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_current_province" id="pat_current_province_text">
                     <!-- <input type="text" id="pat_current_province" name="pat_current_province" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
@@ -464,9 +464,9 @@
                       required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_current_city_mun" id="pat_current_city_mun_text">
                     <!-- <input type="text" id="pat_current_city_mun" name="pat_current_city_mun" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
@@ -475,15 +475,15 @@
                       required>
                       <option value="" disabled selected>Select</option>
                     </select>
+                    <div class="error"></div>
                     <input type="hidden" name="pat_current_address" id="pat_current_address_text">
                     <!-- <input type="text" id="pat_current_address" name="pat_current_address" class="form-control" required> -->
-                    <div class="error"></div>
                   </div>
 
                   <div class="col-md-4">
                     <label for="pat_current_zip_code">Zip Code</label>
-                    <input type="text" id="pat_current_zip_code" name="pat_current_zip_code" class="form-control" readonly>
                     <div class="error"></div>
+                    <input type="text" id="pat_current_zip_code" name="pat_current_zip_code" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -865,7 +865,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script src="{{ url('assets/js/logout.js') }}"></script>
@@ -1219,7 +1219,7 @@
 
       if (!value) {
         if (required) {
-          setError(element, "This is required.");
+          setError(element, "This field is required.");
           return false;
         } else {
           element.classList.remove("error", "success");
@@ -1250,7 +1250,7 @@
 
         // Required check
         if (!value || value === "") {
-          setError(element, "This is required.");
+          setError(element, "This field is required.");
           return false;
         }
 
@@ -1309,7 +1309,7 @@
         } else if (input === pat_other_contact) {
           validateContactNumber(input, false);
         } else if (requiredFields.includes(input) && (!value || value === "")) {
-          setError(input, "This is required.");
+          setError(input, "This field is required.");
         } else if (input.type === "text" && value) {
           const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
           if (!regex.test(value)) {
@@ -1489,7 +1489,6 @@
           data.forEach(region => {
             permRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
             currRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
-            // diagRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
           });
         });
 
@@ -1615,18 +1614,6 @@
           });
       });
 
-      // --- Diagnosing Facility Dropdown Logic 👇
-    // diagRegion.addEventListener("change", () => {
-    //   fetch(`/api/provinces/${diagRegion.value}`)
-    //     .then(res => res.json())
-    //     .then(data => {
-    //       diagProvince.innerHTML = '<option value="">Select</option>';
-    //       data.forEach(prov => {
-    //         diagProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
-    //       });
-    //     });
-    // });
-
       // --- Checkbox logic (use readonly instead of disabled) ---
       sameCheckbox.addEventListener("change", () => {
         if (sameCheckbox.checked) {
@@ -1665,7 +1652,33 @@
   });
   </script>
 
+  <script>
+  $(document).ready(function() {
 
+    $('#pat_full_name').on('blur', function() {
+      let fullName = $(this).val().trim();
+      let dob = $('#pat_date_of_birth').val(); // optional, if DOB field exists
+
+      if (fullName !== '') {
+        $.ajax({
+          url: "{{ route('check.patient.name') }}",
+          method: "GET",
+          data: { pat_full_name: fullName, pat_date_of_birth: dob },
+          success: function(response) {
+            if (response.exists) {
+              $('#pat_full_name').addClass('is-invalid');
+              $('#pat_full_name').next('.error').html('<p class="text-danger">This patient is already registered.</p>');
+            } else {
+              $('#pat_full_name').removeClass('is-invalid');
+              $('#pat_full_name').next('.error').html('');
+            }
+          }
+        });
+      }
+    });
+
+  });
+</script>
 
 </body>
 

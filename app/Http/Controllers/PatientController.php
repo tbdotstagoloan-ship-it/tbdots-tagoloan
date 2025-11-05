@@ -27,25 +27,37 @@ use App\Models\TreatmentRegimen;
 use App\Models\TxSupporter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class PatientController extends Controller
 {
-        public function monthlyPatients() 
-        { 
-            $patients = DB::table('tbl_diagnosis')
-                ->selectRaw('MONTH(diag_diagnosis_date) as month, COUNT(*) as total')
-                ->whereYear('diag_diagnosis_date', date('Y')) // current year only
-                ->groupBy('month')
-                ->orderBy('month')
-                ->pluck('total', 'month');
+        public function monthlyPatients()
+        {
+            $year = date('Y');
 
-            $data = [];
-            for ($i = 1; $i <= 12; $i++) {
-                $data[] = $patients[$i] ?? 0;
-            }
+            // ✅ Cache for 10 minutes since it rarely changes
+            $data = Cache::remember("monthly_patients_{$year}", 600, function () use ($year) {
+                // Use direct range filtering for index use
+                $start = "{$year}-01-01";
+                $end = "{$year}-12-31";
+
+                $patients = DB::table('tbl_diagnosis')
+                    ->selectRaw('MONTH(diag_diagnosis_date) as month, COUNT(*) as total')
+                    ->whereBetween('diag_diagnosis_date', [$start, $end])
+                    ->groupBy('month')
+                    ->orderBy('month')
+                    ->pluck('total', 'month');
+
+                $result = [];
+                for ($i = 1; $i <= 12; $i++) {
+                    $result[] = $patients[$i] ?? 0;
+                }
+
+                return $result;
+            });
 
             return response()->json($data);
         }
@@ -184,6 +196,19 @@ class PatientController extends Controller
 
             return redirect ('form/page2')->with('success', 'You have successfully completed Page 1.');
         }
+
+        public function checkPatientName(Request $request)
+        {
+            $fullName = trim(strtolower($request->pat_full_name));
+            $dob = $request->pat_date_of_birth;
+
+            $exists = Patient::whereRaw('LOWER(pat_full_name) = ?', [$fullName])
+                ->when($dob, fn($query) => $query->where('pat_date_of_birth', $dob))
+                ->exists();
+
+            return response()->json(['exists' => $exists]);
+        }
+
 
         public function validatePage2 (Request $request) {
 

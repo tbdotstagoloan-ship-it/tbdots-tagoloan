@@ -39,7 +39,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -174,8 +174,7 @@
                 <th>Full Name</th>
                 <th>Username</th>
                 <th>Contact Information</th>
-                <th>Date of Birth</th>
-                <th>Gender</th>
+                <th>Sex</th>
                 <th>Barangay</th>
                 <!-- <th>Action</th> -->
               </tr>
@@ -186,10 +185,13 @@
 
           <tr>
           <td>{{ $patient->id }}</td>
-          <td>{{ $patient->pat_full_name }}</td>
+          <td>
+          <a href="{{ url('admin/patient-profile/' . $patient->id) }}" style="text-decoration: none; color: #212529;">
+            {{ $patient->pat_full_name }}
+          </a>
+        </td>
           <td>{{ $patient->acc_username }}</td>
           <td>{{ $patient->pat_contact_number }}</td>
-          <td>{{ Carbon\Carbon::parse($patient->pat_date_of_birth)->format('F j, Y') }}</td>
           <td>{{ $patient->pat_sex }}</td>
           <td>{{ $patient->pat_permanent_address }}</td>
           <!-- <td class="text-center">

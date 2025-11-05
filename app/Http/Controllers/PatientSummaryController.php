@@ -10,6 +10,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cache;
 
 
 class PatientSummaryController extends Controller
@@ -259,9 +260,9 @@ class PatientSummaryController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
-        $query = DB::table('tbl_patients as p')
+        $query = DB::table('tbl_tb_classifications as t')
+            ->join('tbl_patients as p', 'p.id', '=', 't.patient_id')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -273,6 +274,7 @@ class PatientSummaryController extends Controller
             )
             ->where('t.clas_registration_group', 'New');
 
+
         // Apply date filters if provided
         if ($startDate) {
             $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
@@ -281,13 +283,18 @@ class PatientSummaryController extends Controller
             $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
         }
 
-        $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+        // ✅ Cache this heavy query for 5 minutes (300 seconds)
+        $cacheKey = "newly_diagnosed_pdf_{$startDate}_{$endDate}";
+        $patients = Cache::remember($cacheKey, 300, function () use ($query) {
+            return $query->orderByDesc('d.diag_tb_case_no')->get();
+        });
 
+        // Generate PDF
         $pdf = PDF::loadView('pdf.newly-diagnosed-report', ['new' => $patients])
             ->setPaper('A4', 'landscape');
 
         // Add page numbers
-        $pdf->output(); // Force render
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
         $w = $canvas->get_width();
         $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');

@@ -3,15 +3,16 @@
 namespace App\Repositories\Reports;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ReportRepository implements ReportRepositoryInterface
 {
     public function newlyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
-        $query = DB::table('tbl_patients as p')
+        $query = DB::table('tbl_tb_classifications as t')
+            ->join('tbl_patients as p', 'p.id', '=', 't.patient_id')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -23,6 +24,7 @@ class ReportRepository implements ReportRepositoryInterface
             )
             ->where('t.clas_registration_group', 'new');
 
+
         // Apply date filters if provided
         if ($startDate) {
             $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
@@ -32,8 +34,11 @@ class ReportRepository implements ReportRepositoryInterface
             $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
         }
 
-        return $query->orderBy('d.diag_tb_case_no', 'desc')
-            ->paginate($perPage);
+        return Cache::remember(
+        "newly_diagnosed_{$startDate}_{$endDate}_page_" . request('page', 1),
+        120, // cache for 2 minutes
+        fn() => $query->orderBy('d.diag_tb_case_no', 'desc')->paginate($perPage)
+    );
     }
 
     public function relapse(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator

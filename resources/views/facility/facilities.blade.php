@@ -77,7 +77,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -313,17 +313,24 @@
                 <input type="text" class="form-control" name="fac_ntp_code" id="fac_ntp_code" placeholder="NTP Facility Code" required>
                 </div>
 
-                <!-- Province -->
-                <div class="col-md-6">
-                <label for="fac_province" class="form-label">Province / HUC <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_province" id="fac_province" placeholder="Province / HUC" required>
-                </div>
-
                 <!-- Region -->
                 <div class="col-md-6">
-                <label for="fac_region" class="form-label">Region <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_region" id="fac_region" placeholder="Region" required>
+                  <label for="fac_region" class="form-label">Region</label>
+                  <select id="fac_region" class="form-control form-select" required>
+                    <option value="" disabled selected>Select</option>
+                  </select>
+                  <input type="hidden" name="fac_region" id="fac_region_text">
                 </div>
+
+                <!-- Province -->
+                <div class="col-md-6">
+                  <label for="fac_province" class="form-label">Province / HUC</label>
+                  <select id="fac_province" class="form-control form-select" required>
+                    <option value="" disabled selected>Select</option>
+                  </select>
+                  <input type="hidden" name="fac_province" id="fac_province_text">
+                </div>
+
             </div>
             </div>
 
@@ -439,6 +446,48 @@
             form.submit();
           }
         });
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const facRegion = document.getElementById("fac_region");
+      const facProvince = document.getElementById("fac_province");
+      const facRegionText = document.getElementById("fac_region_text");
+      const facProvinceText = document.getElementById("fac_province_text");
+
+      // --- Load Regions ---
+      fetch("/api/regions")
+        .then(res => res.json())
+        .then(data => {
+          data.forEach(region => {
+            facRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
+          });
+        });
+
+      // --- When Region changes, load Provinces ---
+      facRegion.addEventListener("change", () => {
+        const regionCode = facRegion.value;
+        const regionName = facRegion.options[facRegion.selectedIndex].text;
+
+        facRegionText.value = regionName; // Store selected text
+        facProvince.innerHTML = '<option value="" disabled selected>Loading...</option>';
+
+        fetch(`/api/provinces/${regionCode}`)
+          .then(res => res.json())
+          .then(data => {
+            facProvince.innerHTML = '<option value="" disabled selected>Select</option>';
+            data.forEach(prov => {
+              facProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
+            });
+          });
+      });
+
+      // --- When Province changes, store province name ---
+      facProvince.addEventListener("change", () => {
+        const provinceName = facProvince.options[facProvince.selectedIndex].text;
+        facProvinceText.value = provinceName;
       });
     });
   </script>

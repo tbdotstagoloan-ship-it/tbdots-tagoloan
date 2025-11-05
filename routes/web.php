@@ -236,3 +236,9 @@ Route::put('/personnel/{id}', [PersonnelController::class, 'update'])->name('per
 Route::delete('/personnel/{id}', [PersonnelController::class, 'destroy'])->name('personnel.destroy');
 
 // Search Patient for Relapse Registration
+
+
+
+
+// Check Patient Name
+Route::get('/check-patient-name', [PatientController::class, 'checkPatientName'])->name('check.patient.name');
