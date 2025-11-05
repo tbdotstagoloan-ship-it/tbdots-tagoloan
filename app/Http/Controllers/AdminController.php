@@ -128,7 +128,7 @@ class AdminController extends Controller
             ] : null;
         })->filter()->values();
 
-        return view('admin.index', compact(
+        return view('dashboard', compact(
             'totalPatients',
             'totalPhysician',
             'pulmonary',

@@ -86,7 +86,7 @@
         <p>
             We are very sorry for inconvenience. This page is currently in development or not yet available. We're working on it.
         </p>
-        <a href="{{ url('admin/dashboard') }}" class="btn">Back To Home</a>
+        <a href="{{ url('dashboard') }}" class="btn">Back To Home</a>
     </div>
 </body>
 </html>
