@@ -126,7 +126,9 @@ class AdminController extends Controller
                 'consecutive_missed' => $consecutiveMissed,
                 'last_missed' => $logs->where('status', 'missed')->max('date'),
             ] : null;
-        })->filter()->values();
+        })->filter()
+        ->sortByDesc('last_missed')
+        ->values();
 
         return view('dashboard', compact(
             'totalPatients',
