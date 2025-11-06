@@ -3,12 +3,52 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>TB DOTS - Patient Accounts</title>
+  <title>TB DOTS - Relapse Cases</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
-  
+  <style>
+    .charts-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .chart-card {
+      flex: 1;
+      /* hati sila sa lapad (50/50) */
+      min-width: 0;
+      /* para hindi mag-overflow */
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+      border: 2px solid #f1f3f4;
+    }
+
+    .doughnut-chart-container {
+      position: relative;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.02);
+      border: 2px solid #f1f3f4;
+      height: 350px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 350px;
+      background: linear-gradient(135deg, #fafbfc 0%, #ffffff 100%);
+      border-radius: 16px;
+      padding: 20px;
+      border: 2px solid #f1f3f4;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    @media (max-width: 768px) {
+      .charts-row {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -117,12 +157,6 @@
         </ul>
       </li>
 
-      <!-- <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('profile')}}">
-          <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Settings</span>
-        </a>
-      </li> -->
     </ul>
 
     <div class="logout-section">
@@ -143,105 +177,99 @@
         <i class="fas fa-bars"></i>
       </button>
     </div>
+
   </div>
 
+
   <div class="main-content py-4" id="mainContent">
-    <h4 style="margin-bottom: 40px; color: #2c3e50; font-weight: 600;">
-        Patient Accounts
-      </h4>
+    <h4 style="margin-bottom: 50px; color: #2c3e50; font-weight: 600;">
+      Relapse Cases
+    </h4>
+
+    <div class="d-flex justify-content-end mb-2">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPhysicianModal">
+        <i class="fas fa-plus me-2"></i>Add Relapse Cases
+      </button>
+
+    </div>
 
     <div class="card shadow-sm border-0">
       <div class="card-body p-0">
         <div class="table-responsive">
           
-        <form method="GET" action="{{ url('patient-accounts') }}" class="d-flex align-items-center">
-            <select name="per_page" id="per_page" class="form-select form-select-sm w-auto"
-              onchange="this.form.submit()">
-              <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-              <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
-              <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-              <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-              <option value="250" {{ $perPage == 250 ? 'selected' : '' }}>250</option>
-              <option value="500" {{ $perPage == 500 ? 'selected' : '' }}>500</option>
-            </select>
-            <span class="ms-2"></span>
-          </form>
+        
 
           <table class="table">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Full Name</th>
-                <th>Username</th>
-                <th>Contact Information</th>
+                <th>Name</th>
                 <th>Sex</th>
-                <th>Barangay</th>
-                <!-- <th>Action</th> -->
+                <th>Date of Birth</th>
+                <th>Contact No</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
 
-              @foreach ($patientAccount as $patient)
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="text-center">
+                    <div class="dropdown">
+                      <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end">
 
-          <tr>
-          <td>{{ $patient->id }}</td>
-          <td>
-          <a href="{{ url('admin/patient-profile/' . $patient->id) }}" style="text-decoration: none; color: #212529;">
-            {{ $patient->pat_full_name }}
-          </a>
-        </td>
-          <td>{{ $patient->acc_username }}</td>
-          <td>{{ $patient->pat_contact_number }}</td>
-          <td>{{ $patient->pat_sex }}</td>
-          <td>{{ $patient->pat_permanent_address }}</td>
-          <!-- <td class="text-center">
-          <div class="dropdown">
-            <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-ellipsis-v"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+                      <!-- View Details -->
+                        <li>
+                          <a class="dropdown-item d-flex align-items-center btn-view"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#viewPhysicianModal"
+                            title="View Details">
+                            <i class="fas fa-eye me-2"></i> View Details
+                          </a>
+                        </li>
 
-              
-              <li>
-                <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="d-inline">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="dropdown-item d-flex align-items-center btn-delete" title="Delete Patient">
-                    <i class="fas fa-trash-alt me-2"></i> Delete
-                  </button>
-                </form>
-              </li>
+                        <!-- Edit -->
+                        <li>
+                          <a class="dropdown-item d-flex align-items-center btn-edit"
+                            href="#"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editPhysicianModal"
+                            title="Edit Details">
+                            <i class="fas fa-edit me-2"></i> Edit
+                          </a>
+                        </li>
 
-            </ul>
-          </div>
-        </td> -->
-          </tr>
 
-        @endforeach
-
+                        <!-- Delete -->
+                        <li>
+                            <button type="submit" class="dropdown-item d-flex align-items-center btn-delete"
+                              title="Delete Patient">
+                              <i class="fas fa-trash-alt me-2"></i> Delete
+                            </button>
+                        </li>
+                        
+                      </ul>
+                    </div>
+                  </td>
+                  
+                </tr>
             </tbody>
           </table>
+
+
 
         </div>
       </div>
 
-      <div class="d-flex justify-content-center gap-3 mb-4">
-        {{-- Previous Page --}}
-        @if ($prevId)
-            <a href="{{ url()->current() }}?last_id={{ $prevId }}&direction=prev&per_page={{ $perPage }}"
-              class="btn btn-light border">Previous</a>
-        @else
-            <button class="btn btn-light border" disabled>Previous</button>
-        @endif
-
-        {{-- Next Page --}}
-        @if ($nextId)
-            <a href="{{ url()->current() }}?last_id={{ $nextId }}&direction=next&per_page={{ $perPage }}"
-              class="btn btn-light border">Next</a>
-        @else
-            <button class="btn btn-light border" disabled>Next</button>
-        @endif
-    </div>
 
     </div>
   </div>
@@ -252,13 +280,26 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script src="{{ url('assets/js/sidebarToggle.js') }}"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
   <script src="{{ url('assets/js/logout.js') }}"></script>
+
+  <script src="{{ url('assets/js/sidebarToggle.js') }}"></script>
 
   <script src="{{ url('assets/js/active.js') }}"></script>
 
   <script src="{{ url('assets/js/rotate-icon.js') }}"></script>
+
+  @if(session('success'))
+    <script>
+      Swal.fire({
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        icon: 'success',
+        confirmButtonColor: '#198754',
+      });
+    </script>
+  @endif
 
   <script>
     document.querySelectorAll('.btn-delete').forEach(button => {
@@ -282,16 +323,46 @@
       });
     });
   </script>
-  @if(session('success'))
-    <script>
-    Swal.fire({
-      title: 'Success!',
-      text: "{{ session('success') }}",
-      icon: 'success',
-      confirmButtonColor: '#198754',
+
+  <script>
+    document.querySelectorAll('.btn-view').forEach(btn => {
+      btn.addEventListener('click', function () {
+        document.getElementById('view_first_name').innerText = this.dataset.first_name;
+        document.getElementById('view_last_name').innerText = this.dataset.last_name;
+        document.getElementById('view_sex').innerText = this.dataset.sex;
+        document.getElementById('view_dob').innerText = this.dataset.dob;
+        document.getElementById('view_designation').innerText = this.dataset.designation;
+        document.getElementById('view_specialty').innerText = this.dataset.specialty;
+        document.getElementById('view_contact').innerText = this.dataset.contact;
+        document.getElementById('view_email').innerText = this.dataset.email;
+        document.getElementById('view_address').innerText = this.dataset.address;
+      });
     });
-    </script>
-  @endif
+  </script>
+
+    <script>
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const id = this.dataset.id;
+        const form = document.getElementById('editPhysicianForm');
+
+        // dynamically set the form action
+        form.action = `/physician/${id}`;
+
+        // fill in the form fields
+        document.getElementById('edit_phy_first_name').value = this.dataset.firstname;
+        document.getElementById('edit_phy_last_name').value = this.dataset.lastname;
+        document.getElementById('edit_phy_sex').value = this.dataset.sex;
+        document.getElementById('edit_phy_dob').value = this.dataset.dob;
+        document.getElementById('edit_phy_designation').value = this.dataset.designation;
+        document.getElementById('edit_phy_specialty').value = this.dataset.specialty;
+        document.getElementById('edit_phy_contact').value = this.dataset.contact;
+        document.getElementById('edit_phy_email').value = this.dataset.email;
+        document.getElementById('edit_phy_address').value = this.dataset.address;
+      });
+    });
+  </script>
+
 
 </body>
 

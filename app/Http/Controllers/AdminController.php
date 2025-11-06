@@ -173,13 +173,55 @@ class AdminController extends Controller
     //     return view('admin.patient', compact('patients', 'totalPatients', 'perPage'));
     // }
 
+    // public function patient(Request $request)
+    // {
+    //     $totalPatients = Cache::remember('total_patients_count', 60, fn() => Patient::count());
+    //     $search = $request->input('search');
+    //     $perPage = $request->input('per_page', 10);
+
+    //     $patients = DB::table('tbl_patients as p')
+    //         ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
+    //         ->join('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
+    //         ->select(
+    //             'p.id',
+    //             'p.pat_full_name',
+    //             'p.pat_sex',
+    //             'p.pat_date_of_birth',
+    //             'p.pat_civil_status',
+    //             DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+    //             'p.pat_current_region',
+    //             'p.pat_current_province',
+    //             'p.pat_current_city_mun',
+    //             'p.pat_current_address',
+    //             'p.pat_current_zip_code',
+    //             'p.pat_contact_number',
+    //             'p.pat_other_contact',
+    //             'p.pat_philhealth_no',
+    //             'p.pat_nationality',
+    //             'd.diag_tb_case_no',
+    //             'd.diag_diagnosis_date',
+    //             'to.out_outcome as status'
+    //         )
+    //         ->when($search, function ($query, $search) {
+    //             $query->whereRaw("MATCH(p.pat_full_name) AGAINST(? IN BOOLEAN MODE)", [$search])
+    //                 ->orWhere('d.diag_tb_case_no', 'LIKE', "{$search}%");
+    //         })
+    //         ->orderBy('p.id', 'desc')
+    //         ->paginate($perPage);
+
+    //     return view('admin.patient', compact('patients', 'totalPatients', 'perPage'));
+    // }
+    
     public function patient(Request $request)
     {
         $totalPatients = Cache::remember('total_patients_count', 60, fn() => Patient::count());
+
         $search = $request->input('search');
         $perPage = $request->input('per_page', 10);
+        $lastId = $request->input('last_id');       // cursor for next/prev
+        $direction = $request->input('direction');  // 'next' or 'prev'
 
-        $patients = DB::table('tbl_patients as p')
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
             ->join('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
             ->select(
@@ -205,12 +247,48 @@ class AdminController extends Controller
             ->when($search, function ($query, $search) {
                 $query->whereRaw("MATCH(p.pat_full_name) AGAINST(? IN BOOLEAN MODE)", [$search])
                     ->orWhere('d.diag_tb_case_no', 'LIKE', "{$search}%");
-            })
-            ->orderBy('p.id', 'desc')
-            ->paginate($perPage);
+            });
 
-        return view('admin.patient', compact('patients', 'totalPatients', 'perPage'));
+        // Apply keyset pagination depending on direction
+    if ($lastId) {
+        if ($direction === 'next') {
+            $query->where('p.id', '<', $lastId)->orderByDesc('p.id');
+        } elseif ($direction === 'prev') {
+            $query->where('p.id', '>', $lastId)->orderBy('p.id'); // reversed order for prev
+        }
+    } else {
+        $query->orderByDesc('p.id'); // default first page
     }
+
+    // Fetch one extra record to detect if there are more pages
+    $patients = $query->limit($perPage + 1)->get();
+
+    $hasMore = $patients->count() > $perPage;
+
+    // Trim the extra record so only $perPage items are shown
+    $patients = $patients->take($perPage);
+
+    // Fix order for "prev" direction
+    if ($direction === 'prev') {
+        $patients = $patients->sortByDesc('id')->values();
+    }
+
+    // Determine next/prev availability
+    if ($direction === 'next') {
+        $nextId = $hasMore ? $patients->last()->id : null;  // disable if no more next
+        $prevId = $patients->first()->id;                    // always available if next is clicked
+    } elseif ($direction === 'prev') {
+        $nextId = $patients->last()->id;
+        $prevId = $hasMore ? $patients->first()->id : null;  // disable if no more prev
+    } else {
+        // First page (initial load)
+        $nextId = $hasMore ? $patients->last()->id : null;
+        $prevId = null; // disable prev on first load
+    }
+
+        return view('admin.patient', compact('patients', 'totalPatients', 'perPage', 'nextId', 'prevId'));
+    }
+
 
 
     public function patientProfile($id)

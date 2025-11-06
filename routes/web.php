@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RelapseCasesController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\PhysicianController;
 use App\Http\Controllers\DiagnosingFacilityController;
@@ -243,3 +244,7 @@ Route::delete('/personnel/{id}', [PersonnelController::class, 'destroy'])->name(
 
 // Check Patient Name
 Route::get('/check-patient-name', [PatientController::class, 'checkPatientName'])->name('check.patient.name');
+
+
+// Relapse Cases
+Route::get('relapse-cases', [RelapseCasesController::class, 'index'])->middleware(['auth'])->name('relapse.index');

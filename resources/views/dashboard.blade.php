@@ -89,7 +89,7 @@
       </li>
 
       <li class="nav-item menu-item" data-tooltip="Relapse">
-        <a href="{{ url('error') }}">
+        <a href="{{ url('relapse-cases') }}">
           <img src="{{ url('assets/img/user-list.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Relapse Cases</span>
           </a>

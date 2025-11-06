@@ -495,10 +495,33 @@ class PatientController extends Controller
                             ->with('success', 'Patient account created successfully.');
         }
 
-        public function patientAccount(Request $request)
+    //     public function patientAccount(Request $request)
+    // {
+    //     $perPage = $request->input('per_page', 10);
+    //     $patientAccount = DB::table('tbl_patients as p')
+    //         ->join('tbl_patient_accounts as a', 'p.id', '=', 'a.patient_id')
+    //         ->select(
+    //             'p.id',
+    //             'p.pat_full_name',
+    //             'a.acc_username',
+    //             'p.pat_contact_number',
+    //             'p.pat_date_of_birth',
+    //             'p.pat_sex',
+    //             'p.pat_permanent_address',
+    //         )
+    //         ->orderBy('p.id', 'desc')
+    //         ->paginate($perPage);
+
+    //     return view ('admin.patient-accounts', compact('patientAccount', 'perPage'));
+    // }
+
+    public function patientAccount(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-        $patientAccount = DB::table('tbl_patients as p')
+        $lastId = $request->input('last_id');       // cursor for next/prev
+        $direction = $request->input('direction');  // 'next' or 'prev'
+
+        $query = DB::table('tbl_patients as p')
             ->join('tbl_patient_accounts as a', 'p.id', '=', 'a.patient_id')
             ->select(
                 'p.id',
@@ -507,13 +530,49 @@ class PatientController extends Controller
                 'p.pat_contact_number',
                 'p.pat_date_of_birth',
                 'p.pat_sex',
-                'p.pat_permanent_address',
-            )
-            ->orderBy('p.id', 'desc')
-            ->paginate($perPage);
+                'p.pat_permanent_address'
+            );
 
-        return view ('admin.patient-accounts', compact('patientAccount', 'perPage'));
+        // Apply keyset pagination depending on direction
+        if ($lastId) {
+            if ($direction === 'next') {
+                $query->where('p.id', '<', $lastId)->orderByDesc('p.id');
+            } elseif ($direction === 'prev') {
+                $query->where('p.id', '>', $lastId)->orderBy('p.id'); // reverse order for prev
+            }
+        } else {
+            $query->orderByDesc('p.id'); // default first page
+        }
+
+        // Fetch one extra record to detect if there are more pages
+        $patientAccount = $query->limit($perPage + 1)->get();
+
+        $hasMore = $patientAccount->count() > $perPage;
+
+        // Trim the extra record so only $perPage items are shown
+        $patientAccount = $patientAccount->take($perPage);
+
+        // Fix order for "prev" direction
+        if ($direction === 'prev') {
+            $patientAccount = $patientAccount->sortByDesc('id')->values();
+        }
+
+        // Determine next/prev availability
+        if ($direction === 'next') {
+            $nextId = $hasMore ? $patientAccount->last()->id : null;  // disable if no more next
+            $prevId = $patientAccount->first()->id;                    // always available if next is clicked
+        } elseif ($direction === 'prev') {
+            $nextId = $patientAccount->last()->id;
+            $prevId = $hasMore ? $patientAccount->first()->id : null;  // disable if no more prev
+        } else {
+            // First page (initial load)
+            $nextId = $hasMore ? $patientAccount->last()->id : null;
+            $prevId = null; // disable prev on first load
+        }
+
+        return view('admin.patient-accounts', compact('patientAccount', 'perPage', 'nextId', 'prevId'));
     }
+
     
 
 

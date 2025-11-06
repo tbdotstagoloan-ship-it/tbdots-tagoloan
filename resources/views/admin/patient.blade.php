@@ -188,7 +188,7 @@
 
       <!-- Add Patient button -->
       <a href="{{ url('form/page1') }}" class="btn btn-success">
-        <i class="fas fa-plus me-2"></i>Add New Patient
+        <i class="fas fa-plus me-2"></i>Add New TB Patient
       </a>
     </div>
 
@@ -488,16 +488,23 @@
       </div>
 
       
+      <div class="d-flex justify-content-center gap-3 mb-4">
+        {{-- Previous Page --}}
+        @if ($prevId)
+            <a href="{{ url()->current() }}?last_id={{ $prevId }}&direction=prev&per_page={{ $perPage }}"
+              class="btn btn-light border">Previous</a>
+        @else
+            <button class="btn btn-light border" disabled>Previous</button>
+        @endif
 
-      <div class="card-footer">Showing {{ $patients->firstItem() }} to {{ $patients->lastItem() }} of
-        {{ $patients->total() }} entries
-        <div class="mt-2">
-          {{ $patients->links() }}
-        </div>
-      </div>
-
-
-
+        {{-- Next Page --}}
+        @if ($nextId)
+            <a href="{{ url()->current() }}?last_id={{ $nextId }}&direction=next&per_page={{ $perPage }}"
+              class="btn btn-light border">Next</a>
+        @else
+            <button class="btn btn-light border" disabled>Next</button>
+        @endif
+    </div>
 
     </div>
   </div>

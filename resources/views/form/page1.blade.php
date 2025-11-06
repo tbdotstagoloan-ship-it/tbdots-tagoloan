@@ -583,24 +583,6 @@
                   </div>
                 </div>
 
-                <!-- Smear Microscopy / TB Lamp -->
-                <div class="row mb-3 align-items-end">
-                  <div class="col-md-6">
-                    <label for="lab_smear_result" class="form-label">Smear Microscopy Test Result <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <select name="lab_smear_result" id="lab_smear_result" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Positive">Positive</option>
-                    </select>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="lab_smear_test_date" class="form-label">Smear Microscopy / TB Lamp Test Date <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="lab_smear_test_date" id="lab_smear_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                </div>
-
                 <!-- Chest X-ray -->
                 <div class="row mb-3 align-items-end">
                   <div class="col-md-6">
@@ -620,6 +602,24 @@
                     <input type="date" name="lab_cxray_test_date" id="lab_cxray_test_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>" required>
                     <div class="error"></div>
+                  </div>
+                </div>
+
+                <!-- Smear Microscopy / TB Lamp -->
+                <div class="row mb-3 align-items-end">
+                  <div class="col-md-6">
+                    <label for="lab_smear_result" class="form-label">Smear Microscopy Test Result <span
+                        style="color: #6b7280;">(Optional)</span></label>
+                    <select name="lab_smear_result" id="lab_smear_result" class="form-control form-select">
+                      <option value="" disabled selected>Select</option>
+                      <option value="Positive">Positive</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lab_smear_test_date" class="form-label">Smear Microscopy / TB Lamp Test Date <span
+                        style="color: #6b7280;">(Optional)</span></label>
+                    <input type="date" name="lab_smear_test_date" id="lab_smear_test_date" class="form-control"
+                      max="<?php echo date('Y-m-d'); ?>">
                   </div>
                 </div>
 
@@ -644,15 +644,21 @@
                 <!-- Other -->
                 <div class="row mb-3 align-items-end">
                   <div class="col-md-6">
-                    <label for="lab_other_result" class="form-label">Other Test Result <span
+                    <label for="lab_other_result" class="form-label">Other Test Name <span
                         style="color: #6b7280;">(Optional)</span></label>
-                    <select name="lab_other_result" id="lab_other_result" class="form-control form-select">
+                    <!-- <select name="lab_other_result" id="lab_other_result" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
                       <option value="Positive">Positive</option>
-                    </select>
+                    </select> -->
+                    <input type="text" name="lab_other_result" id="lab_other_result" class="form-control" placeholder="Specify">
                   </div>
                   <div class="col-md-6">
-                    <label for="lab_other_test_date" class="form-label">Other Test Date <span
+                    <label for="lab_other_result" class="form-label">Test Result<span
+                        style="color: #6b7280;">(Optional)</span></label>
+                    <input type="text" name="lab_other_result" id="lab_other_result" class="form-control" placeholder="Specify">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lab_other_test_date" class="form-label">Test Date <span
                         style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="lab_other_test_date" id="lab_other_test_date" class="form-control"
                       max="<?php echo date('Y-m-d'); ?>">
@@ -804,8 +810,20 @@
                   <div class="col-md-4">
                     <label for="clas_site_other">Extra-pulmonary Site <span
                         style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="clas_site_other" id="clas_site_other" class="form-control"
-                      placeholder="Specify">
+                    <!-- <input type="text" name="clas_site_other" id="clas_site_other" class="form-control"
+                      placeholder="Specify"> -->
+                      <select name="clas_site_other" id="clas_site_other" class="form-control form-select">
+                        <option value="" disabled selected>Select</option>
+                        <option value="TB Meningitis">TB Meningitis</option>
+                        <option value="TB of Bones and Joints">TB of Bones and Joints</option>
+                        <option value="Lymph Node TB">Lymph Node TB</option>
+                        <option value="Pleural TB">Pleural TB</option>
+                        <option value="Abdominal TB">Abdominal TB</option>
+                        <option value="Genitourinary TB">Genitourinary TB</option>
+                        <option value="TB of the Skin">TB of the Skin</option>
+                        <option value="Pericardial TB">Pericardial TB</option>
+                        <option value="Miliary TB">Miliary TB</option>
+                      </select>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -814,11 +832,11 @@
                       required>
                       <option value="" disabled selected>Select</option>
                       <option value="New">New</option>
-                      <option value="Relapse">Relapse</option>
+                      <!-- <option value="Relapse">Relapse</option>
                       <option value="TALF">TALF</option>
                       <option value="TAF">TAF</option>
                       <option value="PTOU">PTOU</option>
-                      <option value="Unknown History">Unknown History</option>
+                      <option value="Unknown History">Unknown History</option> -->
                     </select>
                     <div class="error"></div>
                   </div>
