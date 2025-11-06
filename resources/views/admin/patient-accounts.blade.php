@@ -229,17 +229,17 @@
         {{-- Previous Page --}}
         @if ($prevId)
             <a href="{{ url()->current() }}?last_id={{ $prevId }}&direction=prev&per_page={{ $perPage }}"
-              class="btn btn-light border">Previous</a>
+              class="btn backBtn">Previous</a>
         @else
-            <button class="btn btn-light border" disabled>Previous</button>
+            <button class="btn backBtn" disabled>Previous</button>
         @endif
 
         {{-- Next Page --}}
         @if ($nextId)
             <a href="{{ url()->current() }}?last_id={{ $nextId }}&direction=next&per_page={{ $perPage }}"
-              class="btn btn-light border">Next</a>
+              class="btn backBtn">Next</a>
         @else
-            <button class="btn btn-light border" disabled>Next</button>
+            <button class="btn backBtn" disabled>Next</button>
         @endif
     </div>
 
