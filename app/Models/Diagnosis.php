@@ -26,20 +26,14 @@ class Diagnosis extends Model
         return $this->belongsTo(Patient::class, 'patient_id');
     }
 
-    public function tbClassification()
-    {
-        return $this->hasOne(TBClassification::class, 'patient_id', 'patient_id');
-    }
-
-
-    // public function patient()
+    // public function tbClassification()
     // {
-    //     return $this->belongsTo(Patient::class, 'patient_id');
+    //     return $this->hasOne(TBClassification::class, 'patient_id', 'patient_id');
     // }
 
-    // public function treatment()
+    // public function tbClassification()
     // {
-    //     return $this->hasOne(Treatment::class, 'diagnosis_id');
+    //     return $this->hasOne(TBClassification::class, 'patient_id');
     // }
 
 }

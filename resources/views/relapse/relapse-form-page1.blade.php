@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>TB DOTS - Add New Patient</title>
+  <title>TB DOTS - Relapse Registration</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
@@ -216,14 +216,14 @@
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 20px; color: #2c3e50; font-weight: 600;">
-      FORM 4B. DS-TB TREATMENT CARD
+      RELAPSE REGISTRATION FORM
     </h4>
 
     <div class="card inventory-card shadow-sm border-0">
       <div class="card-body p-0">
         <div class="table-responsive">
 
-          <form id="form" action="{{ url('validatePage1') }}" method="post" class="p-2" novalidate>
+          <form id="form" action="{{ url('validateRelapsePage1/' . $patient->id) }}" method="post" class="p-2" novalidate>
             @csrf
 
             <!-- Tabs -->
@@ -263,30 +263,23 @@
                 <!-- your case finding fields -->
                 <div class="row mb-2">
                 <div class="col-md-3">
-                  <label for="fac_name">Diagnosing Facility <span style="color: red;">*</span></label>
-                  <select name="fac_name" id="fac_name" class="form-control" required>
-                    <option value="" disabled selected>Select</option>
-                    <!-- dynamic options here -->
-                  </select>
-                  <div class="error"></div>
+                  <label>Diagnosing Facility</label>
+                  <input type="text" value="{{ $patient->diagnosingFacility->fac_name }}" class="form-control" readonly>
                 </div>
 
                 <div class="col-md-3">
-                  <label for="fac_ntp_code">NTP Facility Code <span style="color: red;">*</span></label>
-                  <input type="text" name="fac_ntp_code" id="fac_ntp_code" class="form-control" readonly>
-                  <div class="error"></div>
+                  <label>NTP Facility Code </label>
+                  <input type="text" value="{{ $patient->diagnosingFacility->fac_ntp_code }}" class="form-control" readonly>
                 </div>
 
                 <div class="col-md-3">
-                  <label for="fac_province">Province/ HUC <span style="color: red;">*</span></label>
-                  <input type="text" name="fac_province" id="fac_province" class="form-control" readonly>
-                  <div class="error"></div>
+                  <label>Province/ HUC </label>
+                  <input type="text" value="{{ $patient->diagnosingFacility->fac_province }}" class="form-control" readonly>
                 </div>
 
                 <div class="col-md-3">
-                  <label for="fac_region">Region <span style="color: red;">*</span></label>
-                  <input type="text" name="fac_region" id="fac_region" class="form-control" readonly>
-                  <div class="error"></div>
+                  <label>Region </label>
+                  <input type="text" value="{{ $patient->diagnosingFacility->fac_region }}" class="form-control" readonly>
                 </div>
               </div>
 
@@ -303,72 +296,43 @@
                 <h5 class="mb-4">A. Patient Demographic</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="pat_full_name">Patient's Full Name <span style="color: red;">*</span></label>
-                    <input type="text" name="pat_full_name" id="pat_full_name" class="form-control"
-                      placeholder="Patient's Full Name" required>
-                    <div class="error"></div>
+                    <label>Patient's Full Name </label>
+                    <input type="text" value="{{ $patient->pat_full_name }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_date_of_birth">Date of Birth <span style="color: red;">*</span></label>
-                    <input type="date" name="pat_date_of_birth" id="pat_date_of_birth" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required>
-                    <div class="error"></div>
+                    <label>Date of Birth </label>
+                      <input type="text" value="{{ $patient->pat_date_of_birth }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_age">Age</label>
-                    <input type="text" name="pat_age" id="pat_age" class="form-control" placeholder="Years Months"
-                      readonly>
-                    <div class="error"></div>
+                    <label>Age</label>
+                    <input type="text" value="{{ $patient->pat_age }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_sex">Sex <span style="color: red;">*</span></label>
-                    <select name="pat_sex" id="pat_sex" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </select>
-                    <div class="error"></div>
+                    <label>Sex </label>
+                    <input type="text" value="{{ $patient->pat_sex }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_civil_status">Civil Status <span style="color: red;">*</span></label>
-                    <select name="pat_civil_status" id="pat_civil_status" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                      <option value="Single">Single</option>
-                      <option value="Married">Married</option>
-                      <option value="Divorced">Divorced</option>
-                    </select>
-                    <div class="error"></div>
+                    <label>Civil Status </label>
+                    <input type="text" value="{{ $patient->pat_civil_status }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_contact_number">Contact Number <span style="color: red;">*</span></label>
-                    <input type="text" name="pat_contact_number" id="pat_contact_number" class="form-control"
-                      placeholder="Contact Number" maxlength="11" required>
-                    <div class="error"></div>
+                    <label>Contact Number </label>
+                    <input type="text" value="{{ $patient->pat_contact_number }}" class="form-control" readonly>
                   </div>
                 </div>
 
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="pat_other_contact">Other Contact Information <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="pat_other_contact" id="pat_other_contact" class="form-control"
-                      placeholder="Other Contact Information" maxlength="11">
-                    <div class="error"></div>
+                    <label>Other Contact Information </label>
+                    <input type="text" value="{{ $patient->pat_other_contact }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_philhealth_no">PhilHealth No. <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="pat_philhealth_no" id="pat_philhealth_no" class="form-control"
-                      placeholder="PhilHealth Number">
-                    <div class="error"></div>
+                    <label>PhilHealth No. </label>
+                    <input type="text" value="{{ $patient->pat_philhealth_no }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label for="pat_nationality">Nationality <span style="color: red;">*</span></label>
-                    <select name="pat_nationality" id="pat_nationality" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                      <option value="Filipino">Filipino</option>
-                    </select>
-                    <div class="error"></div>
+                    <label>Nationality </label>
+                    <input type="text" value="{{ $patient->pat_nationality }}" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -377,52 +341,29 @@
 
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="pat_permanent_region">Region <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_region" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_permanent_region" id="pat_permanent_region_text">
-                    <!-- <input type="text" name="pat_permanent_region" id="pat_permanent_region" class="form-control" required> -->
+                    <label>Region </label>
+                    <input type="text" value="{{ $patient->pat_permanent_region }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_permanent_province">Province <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_province" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_permanent_province" id="pat_permanent_province_text">
-                    <!-- <input type="text" name="pat_permanent_province" id="pat_permanent_province" class="form-control" required> -->
+                    <label>Province </label>
+                    <input type="text" value="{{ $patient->pat_permanent_province }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_permanent_city_mun">City / Municipality <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_city_mun" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_permanent_city_mun" id="pat_permanent_city_mun_text">
-                    <!-- <input type="text" name="pat_permanent_city_mun" id="pat_permanent_city_mun" class="form-control" required> -->
+                    <label>City / Municipality </label>
+                    <input type="text" value="{{ $patient->pat_permanent_city_mun }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_permanent_address">Barangay <span style="color: red;">*</span></label>
-                    <select id="pat_permanent_address" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_permanent_address" id="pat_permanent_address_text">
-                    <!-- <input type="text" name="pat_permanent_address" id="pat_permanent_address" class="form-control" required> -->
+                    <label>Barangay </label>
+                    <input type="text" value="{{ $patient->pat_permanent_address }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_permanent_zip_code">Zip Code</label>
+                    <label>Zip Code</label>
                     <div class="error"></div>
-                    <input type="text" id="pat_permanent_zip_code" name="pat_permanent_zip_code" class="form-control" readonly>
+                    <input type="text" value="{{ $patient->pat_permanent_zip_code }}" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -430,61 +371,32 @@
                 <!-- ===== CURRENT ADDRESS SECTION ===== -->
                 <div class="d-flex align-items-center justify-content-between mb-3">
                   <h5 class="mb-0">Current Address</h5>
-
-                  <div class="form-check formal-checkbox">
-                    <input type="checkbox" class="form-check-input" id="sameAsPermanent">
-                    <label class="form-check-label" for="sameAsPermanent">Same as Above</label>
-                  </div>
                 </div>
 
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="pat_current_region">Region <span style="color: red;">*</span></label>
-                    <select id="pat_current_region" class="form-control form-select" required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_current_region" id="pat_current_region_text">
-                    <!-- <input type="text" id="pat_current_region" name="pat_current_region" class="form-control" required> -->
+                    <label>Region </label>
+                    <input type="text" value="{{ $patient->pat_current_region }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_current_province">Province <span style="color: red;">*</span></label>
-                    <select id="pat_current_province" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_current_province" id="pat_current_province_text">
-                    <!-- <input type="text" id="pat_current_province" name="pat_current_province" class="form-control" required> -->
+                    <label>Province </label>
+                    <input type="text" value="{{ $patient->pat_current_province }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_current_city_mun">City / Municipality <span style="color: red;">*</span></label>
-                    <select id="pat_current_city_mun" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_current_city_mun" id="pat_current_city_mun_text">
-                    <!-- <input type="text" id="pat_current_city_mun" name="pat_current_city_mun" class="form-control" required> -->
+                    <label>City / Municipality </label>
+                    <input type="text" value="{{ $patient->pat_current_city_mun }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_current_address">Barangay <span style="color: red;">*</span></label>
-                    <select id="pat_current_address" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <div class="error"></div>
-                    <input type="hidden" name="pat_current_address" id="pat_current_address_text">
-                    <!-- <input type="text" id="pat_current_address" name="pat_current_address" class="form-control" required> -->
+                    <label>Barangay </label>
+                    <input type="text" value="{{ $patient->pat_current_address }}" class="form-control" readonly>
                   </div>
 
                   <div class="col-md-4">
-                    <label for="pat_current_zip_code">Zip Code</label>
-                    <div class="error"></div>
-                    <input type="text" id="pat_current_zip_code" name="pat_current_zip_code" class="form-control" readonly>
+                    <label>Zip Code</label>
+                    <input type="text" value="{{ $patient->pat_current_zip_code }}" class="form-control" readonly>
                   </div>
                 </div>
 
@@ -504,47 +416,46 @@
                 <h5 class="mb-4">B. Screening Information</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label for="scr_referred_by">Referred by <span style="color: red;">*</span></label>
-                    <input type="text" name="scr_referred_by" id="scr_referred_by" class="form-control"
+                    <label>Referred by <span style="color: red;">*</span></label>
+                    <!-- <input type="text" value="{{ $patient->latestScreening->scr_referred_by ?? '' }}" class="form-control" readonly> -->
+                     <input type="text" name="scr_referred_by" id="scr_referred_by" class="form-control"
                       placeholder="Hospital / Barangay Name" required>
-                    <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="scr_location">Location <span style="color: red;">*</span></label>
-                    <input type="text" name="scr_location" id="scr_location" class="form-control" placeholder="Location"
-                      required>
-                    <div class="error"></div>
+                    <label>Location <span style="color: red;">*</span></label>
+                    <!-- <input type="text" value="{{ $patient->latestScreening->scr_location ?? '' }}" class="form-control" readonly> -->
+                     <input type="text" name="scr_location" id="scr_location" class="form-control"
+                      placeholder="Location" required>
                   </div>
                   <div class="col-md-4">
-                    <label for="scr_referrer_type">Type of Referrer <span style="color: red;">*</span></label>
-                    <select name="scr_referrer_type" id="scr_referrer_type" class="form-control form-select" required>
+                    <label>Type of Referrer <span style="color: red;">*</span></label>
+                    <!-- <input type="text" value="{{ $patient->latestScreening->scr_referrer_type ?? '' }}" class="form-control" readonly> -->
+                     <select name="scr_referrer_type" id="scr_referrer_type" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="Public">Public</option>
                       <option value="Other public">Other public</option>
                       <option value="Private">Private</option>
                       <option value="Community">Community</option>
                     </select>
-                    <div class="error"></div>
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-md-4">
-                    <label for="scr_screening_mode">Mode of Screening <span style="color: red;">*</span></label>
-                    <select name="scr_screening_mode" id="scr_screening_mode" class="form-control form-select" required>
+                    <label>Mode of Screening <span style="color: red;">*</span></label>
+                    <!-- <input type="text" value="{{ $patient->latestScreening->scr_screening_mode ?? '' }}" class="form-control" readonly> -->
+                     <select name="scr_screening_mode" id="scr_screening_mode" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="PCF">PCF</option>
                       <option value="ACF">ACF</option>
                       <option value="ICF">ICF</option>
                       <option value="ECF">ECF</option>
                     </select>
-                    <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="scr_screening_date">Date of Screening <span style="color: red;">*</span></label>
-                    <input type="date" name="scr_screening_date" id="scr_screening_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required />
-                    <div class="error"></div>
+                    <label>Date of Screening <span style="color: red;">*</span></label>
+                    <!-- <input type="text" value="{{ $patient->latestScreening->scr_screening_date ?? '' }}" class="form-control" readonly> -->
+                     <input type="date" name="scr_screening_date" id="scr_screening_date" class="form-control" max="{{ date('Y-m-d') }}">
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">
@@ -579,7 +490,7 @@
                     <label for="lab_xpert_test_date" class="form-label">Xpert MTB/RIF Test Date <span
                         style="color: red;">*</span></label>
                     <input type="date" name="lab_xpert_test_date" id="lab_xpert_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required>
+                      max="{{ date('Y-m-d') }}" required>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -601,7 +512,7 @@
                     <label for="lab_cxray_test_date" class="form-label">Chest X-ray Test Date <span
                         style="color: red;">*</span></label>
                     <input type="date" name="lab_cxray_test_date" id="lab_cxray_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required>
+                      max="{{ date('Y-m-d') }}" required>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -621,7 +532,7 @@
                     <label for="lab_smear_test_date" class="form-label">Smear Microscopy / TB Lamp Test Date <span
                         style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="lab_smear_test_date" id="lab_smear_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="{{ date('Y-m-d') }}">
                   </div>
                 </div>
 
@@ -640,7 +551,7 @@
                     <label for="lab_tst_test_date" class="form-label">Tuberculin Skin Test Date <span
                         style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="lab_tst_test_date" id="lab_tst_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="{{ date('Y-m-d') }}">
                   </div>
                 </div>
 
@@ -649,6 +560,10 @@
                   <div class="col-md-6">
                     <label for="lab_other_test_name" class="form-label">Other Test Name <span
                         style="color: #6b7280;">(Optional)</span></label>
+                    <!-- <select name="lab_other_result" id="lab_other_result" class="form-control form-select">
+                      <option value="" disabled selected>Select</option>
+                      <option value="Positive">Positive</option>
+                    </select> -->
                     <input type="text" name="lab_other_test_name" id="lab_other_test_name" class="form-control" placeholder="Specify">
                   </div>
                   <div class="col-md-6">
@@ -659,8 +574,7 @@
                   <div class="col-md-6">
                     <label for="lab_other_test_date" class="form-label">Test Date <span
                         style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="lab_other_test_date" id="lab_other_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="lab_other_test_date" id="lab_other_test_date" class="form-control">
                   </div>
                 </div>
 
@@ -682,13 +596,13 @@
                   <div class="col-md-3">
                     <label for="diag_diagnosis_date">Date of Diagnosis <span style="color: red;">*</span></label>
                     <input type="date" name="diag_diagnosis_date" id="diag_diagnosis_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required>
+                      max="{{ date('Y-m-d') }}" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
-                    <label for="diag_notification_date">Date of Notification</label>
+                    <label for="diag_notification_date">Date of Notification </label>
                     <input type="date" name="diag_notification_date" id="diag_notification_date" class="form-control"
-                      readonly>
+                        max="{{ date('Y-m-d') }}" readonly>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-3">
@@ -705,48 +619,8 @@
                       <option value="" disabled selected>Select</option>
                     </select>
                     <div class="error"></div>
+                    </div>
                   </div>
-                  </div>
-                  <!-- <div class="col-md-4">
-                    <label for="diag_referred_to">Referred To <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="diag_referred_to" id="diag_referred_to" class="form-control"
-                      placeholder="Name of Treatment Facility">
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="diag_address">Address <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="diag_address" id="diag_address" class="form-control" placeholder="Address">
-                    <div class="error"></div>
-                  </div> -->
-                <!-- </div> -->
-
-                <!-- <div class="row mb-2">
-                  <div class="col-md-4">
-                    <label for="diag_facility_code">Facility Code <span
-                        style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="diag_facility_code" id="diag_facility_code" class="form-control"
-                      placeholder="Facility code">
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="diag_region">Region <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="diag_region" id="diag_region" class="form-control" placeholder="Region">
-                    <select id="diag_region" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="diag_region" id="diag_region_text">
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="diag_province">Province/HUC <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="diag_province" id="diag_province" class="form-control" placeholder="Province/HUC">
-                    <select id="diag_province" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                    </select>
-                    <input type="hidden" name="diag_province" id="diag_province_text">
-                    <div class="error"></div>
-                  </div>
-                </div> -->
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back
@@ -827,12 +701,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="clas_registration_group">Registration Group </label>
-                    <!-- <select name="clas_registration_group" id="clas_registration_group" class="form-control form-select"
-                      required>
-                      <option value="" disabled selected>Select</option>
-                      <option value="New">New</option>
-                    </select> -->
-                    <input type="text" name="clas_registration_group" id="clas_registration_group" class="form-control" value="New" readonly>
+                    <input type="text" name="clas_registration_group" id="clas_registration_group" class="form-control" value="Relapse" readonly>
                     <div class="error"></div>
                   </div>
                 </div>
@@ -891,205 +760,57 @@
 
   <script src="{{ url('assets/js/tabs.js') }}"></script>
 
-  <script src="{{ url('assets/js/age.js') }}"></script>
-
   <script>
     const form = document.getElementById('form');
-    const fac_name = document.getElementById('fac_name');
-    const fac_ntp_code = document.getElementById('fac_ntp_code');
-    const fac_province = document.getElementById('fac_province');
-    const fac_region = document.getElementById('fac_region');
-    const pat_full_name = document.getElementById('pat_full_name');
-    const pat_date_of_birth = document.getElementById('pat_date_of_birth');
-    // const pat_age = document.getElementById('pat_age');
-    // const pat_sex = document.getElementById('pat_sex');
-    // const pat_civil_status = document.getElementById('pat_civil_status');
-    // const pat_permanent_address = document.getElementById('pat_permanent_address');
-    // const pat_permanent_city_mun = document.getElementById('pat_permanent_city_mun');
-    // const pat_permanent_province = document.getElementById('pat_permanent_province');
-    // const pat_permanent_region = document.getElementById('pat_permanent_region');
-    // const pat_permanent_zip_code = document.getElementById('pat_permanent_zip_code');
-    // const pat_current_address = document.getElementById('pat_current_address');
-    // const pat_current_city_mun = document.getElementById('pat_current_city_mun');
-    // const pat_current_province = document.getElementById('pat_current_province');
-    // const pat_current_region = document.getElementById('pat_current_region');
-    // const pat_current_zip_code = document.getElementById('pat_current_zip_code');
-    const pat_contact_number = document.getElementById('pat_contact_number');
-    const pat_other_contact = document.getElementById('pat_other_contact');
-    const pat_nationality = document.getElementById('pat_nationality');
-    const scr_referred_by = document.getElementById('scr_referred_by');
-    const scr_location = document.getElementById('scr_location');
-    // const scr_referrer_type = document.getElementById('scr_referrer_type');
-    // const scr_screening_mode = document.getElementById('scr_screening_mode');
-    // const scr_screening_date = document.getElementById('scr_screening_date');
+    // Laboratory Tests
+    const lab_xpert_test_date = document.getElementById('lab_xpert_test_date');
+    const lab_xpert_result = document.getElementById('lab_xpert_result');
+    const lab_cxray_test_date = document.getElementById('lab_cxray_test_date');
+    const lab_cxray_result = document.getElementById('lab_cxray_result');
+    const lab_smear_test_date = document.getElementById('lab_smear_test_date');
+    const lab_smear_result = document.getElementById('lab_smear_result');
+    const lab_tst_test_date = document.getElementById('lab_tst_test_date');
+    const lab_tst_result = document.getElementById('lab_tst_result');
+    const lab_other_test_date = document.getElementById('lab_other_test_date');
+    const lab_other_result = document.getElementById('lab_other_result');
+    // Diagnosis
     const diag_diagnosis_date = document.getElementById('diag_diagnosis_date');
-    // const diag_notification_date = document.getElementById('diag_notification_date');
+    const diag_notification_date = document.getElementById('diag_notification_date');
+    const diag_tb_case_no = document.getElementById('diag_tb_case_no');
     const diag_attending_physician = document.getElementById('diag_attending_physician');
+    // TB Disease Classification
     const clas_bacteriological_status = document.getElementById('clas_bacteriological_status');
     const clas_drug_resistance_status = document.getElementById('clas_drug_resistance_status');
+    const clas_other_drug_resistant = document.getElementById('clas_other_drug_resistant');
     const clas_anatomical_site = document.getElementById('clas_anatomical_site');
+    const clas_site_other = document.getElementById('clas_site_other');
     const clas_registration_group = document.getElementById('clas_registration_group');
-    // const lab_xpert_test_date = document.getElementById('lab_xpert_test_date');
-    // const lab_xpert_result = document.getElementById('lab_xpert_result');
-    // const lab_cxray_test_date = document.getElementById('lab_cxray_test_date');
-    // const lab_cxray_result = document.getElementById('lab_cxray_result');
 
     // Get ALL inputs and selects in the form
     const allInputs = form.querySelectorAll("input, select");
 
     const requiredFields = [
-      fac_name,
-      pat_full_name,
-      pat_date_of_birth,
-      // pat_age,
-      // pat_sex,
-      // pat_civil_status,
-      // pat_permanent_address,
-      // pat_permanent_city_mun,
-      // pat_permanent_province,
-      // pat_permanent_region,
-      // pat_permanent_zip_code,
-      // pat_current_address,
-      // pat_current_city_mun,
-      // pat_current_province,
-      // pat_current_region,
-      // pat_current_zip_code,
-      pat_contact_number,
-      // pat_nationality,
-      scr_referred_by,
-      scr_location,
-      // scr_referrer_type,
-      // scr_screening_mode,
-      // scr_screening_date,
-      diag_diagnosis_date,
-      // diag_notification_date,
-      diag_attending_physician,
-      clas_bacteriological_status,
-      clas_drug_resistance_status,
-      clas_anatomical_site,
-      clas_registration_group,
-      // lab_xpert_test_date,
-      // lab_xpert_result,
-      // lab_cxray_test_date,
-      // lab_cxray_result,
+    lab_xpert_test_date,
+    lab_xpert_result,
+    lab_cxray_test_date,
+    lab_cxray_result,
+    diag_diagnosis_date,
+    diag_attending_physician,
+    clas_bacteriological_status,
+    clas_drug_resistance_status,
+    clas_anatomical_site,
+    clas_registration_group,
     ];
-
-    // ✅ Load Diagnosing Facilities dynamically
-      document.addEventListener("DOMContentLoaded", function() {
-        fetch("/api/facilities")
-          .then(response => response.json())
-          .then(data => {
-            data.forEach(facility => {
-              const option = document.createElement("option");
-              option.value = facility.id;
-              option.textContent = facility.fac_name;
-              option.dataset.code = facility.fac_ntp_code;
-              option.dataset.province = facility.fac_province;
-              option.dataset.region = facility.fac_region;
-              fac_name.appendChild(option);
-            });
-          })
-          .catch(error => console.error("Error loading facilities:", error));
-
-        fac_name.addEventListener("change", function() {
-          const selected = this.options[this.selectedIndex];
-          fac_ntp_code.value = selected.dataset.code || "";
-          fac_province.value = selected.dataset.province || "";
-          fac_region.value = selected.dataset.region || "";
-        });
-      });
 
     form.addEventListener("submit", function (e) {
       e.preventDefault(); // stop default submit first
 
       if (validateInputs()) {
 
-        function getSelectText(select) {
-          if (!select || !select.options.length) return '';
-          const selected = select.options[select.selectedIndex];
-          if (!selected || selected.value === '' || selected.text.toLowerCase().includes('select')) {
-            return ''; // return blank if no valid selection
-          }
-          return selected.text;
-        }
-
-
-
-        // populate preview
         const preview = document.getElementById("previewContent");
-        const selectedFacility = fac_name.options[fac_name.selectedIndex].text;
 
         preview.innerHTML = `
         <div class="container-fluid px-2">
-
-        <!-- Diagnosing Facility -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-2">Facility Information</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Diagnosing Facility</th><td>${selectedFacility}</td></tr>
-                  <tr><th>NTP Facility Code</th><td>${fac_ntp_code.value}</td></tr>
-                  <tr><th>Province</th><td>${fac_province.value}</td></tr>
-                  <tr><th>Region</th><td>${fac_region.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Patient Information -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-2">Patient Information</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Full Name</th><td>${pat_full_name.value}</td></tr>
-                  <tr><th>Date of Birth</th><td>${pat_date_of_birth.value}</td></tr>
-                  <tr><th>Age</th><td>${pat_age.value}</td></tr>
-                  <tr><th>Sex</th><td>${pat_sex.value}</td></tr>
-                  <tr><th>Civil Status</th><td>${pat_civil_status.value}</td></tr>
-                  <tr><th>Contact Number</th><td>${pat_contact_number.value}</td></tr>
-                  <tr><th>Other Contact</th><td>${pat_other_contact.value}</td></tr>
-                  <tr><th>PhilHealth No.</th><td>${pat_philhealth_no.value}</td></tr>
-                  <tr><th>Nationality</th><td>${pat_nationality.value}</td></tr>
-                  <tr>
-                    <th>Permanent Address</th>
-                    <td>${getSelectText(pat_permanent_address)}, 
-                        ${getSelectText(pat_permanent_city_mun)}, 
-                        ${getSelectText(pat_permanent_province)}, 
-                        ${getSelectText(pat_permanent_region)} - 
-                        ${pat_permanent_zip_code.value}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Current Address</th>
-                    <td>${getSelectText(pat_current_address)}, 
-                        ${getSelectText(pat_current_city_mun)}, 
-                        ${getSelectText(pat_current_province)}, 
-                        ${getSelectText(pat_current_region)} - 
-                        ${pat_current_zip_code.value}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Screening Information -->
-          <div class="card shadow-sm border-0 rounded-3 mb-4">
-            <div class="card-body">
-              <h6 class="fw-bold mb-2">Screening Information</h6>
-              <table class="table table-borderless preview-table align-middle mb-0">
-                <tbody>
-                  <tr><th>Referred By</th><td>${scr_referred_by.value}</td></tr>
-                  <tr><th>Location</th><td>${scr_location.value}</td></tr>
-                  <tr><th>Type of Referrer</th><td>${scr_referrer_type.value}</td></tr>
-                  <tr><th>Mode of Screening</th><td>${scr_screening_mode.value}</td></tr>
-                  <tr><th>Date of Screening</th><td>${scr_screening_date.value}</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
 
           <!-- Laboratory Tests -->
           <div class="card shadow-sm border-0 rounded-3 mb-4">
@@ -1147,67 +868,15 @@
         </div>
       `;
 
-
         // show modal
         let modal = new bootstrap.Modal(document.getElementById("previewModal"));
         modal.show();
       }
     });
-
-    // ✅ Final confirm button - ENABLE disabled fields before submit
+    
+      // Final confirm button - submit the form
     document.getElementById("confirmSubmit").addEventListener("click", function () {
-      const sameCheckbox = document.getElementById("sameAsPermanent");
-
-      const permRegion = document.getElementById("pat_permanent_region");
-      const permRegionText = permRegion.options[permRegion.selectedIndex].text;
-      document.getElementById("pat_permanent_region_text").value = permRegionText;
-
-      const permProvince = document.getElementById("pat_permanent_province");
-      const permProvinceText = permProvince.options[permProvince.selectedIndex].text;
-      document.getElementById("pat_permanent_province_text").value = permProvinceText;
-
-      const permCity = document.getElementById("pat_permanent_city_mun");
-      const permCityText = permCity.options[permCity.selectedIndex].text;
-      document.getElementById("pat_permanent_city_mun_text").value = permCityText;
-
-      const permBrgy = document.getElementById("pat_permanent_address");
-      const permBrgyText = permBrgy.options[permBrgy.selectedIndex].text;
-      document.getElementById("pat_permanent_address_text").value = permBrgyText;
-
-      const currRegion = document.getElementById("pat_current_region");
-      const currRegionText = currRegion.options[currRegion.selectedIndex].text;
-      document.getElementById("pat_current_region_text").value = currRegionText;
-
-      const currProvince = document.getElementById("pat_current_province");
-      const currProvinceText = currProvince.options[currProvince.selectedIndex].text;
-      document.getElementById("pat_current_province_text").value = currProvinceText;
-
-      const currCity = document.getElementById("pat_current_city_mun");
-      const currCityText = currCity.options[currCity.selectedIndex].text;
-      document.getElementById("pat_current_city_mun_text").value = currCityText;
-
-      const currBrgy = document.getElementById("pat_current_address");
-      const currBrgyText = currBrgy.options[currBrgy.selectedIndex].text;
-      document.getElementById("pat_current_address_text").value = currBrgyText;
-
-      // const diagRegion = document.getElementById("diag_region");
-      // const diagRegionText = diagRegion.options[diagRegion.selectedIndex].text;
-      // document.getElementById("diag_region_text").value = diagRegionText;
-
-      // const diagProvince = document.getElementById("diag_province");
-      // const diagProvinceText = diagProvince.options[diagProvince.selectedIndex].text;
-      // document.getElementById("diag_province_text").value = diagProvinceText;
-      
-
-      // If checkbox is checked, temporarily enable current address fields for submission
-      if (sameCheckbox && sameCheckbox.checked) {
-        [pat_current_region, pat_current_province, pat_current_city_mun, pat_current_address].forEach(el => {
-          el.disabled = false;
-        });
-      }
-
-      // Now submit the form
-      form.submit();
+    form.submit();
     });
 
 
@@ -1224,30 +893,6 @@
       element.classList.add('is-valid');
       element.classList.remove('is-invalid');
     };
-
-    // ✅ Contact number validation
-    function validateContactNumber(element, required = true) {
-      const value = element.value.trim();
-      const regex = /^09\d{9}$/; // must start with 09 + 9 digits = 11 digits
-
-      if (!value) {
-        if (required) {
-          setError(element, "This field is required.");
-          return false;
-        } else {
-          element.classList.remove("error", "success");
-          return true; // optional, allow empty
-        }
-      }
-
-      if (!regex.test(value)) {
-        setError(element, "Enter a valid 11-digit number");
-        return false;
-      }
-
-      setSuccess(element);
-      return true;
-    }
 
     function validateInputs() {
       let isValid = true;
@@ -1290,17 +935,8 @@
       };
 
       requiredFields.forEach(field => {
-        if (field === pat_contact_number) {
-          if (!validateContactNumber(field, true)) isValid = false;
-        } else if (field === pat_other_contact) {
-          if (!validateContactNumber(field, false)) isValid = false;
-        } else {
-          if (!validateField(field)) isValid = false;
-        }
-      });
-
-      // also validate optional other contact if filled
-      if (!validateContactNumber(pat_other_contact, false)) isValid = false;
+        if (!validateField(field)) isValid = false;
+    });
 
       return isValid;
     }
@@ -1317,45 +953,28 @@
         const value = input.value.trim();
         const today = new Date();
 
-        if (input === pat_contact_number) {
-          validateContactNumber(input, true);
-        } else if (input === pat_other_contact) {
-          validateContactNumber(input, false);
-        } else if (requiredFields.includes(input) && (!value || value === "")) {
-          setError(input, "This field is required.");
-        } else if (input.type === "text" && value) {
-          const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
-          if (!regex.test(value)) {
-            setError(input, "Special characters prohibited.");
-          } else {
-            setSuccess(input);
-          }
+        if (requiredFields.includes(input) && (!value || value === "")) {
+        setError(input, "This field is required.");
         } else if (input.type === "date" && value) {
-          const selectedDate = new Date(value);
-          if (selectedDate > today) {
+        const selectedDate = new Date(value);
+        if (selectedDate > today) {
             setError(input, "Enter a valid date.");
-          } else {
+        } else {
             setSuccess(input);
-          }
-        } else if (value && value !== "") {
-          setSuccess(input);
-        } else if (!requiredFields.includes(input)) {
-          input.classList.remove("is-valid", "is-invalid");
-          const errorDisplay = input.parentElement.querySelector('.error');
-          if (errorDisplay) errorDisplay.innerText = '';
         }
-      };
+        } else if (value && value !== "") {
+        setSuccess(input);
+        } else if (!requiredFields.includes(input)) {
+        input.classList.remove("is-valid", "is-invalid");
+        const errorDisplay = input.parentElement.querySelector('.error');
+        if (errorDisplay) errorDisplay.innerText = '';
+        }
+    };
 
-      input.addEventListener("input", validateField);
-      input.addEventListener("change", validateField);
+    input.addEventListener("input", validateField);
+    input.addEventListener("change", validateField);
     });
 
-    // Restrict to digits only
-    [pat_permanent_zip_code, pat_current_zip_code, pat_contact_number, pat_other_contact].forEach(input => {
-      input.addEventListener("input", () => {
-        input.value = input.value.replace(/\D/g, "");
-      });
-    });
   </script>
 
   <script>
@@ -1458,25 +1077,22 @@
     });
   </script>
 
-  <script>
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
       const screeningInput = document.getElementById('scr_screening_date');
       const notificationInput = document.getElementById('diag_notification_date');
 
       screeningInput.addEventListener('change', function () {
         if (this.value) {
-          // Auto-fill notification date same as screening date
           notificationInput.value = this.value;
         } else {
-          // Clear if screening date removed
           notificationInput.value = '';
         }
       });
     });
-  </script>
+  </script> -->
 
-  <!-- ===== SCRIPT SECTION ===== -->
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", function () {
       const permRegion = document.getElementById("pat_permanent_region");
       const permProvince = document.getElementById("pat_permanent_province");
@@ -1490,12 +1106,8 @@
       const currBrgy = document.getElementById("pat_current_address");
       const currZip = document.getElementById("pat_current_zip_code");
 
-      // const diagRegion = document.getElementById("diag_region");
-      // const diagProvince = document.getElementById("diag_province");
-
       const sameCheckbox = document.getElementById("sameAsPermanent");
 
-      // Load regions for both dropdowns
       fetch("/api/regions")
         .then(res => res.json())
         .then(data => {
@@ -1505,7 +1117,6 @@
           });
         });
 
-      // --- Helper function to copy Permanent → Current ---
       function copyPermanentToCurrent() {
         currRegion.value = permRegion.value;
         currProvince.innerHTML = permProvince.innerHTML;
@@ -1518,7 +1129,6 @@
         currZip.value = permZip.value;
       }
 
-      // --- Helper function to toggle readonly instead of disabled ---
       function toggleCurrentFields(makeReadonly) {
         [currRegion, currProvince, currCity, currBrgy, currZip].forEach(el => {
           if (makeReadonly) {
@@ -1533,7 +1143,6 @@
         });
       }
 
-      // --- Permanent dropdown logic ---
       permRegion.addEventListener("change", () => {
         fetch(`/api/provinces/${permRegion.value}`)
           .then(res => res.json())
@@ -1584,7 +1193,6 @@
         if (sameCheckbox.checked) copyPermanentToCurrent();
       });
 
-      // --- Current dropdown logic ---
       currRegion.addEventListener("change", () => {
         fetch(`/api/provinces/${currRegion.value}`)
           .then(res => res.json())
@@ -1627,7 +1235,6 @@
           });
       });
 
-      // --- Checkbox logic (use readonly instead of disabled) ---
       sameCheckbox.addEventListener("change", () => {
         if (sameCheckbox.checked) {
           copyPermanentToCurrent();
@@ -1641,7 +1248,7 @@
         }
       });
     });
-  </script>
+  </script> -->
 
   <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -1666,32 +1273,22 @@
   </script>
 
   <script>
-  $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function () {
+      const screeningInput = document.getElementById('scr_screening_date');
+      const notificationInput = document.getElementById('diag_notification_date');
 
-    $('#pat_full_name').on('blur', function() {
-      let fullName = $(this).val().trim();
-      let dob = $('#pat_date_of_birth').val(); // optional, if DOB field exists
-
-      if (fullName !== '') {
-        $.ajax({
-          url: "{{ route('check.patient.name') }}",
-          method: "GET",
-          data: { pat_full_name: fullName, pat_date_of_birth: dob },
-          success: function(response) {
-            if (response.exists) {
-              $('#pat_full_name').addClass('is-invalid');
-              $('#pat_full_name').next('.error').html('<p class="text-danger">This patient is already registered.</p>');
-            } else {
-              $('#pat_full_name').removeClass('is-invalid');
-              $('#pat_full_name').next('.error').html('');
-            }
-          }
-        });
-      }
+      screeningInput.addEventListener('change', function () {
+        if (this.value) {
+          // Auto-fill notification date same as screening date
+          notificationInput.value = this.value;
+        } else {
+          // Clear if screening date removed
+          notificationInput.value = '';
+        }
+      });
     });
+  </script>
 
-  });
-</script>
 
 </body>
 

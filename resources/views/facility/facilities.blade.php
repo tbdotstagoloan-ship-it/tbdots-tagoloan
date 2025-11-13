@@ -107,7 +107,7 @@
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
         <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->
@@ -337,7 +337,7 @@
             <div class="modal-footer">
             <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-success">
-                Save Facility
+                Submit
             </button>
             </div>
         </form>

@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>TB DOTS - Add New Patient</title>
+  <title>TB DOTS - Relapse Registration</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
@@ -202,7 +202,7 @@
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 20px; color: #2c3e50; font-weight: 600;">
-      National TB Control Program
+      RELAPSE REGISTRATION FORM
     </h4>
 
 
@@ -210,7 +210,7 @@
       <div class="card-body p-0">
         <div class="table-responsive">
 
-          <form id="form" action="{{ url('validatePage2') }}" method="post" class="p-2" novalidate>
+          <form id="form" action="{{ url('validateRelapsePage2/' . $patient->id) }}" method="post" class="p-2" novalidate>
             @csrf
 
             <!-- Tabs -->
@@ -262,29 +262,22 @@
               <div class="tab-pane fade show active" id="treatment" role="tabpanel">
                 <div class="row mb-2">
                   <div class="col-md-3">
-                    <label for="trea_name">Treatment Facility</label>
-                    <input type="text" name="trea_name" id="trea_name" class="form-control"
-                      value="{{ session('trea_name') }}" readonly>
-                    <div class="error"></div>
+                      <label for="trea_name">Treatment Facility</label>
+                      <input type="text" value="{{ $patient->latestTreatmentFacility->trea_name ?? '' }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-3">
-                    <label for="trea_ntp_code">NTP Facility Code</label>
-                    <input type="text" name="trea_ntp_code" id="trea_ntp_code" class="form-control"
-                      value="{{ session('trea_ntp_code') }}" readonly>
-                    <div class="error"></div>
+                      <label for="trea_ntp_code">NTP Facility Code</label>
+                      <input type="text" value="{{ $patient->latestTreatmentFacility->trea_ntp_code ?? '' }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-3">
-                    <label for="trea_province">Province / HUC</label>
-                    <input type="text" name="trea_province" id="trea_province" class="form-control"
-                      value="{{ session('trea_province') }}" readonly>
-                    <div class="error"></div>
+                      <label for="trea_province">Province / HUC</label>
+                      <input type="text" value="{{ $patient->latestTreatmentFacility->trea_province ?? '' }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-3">
-                    <label for="trea_region">Region</label>
-                    <input type="text" name="trea_region" id="trea_region" class="form-control"
-                      value="{{ session('trea_region') }}" readonly>
-                    <div class="error"></div>
+                      <label for="trea_region">Region</label>
+                      <input type="text" value="{{ $patient->latestTreatmentFacility->trea_region ?? '' }}" class="form-control" readonly>
                   </div>
+
                 </div>
                 <div class="d-flex justify-content-end mt-4">
                   <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
@@ -301,7 +294,7 @@
                   <div class="col-md-6">
                     <label for="hist_date_tx_started">Date Tx Started <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="hist_date_tx_started" id="hist_date_tx_started" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="{{ date('Y-m-d') }}">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
@@ -318,10 +311,12 @@
                   </div>
                   <div class="col-md-6">
                     <label for="hist_treatment_duration">Treatment Duration <span style="color: #6b7280;">(Optional)</span></label>
-                      <select name="hist_treatment_duration" id="hist_treatment_duration" class="form-control form-select">
+                      <!-- <select name="hist_treatment_duration" id="hist_treatment_duration" class="form-control form-select">
                         <option value="" disabled selected>Select</option>
                         <option value="6 Months">6 Months</option>
-                      </select>
+                      </select> -->
+                      <input type="text" name="hist_treatment_duration" id="hist_treatment_duration" class="form-control"
+                        placeholder="Duration">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
@@ -362,13 +357,13 @@
                   </div>
                   <div class="col-md-6">
                     <label for="hiv_test_date">HIV Test Date <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="hiv_test_date" id="hiv_test_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="hiv_test_date" id="hiv_test_date" class="form-control" max="{{ date('Y-m-d') }}">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
                     <label for="hiv_confirmatory_test_date">Confirmatory Test Date <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="hiv_confirmatory_test_date" id="hiv_confirmatory_test_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="{{ date('Y-m-d') }}">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
@@ -415,25 +410,25 @@
 
                 <div class="row mb-2">
                   <div class="col-md-4">
-                    <label for="base_height">Height (cm) <span style="color: red;">*</span></label>
-                    <input type="text" name="base_height" id="base_height" class="form-control" placeholder="Height"
+                    <label for="base_height">Height <span style="color: red;">*</span></label>
+                    <input type="text" name="base_height" id="base_height" class="form-control" placeholder="cm"
                       required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="base_weight">Weight (kg) <span style="color: red;">*</span></label>
-                    <input type="text" name="base_weight" id="base_weight" class="form-control" placeholder="Weight"
+                    <label for="base_weight">Weight <span style="color: red;">*</span></label>
+                    <input type="text" name="base_weight" id="base_weight" class="form-control" placeholder="kg"
                       required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="base_blood_pressure">Blood Pressure (mmHg) <span style="color: red;">*</span></label>
+                    <label for="base_blood_pressure">Blood Pressure <span style="color: red;">*</span></label>
                     <input type="text" name="base_blood_pressure" id="base_blood_pressure" class="form-control"
                       placeholder="Blood Pressure" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
-                    <label for="base_pulse_rate">Pulse Rate (bpm) <span style="color: red;">*</span></label>
+                    <label for="base_pulse_rate">Pulse Rate <span style="color: red;">*</span></label>
                     <input type="text" name="base_pulse_rate" id="base_pulse_rate" class="form-control"
                       placeholder="Pulse Rate" required>
                     <div class="error"></div>
@@ -448,34 +443,20 @@
                   <hr>
                   <div class="row mb-2">
                     <div class="col-md-3">
-                    <label for="base_emergency_contact_name">In case of emergency <span style="color: red;">*</span></label>
-                    <input type="text" name="base_emergency_contact_name" id="base_emergency_contact_name"
-                      class="form-control" placeholder="Person to Notify" required>
-                    <div class="error"></div>
+                    <label for="base_emergency_contact_name">Person to Notify </label>
+                    <input type="text" value="{{ $patient->latestBaselineInfo->base_emergency_contact_name ?? '' }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-3">
-                    <label for="base_relationship">Relationship <span style="color: red;">*</span></label>
-                    <!-- <input type="text" name="base_relationship" id="base_relationship" class="form-control"
-                      placeholder="Relationship" required> -->
-                      <select name="base_relationship" id="base_relationship" class="form-control form-select" required>
-                        <option value="" disabled selected>Select</option>
-                        <option value="Guardian">Guardian</option>
-                        <option value="Father">Father</option>
-                        <option value="Mother">Mother</option>
-                      </select>
-                    <div class="error"></div>
+                    <label for="base_relationship">Relationship </label>
+                    <input type="text" value="{{ $patient->latestBaselineInfo->base_relationship ?? '' }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-3">
-                    <label for="base_contact_info">Contact Information <span style="color: red;">*</span></label>
-                    <input type="text" name="base_contact_info" id="base_contact_info" class="form-control"
-                      placeholder="Contact Information" maxlength="11" required>
-                    <div class="error"></div>
+                    <label for="base_contact_info">Contact Information </label>
+                    <input type="text" value="{{ $patient->latestBaselineInfo->base_contact_info ?? '' }}" class="form-control" readonly>
                   </div>
                   <div class="col-md-3">
-                    <label for="base_occupation">Occupation <span style="color: red;">*</span></label>
-                    <input type="text" name="base_occupation" id="base_occupation" class="form-control"
-                      placeholder="Occupation" required>
-                    <div class="error"></div>
+                    <label for="base_occupation">Occupation </label>
+                    <input type="text" value="{{ $patient->latestBaselineInfo->base_occupation ?? '' }}" class="form-control" readonly>
                   </div>
                   </div>
                   <div class="row">
@@ -512,7 +493,7 @@
                   <div class="col-md-3">
                     <label for="base_date_tested">Date Tested <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="base_date_tested" id="base_date_tested" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="{{ date('Y-m-d') }}">
                     <div class="error"></div>
                   </div>
                   </div>
@@ -536,7 +517,7 @@
                   <div class="col-md-6">
                     <label for="com_date_diagnosed">Date Diagnosed <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="com_date_diagnosed" id="com_date_diagnosed" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="{{ date('Y-m-d') }}">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
@@ -590,7 +571,7 @@
                   <div class="col-md-4">
                     <label for="reg_start_date">Treatment Start Date <span style="color: red;">*</span></label>
                     <input type="date" name="reg_start_date" id="reg_start_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required>
+                      max="{{ date('Y-m-d') }}" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -616,42 +597,6 @@
                 </div>
               </div>
 
-              <!-- TAB 4: Outcome -->
-              <!-- <div class="tab-pane fade" id="outcome" role="tabpanel">
-                <h5 class="mb-4">C. Treatment Outcome</h5>
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="out_outcome">Outcome <span style="color: #6b7280;">(Optional)</span></label>
-                    <select name="out_outcome" id="out_outcome" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Cured">Cured</option>
-                      <option value="Treatment Completed">Treatment Completed</option>
-                      <option value="Lost to Follow-Up">Lost to Follow-up</option>
-                      <option value="Died">Died</option>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="out_date">Date of Outcome <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="out_date" id="out_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="out_reason">Reason <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="out_reason" id="out_reason" class="form-control"
-                      placeholder="If Failed, LTFU, or Died">
-                    <div class="error"></div>
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                    <i class="fas fa-arrow-left"></i> Back
-                  </button>
-                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                    Next <i class="fas fa-arrow-right"></i>
-                  </button>
-                </div>
-              </div> -->
-
               <!-- TAB 5: Medicine -->
               <div class="tab-pane fade" id="medicine" role="tabpanel">
                 <h5 class="mb-4">Prescribed Drugs</h5>
@@ -659,7 +604,7 @@
                   <div class="col-md-4">
                     <label for="drug_start_date">Date Start <span style="color: red;">*</span></label>
                     <input type="date" name="drug_start_date" id="drug_start_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>" required>
+                      max="{{ date('Y-m-d') }}" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-4">
@@ -703,47 +648,6 @@
                   </div>
                 </div>
 
-                <!-- <div class="row mb-2">
-                  <div class="col-md-4">
-                    <label for="drug_con_date">Continuation <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="drug_con_date" id="drug_con_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="drug_con_name">Drug <span style="color: #6b7280;">(Optional)</span></label>
-                    <select name="drug_con_name" id="drug_con_name" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="2FDC">2FDC</option>
-                      <option value="H">H</option>
-                      <option value="R">R</option>
-                      <option value="Z">Z</option>
-                      <option value="E">E</option>
-                    </select>
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="drug_con_no_of_tablets">No. of Tablets <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="drug_con_no_tabs" id="drug_con_no_tabs" class="form-control" readonly>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="drug_con_strength">Strength <span style="color: #6b7280;">(Optional)</span></label>
-                      <select name="drug_con_strength" id="drug_con_strength" class="form-control form-select">
-                        <option value="" disabled selected>Select</option>
-                        <option value="150mg">150mg</option>
-                        <option value="75mg">75mg</option>
-                      </select>
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="drug_con_unit">Unit <span style="color: #6b7280;">(Optional)</span></label>
-                      <select name="drug_con_unit" id="drug_con_unit" class="form-control form-select">
-                        <option value="" disabled selected>Select</option>
-                        <option value="Tablet">Tablet</option>
-                      </select>
-                    <div class="error"></div>
-                  </div>
-                </div> -->
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back
@@ -827,8 +731,6 @@
                     <div class="error"></div>
                   </div>
 
-                <!-- </div> -->
-                <!-- <hr> -->
                  <div class="col-md-4">
                     <label for="sup_dat_used">Name of DAT/s Used <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="sup_dat_used" id="sup_dat_used" class="form-control"
@@ -836,35 +738,6 @@
                     <div class="error"></div>
                   </div>
                   </div>
-                
-                  <!-- <div class="col-md-6">
-                    <label for="pha_continuation_start">Continuation Phase Start <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="pha_continuation_start" id="pha_continuation_start" class="form-control"
-                      readonly>
-                    <div class="error"></div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <label for="pha_continuation_end">Continuation Phase End Date <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="pha_continuation_end" id="pha_continuation_end" class="form-control"
-                      readonly>
-                    <div class="error"></div>
-                  </div> -->
-                <!-- </div> -->
-
-                <!-- <div class="row mb-3">
-                  <div class="col-md-6">
-                    <label for="pha_weight">Weight <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="pha_weight" id="pha_weight" class="form-control" placeholder="kg">
-                    <div class="error"></div>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="pha_child_height">Height for Children <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="pha_child_height" id="pha_child_height" class="form-control"
-                      placeholder="cm">
-                    <div class="error"></div>
-                  </div>
-                </div> -->
                 <div class="d-flex justify-content-between mt-4">
                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
                     <i class="fas fa-arrow-left"></i> Back
@@ -922,36 +795,34 @@
 
   <script>
     const form = document.getElementById('form');
+    // Baseline Information (Required fields only)
     const base_height = document.getElementById('base_height');
     const base_weight = document.getElementById('base_weight');
     const base_blood_pressure = document.getElementById('base_blood_pressure');
     const base_pulse_rate = document.getElementById('base_pulse_rate');
     const base_temperature = document.getElementById('base_temperature');
-    const base_emergency_contact_name = document.getElementById('base_emergency_contact_name');
-    const base_relationship = document.getElementById('base_relationship');
-    const base_contact_info = document.getElementById('base_contact_info');
     const base_diabetes_screening = document.getElementById('base_diabetes_screening');
     const base_four_ps_beneficiary = document.getElementById('base_four_ps_beneficiary');
-    const base_fbs_screening = document.getElementById('base_fbs_screening');
-    const base_date_tested = document.getElementById('base_date_tested');
-    const base_occupation = document.getElementById('base_occupation');
+
+    // Treatment Regimen
     const reg_start_type = document.getElementById('reg_start_type');
     const reg_start_date = document.getElementById('reg_start_date');
+
+    // Prescribed Drugs
     const drug_start_date = document.getElementById('drug_start_date');
     const drug_name = document.getElementById('drug_name');
+    const drug_no_of_tablets = document.getElementById('drug_no_of_tablets');
     const drug_strength = document.getElementById('drug_strength');
     const drug_unit = document.getElementById('drug_unit');
-    const drug_con_date = document.getElementById('drug_con_date');
+
+    // Administration of Drugs
     const sup_location = document.getElementById('sup_location');
     const sup_name = document.getElementById('sup_name');
     const sup_designation = document.getElementById('sup_designation');
     const sup_type = document.getElementById('sup_type');
     const sup_contact_info = document.getElementById('sup_contact_info');
-    const sup_treatment_schedule = document.getElementById('sup_treatment_schedule');
     const pha_intensive_start = document.getElementById('pha_intensive_start');
     const pha_intensive_end = document.getElementById('pha_intensive_end');
-    const pha_continuation_start = document.getElementById('pha_continuation_start');
-    const pha_continuation_end = document.getElementById('pha_continuation_end');
 
     // Get ALL inputs and selects in the form
     const allInputs = form.querySelectorAll("input, select");
@@ -962,50 +833,25 @@
       base_blood_pressure,
       base_pulse_rate,
       base_temperature,
-      base_emergency_contact_name,
-      base_relationship,
-      base_contact_info, 
-      base_occupation,
       base_diabetes_screening,
       base_four_ps_beneficiary,
       reg_start_type,
       reg_start_date,
       drug_start_date,
-      drug_name,
-      drug_strength,
-      drug_unit,
       sup_location,
       sup_name,
       sup_designation,
       sup_type,
-      sup_contact_info, 
-      sup_treatment_schedule,
-
+      sup_contact_info,
     ];
 
     form.addEventListener("submit", function (e) {
-      e.preventDefault(); // stop default submit
+      e.preventDefault();
 
       if (validateInputs()) {
-        // populate preview
         const preview = document.getElementById("previewContent");
         preview.innerHTML = `
           <div class="container-fluid px-2">
-
-            <!-- Treatment Facility -->
-            <div class="card shadow-sm border-0 rounded-3 mb-4">
-              <div class="card-body">
-                <h6 class="fw-bold mb-2">Treatment Facility</h6>
-                <table class="table table-borderless preview-table align-middle mb-0">
-                  <tbody>
-                    <tr><th>Name of Treatment Facility</th><td>${form.trea_name.value}</td></tr>
-                    <tr><th>NTP Facility Code</th><td>${form.trea_ntp_code.value}</td></tr>
-                    <tr><th>Province</th><td>${form.trea_province.value}</td></tr>
-                    <tr><th>Region</th><td>${form.trea_region.value}</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
 
             <!-- Baseline Information -->
             <div class="card shadow-sm border-0 rounded-3 mb-4">
@@ -1013,33 +859,13 @@
                 <h6 class="fw-bold mb-2">Baseline Information</h6>
                 <table class="table table-borderless preview-table align-middle mb-0">
                   <tbody>
-                    <tr><th>Date Tx Started</th><td>${form.hist_date_tx_started.value}</td></tr>
-                    <tr><th>Name of Treatment Unit</th><td>${form.hist_treatment_unit.value}</td></tr>
-                    <tr><th>Drug</th><td>${form.hist_drug.value}</td></tr>
-                    <tr><th>Treatment Duration</th><td>${form.hist_treatment_duration.value}</td></tr>
-                    <tr><th>Outcome</th><td>${form.hist_outcome.value}</td></tr>
-                    <tr><th>HIV Info</th><td>${form.hiv_information.value}</td></tr>
-                    <tr><th>HIV Test Date</th><td>${form.hiv_test_date.value}</td></tr>
-                    <tr><th>Confirmatory Test Date</th><td>${form.hiv_confirmatory_test_date.value}</td></tr>
-                    <tr><th>HIV Result</th><td>${form.hiv_result.value}</td></tr>
-                    <tr><th>ART Started?</th><td>${form.hiv_art_started.value}</td></tr>
-                    <tr><th>CPT Started?</th><td>${form.hiv_cpt_started.value}</td></tr>
-                    <tr><th>Height</th><td>${form.base_height.value}</td></tr>
-                    <tr><th>Weight</th><td>${form.base_weight.value}</td></tr>
-                    <tr><th>Blood Pressure</th><td>${form.base_blood_pressure.value}</td></tr>
-                    <tr><th>Pulse Rate</th><td>${form.base_pulse_rate.value}</td></tr>
-                    <tr><th>Temperature (°C)</th><td>${form.base_temperature.value}</td></tr>
-                    <tr><th>Emergency Contact</th><td>${form.base_emergency_contact_name.value}</td></tr>
-                    <tr><th>Relationship</th><td>${form.base_relationship.value}</td></tr>
-                    <tr><th>Contact Info</th><td>${form.base_contact_info.value}</td></tr>
-                    <tr><th>Diabetes Screening</th><td>${form.base_diabetes_screening.value}</td></tr>
-                    <tr><th>4Ps Beneficiary</th><td>${form.base_four_ps_beneficiary.value}</td></tr>
-                    <tr><th>FBS Screening</th><td>${form.base_fbs_screening.value}</td></tr>
-                    <tr><th>Date Tested</th><td>${form.base_date_tested.value}</td></tr>
-                    <tr><th>Occupation</th><td>${form.base_occupation.value}</td></tr>
-                    <tr><th>Comorbidity Type</th><td>${form.com_type.value}</td></tr>
-                    <tr><th>Other Comorbidity</th><td>${form.com_other.value}</td></tr>
-                    <tr><th>Comorbidity Treatment</th><td>${form.com_treatment.value}</td></tr>
+                    <tr><th>Height</th><td>${base_height.value} cm</td></tr>
+                    <tr><th>Weight</th><td>${base_weight.value} kg</td></tr>
+                    <tr><th>Blood Pressure</th><td>${base_blood_pressure.value}</td></tr>
+                    <tr><th>Pulse Rate</th><td>${base_pulse_rate.value}</td></tr>
+                    <tr><th>Temperature</th><td>${base_temperature.value} °C</td></tr>
+                    <tr><th>Diabetes Screening</th><td>${base_diabetes_screening.value}</td></tr>
+                    <tr><th>4Ps Beneficiary</th><td>${base_four_ps_beneficiary.value}</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1051,9 +877,8 @@
                 <h6 class="fw-bold mb-2">Treatment Regimen</h6>
                 <table class="table table-borderless preview-table align-middle mb-0">
                   <tbody>
-                    <tr><th>Start Regimen Type</th><td>${form.reg_start_type.value}</td></tr>
-                    <tr><th>Treatment Start Date</th><td>${form.reg_start_date.value}</td></tr>
-                    <tr><th>End Regimen Type</th><td>${form.reg_end_type.value}</td></tr>
+                    <tr><th>Regimen Type at Start</th><td>${reg_start_type.value}</td></tr>
+                    <tr><th>Treatment Start Date</th><td>${reg_start_date.value}</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1065,11 +890,11 @@
                 <h6 class="fw-bold mb-2">Prescribed Drugs</h6>
                 <table class="table table-borderless preview-table align-middle mb-0">
                   <tbody>
-                    <tr><th>Date Start</th><td>${form.drug_start_date.value}</td></tr>
-                    <tr><th>Drug</th><td>${form.drug_name.value}</td></tr>
-                    <tr><th>No. of Tablets</th><td>${form.drug_no_of_tablets.value}</td></tr>
-                    <tr><th>Strength</th><td>${form.drug_strength.value}</td></tr>
-                    <tr><th>Unit</th><td>${form.drug_unit.value}</td></tr>
+                    <tr><th>Date Start</th><td>${drug_start_date.value}</td></tr>
+                    <tr><th>Drug</th><td>${drug_name.value}</td></tr>
+                    <tr><th>No. of Tablets</th><td>${drug_no_of_tablets.value}</td></tr>
+                    <tr><th>Strength</th><td>${drug_strength.value}</td></tr>
+                    <tr><th>Unit</th><td>${drug_unit.value}</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1081,15 +906,13 @@
                 <h6 class="fw-bold mb-2">Administration of Drugs</h6>
                 <table class="table table-borderless preview-table align-middle mb-0">
                   <tbody>
-                    <tr><th>Location</th><td>${form.sup_location.value}</td></tr>
-                    <tr><th>Supporter Name</th><td>${form.sup_name.value}</td></tr>
-                    <tr><th>Designation</th><td>${form.sup_designation.value}</td></tr>
-                    <tr><th>Type</th><td>${form.sup_type.value}</td></tr>
-                    <tr><th>Contact Info</th><td>${form.sup_contact_info.value}</td></tr>
-                    <tr><th>Schedule</th><td>${form.sup_treatment_schedule.value}</td></tr>
-                    <tr><th>DAT/s Used</th><td>${form.sup_dat_used.value}</td></tr>
-                    <tr><th>Intensive Phase Start</th><td>${form.pha_intensive_start.value}</td></tr>
-                    <tr><th>Intensive Phase End</th><td>${form.pha_intensive_end.value}</td></tr>
+                    <tr><th>Location of Treatment</th><td>${sup_location.value}</td></tr>
+                    <tr><th>Tx Supporter Name</th><td>${sup_name.value}</td></tr>
+                    <tr><th>Designation</th><td>${sup_designation.value}</td></tr>
+                    <tr><th>Type</th><td>${sup_type.value}</td></tr>
+                    <tr><th>Contact Info</th><td>${sup_contact_info.value}</td></tr>
+                    <tr><th>Intensive Phase Start</th><td>${pha_intensive_start.value}</td></tr>
+                    <tr><th>Intensive Phase End</th><td>${pha_intensive_end.value}</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1098,18 +921,15 @@
           </div>
         `;
 
-
-        // show modal
         let modal = new bootstrap.Modal(document.getElementById("previewModal"));
         modal.show();
       }
     });
 
-    // ✅ Final confirm button event
+    // Final confirm button
     document.getElementById("confirmSubmit").addEventListener("click", function () {
-      form.submit(); // final submit
+      form.submit();
     });
-
 
     const setError = (element, message) => {
       const errorDisplay = element.parentElement.querySelector('.error');
@@ -1125,18 +945,18 @@
       element.classList.remove('is-invalid');
     };
 
-    // ✅ Contact number validation (must start with 09 + 9 digits)
+    // Contact number validation
     function validateContactNumber(element) {
       const value = element.value.trim();
-      const regex = /^09\d{9}$/; // 11 digits, starts with 09
+      const regex = /^09\d{9}$/;
 
       if (!value) {
-        setError(element, "This is required.");
+        setError(element, "This field is required.");
         return false;
       }
 
       if (!regex.test(value)) {
-        setError(element, "Enter a valid 11-digit number.");
+        setError(element, "Enter a valid 11-digit number starting with 09");
         return false;
       }
 
@@ -1149,30 +969,42 @@
       const today = new Date();
 
       const validateField = (element) => {
+        // Skip validation for disabled or readonly fields
+        if (element.disabled || element.readOnly) {
+          return true;
+        }
+
         const value = element.value.trim();
 
         // Required check
         if (!value) {
-          setError(element, "This is required.");
+          setError(element, "This field is required.");
           return false;
         }
 
-        // Special character check for text
-        if (element.type === "text" && value &&
-          element.id !== "base_contact_info" &&
-          element.id !== "sup_contact_info") {
-          const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
-          if (!regex.test(value)) {
-            setError(element, "Special characters prohibited.");
+        // Date validation
+        if (element.type === "date" && value) {
+          const selectedDate = new Date(value);
+          if (selectedDate > today) {
+            setError(element, "Enter a valid date.");
             return false;
           }
         }
 
-        // Numeric check for weight/height
-        if ((element.id === "base_weight" || element.id === "base_height" || element.id === "pha_weight" || element.id === "pha_child_height") && value) {
+        // Numeric validation for height/weight
+        if ((element.id === "base_weight" || element.id === "base_height") && value) {
           const regex = /^[0-9]+(\.[0-9]+)?$/;
           if (!regex.test(value)) {
             setError(element, "Enter a valid numeric value.");
+            return false;
+          }
+        }
+
+        // Text field validation (allow common characters)
+        if (element.type === "text" && value && element.id !== "sup_contact_info") {
+          const regex = /^[a-zA-Z0-9 ,.\-\/°]*$/;
+          if (!regex.test(value)) {
+            setError(element, "Special characters prohibited.");
             return false;
           }
         }
@@ -1182,7 +1014,7 @@
       };
 
       requiredFields.forEach(field => {
-        if (field === base_contact_info || field === sup_contact_info) {
+        if (field === sup_contact_info) {
           if (!validateContactNumber(field)) isValid = false;
         } else {
           if (!validateField(field)) isValid = false;
@@ -1195,36 +1027,43 @@
     // Real-time validation
     allInputs.forEach(input => {
       const validateField = () => {
+        // Skip validation for disabled or readonly fields
+        if (input.disabled || input.readOnly) {
+          return;
+        }
+
         const value = input.value.trim();
         const today = new Date();
 
-        if (input === base_contact_info || input === sup_contact_info) {
+        if (input === sup_contact_info) {
           validateContactNumber(input);
-        } else if (input.id === "base_weight" || input.id === "base_height" || input.id === "pha_weight" || input.id === "pha_child_height") {
+        } else if (requiredFields.includes(input) && !value) {
+          setError(input, "This field is required.");
+        } else if (input.type === "date" && value) {
+          const selectedDate = new Date(value);
+          if (selectedDate > today) {
+            setError(input, "Enter a valid date.");
+          } else {
+            setSuccess(input);
+          }
+        } else if ((input.id === "base_weight" || input.id === "base_height") && value) {
           const regex = /^[0-9]*\.?[0-9]*$/;
           if (!regex.test(value)) {
             setError(input, "Enter a valid numeric value.");
-          } else if (value && isNaN(value)) {
-            setError(input, "Enter a valid numeric value.");
           } else {
             setSuccess(input);
           }
-        } else if (input.type === "text" && value) {
-          const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
+        } else if (input.type === "text" && value && input.id !== "sup_contact_info") {
+          const regex = /^[a-zA-Z0-9 ,.\-\/°]*$/;
           if (!regex.test(value)) {
             setError(input, "Special characters prohibited.");
           } else {
             setSuccess(input);
           }
-        } else if (!requiredFields.includes(input) && value) {
-          const regex = /^[a-zA-Z0-9 ,.\-\/]*$/;
-          if (!regex.test(value)) {
-            setError(input, "Special characters prohibited.");
-          } else {
-            setSuccess(input);
-          }
-        } else {
-          input.classList.remove("success", "error");
+        } else if (value) {
+          setSuccess(input);
+        } else if (!requiredFields.includes(input)) {
+          input.classList.remove("is-valid", "is-invalid");
           const errorDisplay = input.parentElement.querySelector('.error');
           if (errorDisplay) errorDisplay.innerText = '';
         }
@@ -1234,12 +1073,12 @@
       input.addEventListener("change", validateField);
     });
 
-    // ✅ Force digits only for contact fields
-    [base_height, base_weight, base_contact_info, sup_contact_info].forEach(input => {
-      input.addEventListener("input", () => {
-        input.value = input.value.replace(/\D/g, ""); // remove non-digits
-        if (input.value.length > 11) input.value = input.value.slice(0, 11); // limit to 11 digits
-      });
+    // Force digits only for contact number
+    sup_contact_info.addEventListener("input", () => {
+      sup_contact_info.value = sup_contact_info.value.replace(/\D/g, "");
+      if (sup_contact_info.value.length > 11) {
+        sup_contact_info.value = sup_contact_info.value.slice(0, 11);
+      }
     });
   </script>
 
@@ -1261,8 +1100,6 @@
       const drugContinuation = document.getElementById('drug_con_date');
       const intensiveStart = document.getElementById('pha_intensive_start');
       const intensiveEnd = document.getElementById('pha_intensive_end');
-      const contStart = document.getElementById('pha_continuation_start');
-      const contEnd = document.getElementById('pha_continuation_end');
 
       // ✅ Calculate Intensive Phase (56 days)
       drugStart.addEventListener('change', function () {
@@ -1282,23 +1119,6 @@
         }
       });
 
-      // ✅ Calculate Continuation Phase (180 days)
-      // drugContinuation.addEventListener('change', function () {
-      //   if (this.value) {
-      //     const conDate = new Date(this.value);
-
-      //     // Continuation Phase Start = selected continuation date
-      //     contStart.value = this.value;
-
-      //     // Continuation Phase End = Continuation Start + 180 days
-      //     const contEndDate = new Date(conDate);
-      //     contEndDate.setDate(conDate.getDate() + 180);
-      //     contEnd.value = contEndDate.toISOString().split('T')[0];
-      //   } else {
-      //     contStart.value = '';
-      //     contEnd.value = '';
-      //   }
-      // });
     });
   </script>
 

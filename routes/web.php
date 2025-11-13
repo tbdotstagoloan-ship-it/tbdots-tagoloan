@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PatientAuthController;
 use App\Http\Controllers\RelapseCasesController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\PhysicianController;
@@ -52,7 +53,7 @@ Route::get('/', function () {
 Route::get('dashboard', [AdminController::class,'index'])->middleware(['auth'])->name('dashboard');
 // Route::get('admin/dashboard', [AdminController::class,'index'])->middleware(['auth'])->name('admin.index');
 Route::get('patient', [AdminController::class, 'patient'])->middleware(['auth'])->name('admin.patient');
-Route::get('patient-profile', [AdminController::class, 'patientProfile'])->middleware(['auth']);
+// Route::get('patient-profile', [AdminController::class, 'patientProfile'])->middleware(['auth']);
 Route::get('form/page1', [AdminController::class, 'page1'])->middleware(['auth']);
 Route::post('submitpage1', [AdminController::class, 'submitpage1'])->middleware(['auth']);
 Route::get('form/page2', [AdminController::class, 'page2'])->middleware(['auth']);
@@ -248,3 +249,14 @@ Route::get('/check-patient-name', [PatientController::class, 'checkPatientName']
 
 // Relapse Cases
 Route::get('relapse-cases', [RelapseCasesController::class, 'index'])->middleware(['auth'])->name('relapse.index');
+Route::get('/patients/{id}/relapse', [RelapseCasesController::class, 'create'])->name('relapse.create');
+
+Route::get('relapse/form/page1/{id}', [RelapseCasesController::class, 'relapseFormPage1'])->middleware(['auth'])->name('relapse.page1');
+Route::post('validateRelapsePage1/{id}', [RelapseCasesController::class, 'validateRelapsePage1'])->middleware(['auth']);
+Route::get('relapse/form/page2/{id}', [RelapseCasesController::class, 'relapseFormPage2'])->middleware(['auth'])->name('relapse.page2');
+Route::post('validateRelapsePage2/{id}', [RelapseCasesController::class, 'validateRelapsePage2'])->middleware(['auth']);
+Route::get('relapse/form/page3/{id}', [RelapseCasesController::class, 'relapseFormPage3'])->middleware(['auth'])->name('relapse.page3');
+Route::post('validateRelapsePage3/{id}', [RelapseCasesController::class, 'validateRelapsePage3'])->middleware(['auth']);
+
+// Reset Password
+Route::post('/patient/{id}/update-password', [PatientAuthController::class, 'updatePassword'])->name('patient.update-password');

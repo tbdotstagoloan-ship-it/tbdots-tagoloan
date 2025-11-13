@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>TB DOTS - Add New Patient</title>
+  <title>TB DOTS - Relapse Registration</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
@@ -176,7 +176,7 @@
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 20px; color: #2c3e50; font-weight: 600">
-      National TB Control Program
+      RELAPSE REGISTRATION FORM
     </h4>
 
 
@@ -184,7 +184,7 @@
       <div class="card-body p-0">
         <div class="table-responsive">
 
-          <form id="form" action="{{ url('validatePage3') }}" method="post" class="p-2" novalidate>
+          <form id="form" action="{{ url('validateRelapsePage3/' . $patient->id) }}" method="post" class="p-2" novalidate>
             @csrf
 
             <!-- Tabs -->
@@ -230,7 +230,7 @@
                 <div class="row mb-2">
                   <div class="col-md-4">
                     <label for="adv_ae_date">Date of AE <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="adv_ae_date" id="adv_ae_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" name="adv_ae_date" id="adv_ae_date" class="form-control" max="{{ date('Y-m-d') }}">
                   </div>
                   <div class="col-md-4">
                     <label for="adv_specific_ae">Specific AE <span style="color: #6b7280;">(Optional)</span></label>
@@ -239,7 +239,7 @@
                   <div class="col-md-4">
                     <label for="adv_fda_reported_date">Date Reported to FDA <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="date" name="adv_fda_reported_date" id="adv_fda_reported_date" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
+                      max="{{ date('Y-m-d') }}">
                   </div>
                 </div>
                 <div class="d-flex justify-content-end mt-4">
@@ -249,37 +249,6 @@
               </div>
 
               </div>
-
-              <!-- TAB 2: Patient Progress-->
-              <!-- <div class="tab-pane fade" id="progress" role="tabpanel">
-                <h5 class="mb-4">F. Patient Progress Report Form</h5>
-                <div class="row mb-2">
-                  <div class="col-md-3">
-                    <label for="prog_date">Date <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="prog_date" id="prog_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="prog_problem">Problem <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="prog_problem" id="prog_problem" class="form-control" placeholder="AE, reason of absence">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="prog_action_taken">Action Taken <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="prog_action_taken" id="prog_action_taken" class="form-control" placeholder="Action taken">
-                  </div>
-                  <div class="col-md-3">
-                    <label for="prog_plan">Plan <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="prog_plan" id="prog_plan" class="form-control" placeholder="Plan">
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
-                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
-                </div>
-              </div> -->
 
               <!-- TAB 3: Close Contact -->
               <div class="tab-pane fade" id="close" role="tabpanel">
@@ -311,24 +280,24 @@
                       </div>
                       <div class="col-md-3">
                         <label for="con_relationship">Relationship <span style="color: #6b7280;">(Optional)</span></label>
-                        <input type="text" name="con_relationship[]" id="con_relationship" class="form-control" placeholder="Relationship">
-                         <!-- <select name="con_relationship[]" id="con_relationship" class="form-control form-select">
+                        <!-- <input type="text" name="con_relationship[]" id="con_relationship" class="form-control" placeholder="Relationship"> -->
+                         <select name="con_relationship[]" id="con_relationship" class="form-control form-select">
                           <option value="" disabled selected>Select</option>
                           <option value="Guardian">Guardian</option>
                           <option value="Father">Father</option>
                           <option value="Mother">Mother</option>
-                         </select> -->
+                         </select>
                       </div>
                     </div>
 
                     <div class="row mb-2">
                       <div class="col-md-3">
                         <label for="con_initial_screening">Initial Screening <span style="color: #6b7280;">(Optional)</span></label>
-                        <input type="date" name="con_initial_screening[]" id="con_initial_screening" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                        <input type="date" name="con_initial_screening[]" id="con_initial_screening" class="form-control" max="{{ date('Y-m-d') }}">
                       </div>
                       <div class="col-md-3">
                         <label for="con_follow_up">Ff-up <span style="color: #6b7280;">(Optional)</span></label>
-                        <input type="date" name="con_follow_up[]" id="con_follow_up" class="form-control" max="<?php echo date('Y-m-d'); ?>">
+                        <input type="date" name="con_follow_up[]" id="con_follow_up" class="form-control" max="{{ date('Y-m-d') }}">
                       </div>
                       <div class="col-md-3">
                         <label for="con_remarks">Remarks <span style="color: #6b7280;">(Optional)</span></label>
@@ -350,108 +319,6 @@
                   <button type="submit" class="btn btn-success">Submit</button>
                 </div>
               </div>
-
-              <!-- TAB 4: Sputum Monitoring -->
-              <!-- <div class="tab-pane fade" id="sputum" role="tabpanel">
-                <h5 class="mb-4">H. Sputum Monitoring</h5>
-                <div class="row mb-2">
-                  <div class="col-md-4">
-                    <label for="sput_date_collected">Date Collected <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="sput_date_collected" id="sput_date_collected" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-4">
-                    <label for="sput_smear_result">Smear Microscopy/ TB LAMP <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="sput_smear_result" id="sput_smear_result" class="form-control"
-                      placeholder="Smear Microscopy/ TB LAMP">
-                  </div>
-                  <div class="col-md-4">
-                    <label for="sput_xpert_result">Xpert MTB/RIF <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="sput_xpert_result" id="sput_xpert_result" class="form-control" placeholder="Xpert MTB/RIF">
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
-                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
-                </div>
-              </div> -->
-
-              <!-- TAB 5: Chest Xray -->
-              <!-- <div class="tab-pane fade" id="xray" role="tabpanel">
-                <h5 class="mb-4">I. Chest X-ray</h5>
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="xray_date_examined">Date Examined <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="xray_date_examined" id="xray_date_examined" class="form-control"
-                      max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-4">
-                    <label for="xray_impression">Impression/ Comparative Reading <span style="color: #6b7280;">(Optional)</span></label>
-                    <select name="xray_impression" id="xray_impression" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Normal">Normal</option>
-                      <option value="Abnormal suggestive of TB">Abnormal suggestive of TB</option>
-                      <option value="Abnormal not suggestive of TB">Abnormal not suggestive of TB</option>
-                      <option value="Normal">Improved</option>
-                      <option value="Abnormal suggestive of TB">Stable/Unchanged</option>
-                      <option value="Abnormal not suggestive of TB">Worsened</option>
-                    </select>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="xray_descriptive_comment">Descriptive Comments <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="xray_descriptive_comment" id="xray_descriptive_comment" class="form-control"
-                      placeholder="Descriptive Comments">
-                  </div>
-                </div>
-
-                <div class="d-flex justify-content-between mt-4">
-                  <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
-                  <button type="button" class="btn backBtn next-tab d-flex align-items-center gap-1">
-                  Next <i class="fas fa-arrow-right"></i>
-                </button>
-                </div>
-              </div> -->
-
-              <!-- TAB 6: Follow Up -->
-              <!-- <div class="tab-pane fade" id="followup" role="tabpanel">
-                <h5 class="mb-4">J. Post Treatment Follow-up</h5>
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="fol_months_after_tx">Mo. After Tx <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="fol_months_after_tx" id="fol_months_after_tx" class="form-control" placeholder="PT">
-                  </div>
-                  <div class="col-md-4">
-                    <label for="fol_date">Date <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="date" name="fol_date" id="fol_date" class="form-control" max="<?php echo date('Y-m-d'); ?>">
-                  </div>
-                  <div class="col-md-4">
-                    <label for="fol_cxr_findings">CXR Findings <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="fol_cxr_findings" id="fol_cxr_findings" class="form-control" placeholder="CXR Findings">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <div class="col-md-4">
-                    <label for="fol_smear_xpert">Smear/ Xpert <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="fol_smear_xpert" id="fol_smear_xpert" class="form-control" placeholder="Smear/ Xpert">
-                  </div>
-                  <div class="col-md-4">
-                    <label for="fol_tbc_dst">TBC & DST <span style="color: #6b7280;">(Optional)</span></label>
-                    <input type="text" name="fol_tbc_dst" id="fol_tbc_dst" class="form-control" placeholder="TBC & DST">
-                  </div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
-                   <button type="button" class="btn backBtn prev-tab d-flex align-items-center gap-1">
-                  <i class="fas fa-arrow-left"></i> Back
-                </button>
-                  <button type="submit" class="btn btn-success">Submit</button>
-                </div>
-              </div> -->
 
           </form>
 

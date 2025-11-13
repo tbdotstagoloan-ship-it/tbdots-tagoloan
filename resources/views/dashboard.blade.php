@@ -88,12 +88,12 @@
         </ul>
       </li>
 
-      <li class="nav-item menu-item" data-tooltip="Relapse">
+      <!-- <li class="nav-item menu-item" data-tooltip="Relapse">
         <a href="{{ url('relapse-cases') }}">
           <img src="{{ url('assets/img/user-list.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Relapse Cases</span>
           </a>
-      </li>
+      </li> -->
 
       <li class="nav-item menu-item" data-tooltip="Physician">
         <a href="{{ url('physician') }}">
@@ -120,7 +120,7 @@
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
         <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->

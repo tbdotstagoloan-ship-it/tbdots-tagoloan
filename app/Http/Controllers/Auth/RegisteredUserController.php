@@ -60,6 +60,6 @@ class RegisteredUserController extends Controller
 
         session()->flash('success', ' Welcome, '.$user->name);
 
-        return redirect()->route('admin.index');
+        return redirect()->route('dashboard');
     }
 }

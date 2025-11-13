@@ -217,85 +217,117 @@ class AdminController extends Controller
     public function patient(Request $request)
     {
         $totalPatients = Cache::remember('total_patients_count', 60, fn() => Patient::count());
-
+        
         $search = $request->input('search');
         $perPage = $request->input('per_page', 10);
-        $lastId = $request->input('last_id');       // cursor for next/prev
-        $direction = $request->input('direction');  // 'next' or 'prev'
+        $lastId = $request->input('last_id');
+        $direction = $request->input('direction');
 
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
-            ->select(
-                'p.id',
-                'p.pat_full_name',
-                'p.pat_sex',
-                'p.pat_date_of_birth',
-                'p.pat_civil_status',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_current_region',
-                'p.pat_current_province',
-                'p.pat_current_city_mun',
-                'p.pat_current_address',
-                'p.pat_current_zip_code',
-                'p.pat_contact_number',
-                'p.pat_other_contact',
-                'p.pat_philhealth_no',
-                'p.pat_nationality',
-                'd.diag_tb_case_no',
-                'd.diag_diagnosis_date',
-                'to.out_outcome as status'
-            )
-            ->when($search, function ($query, $search) {
-                $query->whereRaw("MATCH(p.pat_full_name) AGAINST(? IN BOOLEAN MODE)", [$search])
-                    ->orWhere('d.diag_tb_case_no', 'LIKE', "{$search}%");
-            });
+        ->join(DB::raw('(SELECT MAX(id) AS latest_diag_id, patient_id FROM tbl_diagnosis GROUP BY patient_id) AS ld'), 'p.id', '=', 'ld.patient_id')
+        ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+        ->leftJoin(DB::raw('(SELECT MAX(id) AS latest_out_id, patient_id FROM tbl_treatment_outcomes GROUP BY patient_id) AS lo'), 'p.id', '=', 'lo.patient_id')
+        ->leftJoin('tbl_treatment_outcomes as to', 'to.id', '=', 'lo.latest_out_id')
+        ->leftJoin(DB::raw('(SELECT MAX(id) AS latest_phase_id, patient_id FROM tbl_adherences GROUP BY patient_id) AS lp'), 'p.id', '=', 'lp.patient_id')
+        ->leftJoin('tbl_adherences as tp', 'tp.id', '=', 'lp.latest_phase_id')
+        ->leftJoin('tbl_patient_accounts as pa', 'pa.patient_id', '=', 'p.id')
 
-        // Apply keyset pagination depending on direction
-    if ($lastId) {
-        if ($direction === 'next') {
-            $query->where('p.id', '<', $lastId)->orderByDesc('p.id');
-        } elseif ($direction === 'prev') {
-            $query->where('p.id', '>', $lastId)->orderBy('p.id'); // reversed order for prev
+        ->select(
+            'p.id',
+            'p.pat_full_name',
+            'p.pat_sex',
+            'p.pat_date_of_birth',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_current_region',
+            'p.pat_current_province',
+            'p.pat_current_city_mun',
+            'p.pat_current_address',
+            'p.pat_current_zip_code',
+            'd.diag_tb_case_no',
+            'd.diag_diagnosis_date',
+            'to.out_outcome as status',
+            'tp.pha_intensive_start',
+            'tp.pha_intensive_end',
+            'tp.pha_continuation_start',
+            'tp.pha_continuation_end',
+            'pa.id as account_id'
+
+        )
+        ->when($search, function ($query, $search) {
+            $query->where('p.pat_full_name', 'LIKE', "%{$search}%")
+                ->orWhere('d.diag_tb_case_no', 'LIKE', "{$search}%");
+        });
+
+
+        // ✅ Keyset pagination (unchanged)
+        if ($lastId) {
+            if ($direction === 'next') {
+                $query->where('p.id', '<', $lastId)->orderByDesc('p.id');
+            } elseif ($direction === 'prev') {
+                $query->where('p.id', '>', $lastId)->orderBy('p.id');
+            }
+        } else {
+            $query->orderByDesc('p.id');
         }
-    } else {
-        $query->orderByDesc('p.id'); // default first page
-    }
 
-    // Fetch one extra record to detect if there are more pages
-    $patients = $query->limit($perPage + 1)->get();
+        // ✅ Fetch + check next/prev
+        $patients = $query->limit($perPage + 1)->get();
+        $hasMore = $patients->count() > $perPage;
+        $patients = $patients->take($perPage);
 
-    $hasMore = $patients->count() > $perPage;
+        if ($direction === 'prev') {
+            $patients = $patients->sortByDesc('id')->values();
+        }
 
-    // Trim the extra record so only $perPage items are shown
-    $patients = $patients->take($perPage);
-
-    // Fix order for "prev" direction
-    if ($direction === 'prev') {
-        $patients = $patients->sortByDesc('id')->values();
-    }
-
-    // Determine next/prev availability
-    if ($direction === 'next') {
-        $nextId = $hasMore ? $patients->last()->id : null;  // disable if no more next
-        $prevId = $patients->first()->id;                    // always available if next is clicked
-    } elseif ($direction === 'prev') {
-        $nextId = $patients->last()->id;
-        $prevId = $hasMore ? $patients->first()->id : null;  // disable if no more prev
-    } else {
-        // First page (initial load)
-        $nextId = $hasMore ? $patients->last()->id : null;
-        $prevId = null; // disable prev on first load
-    }
+        if ($direction === 'next') {
+            $nextId = $hasMore ? $patients->last()->id : null;
+            $prevId = $patients->first()->id;
+        } elseif ($direction === 'prev') {
+            $nextId = $patients->last()->id;
+            $prevId = $hasMore ? $patients->first()->id : null;
+        } else {
+            $nextId = $hasMore ? $patients->last()->id : null;
+            $prevId = null;
+        }
 
         return view('admin.patient', compact('patients', 'totalPatients', 'perPage', 'nextId', 'prevId'));
     }
 
 
 
+
+    // public function patientProfile($id)
+    // {
+    //     $patient = Patient::findOrFail($id);
+    //     return view('admin.patient-profile', compact('patient'));
+    // }
+
     public function patientProfile($id)
     {
-        $patient = Patient::findOrFail($id);
+        $patient = Patient::with([
+            'diagnosingFacility',
+            'screenings.labTests',  // Make sure Screening model has labTests relationship
+            'diagnoses',
+            'tbClassification',  // Make sure Diagnosis model has tbClassification relationship
+            'treatmentFacilities',
+            'treatmentHistories',
+            'comorbidities',
+            'baselineInfos',
+            'hivInfos',
+            'treatmentRegimens',
+            'txSupporters',
+            'adherences',
+            'prescribedDrugs',
+            'treatmentOutcomes',
+            'adverseEvents',
+            'progress',
+            'close_contacts',
+            'sputum_monitorings',
+            'chestXrays',
+            'postTreatment',
+            'medicationAdherences'
+        ])->findOrFail($id);
+        
         return view('admin.patient-profile', compact('patient'));
     }
 
@@ -424,5 +456,6 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Patient deleted successfully.');
     }
 
+    
 
 }

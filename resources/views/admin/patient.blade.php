@@ -91,7 +91,7 @@
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
         <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->
@@ -170,7 +170,7 @@
   <div class="main-content py-4" id="mainContent">
     <div style="margin-bottom: 50px;">
       <h4 style="color: #2c3e50; font-weight: 600;">
-      New Cases
+      TB Patient
     </h4>
     <p class="text-muted mb-3">
       You have total {{ $totalPatients }} patients in TB DOTS.
@@ -220,16 +220,71 @@
                 <th>ID</th>
                 <th>Full Name</th>
                 <th>Sex</th>
-                <th>Age</th>
                 <th>Barangay</th>
-                <th>TB Case No</th>
-                <th>Date Registered</th>
-                <th>Status</th>
+                <th>Intensive Phase</th>
+                <th>Days</th>
+                <th>Maintenance Phase</th>
+                <th>Days</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               @foreach ($patients as $patient)
+                @php
+                    $now = \Carbon\Carbon::now();
+
+                    $intensiveStart = $patient->pha_intensive_start ? \Carbon\Carbon::parse($patient->pha_intensive_start) : null;
+                    $intensiveEnd = $patient->pha_intensive_end ? \Carbon\Carbon::parse($patient->pha_intensive_end) : null;
+                    $maintenanceStart = $patient->pha_continuation_start ? \Carbon\Carbon::parse($patient->pha_continuation_start) : null;
+                    $maintenanceEnd = $patient->pha_continuation_end ? \Carbon\Carbon::parse($patient->pha_continuation_end) : null;
+
+                    // Intensive Phase Logic
+                    if ($intensiveStart && $intensiveEnd) {
+                        if ($now->between($intensiveStart, $intensiveEnd)) {
+                            // Currently in intensive phase
+                            $intensiveStatus = 'Ongoing';
+                            $intensiveDaysRemaining = (int) $now->diffInDays($intensiveEnd, false);
+                        } else {
+                            // Intensive phase completed
+                            $intensiveStatus = 'Completed';
+                            $intensiveDaysRemaining = 0;
+                        }
+                    } else {
+                        // No intensive phase data
+                        $intensiveStatus = '—';
+                        $intensiveDaysRemaining = 0;
+                    }
+
+                    // Maintenance Phase Logic
+                    if ($maintenanceStart && $maintenanceEnd) {
+                        if ($now->between($maintenanceStart, $maintenanceEnd)) {
+                            // Currently in maintenance phase
+                            $maintenanceStatus = 'Ongoing';
+                            $maintenanceDaysRemaining = (int) $now->diffInDays($maintenanceEnd, false);
+                        } else {
+                            // Maintenance phase completed
+                            $maintenanceStatus = 'Completed';
+                            $maintenanceDaysRemaining = 0;
+                        }
+                    } else {
+                        // Maintenance not yet started
+                        $maintenanceStatus = 'Not Started';
+                        $maintenanceDaysRemaining = 0;
+                    }
+
+                    // Determine latest/current phase
+                    $currentPhase = '—';
+                    if ($maintenanceStart && $maintenanceEnd && $now->between($maintenanceStart, $maintenanceEnd)) {
+                        $currentPhase = 'Maintenance Phase';
+                    } elseif ($intensiveStart && $intensiveEnd && $now->between($intensiveStart, $intensiveEnd)) {
+                        $currentPhase = 'Intensive Phase';
+                    } elseif ($maintenanceEnd && $now->greaterThan($maintenanceEnd)) {
+                        $currentPhase = 'Treatment Completed';
+                    } elseif ($intensiveEnd && $now->greaterThan($intensiveEnd) && (!$maintenanceStart || $now->lessThan($maintenanceStart))) {
+                        $currentPhase = 'Intensive Completed';
+                    }
+                @endphp
+
                 <tr>
                   <td>{{ $patient->id }}</td>
                   <td>
@@ -239,26 +294,28 @@
                     </a>
                 </td>
                   <td>{{ $patient->pat_sex }}</td>
-                  <td>{{ $patient->pat_age }}</td>
                   <td>{{ $patient->pat_current_address }}</td>
-                  <td>{{ $patient->diag_tb_case_no }}</td>
-                  <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
                   <td>
-                      @php
-                          $status = strtolower($patient->status);
-                          $badgeClass = match($status) {
-                              'ongoing' => 'bg-warning text-dark',
-                              'cured' => 'bg-success',
-                              'treatment completed' => 'bg-success',
-                              'lost to follow-up' => 'bg-secondary',
-                              'died' => 'bg-danger',
-                              'relapse' => 'bg-warning text-dark',
-                              default => 'bg-secondary'
-                          };
-                      @endphp
-
-                      <span class="status-badge badge {{ $badgeClass }}">{{ ucfirst($patient->status) }}</span>
+                      <span class="badge 
+                          @if($intensiveStatus === 'Ongoing') bg-warning
+                          @elseif($intensiveStatus === 'Completed') bg-success
+                          @else bg-secondary
+                          @endif">
+                          {{ $intensiveStatus }}
+                      </span>
                   </td>
+                  <td>{{ $intensiveDaysRemaining !== '—' ? $intensiveDaysRemaining . ' days' : '—' }}</td>
+                  <td>
+                      <span class="badge 
+                          @if($maintenanceStatus === 'Ongoing') bg-warning
+                          @elseif($maintenanceStatus === 'Completed') bg-success
+                          @elseif($maintenanceStatus === 'Not Started') bg-secondary
+                          @else bg-secondary
+                          @endif">
+                          {{ $maintenanceStatus }}
+                      </span>
+                  </td>
+                  <td>{{ $maintenanceDaysRemaining !== '—' ? $maintenanceDaysRemaining . ' days' : '—' }}</td>
 
                   <td class="text-center">
                     <div class="dropdown">
@@ -297,13 +354,26 @@
                           </form>
                         </li>
 
-                        <!-- Create Patient Account -->
-                        <li>
-                          <a class="dropdown-item d-flex align-items-center"
-                            href="{{ route('patient.account', $patient->id) }}" title="Create Patient Account">
-                            <i class="fas fa-user-plus me-2"></i> Create Account
-                          </a>
-                        </li>
+                       <!-- Create Patient Account or Change Password -->
+<li>
+  @if(isset($patient->account_id) && $patient->account_id)
+    <!-- If patient has account, show Change Password -->
+    <a class="dropdown-item d-flex align-items-center change-password-btn"
+      href="javascript:void(0);" 
+      data-patient-id="{{ $patient->id }}"
+      data-patient-name="{{ $patient->pat_full_name }}"
+      title="Change Patient Password">
+      <i class="fas fa-key me-2"></i> Change Password
+    </a>
+  @else
+    <!-- If patient has no account, show Create Account -->
+    <a class="dropdown-item d-flex align-items-center"
+      href="{{ route('patient.account', $patient->id) }}" 
+      title="Create Patient Account">
+      <i class="fas fa-user-plus me-2"></i> Create Account
+    </a>
+  @endif
+</li>
 
                         <!-- Report -->
                         <li>
@@ -317,6 +387,43 @@
                     </div>
                   </td>
                 </tr>
+
+                <!-- Change Password Modal - Place this OUTSIDE the foreach loop -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" id="changePasswordForm">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">
+            Change Password - <span id="patientNameDisplay"></span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="acc_password" class="form-label">New Password</label>
+            <input type="acc_password" class="form-control" id="acc_password" name="password" required minlength="8">
+            <small class="text-muted">Minimum 8 characters</small>
+          </div>
+          
+          <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-1"></i> Update Password
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
                 <!-- Edit Patient Modal - MOVED INSIDE THE LOOP -->
                 <div class="modal fade" id="editPatientModal{{ $patient->id }}" tabindex="-1"
@@ -614,7 +721,33 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const changePasswordBtns = document.querySelectorAll('.change-password-btn');
+    const modal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+    const form = document.getElementById('changePasswordForm');
+    const patientNameDisplay = document.getElementById('patientNameDisplay');
+    
+    changePasswordBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const patientId = this.dataset.patientId;
+            const patientName = this.dataset.patientName;
+            
+            // Update form action
+            form.action = `/patient/${patientId}/update-password`;
+            
+            // Update patient name in modal title
+            patientNameDisplay.textContent = patientName;
+            
+            // Clear previous inputs
+            form.reset();
+            
+            // Show modal
+            modal.show();
+        });
+    });
+});
+</script>
 
 </body>
 

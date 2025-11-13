@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>TB DOTS - Medication Adherence Monitoring</title>
+  <title>TB DOTS - Missed Medication Intake</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
@@ -109,7 +109,7 @@
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
         <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->
