@@ -6,7 +6,7 @@
   <title>TB DOTS - Patient List</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
   <style>
     /* Make search input and button same height */
@@ -48,7 +48,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}">
+        <a href="{{url('dashboard')}}">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -61,7 +61,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -87,15 +87,15 @@
         </a>
       </li>
 
-      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+      <li class="menu-item" data-tooltip="Meidication Adherence">
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
-        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
+        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence Flags</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3 p-1 bg-danger border border-light rounded-circle" 
+            <span class="position-absolute top-50 end-0 translate-middle-y me-4 p-1 bg-danger border border-light rounded-circle" 
                   style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
               <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
             </span>
@@ -170,7 +170,7 @@
   <div class="main-content py-4" id="mainContent">
     <div style="margin-bottom: 50px;">
       <h4 style="color: #2c3e50; font-weight: 600;">
-      Patient List
+      TB Patient
     </h4>
     <p class="text-muted mb-3">
       You have total {{ $totalPatients }} patients in TB DOTS.
@@ -188,7 +188,7 @@
 
       <!-- Add Patient button -->
       <a href="{{ url('form/page1') }}" class="btn btn-success">
-        <i class="fas fa-plus me-2"></i>Add New Patient
+        <i class="fas fa-plus me-2"></i>Add New TB Patient
       </a>
     </div>
 
@@ -220,40 +220,102 @@
                 <th>ID</th>
                 <th>Full Name</th>
                 <th>Sex</th>
-                <th>Age</th>
                 <th>Barangay</th>
-                <th>TB Case No</th>
-                <th>Date Registered</th>
-                <th>Status</th>
+                <th>Intensive Phase</th>
+                <th>Days</th>
+                <th>Maintenance Phase</th>
+                <th>Days</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
               @foreach ($patients as $patient)
+                @php
+                    $now = \Carbon\Carbon::now();
+
+                    $intensiveStart = $patient->pha_intensive_start ? \Carbon\Carbon::parse($patient->pha_intensive_start) : null;
+                    $intensiveEnd = $patient->pha_intensive_end ? \Carbon\Carbon::parse($patient->pha_intensive_end) : null;
+                    $maintenanceStart = $patient->pha_continuation_start ? \Carbon\Carbon::parse($patient->pha_continuation_start) : null;
+                    $maintenanceEnd = $patient->pha_continuation_end ? \Carbon\Carbon::parse($patient->pha_continuation_end) : null;
+
+                    // Intensive Phase Logic
+                    if ($intensiveStart && $intensiveEnd) {
+                        if ($now->between($intensiveStart, $intensiveEnd)) {
+                            // Currently in intensive phase
+                            $intensiveStatus = 'Ongoing';
+                            $intensiveDaysRemaining = (int) $now->diffInDays($intensiveEnd, false);
+                        } else {
+                            // Intensive phase completed
+                            $intensiveStatus = 'Completed';
+                            $intensiveDaysRemaining = 0;
+                        }
+                    } else {
+                        // No intensive phase data
+                        $intensiveStatus = '—';
+                        $intensiveDaysRemaining = 0;
+                    }
+
+                    // Maintenance Phase Logic
+                    if ($maintenanceStart && $maintenanceEnd) {
+                        if ($now->between($maintenanceStart, $maintenanceEnd)) {
+                            // Currently in maintenance phase
+                            $maintenanceStatus = 'Ongoing';
+                            $maintenanceDaysRemaining = (int) $now->diffInDays($maintenanceEnd, false);
+                        } else {
+                            // Maintenance phase completed
+                            $maintenanceStatus = 'Completed';
+                            $maintenanceDaysRemaining = 0;
+                        }
+                    } else {
+                        // Maintenance not yet started
+                        $maintenanceStatus = 'Not Started';
+                        $maintenanceDaysRemaining = 0;
+                    }
+
+                    // Determine latest/current phase
+                    $currentPhase = '—';
+                    if ($maintenanceStart && $maintenanceEnd && $now->between($maintenanceStart, $maintenanceEnd)) {
+                        $currentPhase = 'Maintenance Phase';
+                    } elseif ($intensiveStart && $intensiveEnd && $now->between($intensiveStart, $intensiveEnd)) {
+                        $currentPhase = 'Intensive Phase';
+                    } elseif ($maintenanceEnd && $now->greaterThan($maintenanceEnd)) {
+                        $currentPhase = 'Treatment Completed';
+                    } elseif ($intensiveEnd && $now->greaterThan($intensiveEnd) && (!$maintenanceStart || $now->lessThan($maintenanceStart))) {
+                        $currentPhase = 'Intensive Completed';
+                    }
+                @endphp
+
                 <tr>
                   <td>{{ $patient->id }}</td>
-                  <td>{{ $patient->pat_full_name }}</td>
-                  <td>{{ $patient->pat_sex }}</td>
-                  <td>{{ $patient->pat_age }}</td>
-                  <td>{{ $patient->pat_current_address }}</td>
-                  <td>{{ $patient->diag_tb_case_no }}</td>
-                  <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
                   <td>
-                      @php
-                          $status = strtolower($patient->status);
-                          $badgeClass = match($status) {
-                              'ongoing' => 'bg-secondary',
-                              'cured' => 'bg-success',
-                              'treatment completed' => 'bg-success',
-                              'lost to follow-up' => 'bg-warning text-dark',
-                              'died' => 'bg-danger',
-                              'relapse' => 'bg-warning text-dark',
-                              default => 'bg-secondary'
-                          };
-                      @endphp
-
-                      <span class="status-badge badge {{ $badgeClass }}">{{ ucfirst($patient->status) }}</span>
+                    <a href="{{ url('admin/patient-profile/' . $patient->id) }}" 
+                      style="text-decoration: none; color: #212529;">
+                        {{ $patient->pat_full_name }}
+                    </a>
+                </td>
+                  <td>{{ $patient->pat_sex }}</td>
+                  <td>{{ $patient->pat_current_address }}</td>
+                  <td>
+                      <span class="badge 
+                          @if($intensiveStatus === 'Ongoing') bg-warning
+                          @elseif($intensiveStatus === 'Completed') bg-success
+                          @else bg-secondary
+                          @endif">
+                          {{ $intensiveStatus }}
+                      </span>
                   </td>
+                  <td>{{ $intensiveDaysRemaining !== '—' ? $intensiveDaysRemaining . ' days' : '—' }}</td>
+                  <td>
+                      <span class="badge 
+                          @if($maintenanceStatus === 'Ongoing') bg-warning
+                          @elseif($maintenanceStatus === 'Completed') bg-success
+                          @elseif($maintenanceStatus === 'Not Started') bg-secondary
+                          @else bg-secondary
+                          @endif">
+                          {{ $maintenanceStatus }}
+                      </span>
+                  </td>
+                  <td>{{ $maintenanceDaysRemaining !== '—' ? $maintenanceDaysRemaining . ' days' : '—' }}</td>
 
                   <td class="text-center">
                     <div class="dropdown">
@@ -292,6 +354,27 @@
                           </form>
                         </li>
 
+                       <!-- Create Patient Account or Change Password -->
+<li>
+  @if(isset($patient->account_id) && $patient->account_id)
+    <!-- If patient has account, show Change Password -->
+    <a class="dropdown-item d-flex align-items-center change-password-btn"
+      href="javascript:void(0);" 
+      data-patient-id="{{ $patient->id }}"
+      data-patient-name="{{ $patient->pat_full_name }}"
+      title="Change Patient Password">
+      <i class="fas fa-key me-2"></i> Change Password
+    </a>
+  @else
+    <!-- If patient has no account, show Create Account -->
+    <a class="dropdown-item d-flex align-items-center"
+      href="{{ route('patient.account', $patient->id) }}" 
+      title="Create Patient Account">
+      <i class="fas fa-user-plus me-2"></i> Create Account
+    </a>
+  @endif
+</li>
+
                         <!-- Report -->
                         <li>
                           <a class="dropdown-item d-flex align-items-center" target="_blank"
@@ -299,18 +382,48 @@
                             <i class="fas fa-download me-2"></i> Generate Report
                           </a>
                         </li>
-
-                        <!-- Create Patient Account -->
-                        <li>
-                          <a class="dropdown-item d-flex align-items-center"
-                            href="{{ route('patient.account', $patient->id) }}" title="Create Patient Account">
-                            <i class="fas fa-user-plus me-2"></i> Create Account
-                          </a>
-                        </li>
+                        
                       </ul>
                     </div>
                   </td>
                 </tr>
+
+                <!-- Change Password Modal - Place this OUTSIDE the foreach loop -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" id="changePasswordForm">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">
+            Change Password - <span id="patientNameDisplay"></span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="acc_password" class="form-label">New Password</label>
+            <input type="acc_password" class="form-control" id="acc_password" name="password" required minlength="8">
+            <small class="text-muted">Minimum 8 characters</small>
+          </div>
+          
+          <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i> Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save me-1"></i> Update Password
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
                 <!-- Edit Patient Modal - MOVED INSIDE THE LOOP -->
                 <div class="modal fade" id="editPatientModal{{ $patient->id }}" tabindex="-1"
@@ -370,12 +483,17 @@
                             </div>
                           </div>
 
-                          <div class="row mb-3">
+                          <!-- <div class="row mb-3">
                             <div class="col-md-4">
-                              <label for="pat_permanent_address{{ $patient->id }}" class="form-label">Permanent
-                                Address</label>
-                              <input type="text" name="pat_permanent_address" id="pat_permanent_address{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_permanent_address ?? '' }}">
+                              <label for="pat_permanent_region{{ $patient->id }}" class="form-label">Region</label>
+                              <input type="text" name="pat_permanent_region" id="pat_permanent_region{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_permanent_region ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_permanent_province{{ $patient->id }}" class="form-label">Province</label>
+                              <input type="text" name="pat_permanent_province"
+                                id="pat_permanent_province{{ $patient->id }}" class="form-control"
+                                value="{{ $patient->pat_permanent_province ?? '' }}">
                             </div>
                             <div class="col-md-4">
                               <label for="pat_permanent_city_mun{{ $patient->id }}" class="form-label">City/
@@ -384,19 +502,14 @@
                                 id="pat_permanent_city_mun{{ $patient->id }}" class="form-control"
                                 value="{{ $patient->pat_permanent_city_mun ?? '' }}">
                             </div>
-                            <div class="col-md-4">
-                              <label for="pat_permanent_province{{ $patient->id }}" class="form-label">Province</label>
-                              <input type="text" name="pat_permanent_province"
-                                id="pat_permanent_province{{ $patient->id }}" class="form-control"
-                                value="{{ $patient->pat_permanent_province ?? '' }}">
-                            </div>
-                          </div>
+                            
+                          </div> -->
 
-                          <div class="row mb-3">
+                          <!-- <div class="row mb-3">
                             <div class="col-md-4">
-                              <label for="pat_permanent_region{{ $patient->id }}" class="form-label">Region</label>
-                              <input type="text" name="pat_permanent_region" id="pat_permanent_region{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_permanent_region ?? '' }}">
+                              <label for="pat_permanent_address{{ $patient->id }}" class="form-label">Barangay</label>
+                              <input type="text" name="pat_permanent_address" id="pat_permanent_address{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_permanent_address ?? '' }}">
                             </div>
                             <div class="col-md-4">
                               <label for="pat_permanent_zip_code{{ $patient->id }}" class="form-label">Zip Code</label>
@@ -404,27 +517,7 @@
                                 id="pat_permanent_zip_code{{ $patient->id }}" class="form-control"
                                 value="{{ $patient->pat_permanent_zip_code ?? '' }}">
                             </div>
-                          </div>
-
-                          <div class="row mb-3">
-                            <div class="col-md-4">
-                              <label for="pat_current_address{{ $patient->id }}" class="form-label">Current
-                                Address</label>
-                              <input type="text" name="pat_current_address" id="pat_current_address{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_current_address ?? '' }}">
-                            </div>
-                            <div class="col-md-4">
-                              <label for="pat_current_city_mun{{ $patient->id }}" class="form-label">City/
-                                Municipality</label>
-                              <input type="text" name="pat_current_city_mun" id="pat_current_city_mun{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_current_city_mun ?? '' }}">
-                            </div>
-                            <div class="col-md-4">
-                              <label for="pat_current_province{{ $patient->id }}" class="form-label">Province</label>
-                              <input type="text" name="pat_current_province" id="pat_current_province{{ $patient->id }}"
-                                class="form-control" value="{{ $patient->pat_current_province ?? '' }}">
-                            </div>
-                          </div>
+                          </div> -->
 
                           <div class="row mb-3">
                             <div class="col-md-4">
@@ -433,30 +526,50 @@
                                 class="form-control" value="{{ $patient->pat_current_region ?? '' }}">
                             </div>
                             <div class="col-md-4">
+                              <label for="pat_current_province{{ $patient->id }}" class="form-label">Province</label>
+                              <input type="text" name="pat_current_province" id="pat_current_province{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_province ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                              <label for="pat_current_city_mun{{ $patient->id }}" class="form-label">City/
+                                Municipality</label>
+                              <input type="text" name="pat_current_city_mun" id="pat_current_city_mun{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_city_mun ?? '' }}">
+                            </div>
+
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label for="pat_current_address{{ $patient->id }}" class="form-label">Barangay</label>
+                              <input type="text" name="pat_current_address" id="pat_current_address{{ $patient->id }}"
+                                class="form-control" value="{{ $patient->pat_current_address ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
                               <label for="pat_current_zip_code{{ $patient->id }}" class="form-label">Zip Code</label>
                               <input type="text" name="pat_current_zip_code" id="pat_current_zip_code{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_current_zip_code ?? '' }}">
                             </div>
-                          </div>
-
-                          <div class="row mb-3">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <label for="pat_contact_number{{ $patient->id }}" class="form-label">Contact Number</label>
                               <input type="text" name="pat_contact_number" id="pat_contact_number{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_contact_number ?? '' }}">
                             </div>
-                            <div class="col-md-3">
+                          </div>
+
+                          <div class="row mb-3">
+                            <div class="col-md-4">
                               <label for="pat_other_contact{{ $patient->id }}" class="form-label">Other Contact
                                 Information</label>
                               <input type="text" name="pat_other_contact" id="pat_other_contact{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_other_contact ?? '' }}">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <label for="pat_philhealth_no{{ $patient->id }}" class="form-label">PhilHealth No.</label>
                               <input type="text" name="pat_philhealth_no" id="pat_philhealth_no{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_philhealth_no ?? '' }}">
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <label for="pat_nationality{{ $patient->id }}" class="form-label">Nationality</label>
                               <input type="text" name="pat_nationality" id="pat_nationality{{ $patient->id }}"
                                 class="form-control" value="{{ $patient->pat_nationality ?? '' }}">
@@ -482,16 +595,23 @@
       </div>
 
       
+      <div class="d-flex justify-content-center gap-3 mb-4">
+        {{-- Previous Page --}}
+        @if ($prevId)
+            <a href="{{ url()->current() }}?last_id={{ $prevId }}&direction=prev&per_page={{ $perPage }}"
+              class="btn backBtn">Previous</a>
+        @else
+            <button class="btn backBtn" disabled>Previous</button>
+        @endif
 
-      <div class="card-footer">Showing {{ $patients->firstItem() }} to {{ $patients->lastItem() }} of
-        {{ $patients->total() }} entries
-        <div class="mt-2">
-          {{ $patients->links() }}
-        </div>
-      </div>
-
-
-
+        {{-- Next Page --}}
+        @if ($nextId)
+            <a href="{{ url()->current() }}?last_id={{ $nextId }}&direction=next&per_page={{ $perPage }}"
+              class="btn backBtn">Next</a>
+        @else
+            <button class="btn backBtn" disabled>Next</button>
+        @endif
+    </div>
 
     </div>
   </div>
@@ -601,7 +721,33 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const changePasswordBtns = document.querySelectorAll('.change-password-btn');
+    const modal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+    const form = document.getElementById('changePasswordForm');
+    const patientNameDisplay = document.getElementById('patientNameDisplay');
+    
+    changePasswordBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const patientId = this.dataset.patientId;
+            const patientName = this.dataset.patientName;
+            
+            // Update form action
+            form.action = `/patient/${patientId}/update-password`;
+            
+            // Update patient name in modal title
+            patientNameDisplay.textContent = patientName;
+            
+            // Clear previous inputs
+            form.reset();
+            
+            // Show modal
+            modal.show();
+        });
+    });
+});
+</script>
 
 </body>
 

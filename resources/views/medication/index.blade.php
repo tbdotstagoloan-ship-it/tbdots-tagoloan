@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>TB DOTS - Home</title>
+  <title>TB DOTS - Missed Medication Intake</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
   <style>
     .charts-row {
@@ -66,7 +66,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}">
+        <a href="{{url('dashboard')}}">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -79,7 +79,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -105,15 +105,15 @@
         </a>
       </li>
 
-      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+      <li class="menu-item" data-tooltip="Meidication Adherence">
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
-        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
+        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence Flags</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3 p-1 bg-danger border border-light rounded-circle" 
+            <span class="position-absolute top-50 end-0 translate-middle-y me-4 p-1 bg-danger border border-light rounded-circle" 
                   style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
               <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
             </span>
@@ -189,7 +189,7 @@
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 50px; color: #2c3e50; font-weight: 600;">
-        Medication Adherence Flags
+        Medication Adherence Monitoring
     </h4>
 
     <div class="card shadow-sm border-0">
@@ -247,7 +247,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
   <script src="{{ url('assets/js/logout.js') }}"></script>
 

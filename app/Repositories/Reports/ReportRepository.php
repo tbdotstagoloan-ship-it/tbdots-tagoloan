@@ -3,38 +3,89 @@
 namespace App\Repositories\Reports;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ReportRepository implements ReportRepositoryInterface
 {
-    public function newlyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
-    {
-        $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_diagnosis_date',
-                'd.diag_tb_case_no',
-                't.clas_registration_group'
-            )
-            ->where('t.clas_registration_group', 'new');
+    // public function newlyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
+    // {
+    //     $query = DB::table('tbl_tb_classifications as t')
+    //         ->join('tbl_patients as p', 'p.id', '=', 't.patient_id')
+    //         ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
+    //         ->select(
+    //             'p.pat_full_name',
+    //             DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+    //             'p.pat_sex',
+    //             'p.pat_permanent_address as barangay',
+    //             'd.diag_diagnosis_date',
+    //             'd.diag_tb_case_no',
+    //             't.clas_registration_group'
+    //         )
+    //         ->where('t.clas_registration_group', 'new');
 
-        // Apply date filters if provided
-        if ($startDate) {
-            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-        }
+
         
-        if ($endDate) {
-            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-        }
+    //     if ($startDate) {
+    //         $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+    //     }
+        
+    //     if ($endDate) {
+    //         $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    //     }
 
-        return $query->orderBy('d.diag_tb_case_no', 'desc')
-            ->paginate($perPage);
+    //     return Cache::remember(
+    //     "newly_diagnosed_{$startDate}_{$endDate}_page_" . request('page', 1),
+    //     120, 
+    //     fn() => $query->orderBy('d.diag_tb_case_no', 'desc')->paginate($perPage)
+    // );
+    // }
+
+    public function newlyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
+{
+    // Get latest classification per patient where classification is "New"
+    $latestNewClassifications = DB::table('tbl_tb_classifications as t1')
+        ->select('t1.patient_id', DB::raw('MAX(t1.id) as latest_classification_id'))
+        ->where('t1.clas_registration_group', 'new')
+        ->groupBy('t1.patient_id');
+
+    $query = DB::table('tbl_tb_classifications as t')
+        ->joinSub($latestNewClassifications, 'latest_new', function ($join) {
+            $join->on('t.id', '=', 'latest_new.latest_classification_id');
+        })
+        ->join('tbl_patients as p', 'p.id', '=', 't.patient_id')
+        // Join only the latest diagnosis per patient
+        ->join(DB::raw('(SELECT patient_id, MAX(id) as latest_diagnosis_id FROM tbl_diagnosis GROUP BY patient_id) as dmax'), function ($join) {
+            $join->on('dmax.patient_id', '=', 'p.id');
+        })
+        ->join('tbl_diagnosis as d', 'd.id', '=', 'dmax.latest_diagnosis_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_diagnosis_date',
+            'd.diag_tb_case_no',
+            't.clas_registration_group'
+        )
+        ->where('t.clas_registration_group', '=', 'new');
+
+    // Optional date filters
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
+
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+
+    return Cache::remember(
+        "newly_diagnosed_{$startDate}_{$endDate}_page_" . request('page', 1),
+        120,
+        fn() => $query->orderByDesc('d.diag_diagnosis_date')->paginate($perPage)
+    );
+}
+
 
     public function relapse(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {

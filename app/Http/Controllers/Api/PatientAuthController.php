@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\PatientAccount;
 use App\Models\Patient;
+use Illuminate\Support\Facades\DB;
+
 
 class PatientAuthController extends Controller
 {
@@ -53,4 +55,29 @@ class PatientAuthController extends Controller
             'message' => 'Logout successful',
         ]);
     }
+
+    public function updatePassword(Request $request, $id)
+    {
+        $request->validate([
+            'password' => 'required|min:8|confirmed',
+        ]);
+        
+        $account = DB::table('tbl_patient_accounts')
+            ->where('patient_id', $id)
+            ->first();
+        
+        if (!$account) {
+            return redirect()->back()->with('error', 'Patient does not have an account.');
+        }
+        
+        DB::table('tbl_patient_accounts')
+            ->where('patient_id', $id)
+            ->update([
+                'password' => Hash::make($request->password),
+                'updated_at' => now()
+            ]);
+        
+        return redirect()->back()->with('success', 'Password changed successfully for ' . $request->input('patient_name', 'patient') . '.');
+    }
+
 }

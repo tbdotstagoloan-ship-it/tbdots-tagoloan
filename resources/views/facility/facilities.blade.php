@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>TB DOTS - Home</title>
+  <title>TB DOTS - Facilities</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
   <style>
     .charts-row {
@@ -64,7 +64,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}">
+        <a href="{{url('dashboard')}}">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -77,7 +77,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -103,15 +103,15 @@
         </a>
       </li>
 
-      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+      <li class="menu-item" data-tooltip="Meidication Adherence">
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
-        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
+        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence Flags</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3 p-1 bg-danger border border-light rounded-circle" 
+            <span class="position-absolute top-50 end-0 translate-middle-y me-4 p-1 bg-danger border border-light rounded-circle" 
                   style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
               <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
             </span>
@@ -313,24 +313,31 @@
                 <input type="text" class="form-control" name="fac_ntp_code" id="fac_ntp_code" placeholder="NTP Facility Code" required>
                 </div>
 
-                <!-- Province -->
-                <div class="col-md-6">
-                <label for="fac_province" class="form-label">Province / HUC <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_province" id="fac_province" placeholder="Province / HUC" required>
-                </div>
-
                 <!-- Region -->
                 <div class="col-md-6">
-                <label for="fac_region" class="form-label">Region <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="fac_region" id="fac_region" placeholder="Region" required>
+                  <label for="fac_region" class="form-label">Region</label>
+                  <select id="fac_region" class="form-control form-select" required>
+                    <option value="" disabled selected>Select</option>
+                  </select>
+                  <input type="hidden" name="fac_region" id="fac_region_text">
                 </div>
+
+                <!-- Province -->
+                <div class="col-md-6">
+                  <label for="fac_province" class="form-label">Province / HUC</label>
+                  <select id="fac_province" class="form-control form-select" required>
+                    <option value="" disabled selected>Select</option>
+                  </select>
+                  <input type="hidden" name="fac_province" id="fac_province_text">
+                </div>
+
             </div>
             </div>
 
             <div class="modal-footer">
             <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-success">
-                Save Facility
+                Submit
             </button>
             </div>
         </form>
@@ -399,7 +406,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
   <script src="{{ url('assets/js/logout.js') }}"></script>
 
@@ -439,6 +446,48 @@
             form.submit();
           }
         });
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const facRegion = document.getElementById("fac_region");
+      const facProvince = document.getElementById("fac_province");
+      const facRegionText = document.getElementById("fac_region_text");
+      const facProvinceText = document.getElementById("fac_province_text");
+
+      // --- Load Regions ---
+      fetch("/api/regions")
+        .then(res => res.json())
+        .then(data => {
+          data.forEach(region => {
+            facRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
+          });
+        });
+
+      // --- When Region changes, load Provinces ---
+      facRegion.addEventListener("change", () => {
+        const regionCode = facRegion.value;
+        const regionName = facRegion.options[facRegion.selectedIndex].text;
+
+        facRegionText.value = regionName; // Store selected text
+        facProvince.innerHTML = '<option value="" disabled selected>Loading...</option>';
+
+        fetch(`/api/provinces/${regionCode}`)
+          .then(res => res.json())
+          .then(data => {
+            facProvince.innerHTML = '<option value="" disabled selected>Select</option>';
+            data.forEach(prov => {
+              facProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
+            });
+          });
+      });
+
+      // --- When Province changes, store province name ---
+      facProvince.addEventListener("change", () => {
+        const provinceName = facProvince.options[facProvince.selectedIndex].text;
+        facProvinceText.value = provinceName;
       });
     });
   </script>

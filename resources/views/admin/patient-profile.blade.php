@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}" />
-    <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+    <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
     <style>
         .page-content {
             background: white;
@@ -378,128 +378,131 @@
 <body>
 
     <div class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo">
-        <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
-      </div>
-      <div class="sidebar-brand">
-        <h2>TB DOTS</h2>
-        <p>RHU, Tagoloan</p>
-      </div>
-    </div>
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <img src="{{url('assets/img/tbdots-logo-1.png')}}" alt="TB DOTS Logo" />
+            </div>
+            <div class="sidebar-brand">
+                <h2>TB DOTS</h2>
+                <p>RHU, Tagoloan</p>
+            </div>
+        </div>
 
-    <ul class="sidebar-menu" id="sidebarAccordion">
-      <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}">
-          <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Dashboard</span>
-        </a>
-      </li>
+        <ul class="sidebar-menu" id="sidebarAccordion">
+            <li class="menu-item" data-tooltip="Dashboard">
+                <a href="{{url('dashboard')}}">
+                    <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Dashboard</span>
+                </a>
+            </li>
 
-      <li class="nav-item menu-item" data-tooltip="Patient">
-        <a href="#" class="nav-link d-flex align-items-center patient-toggle">
-          <img src="{{ url('assets/img/ap1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient</span>
-          <i class="fas fa-chevron-right toggle-arrow"></i>
-        </a>
-        <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
-          <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
-        </ul>
-      </li>
+            <li class="nav-item menu-item" data-tooltip="Patient">
+                <a href="#" class="nav-link d-flex align-items-center patient-toggle">
+                    <img src="{{ url('assets/img/ap1.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Patient</span>
+                    <i class="fas fa-chevron-right toggle-arrow"></i>
+                </a>
+                <ul class="submenu list-unstyled ps-4">
+                    <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
+                    <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
+                </ul>
+            </li>
 
-      <li class="nav-item menu-item" data-tooltip="Physician">
-        <a href="{{ url('physician') }}">
-          <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Physician</span>
-          </a>
-      </li>
+            <li class="nav-item menu-item" data-tooltip="Physician">
+                <a href="{{ url('physician') }}">
+                    <img src="{{ url('assets/img/cross.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Physician</span>
+                </a>
+            </li>
 
-      <li class="menu-item" data-tooltip="Personnel">
-        <a href="{{url('personnel')}}">
-          <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Personnel</span>
-        </a>
-      </li>
+            <li class="menu-item" data-tooltip="Personnel">
+                <a href="{{url('personnel')}}">
+                    <img src="{{ url('assets/img/friends.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Personnel</span>
+                </a>
+            </li>
 
-      <li class="menu-item" data-tooltip="Facilities">
-        <a href="{{url('facilities')}}">
-          <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Facilities</span>
-        </a>
-      </li>
+            <li class="menu-item" data-tooltip="Facilities">
+                <a href="{{url('facilities')}}">
+                    <img src="{{ url('assets/img/hospital-facility.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Facilities</span>
+                </a>
+            </li>
 
-      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
-        <!-- make the anchor position-relative and give some right padding (pe-4) -->
-        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
-          <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence Flags</span>
+            <li class="menu-item" data-tooltip="Meidication Adherence">
+                <!-- make the anchor position-relative and give some right padding (pe-4) -->
+                <a href="{{url('medication-adherence-flags')}}"
+                    class="d-flex align-items-center position-relative pe-4">
+                    <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Missed Medication Intake</span>
 
-          @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
-            <!-- dot positioned relative to the anchor -->
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3 p-1 bg-danger border border-light rounded-circle" 
-                  style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
-              <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
-            </span>
-          @endif
-        </a>
-      </li>
+                    @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
+                        <!-- dot positioned relative to the anchor -->
+                        <span
+                            class="position-absolute top-50 end-0 translate-middle-y me-4 p-1 bg-danger border border-light rounded-circle"
+                            style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
+                            <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
+                        </span>
+                    @endif
+                </a>
+            </li>
 
-      <li class="menu-item" data-tooltip="Patient Accounts">
-        <a href="{{url('patient-accounts')}}">
-          <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Patient Accounts</span>
-        </a>
-      </li>
+            <li class="menu-item" data-tooltip="Patient Accounts">
+                <a href="{{url('patient-accounts')}}">
+                    <img src="{{ url('assets/img/pa1.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Patient Accounts</span>
+                </a>
+            </li>
 
-      <!-- <li class="menu-item" data-tooltip="Notification">
+            <!-- <li class="menu-item" data-tooltip="Notification">
         <a href="{{url('error')}}">
           <img src="{{ url('assets/img/n1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Notification</span>
         </a>
       </li> -->
 
-      <li class="nav-item menu-item" data-tooltip="Generate Reports">
-        <a href="#" class="nav-link d-flex align-items-center reports-toggle">
-          <img src="{{ url('assets/img/r1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Generate Reports</span>
-          <i class="fas fa-chevron-right toggle-arrow rotate-icon"></i>
-        </a>
-        <ul class="submenu list-unstyled ps-4">
-          <li><a href="{{ url('newly-diagnosed')}}" class="nav-link">Newly Diagnosed</a></li>
-          <li><a href="{{ url('relapse') }}" class="nav-link">Relapse Patients</a></li>
-          <li><a href="{{ url('underage')}}" class="nav-link">Underage Patients</a></li>
-          <li><a href="{{ url('bacteriologically-confirmed') }}" class="nav-link">TB Classification</a></li>
-          <li><a href="{{ url('pulmonary') }}" class="nav-link">Anatomical Sites</a></li>
-          <li><a href="{{ url('ongoing-treatment')}}" class="nav-link">Ongoing Treatments</a></li>
-          <li><a href="{{ url('barangay-cases')}}" class="nav-link">Barangay Cases</a></li>
-          <li><a href="{{ url('intensive-treatment') }}" class="nav-link">Treatment Phases</a></li>
-          <li><a href="{{ url('sputum-monitoring') }}" class="nav-link">Sputum Monitoring</a></li>
-          <li><a href="{{ url('cured')}}" class="nav-link">Treatment Outcomes</a></li>
-          <li><a href="{{ url('barangay-cases-notification') }}" class="nav-link">Barangay Cases Notification</a></li>
-          <li><a href="{{ url('quarterly-cases-notification') }}" class="nav-link">Quarterly Reports</a></li>
-        </ul>
-      </li>
+            <li class="nav-item menu-item" data-tooltip="Generate Reports">
+                <a href="#" class="nav-link d-flex align-items-center reports-toggle">
+                    <img src="{{ url('assets/img/r1.png') }}" class="menu-icon" alt="">
+                    <span class="menu-text">Generate Reports</span>
+                    <i class="fas fa-chevron-right toggle-arrow rotate-icon"></i>
+                </a>
+                <ul class="submenu list-unstyled ps-4">
+                    <li><a href="{{ url('newly-diagnosed')}}" class="nav-link">Newly Diagnosed</a></li>
+                    <li><a href="{{ url('relapse') }}" class="nav-link">Relapse Patients</a></li>
+                    <li><a href="{{ url('underage')}}" class="nav-link">Underage Patients</a></li>
+                    <li><a href="{{ url('bacteriologically-confirmed') }}" class="nav-link">TB Classification</a></li>
+                    <li><a href="{{ url('pulmonary') }}" class="nav-link">Anatomical Sites</a></li>
+                    <li><a href="{{ url('ongoing-treatment')}}" class="nav-link">Ongoing Treatments</a></li>
+                    <li><a href="{{ url('barangay-cases')}}" class="nav-link">Barangay Cases</a></li>
+                    <li><a href="{{ url('intensive-treatment') }}" class="nav-link">Treatment Phases</a></li>
+                    <li><a href="{{ url('sputum-monitoring') }}" class="nav-link">Sputum Monitoring</a></li>
+                    <li><a href="{{ url('cured')}}" class="nav-link">Treatment Outcomes</a></li>
+                    <li><a href="{{ url('barangay-cases-notification') }}" class="nav-link">Barangay Cases
+                            Notification</a></li>
+                    <li><a href="{{ url('quarterly-cases-notification') }}" class="nav-link">Quarterly Reports</a></li>
+                </ul>
+            </li>
 
-      <!-- <li class="menu-item" data-tooltip="Settings">
+            <!-- <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
       </li> -->
-    </ul>
+        </ul>
 
-    <div class="logout-section">
-      <form id="logout-form" method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="button" id="logout-btn" class="logout-button">
-          <i class="fas fa-sign-out-alt menu-icon-logout"></i>
-          <span class="menu-text">Logout</span>
-        </button>
-      </form>
+        <div class="logout-section">
+            <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="button" id="logout-btn" class="logout-button">
+                    <i class="fas fa-sign-out-alt menu-icon-logout"></i>
+                    <span class="menu-text">Logout</span>
+                </button>
+            </form>
+        </div>
+
     </div>
-
-  </div>
 
     <div class="header" id="header">
         <div class="header-left">
@@ -520,9 +523,22 @@
                 </span>
             </h1>
 
-            <a href="{{ url('patient') }}" class="btn btn-secondary backBtn">
+            <!-- <a href="{{ url('patient') }}" class="btn btn-secondary backBtn">
                 <i class="fas fa-arrow-left me-2"></i>Back
-            </a>
+            </a> -->
+            @php
+                $latestOutcome = $patient->treatmentOutcomes()->latest('created_at')->first();
+            @endphp
+
+            @if ($latestOutcome && in_array(strtolower($latestOutcome->out_outcome), ['cured', 'completed', 'lost to follow up']))
+                <a href="javascript:void(0);" class="btn btn-warning btn-relapse"
+                    data-url="{{ route('relapse.page1', $patient->id) }}">
+                    <i class="fas fa-arrows-rotate me-2"></i>Re-register <b>(Relapse)</b>
+                </a>
+            @endif
+
+
+
         </div>
 
         <div class="page-content">
@@ -701,1631 +717,1458 @@
                     </div>
                 </div>
 
-
             </div>
+            <!-- End of Patient Profile Tab -->
 
-            <!-- Diagnosis Tab -->
+            <!-- Screening Information -->
             <div id="diagnosis-tab" class="tab-content" style="margin-top: 30px; display: none;">
-
                 <div class="info-section card p-3 shadow-sm border-0 rounded-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
                             <h5 class="fw-bold mb-1">Screening Information</h5>
-                            <p class="text-muted small mb-0">Details regarding the patient's referral, location, and
-                                mode of screening.</p>
+                            <p class="text-muted small mb-0"> Details regarding the patient's referral, location, and
+                                mode of screening. </p>
                         </div>
-                    </div>
+                    </div> @if ($patient->screenings->isNotEmpty())
+                        <div class="table-responsive mb-3">
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Referred By</th>
+                                        <th>Type of Referrer</th>
+                                        <th>Location</th>
+                                        <th>Mode of Screening</th>
+                                        <th>Date of Screening</th>
+                                    </tr>
+                                </thead>
+                                <tbody> @foreach ($patient->screenings as $screening) <tr>
+                                    <td>{{ $screening->scr_referred_by ?? '—' }}</td>
+                                    <td>{{ $screening->scr_referrer_type ?? '—' }}</td>
+                                    <td>{{ $screening->scr_location ?? '—' }}</td>
+                                    <td>{{ $screening->scr_screening_mode ?? '—' }}</td>
+                                    <td> @if (!empty($screening->scr_screening_date))
+                                        {{ \Carbon\Carbon::parse($screening->scr_screening_date)->format('F j, Y') }}
+                                    @else — @endif </td>
+                                </tr> @endforeach </tbody>
+                            </table>
+                    </div> @else <p class="text-muted fst-italic mt-2"> No screening information recorded for this
+                    patient. </p> @endif
+                </div>
 
-                    @if ($patient->screenings->isNotEmpty())
-                        @foreach ($patient->screenings as $screening)
-                            <div class="table-responsive mb-3">
-                                <table class="table align-middle">
-                                    <thead class="table-light">
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Initial Laboratory Tests</h5>
+                        <p class="text-muted small mb-0">
+                            Patient’s laboratory test details, dates, and results.
+                        </p>
+                    </div>
+                </div>
+
+                @if ($patient->labTests && $patient->labTests->isNotEmpty())
+                    <div class="table-responsive mb-3">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Laboratory Test</th>
+                                    <th>Result</th>
+                                    <th>Date Conducted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->labTests as $lab)
+                                    @php
+                                        $tests = [
+                                            ['name' => 'Xpert MTB/RIF', 'result' => $lab->lab_xpert_result, 'date' => $lab->lab_xpert_test_date],
+                                            ['name' => 'Smear Microscopy', 'result' => $lab->lab_smear_result, 'date' => $lab->lab_smear_test_date],
+                                            ['name' => 'Chest X-ray', 'result' => $lab->lab_cxray_result, 'date' => $lab->lab_cxray_test_date],
+                                            ['name' => 'Tuberculin Skin Test', 'result' => $lab->lab_tst_result, 'date' => $lab->lab_tst_test_date],
+                                            ['name' => 'Other Test', 'result' => $lab->lab_other_result, 'date' => $lab->lab_other_test_date],
+                                        ];
+                                    @endphp
+                                    @foreach ($tests as $test)
+                                        @if (!empty($test['result']))
+                                            <tr>
+                                                <td>{{ $test['name'] }}</td>
+                                                <td>{{ $test['result'] }}</td>
+                                                <td>
+                                                    {{ $test['date'] ? \Carbon\Carbon::parse($test['date'])->format('F j, Y') : '—' }}
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No laboratory test records available for this patient.</p>
+                @endif
+            </div>
+
+
+                                <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <h5 class="fw-bold mb-1">Diagnosis</h5>
+                                            <p class="text-muted small mb-0">Details of the patient’s diagnosis, attending physician,
+                                                and referral information.</p>
+                                        </div>
+                                        <button class="btn btn-sm btn-success d-flex align-items-center gap-1" data-bs-toggle="modal"
+                                            data-bs-target="#editDiagnosisModal">
+                                            <i class="fas fa-plus"></i> Add Referral
+                                        </button>
+                                    </div>
+
+                                    @if ($patient->diagnoses->count() > 0)
+
+                                        {{-- Table 1: Diagnosis Details --}}
+                                        <small class="fw-semibold mt-3 d-block">Diagnosis Details</small>
+                                        <div class="table-responsive mb-4">
+                                            <table class="table align-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Diagnosis Date</th>
+                                                        <th>Notification Date</th>
+                                                        <th>TB Case Number</th>
+                                                        <th>Attending Physician</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($patient->diagnoses as $index => $diagnosis)
+                                                        <tr>
+                                                            <td>
+                                                                @if(!empty($diagnosis->diag_diagnosis_date))
+                                                                    {{ \Carbon\Carbon::parse($diagnosis->diag_diagnosis_date)->format('F j, Y') }}
+                                                                @else
+                                                                    —
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if(!empty($diagnosis->diag_notification_date))
+                                                                    {{ \Carbon\Carbon::parse($diagnosis->diag_notification_date)->format('F j, Y') }}
+                                                                @else
+                                                                    —
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ $diagnosis->diag_tb_case_no ?? '—' }}</td>
+                                                            <td>{{ $diagnosis->diag_attending_physician ?? '—' }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        {{-- Table 2: Referral Information --}}
+                                        <small class="fw-semibold mt-3 d-block">Referral Information</small>
+                                        <div class="table-responsive mb-4">
+                                            <table class="table align-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Referred To</th>
+                                                        <th>Address</th>
+                                                        <th>Facility Code</th>
+                                                        <th>Province</th>
+                                                        <th>Region</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($patient->diagnoses as $index => $diagnosis)
+                                                        <tr>
+                                                            <td>{{ $diagnosis->diag_referred_to ?? '—' }}</td>
+                                                            <td>{{ $diagnosis->diag_address ?? '—' }}</td>
+                                                            <td>{{ $diagnosis->diag_facility_code ?? '—' }}</td>
+                                                            <td>{{ $diagnosis->diag_province ?? '—' }}</td>
+                                                            <td>{{ $diagnosis->diag_region ?? '—' }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    @else
+                                        <p class="text-muted fst-italic mt-2">No diagnosis record available for this patient.</p>
+                                    @endif
+                                </div>
+
+
+            @php
+            $tbRecords = $patient->tbClassification;
+
+            // Check if each optional column has at least one non-empty value
+            $hasOtherDrugResistance = $tbRecords->whereNotNull('clas_other_drug_resistant')->where('clas_other_drug_resistant', '!=', '')->isNotEmpty();
+            $hasExtraPulmonarySite = $tbRecords->whereNotNull('clas_site_other')->where('clas_site_other', '!=', '')->isNotEmpty();
+            @endphp
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">TB Disease Classification</h5>
+                        <p class="text-muted small mb-0">
+                            Details about the patient’s TB classification, drug resistance, and anatomical site.
+                        </p>
+                    </div>
+                </div>
+
+                @if ($tbRecords->count())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Bacteriological Status</th>
+                                    <th>Drug Resistance Status</th>
+
+                                    @if ($hasOtherDrugResistance)
+                                        <th>Other Drug Resistance Status</th>
+                                    @endif
+
+                                    <th>Anatomical Site</th>
+
+                                    @if ($hasExtraPulmonarySite)
+                                        <th>Extra-pulmonary Site</th>
+                                    @endif
+
+                                    <th>Registration Group</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($tbRecords as $index => $classification)
+                                    <tr>
+                                        <td>{{ $classification->clas_bacteriological_status ?? '—' }}</td>
+                                        <td>{{ $classification->clas_drug_resistance_status ?? '—' }}</td>
+
+                                        @if ($hasOtherDrugResistance)
+                                            <td>{{ $classification->clas_other_drug_resistant ?? '—' }}</td>
+                                        @endif
+
+                                        <td>{{ $classification->clas_anatomical_site ?? '—' }}</td>
+
+                                        @if ($hasExtraPulmonarySite)
+                                            <td>{{ $classification->clas_site_other ?? '—' }}</td>
+                                        @endif
+
+                                        <td>{{ $classification->clas_registration_group ?? '—' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">
+                        No TB disease classification recorded for this patient.
+                    </p>
+                @endif
+            </div>
+
+        </div>
+        <!-- End of Diagnosis Tab -->
+
+
+        <!-- Treatment Information Tab -->
+        <div id="treatment-tab" class="tab-content" style="margin-top: 30px; display: none;">
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Treatment Facility</h5>
+                        <p class="text-muted small mb-0">Details of the facility where the patient is receiving
+                            treatment.</p>
+                    </div>
+                    <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1"
+                                                data-bs-toggle="modal" data-bs-target="#editTreatmentFacilityModal">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button> -->
+                </div>
+
+                @if ($patient->treatmentFacilities->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Facility Name</th>
+                                    <th>NTP Facility Code</th>
+                                    <th>Province</th>
+                                    <th>Region</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->treatmentFacilities as $facility)
+                                    @php
+                                        $hasData = !empty($facility->trea_name)
+                                            || !empty($facility->trea_ntp_code)
+                                            || !empty($facility->trea_province)
+                                            || !empty($facility->trea_region);
+                                    @endphp
+
+                                    @if ($hasData)
                                         <tr>
-                                            <th>Referred By</th>
-                                            <th>Type of Referrer</th>
-                                            <th>Location</th>
-                                            <th>Mode of Screening</th>
-                                            <th>Date of Screening</th>
+                                            <td>{{ $facility->trea_name ?? '—' }}</td>
+                                            <td>{{ $facility->trea_ntp_code ?? '—' }}</td>
+                                            <td>{{ $facility->trea_province ?? '—' }}</td>
+                                            <td>{{ $facility->trea_region ?? '—' }}</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No treatment facility information found for this patient.</p>
+                @endif
+            </div>
+
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">History of TB Treatment</h5>
+                        <p class="text-muted small mb-0">Previous TB treatment information and outcomes.</p>
+                    </div>
+                    <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                                                data-bs-target="#editTreatmentHistoryModal">
+                                                <i class="fas fa-plus"></i> Add Record
+                                            </button> -->
+                </div>
+
+                @if ($patient->treatmentHistories->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date Tx Started</th>
+                                    <th>Name of Treatment Unit</th>
+                                    <th>Drug</th>
+                                    <th>Treatment Duration</th>
+                                    <th>Outcome</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->treatmentHistories as $history)
+                                    @php
+                                        $hasData = !empty($history->hist_date_tx_started)
+                                            || !empty($history->hist_treatment_unit)
+                                            || !empty($history->hist_drug)
+                                            || !empty($history->hist_treatment_duration)
+                                            || !empty($history->hist_outcome);
+                                    @endphp
+
+                                    @if ($hasData)
                                         <tr>
-                                            <td>{{ $screening->scr_referred_by ?? '—' }}</td>
-                                            <td>{{ $screening->scr_referrer_type ?? '—' }}</td>
-                                            <td>{{ $screening->scr_location ?? '—' }}</td>
-                                            <td>{{ $screening->scr_screening_mode ?? '—' }}</td>
                                             <td>
-                                                @if(!empty($screening->scr_screening_date))
-                                                    {{ \Carbon\Carbon::parse($screening->scr_screening_date)->format('F j, Y') }}
+                                                @if(!empty($history->hist_date_tx_started))
+                                                    {{ \Carbon\Carbon::parse($history->hist_date_tx_started)->format('F j, Y') }}
                                                 @else
                                                     —
                                                 @endif
                                             </td>
+                                            <td>{{ $history->hist_treatment_unit ?? '—' }}</td>
+                                            <td>{{ $history->hist_drug ?? '—' }}</td>
+                                            <td>{{ $history->hist_treatment_duration ?? '—' }}</td>
+                                            <td>{{ $history->hist_outcome ?? '—' }}</td>
                                         </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endforeach
-                    @else
-                        <p class="text-muted fst-italic mt-2">No screening information recorded for this patient.</p>
-                    @endif
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No TB treatment history found for this patient.</p>
+                @endif
+            </div>
+
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Co-morbidities</h5>
+                        <p class="text-muted small mb-0">Other medical conditions and treatments related to this
+                            patient.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editComorbiditiesModal">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button>
                 </div>
 
+                @if ($patient->comorbidities->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date Diagnosed</th>
+                                    <th>Type</th>
+                                    <th>Other</th>
+                                    <th>Treatment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->comorbidities as $comorbidity)
+                                    @php
+                                        $hasData = !empty($comorbidity->com_date_diagnosed)
+                                            || !empty($comorbidity->com_type)
+                                            || !empty($comorbidity->com_other)
+                                            || !empty($comorbidity->com_treatment);
+                                    @endphp
 
-                <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <h5 class="fw-bold mb-1">Initial Laboratory Tests</h5>
-                            <p class="text-muted small mb-0">Patient’s laboratory test details, dates, and results.</p>
-                        </div>
-                        @foreach($patient->labTests as $labTest)
-                                            <!-- Edit button -->
-                                            <!-- <button class="btn btn-sm btn-success d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editLabTestsModal{{ $labTest->id }}">
-                                                <i class="fas fa-plus"></i> Add Result
-                                            </button> -->
-                                        </div>
-
-                                        @if ($patient->screenings->isNotEmpty() && $patient->screenings->first()->labTests->isNotEmpty())
-                                        @foreach ($patient->screenings->first()->labTests as $lab)
-                                            @php
-                                                $hasXpert = !empty($lab->lab_xpert_result);
-                                                $hasSmear = !empty($lab->lab_smear_result);
-                                                $hasXray = !empty($lab->lab_cxray_result);
-                                                $hasTst = !empty($lab->lab_tst_result);
-                                                $hasOther = !empty($lab->lab_other_result);
-                                            @endphp
-
-                                            @if ($hasXpert || $hasSmear || $hasXray || $hasTst || $hasOther)
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Laboratory Test</th>
-                                                            <th>Result</th>
-                                                            <th>Date Conducted</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if ($hasXpert)
-                                                            <tr>
-                                                                <td>Xpert MTB/RIF</td>
-                                                                <td>{{ $lab->lab_xpert_result }}</td>
-                                                                <td>{{ $lab->lab_xpert_test_date ? \Carbon\Carbon::parse($lab->lab_xpert_test_date)->format('F j, Y') : '—' }}</td>
-                                                            </tr>
-                                                        @endif
-
-                                                        @if ($hasSmear)
-                                                            <tr>
-                                                                <td>Smear Microscopy</td>
-                                                                <td>{{ $lab->lab_smear_result }}</td>
-                                                                <td>{{ $lab->lab_smear_test_date ? \Carbon\Carbon::parse($lab->lab_smear_test_date)->format('F j, Y') : '—' }}</td>
-                                                            </tr>
-                                                        @endif
-
-                                                        @if ($hasXray)
-                                                            <tr>
-                                                                <td>Chest X-ray</td>
-                                                                <td>{{ $lab->lab_cxray_result }}</td>
-                                                                <td>{{ $lab->lab_cxray_test_date ? \Carbon\Carbon::parse($lab->lab_cxray_test_date)->format('F j, Y') : '—' }}</td>
-                                                            </tr>
-                                                        @endif
-
-                                                        @if ($hasTst)
-                                                            <tr>
-                                                                <td>Tuberculin Skin Test</td>
-                                                                <td>{{ $lab->lab_tst_result }}</td>
-                                                                <td>{{ $lab->lab_tst_test_date ? \Carbon\Carbon::parse($lab->lab_tst_test_date)->format('F j, Y') : '—' }}</td>
-                                                            </tr>
-                                                        @endif
-
-                                                        @if ($hasOther)
-                                                            <tr>
-                                                                <td>Other Test</td>
-                                                                <td>{{ $lab->lab_other_result }}</td>
-                                                                <td>{{ $lab->lab_other_test_date ? \Carbon\Carbon::parse($lab->lab_other_test_date)->format('F j, Y') : '—' }}</td>
-                                                            </tr>
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            @else
-                                                <p class="text-muted fst-italic mt-2">
-                                                    No laboratory test results recorded for this patient.
-                                                </p>
-                                            @endif
-                                        @endforeach
-                                    @else
-                                        <p class="text-muted fst-italic mt-2">
-                                            No laboratory test records available for this patient.
-                                        </p>
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>
+                                                @if(!empty($comorbidity->com_date_diagnosed))
+                                                    {{ \Carbon\Carbon::parse($comorbidity->com_date_diagnosed)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $comorbidity->com_type ?? '—' }}</td>
+                                            <td>{{ $comorbidity->com_other ?? '—' }}</td>
+                                            <td>{{ $comorbidity->com_treatment ?? '—' }}</td>
+                                        </tr>
                                     @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No co-morbidities recorded for this patient.</p>
+                @endif
+            </div>
 
-                                    </div>
 
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="fw-bold mb-1">Baseline Information</h5>
+                    <p class="text-muted small mb-0">
+                        Patient’s initial measurements, vital signs, and screening details.
+                    </p>
+                </div>
+            </div>
 
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Diagnosis</h5>
-                                                <p class="text-muted small mb-0">Details of the patient’s diagnosis, attending physician,
-                                                    and referral information.</p>
-                                            </div>
-                                            <button class="btn btn-sm btn-success d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editDiagnosisModal">
-                                                <i class="fas fa-plus"></i> Add Referral
-                                            </button>
-                                        </div>
+            @if ($patient->baselineInfos->isNotEmpty())
+                {{-- Table 1: Physical Measurements & Vitals --}}
+                <div class="table-responsive mb-4">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Height</th>
+                                <th>Weight</th>
+                                <th>Blood Pressure</th>
+                                <th>Pulse Rate</th>
+                                <th>Temperature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($patient->baselineInfos as $info)
+                                <tr>
+                                    <td>{{ $info->base_height ?? '—' }}</td>
+                                    <td>{{ $info->base_weight ?? '—' }}</td>
+                                    <td>{{ $info->base_blood_pressure ?? '—' }}</td>
+                                    <td>{{ $info->base_pulse_rate ?? '-' }}</td>
+                                    <td>{{ $info->base_temperature ?? '—' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-                                        @if ($patient->diagnosis)
-                                            {{-- Table 1: Diagnosis Details --}}
-                                            <small class="fw-semibold mt-3">Diagnosis Details</small>
-                                            <div class="table-responsive mb-4">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Diagnosis Date</th>
-                                                            <th>Notification Date</th>
-                                                            <th>TB Case Number</th>
-                                                            <th>Attending Physician</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                @if(!empty($patient->diagnosis->diag_diagnosis_date))
-                                                                    {{ \Carbon\Carbon::parse($patient->diagnosis->diag_diagnosis_date)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if(!empty($patient->diagnosis->diag_notification_date))
-                                                                    {{ \Carbon\Carbon::parse($patient->diagnosis->diag_notification_date)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ $patient->diagnosis->diag_tb_case_no ?? '—' }}</td>
-                                                            <td>{{ $patient->diagnosis->diag_attending_physician ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
-                                            {{-- Table 2: Referral Information --}}
-                                            <small class="fw-semibold mt-3">Referral Information</small>
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Referred To</th>
-                                                            <th>Address</th>
-                                                            <th>Facility Code</th>
-                                                            <th>Province</th>
-                                                            <th>Region</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{ $patient->diagnosis->diag_referred_to ?? '—' }}</td>
-                                                            <td>{{ $patient->diagnosis->diag_address ?? '—' }}</td>
-                                                            <td>{{ $patient->diagnosis->diag_facility_code ?? '—' }}</td>
-                                                            <td>{{ $patient->diagnosis->diag_province ?? '—' }}</td>
-                                                            <td>{{ $patient->diagnosis->diag_region ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                {{-- Table 2: Screening Information --}}
+                <div class="table-responsive mb-4">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Diabetes Screening</th>
+                                <th>FBS Screening</th>
+                                <th>Date Tested</th>
+                                <th>4Ps Beneficiary?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($patient->baselineInfos as $info)
+                                <tr>
+                                    <td>{{ $info->base_diabetes_screening ?? '—' }}</td>
+                                    <td>{{ $info->base_fbs_screening ?? '—' }}</td>
+                                    <td>
+                                        @if(!empty($info->base_date_tested))
+                                            {{ \Carbon\Carbon::parse($info->base_date_tested)->format('F j, Y') }}
                                         @else
-                                            <p class="text-muted fst-italic mt-2">No diagnosis record available for this patient.</p>
+                                            —
                                         @endif
-                                    </div>
+                                    </td>
+                                    <td>{{ $info->base_four_ps_beneficiary ?? '—' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">TB Disease Classification</h5>
-                                                <p class="text-muted small mb-0">
-                                                    Details about the patient’s TB classification, drug resistance, and anatomical site.
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        @if ($patient->diagnosis && $patient->diagnosis->tbClassification)
-                                            {{-- Table 1: Classification & Drug Resistance --}}
-                                            <div class="table-responsive mb-4">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Bacteriological Status</th>
-                                                            <th>Drug Resistance Status</th>
-                                                            <th>Other Drug Resistance Status</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{ $patient->diagnosis->tbClassification->clas_bacteriological_status ?? '—' }}
-                                                            </td>
-                                                            <td>{{ $patient->diagnosis->tbClassification->clas_drug_resistance_status ?? '—' }}
-                                                            </td>
-                                                            <td>{{ $patient->diagnosis->tbClassification->clas_other_drug_resistant ?? '—' }}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
-                                            {{-- Table 2: Anatomical & Registration Info --}}
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Anatomical Site</th>
-                                                            <th>Extra-pulmonary Site</th>
-                                                            <th>Registration Group</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{ $patient->diagnosis->tbClassification->clas_anatomical_site ?? '—' }}</td>
-                                                            <td>{{ $patient->diagnosis->tbClassification->clas_site_other ?? '—' }}</td>
-                                                            <td>{{ $patient->diagnosis->tbClassification->clas_registration_group ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No TB disease classification recorded for this patient.</p>
-                                        @endif
-                                    </div>
+                {{-- Table 3: Emergency Contact --}}
+                <small class="fw-semibold mt-3">Emergency Contact Information</small>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Relationship</th>
+                                <th>Contact Info</th>
+                                <th>Occupation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($patient->baselineInfos as $info)
+                                <tr>
+                                    <td>{{ $info->base_emergency_contact_name ?? '—' }}</td>
+                                    <td>{{ $info->base_relationship ?? '—' }}</td>
+                                    <td>{{ $info->base_contact_info ?? '—' }}</td>
+                                    <td>{{ $info->base_occupation ?? '—' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @else
+                <p class="text-muted fst-italic mt-2">
+                    No baseline information recorded for this patient.
+                </p>
+            @endif
+        </div>
 
 
 
-                                </div>
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">HIV Information</h5>
+                        <p class="text-muted small mb-0">Details regarding HIV screening, test results, and
+                            treatment initiation.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editBaselineModal">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button>
+                </div>
+
+                @if ($patient->hivInfos->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>HIV Information</th>
+                                    <th>HIV Test Date</th>
+                                    <th>Confirmatory Test Date</th>
+                                    <th>Result</th>
+                                    <th>Started on ART</th>
+                                    <th>Started on CPT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->hivInfos as $hiv)
+                                    @php
+                                        $hasData = !empty($hiv->hiv_information)
+                                            || !empty($hiv->hiv_test_date)
+                                            || !empty($hiv->hiv_confirmatory_test_date)
+                                            || !empty($hiv->hiv_result)
+                                            || !empty($hiv->hiv_art_started)
+                                            || !empty($hiv->hiv_cpt_started);
+                                    @endphp
+
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>{{ $hiv->hiv_information ?? '—' }}</td>
+                                            <td>
+                                                @if(!empty($hiv->hiv_test_date))
+                                                    {{ \Carbon\Carbon::parse($hiv->hiv_test_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(!empty($hiv->hiv_confirmatory_test_date))
+                                                    {{ \Carbon\Carbon::parse($hiv->hiv_confirmatory_test_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $hiv->hiv_result ?? '—' }}</td>
+                                            <td>{{ $hiv->hiv_art_started ?? '—' }}</td>
+                                            <td>{{ $hiv->hiv_cpt_started ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No HIV information recorded for this patient.</p>
+                @endif
+            </div>
 
 
-                                <!-- Treatment Information Tab -->
-                                <div id="treatment-tab" class="tab-content" style="margin-top: 30px; display: none;">
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Treatment Facility</h5>
-                                                <p class="text-muted small mb-0">Details of the facility where the patient is receiving
-                                                    treatment.</p>
-                                            </div>
-                                            <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1"
-                                                data-bs-toggle="modal" data-bs-target="#editTreatmentFacilityModal">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </button> -->
-                                        </div>
-
-                                        @if ($patient->treatmentFacilities->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Facility Name</th>
-                                                            <th>NTP Facility Code</th>
-                                                            <th>Province</th>
-                                                            <th>Region</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->treatmentFacilities as $facility)
-                                                            @php
-                                                                $hasData = !empty($facility->trea_name)
-                                                                    || !empty($facility->trea_ntp_code)
-                                                                    || !empty($facility->trea_province)
-                                                                    || !empty($facility->trea_region);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>{{ $facility->trea_name ?? '—' }}</td>
-                                                                    <td>{{ $facility->trea_ntp_code ?? '—' }}</td>
-                                                                    <td>{{ $facility->trea_province ?? '—' }}</td>
-                                                                    <td>{{ $facility->trea_region ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No treatment facility information found for this patient.</p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">History of TB Treatment</h5>
-                                                <p class="text-muted small mb-0">Previous TB treatment information and outcomes.</p>
-                                            </div>
-                                            <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editTreatmentHistoryModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button> -->
-                                        </div>
-
-                                        @if ($patient->treatmentHistories->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date Tx Started</th>
-                                                            <th>Name of Treatment Unit</th>
-                                                            <th>Treatment Regimen</th>
-                                                            <th>Outcome</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->treatmentHistories as $history)
-                                                            @php
-                                                                $hasData = !empty($history->hist_date_tx_started)
-                                                                    || !empty($history->hist_treatment_unit)
-                                                                    || !empty($history->hist_regimen)
-                                                                    || !empty($history->hist_outcome);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>
-                                                                        @if(!empty($history->hist_date_tx_started))
-                                                                            {{ \Carbon\Carbon::parse($history->hist_date_tx_started)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $history->hist_treatment_unit ?? '—' }}</td>
-                                                                    <td>{{ $history->hist_regimen ?? '—' }}</td>
-                                                                    <td>{{ $history->hist_outcome ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No TB treatment history found for this patient.</p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Co-morbidities</h5>
-                                                <p class="text-muted small mb-0">Other medical conditions and treatments related to this
-                                                    patient.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editComorbiditiesModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
-
-                                        @if ($patient->comorbidities->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date Diagnosed</th>
-                                                            <th>Type</th>
-                                                            <th>Other</th>
-                                                            <th>Treatment</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->comorbidities as $comorbidity)
-                                                            @php
-                                                                $hasData = !empty($comorbidity->com_date_diagnosed)
-                                                                    || !empty($comorbidity->com_type)
-                                                                    || !empty($comorbidity->com_other)
-                                                                    || !empty($comorbidity->com_treatment);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>
-                                                                        @if(!empty($comorbidity->com_date_diagnosed))
-                                                                            {{ \Carbon\Carbon::parse($comorbidity->com_date_diagnosed)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $comorbidity->com_type ?? '—' }}</td>
-                                                                    <td>{{ $comorbidity->com_other ?? '—' }}</td>
-                                                                    <td>{{ $comorbidity->com_treatment ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No co-morbidities recorded for this patient.</p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Baseline Information</h5>
-                                                <p class="text-muted small mb-0">
-                                                    Patient’s initial measurements, vital signs, and screening details.
-                                                </p>
-                                            </div>
-                                            <!-- Optional Add Button -->
-                                            <!--
-                                        <button class="btn btn-success btn-sm d-flex align-items-center gap-1"
-                                            data-bs-toggle="modal" data-bs-target="#editBaselineInfoModal">
-                                            <i class="fas fa-plus"></i> Add Record
-                                        </button>
-                                        -->
-                                        </div>
-
-                                        @if ($patient->baselineInfos->isNotEmpty())
-                                            @foreach ($patient->baselineInfos as $info)
-                                                {{-- Table 1: Physical Measurements & Vitals --}}
-                                                <div class="table-responsive mb-4">
-                                                    <table class="table align-middle">
-                                                        <thead class="table-light">
-                                                            <tr>
-                                                                <th>Height</th>
-                                                                <th>Weight</th>
-                                                                <th>Blood Pressure</th>
-                                                                <th>Pulse Rate</th>
-                                                                <th>Temperature</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>{{ $info->base_height ?? '—' }}</td>
-                                                                <td>{{ $info->base_weight ?? '—' }}</td>
-                                                                <td>{{ $info->base_blood_pressure ?? '—' }}</td>
-                                                                <td>{{ $info->base_pulse_rate ?? '-' }}</td>
-                                                                <td>{{ $info->base_temperature ?? '—' }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                                {{-- Table 2: Screening Information --}}
-                                                <div class="table-responsive mb-4">
-                                                    <table class="table align-middle">
-                                                        <thead class="table-light">
-                                                            <tr>
-                                                                <th>Diabetes Screening</th>
-                                                                <th>FBS Screening</th>
-                                                                <th>Date Tested</th>
-                                                                <th>4Ps Beneficiary?</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>{{ $info->base_diabetes_screening ?? '—' }}</td>
-                                                                <td>{{ $info->base_fbs_screening ?? '—' }}</td>
-                                                                <td>
-                                                                    @if(!empty($info->base_date_tested))
-                                                                        {{ \Carbon\Carbon::parse($info->base_date_tested)->format('F j, Y') }}
-                                                                    @else
-                                                                        —
-                                                                    @endif
-                                                                </td>
-                                                                <td>{{ $info->base_four_ps_beneficiary ?? '—' }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-
-                                                {{-- Table 3: Emergency Contact --}}
-                                                <small class="fw-semibold mt-3">Emergency Contact Information</small>
-                                                <div class="table-responsive">
-                                                    <table class="table align-middle">
-                                                        <thead class="table-light">
-                                                            <tr>
-                                                                <th>Name</th>
-                                                                <th>Relationship</th>
-                                                                <th>Contact Info</th>
-                                                                <th>Occupation</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>{{ $info->base_emergency_contact_name ?? '—' }}</td>
-                                                                <td>{{ $info->base_relationship ?? '—' }}</td>
-                                                                <td>{{ $info->base_contact_info ?? '—' }}</td>
-                                                                <td>{{ $info->base_occupation ?? '—' }}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            @endforeach
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">
-                                                No baseline information recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
-
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">HIV Information</h5>
-                                                <p class="text-muted small mb-0">Details regarding HIV screening, test results, and
-                                                    treatment initiation.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editBaselineModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
-
-                                        @if ($patient->hivInfos->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>HIV Information</th>
-                                                            <th>HIV Test Date</th>
-                                                            <th>Confirmatory Test Date</th>
-                                                            <th>Result</th>
-                                                            <th>Started on ART</th>
-                                                            <th>Started on CPT</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->hivInfos as $hiv)
-                                                            @php
-                                                                $hasData = !empty($hiv->hiv_information)
-                                                                    || !empty($hiv->hiv_test_date)
-                                                                    || !empty($hiv->hiv_confirmatory_test_date)
-                                                                    || !empty($hiv->hiv_result)
-                                                                    || !empty($hiv->hiv_art_started)
-                                                                    || !empty($hiv->hiv_cpt_started);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>{{ $hiv->hiv_information ?? '—' }}</td>
-                                                                    <td>
-                                                                        @if(!empty($hiv->hiv_test_date))
-                                                                            {{ \Carbon\Carbon::parse($hiv->hiv_test_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if(!empty($hiv->hiv_confirmatory_test_date))
-                                                                            {{ \Carbon\Carbon::parse($hiv->hiv_confirmatory_test_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $hiv->hiv_result ?? '—' }}</td>
-                                                                    <td>{{ $hiv->hiv_art_started ?? '—' }}</td>
-                                                                    <td>{{ $hiv->hiv_cpt_started ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No HIV information recorded for this patient.</p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Treatment Regimen</h5>
-                                                <p class="text-muted small mb-0">Details regarding the patient’s treatment regimen from
-                                                    start to end.</p>
-                                            </div>
-                                            <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1"
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Treatment Regimen</h5>
+                        <p class="text-muted small mb-0">Details regarding the patient’s treatment regimen from
+                            start to end.</p>
+                    </div>
+                    <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1"
                                                 data-bs-toggle="modal" data-bs-target="#editTreatmentRegimenModal">
                                             <i class="fas fa-plus"></i> Add Record
                                         </button> -->
-                                        </div>
+                </div>
 
-                                        @if ($patient->treatmentRegimens->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Regimen Type at Start of Treatment</th>
-                                                            <th>Treatment Start Date</th>
-                                                            <th>Regimen Type at End of Treatment</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->treatmentRegimens as $regimen)
-                                                            @php
-                                                                $hasData = !empty($regimen->reg_start_type)
-                                                                    || !empty($regimen->reg_start_date)
-                                                                    || !empty($regimen->reg_end_type);
-                                                            @endphp
+                @if ($patient->treatmentRegimens->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Regimen Type at Start of Treatment</th>
+                                    <th>Treatment Start Date</th>
+                                    <th>Regimen Type at End of Treatment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->treatmentRegimens as $regimen)
+                                    @php
+                                        $hasData = !empty($regimen->reg_start_type)
+                                            || !empty($regimen->reg_start_date)
+                                            || !empty($regimen->reg_end_type);
+                                    @endphp
 
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>{{ $regimen->reg_start_type ?? '—' }}</td>
-                                                                    <td>
-                                                                        @if (!empty($regimen->reg_start_date))
-                                                                            {{ \Carbon\Carbon::parse($regimen->reg_start_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $regimen->reg_end_type ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">
-                                                No treatment regimen recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Prescribed Drugs</h5>
-                                                <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and continuation phases.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editPrescribedDrugsModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
-
-                                        @php
-                                            $firstDrug = $patient->prescribedDrugs->first();
-                                        @endphp
-
-                                        @if ($firstDrug)
-                                            {{-- Table 1: Intensive Phase --}}
-                                            <small class="fw-semibold mt-3">Intensive Phase</small>
-                                            <div class="table-responsive mb-4">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date Start</th>
-                                                            <th>Drug</th>
-                                                            <th>No. of Tablets</th>
-                                                            <th>Strength</th>
-                                                            <th>Unit</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                @if(!empty($firstDrug->drug_start_date))
-                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_start_date)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ $firstDrug->drug_name ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_no_of_tablets ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_strength ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_unit ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
-                                            {{-- Table 2: Continuation Phase --}}
-                                            <small class="fw-semibold mt-3">Continuation Phase</small>
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date</th>
-                                                            <th>Drug</th>
-                                                            <th>No. of Tablets</th>
-                                                            <th>Strength</th>
-                                                            <th>Unit</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                @if(!empty($firstDrug->drug_con_date))
-                                                                    {{ \Carbon\Carbon::parse($firstDrug->drug_con_date)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ $firstDrug->drug_con_name ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_con_no_of_tablets ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_con_strength ?? '—' }}</td>
-                                                            <td>{{ $firstDrug->drug_con_unit ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2 mb-0">
-                                                No prescribed drugs recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>{{ $regimen->reg_start_type ?? '—' }}</td>
+                                            <td>
+                                                @if (!empty($regimen->reg_start_date))
+                                                    {{ \Carbon\Carbon::parse($regimen->reg_start_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $regimen->reg_end_type ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">
+                        No treatment regimen recorded for this patient.
+                    </p>
+                @endif
+            </div>
 
 
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Administration of Drugs</h5>
-                                                <p class="text-muted small mb-0">Details of treatment supporter, treatment schedules, and
-                                                    patient measurements.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editAdministrationModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
+            <!-- Administration of Drugs - FIXED -->
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Administration of Drugs</h5>
+                        <p class="text-muted small mb-0">Details of treatment supporter, treatment schedules, and patient measurements.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editAdministrationModal">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button>
+                </div>
 
-                                        {{-- Table 1: Treatment Supporter Information --}}
-                                        @if ($patient->txSupporters->isNotEmpty())
-                                            <small class="fw-semibold mt-3">Treatment Supporter Information</small>
-                                            <div class="table-responsive mb-4">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Location of Treatment</th>
-                                                            <th>Supporter Name</th>
-                                                            <th>Designation</th>
-                                                            <th>Supporter Type</th>
-                                                            <th>Contact Information</th>
-                                                            <th>Name of DAT/s Used</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{ $patient->txSupporters->first()->sup_location ?? '—' }}</td>
-                                                            <td>{{ $patient->txSupporters->first()->sup_name ?? '—' }}</td>
-                                                            <td>{{ $patient->txSupporters->first()->sup_designation ?? '—' }}</td>
-                                                            <td>{{ $patient->txSupporters->first()->sup_type ?? '—' }}</td>
-                                                            <td>{{ $patient->txSupporters->first()->sup_contact_info ?? '—' }}</td>
-                                                            <td>{{ $patient->txSupporters->first()->sup_dat_used ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @endif
+                {{-- Table 1: Treatment Supporter Information --}}
+                @if ($patient->txSupporters->isNotEmpty())
+                    <small class="fw-semibold mt-3">Treatment Supporter Information</small>
+                    <div class="table-responsive mb-4">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Location of Treatment</th>
+                                    <th>Supporter Name</th>
+                                    <th>Designation</th>
+                                    <th>Supporter Type</th>
+                                    <th>Contact Information</th>
+                                    <th>Name of DAT/s Used</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->txSupporters as $supporter)
+                                    <tr>
+                                        <td>{{ $supporter->sup_location ?? '—' }}</td>
+                                        <td>{{ $supporter->sup_name ?? '—' }}</td>
+                                        <td>{{ $supporter->sup_designation ?? '—' }}</td>
+                                        <td>{{ $supporter->sup_type ?? '—' }}</td>
+                                        <td>{{ $supporter->sup_contact_info ?? '—' }}</td>
+                                        <td>{{ $supporter->sup_dat_used ?? '—' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
 
-                                        {{-- Table 2: Treatment Schedule Details --}}
-                                        @if ($patient->adherences->isNotEmpty())
-                                            <small class="fw-semibold mt-3">Treatment Schedule Details</small>
-                                            <div class="table-responsive mb-4">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Schedule of Treatment</th>
-                                                            <th>Intensive Phase Start</th>
-                                                            <th>Intensive Phase End</th>
-                                                            <th>Continuation Phase Start</th>
-                                                            <th>Continuation Phase End</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '—' }}</td>
-                                                            <td>
-                                                                @if(!empty($patient->adherences->first()->pha_intensive_start))
-                                                                    {{ \Carbon\Carbon::parse($patient->adherences->first()->pha_intensive_start)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if(!empty($patient->adherences->first()->pha_intensive_end))
-                                                                    {{ \Carbon\Carbon::parse($patient->adherences->first()->pha_intensive_end)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if(!empty($patient->adherences->first()->pha_continuation_start))
-                                                                    {{ \Carbon\Carbon::parse($patient->adherences->first()->pha_continuation_start)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if(!empty($patient->adherences->first()->pha_continuation_end))
-                                                                    {{ \Carbon\Carbon::parse($patient->adherences->first()->pha_continuation_end)->format('F j, Y') }}
-                                                                @else
-                                                                    —
-                                                                @endif
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @endif
+                {{-- Table 2: Treatment Schedule Details --}}
+                @if ($patient->adherences->isNotEmpty())
+                    <small class="fw-semibold mt-3">Treatment Schedule Details</small>
+                    <div class="table-responsive mb-4">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Schedule of Treatment</th>
+                                    <th>Intensive Phase Start</th>
+                                    <th>Intensive Phase End</th>
+                                    <th>Continuation Phase Start</th>
+                                    <th>Continuation Phase End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->adherences as $adherence)
+                                    <tr>
+                                        <td>{{ $supporter->sup_treatment_schedule ?? '—' }}</td>
+                                        <td>
+                                            @if (!empty($adherence->pha_intensive_start))
+                                                {{ \Carbon\Carbon::parse($adherence->pha_intensive_start)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if (!empty($adherence->pha_intensive_end))
+                                                {{ \Carbon\Carbon::parse($adherence->pha_intensive_end)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if (!empty($adherence->pha_continuation_start))
+                                                {{ \Carbon\Carbon::parse($adherence->pha_continuation_start)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if (!empty($adherence->pha_continuation_end))
+                                                {{ \Carbon\Carbon::parse($adherence->pha_continuation_end)->format('F j, Y') }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
 
-                                        {{-- Table 3: Measurements --}}
-                                        @if ($patient->adherences->isNotEmpty())
-                                            <small class="fw-semibold mt-3">Measurements</small>
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Weight (kg)</th>
-                                                            <th>Height (cm) for Children</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{ $patient->adherences->first()->pha_weight ?? '—' }}</td>
-                                                            <td>{{ $patient->adherences->first()->pha_child_height ?? '—' }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @endif
+                {{-- Table 3: Measurements --}}
+                @if ($patient->adherences->isNotEmpty())
+                    <small class="fw-semibold mt-3">Measurements</small>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Weight (kg)</th>
+                                    <th>Height (cm) for Children</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->adherences as $adherence)
+                                    <tr>
+                                        <td>{{ $adherence->pha_weight ?? '—' }}</td>
+                                        <td>{{ $adherence->pha_child_height ?? '—' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
 
-                                        @if ($patient->txSupporters->isEmpty() && $patient->adherences->isEmpty())
-                                            <p class="text-muted fst-italic mt-2">
-                                                No administration of drugs recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
+                @if ($patient->txSupporters->isEmpty() && $patient->adherences->isEmpty())
+                    <p class="text-muted fst-italic mt-2">
+                        No administration of drugs recorded for this patient.
+                    </p>
+                @endif
+            </div>
 
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Treatment Outcome</h5>
-                                                <p class="text-muted small mb-0">List of all recorded treatment outcomes and reasons.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" onclick="editOutcome(
+
+            <!-- Prescribed Drugs - FIXED -->
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Prescribed Drugs</h5>
+                        <p class="text-muted small mb-0">Details of drugs prescribed during the intensive and continuation phases.</p>
+                    </div>
+                    <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editPrescribedDrugsModal">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button> -->
+                </div>
+
+                @if ($patient->prescribedDrugs->isNotEmpty())
+                    {{-- Table 1: Intensive Phase --}}
+                    <small class="fw-semibold mt-3">Intensive Phase</small>
+                    <div class="table-responsive mb-4">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date Start</th>
+                                    <th>Drug</th>
+                                    <th>No. of Tablets</th>
+                                    <th>Strength</th>
+                                    <th>Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->prescribedDrugs as $drug)
+                                    @if (!empty($drug->drug_start_date) || !empty($drug->drug_name))
+                                        <tr>
+                                            <td>
+                                                @if (!empty($drug->drug_start_date))
+                                                    {{ \Carbon\Carbon::parse($drug->drug_start_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $drug->drug_name ?? '—' }}</td>
+                                            <td>{{ $drug->drug_no_of_tablets ?? '—' }}</td>
+                                            <td>{{ $drug->drug_strength ?? '—' }}</td>
+                                            <td>{{ $drug->drug_unit ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {{-- Table 2: Continuation Phase --}}
+                    <small class="fw-semibold mt-3">Continuation Phase</small>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Drug</th>
+                                    <th>No. of Tablets</th>
+                                    <th>Strength</th>
+                                    <th>Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->prescribedDrugs as $drug)
+                                    @if (!empty($drug->drug_con_date) || !empty($drug->drug_con_name))
+                                        <tr>
+                                            <td>
+                                                @if (!empty($drug->drug_con_date))
+                                                    {{ \Carbon\Carbon::parse($drug->drug_con_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $drug->drug_con_name ?? '—' }}</td>
+                                            <td>{{ $drug->drug_con_no_of_tablets ?? '—' }}</td>
+                                            <td>{{ $drug->drug_con_strength ?? '—' }}</td>
+                                            <td>{{ $drug->drug_con_unit ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2 mb-0">
+                        No prescribed drugs recorded for this patient.
+                    </p>
+                @endif
+            </div>
+
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Treatment Outcome</h5>
+                        <p class="text-muted small mb-0">List of all recorded treatment outcomes and reasons.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" onclick="editOutcome(
                                                     {{ $patient->treatmentOutcomes->first()->id ?? 0 }}, 
                                                     '{{ addslashes($patient->treatmentOutcomes->first()->out_outcome ?? '') }}', 
                                                     '{{ $patient->treatmentOutcomes->first()->out_date ?? '' }}', 
                                                     '{{ addslashes($patient->treatmentOutcomes->first()->out_reason ?? '') }}'
                                                 )" data-bs-toggle="modal" data-bs-target="#editTreatmentOutcomeModal"
-                                                @if($patient->treatmentOutcomes->isEmpty()) disabled @endif>
-                                                <i class="fas fa-edit"></i> Edit Outcome
-                                            </button>
-                                        </div>
+                        @if($patient->treatmentOutcomes->isEmpty()) disabled @endif>
+                        <i class="fas fa-edit"></i> Edit Outcome
+                    </button>
+                </div>
 
-                                        @if ($patient->treatmentOutcomes->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Outcome</th>
-                                                            <th>Date of Outcome</th>
-                                                            <th>Reason</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->treatmentOutcomes as $outcome)
-                                                            @php
-                                                                $hasData = !empty($outcome->out_outcome)
-                                                                    || !empty($outcome->out_date)
-                                                                    || !empty($outcome->out_reason);
-                                                            @endphp
+                @if ($patient->treatmentOutcomes->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Outcome</th>
+                                    <th>Date of Outcome</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->treatmentOutcomes as $outcome)
+                                    @php
+                                        $hasData = !empty($outcome->out_outcome)
+                                            || !empty($outcome->out_date)
+                                            || !empty($outcome->out_reason);
+                                    @endphp
 
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>{{ $outcome->out_outcome ?? '—' }}</td>
-                                                                    <td>
-                                                                        @if (!empty($outcome->out_date))
-                                                                            {{ \Carbon\Carbon::parse($outcome->out_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $outcome->out_reason ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">
-                                                No treatment outcome recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>{{ $outcome->out_outcome ?? '—' }}</td>
+                                            <td>
+                                                @if (!empty($outcome->out_date))
+                                                    {{ \Carbon\Carbon::parse($outcome->out_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $outcome->out_reason ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">
+                        No treatment outcome recorded for this patient.
+                    </p>
+                @endif
+            </div>
 
-                                </div>
-
-
-                                <!-- Monitoring Tab -->
-                                <div id="lab-tab" class="tab-content" style="margin-top: 30px; display: none;">
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Serious Adverse Events</h5>
-                                                <p class="text-muted small mb-0">Recorded adverse events and AEs of special interest for
-                                                    this patient.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editAdverseEventModal">
-                                                <i class="fas fa-plus"></i> Add Event
-                                            </button>
-                                        </div>
-
-                                        @if ($patient->adverseEvents->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date of Adverse Event</th>
-                                                            <th>Specific Adverse Event</th>
-                                                            <th>Date Reported to FDA</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->adverseEvents as $adverse)
-                                                            @php
-                                                                $hasData = !empty($adverse->adv_ae_date)
-                                                                    || !empty($adverse->adv_specific_ae)
-                                                                    || !empty($adverse->adv_fda_reported_date);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>
-                                                                        @if(!empty($adverse->adv_ae_date))
-                                                                            {{ \Carbon\Carbon::parse($adverse->adv_ae_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $adverse->adv_specific_ae ?? '—' }}</td>
-                                                                    <td>
-                                                                        @if(!empty($adverse->adv_fda_reported_date))
-                                                                            {{ \Carbon\Carbon::parse($adverse->adv_fda_reported_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No adverse events have been recorded for this patient.</p>
-                                        @endif
-                                    </div>
+        </div>
+        <!-- End of Treatment Information Tab -->
 
 
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Patient Progress Report</h5>
-                                                <p class="text-muted small mb-0">Summary of the patient’s progress and treatment updates.
-                                                </p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editProgressModal">
-                                                <i class="fas fa-plus"></i> Add Report
-                                            </button>
-                                        </div>
+        <!-- Follow Ups Tab -->
+        <div id="lab-tab" class="tab-content" style="margin-top: 30px; display: none;">
 
-                                        @if ($patient->progress->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date</th>
-                                                            <th>Problem</th>
-                                                            <th>Action Taken</th>
-                                                            <th>Plan</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->progress as $prog)
-                                                            @php
-                                                                $hasData = !empty($prog->prog_date)
-                                                                    || !empty($prog->prog_problem)
-                                                                    || !empty($prog->prog_action_taken)
-                                                                    || !empty($prog->prog_plan);
-                                                            @endphp
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Serious Adverse Events</h5>
+                        <p class="text-muted small mb-0">Recorded adverse events and AEs of special interest for
+                            this patient.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editAdverseEventModal">
+                        <i class="fas fa-plus"></i> Add Event
+                    </button>
+                </div>
 
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>
-                                                                        @if(!empty($prog->prog_date))
-                                                                            {{ \Carbon\Carbon::parse($prog->prog_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $prog->prog_problem ?? '—' }}</td>
-                                                                    <td>{{ $prog->prog_action_taken ?? '—' }}</td>
-                                                                    <td>{{ $prog->prog_plan ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No progress reports have been recorded for this patient.</p>
-                                        @endif
-                                    </div>
+                @if ($patient->adverseEvents->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date of Adverse Event</th>
+                                    <th>Specific Adverse Event</th>
+                                    <th>Date Reported to FDA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->adverseEvents as $adverse)
+                                    @php
+                                        $hasData = !empty($adverse->adv_ae_date)
+                                            || !empty($adverse->adv_specific_ae)
+                                            || !empty($adverse->adv_fda_reported_date);
+                                    @endphp
 
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Close Contacts</h5>
-                                                <p class="text-muted small mb-0">List of patient’s identified close contacts and their
-                                                    screening details.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editCloseContactModal">
-                                                <i class="fas fa-plus"></i> Add Contact
-                                            </button>
-                                        </div>
-
-                                        @if ($patient->close_contacts->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Name</th>
-                                                            <th>Age</th>
-                                                            <th>Sex</th>
-                                                            <th>Relationship</th>
-                                                            <th>Initial Screening</th>
-                                                            <th>Follow-up</th>
-                                                            <th>Remarks</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->close_contacts as $contact)
-                                                            @php
-                                                                $hasData = !empty($contact->con_name)
-                                                                    || !empty($contact->con_age)
-                                                                    || !empty($contact->con_sex)
-                                                                    || !empty($contact->con_relationship)
-                                                                    || !empty($contact->con_initial_screening)
-                                                                    || !empty($contact->con_follow_up)
-                                                                    || !empty($contact->con_remarks);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>{{ $contact->con_name ?? '—' }}</td>
-                                                                    <td>{{ $contact->con_age ?? '—' }}</td>
-                                                                    <td>{{ $contact->con_sex ?? '—' }}</td>
-                                                                    <td>{{ $contact->con_relationship ?? '—' }}</td>
-                                                                    <td>
-                                                                        @if(!empty($contact->con_initial_screening))
-                                                                            {{ \Carbon\Carbon::parse($contact->con_initial_screening)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>
-                                                                        @if(!empty($contact->con_follow_up))
-                                                                            {{ \Carbon\Carbon::parse($contact->con_follow_up)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $contact->con_remarks ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No close contacts have been recorded for this patient.</p>
-                                        @endif
-                                    </div>
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>
+                                                @if(!empty($adverse->adv_ae_date))
+                                                    {{ \Carbon\Carbon::parse($adverse->adv_ae_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $adverse->adv_specific_ae ?? '—' }}</td>
+                                            <td>
+                                                @if(!empty($adverse->adv_fda_reported_date))
+                                                    {{ \Carbon\Carbon::parse($adverse->adv_fda_reported_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No adverse events have been recorded for this patient.</p>
+                @endif
+            </div>
 
 
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Sputum Monitoring</h5>
-                                                <p class="text-muted small mb-0">Laboratory monitoring results of sputum samples collected
-                                                    during treatment.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editSputumModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Patient Progress Report</h5>
+                        <p class="text-muted small mb-0">Summary of the patient’s progress and treatment updates.
+                        </p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editProgressModal">
+                        <i class="fas fa-plus"></i> Add Report
+                    </button>
+                </div>
 
-                                        @if ($patient->sputum_monitorings->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date Collected</th>
-                                                            <th>Smear Microscopy / TB LAMP Result</th>
-                                                            <th>Xpert MTB/RIF Result</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->sputum_monitorings as $sputum)
-                                                            @php
-                                                                $hasData = !empty($sputum->sput_date_collected)
-                                                                    || !empty($sputum->sput_smear_result)
-                                                                    || !empty($sputum->sput_xpert_result);
-                                                            @endphp
+                @if ($patient->progress->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Problem</th>
+                                    <th>Action Taken</th>
+                                    <th>Plan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->progress as $prog)
+                                    @php
+                                        $hasData = !empty($prog->prog_date)
+                                            || !empty($prog->prog_problem)
+                                            || !empty($prog->prog_action_taken)
+                                            || !empty($prog->prog_plan);
+                                    @endphp
 
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>
-                                                                        @if(!empty($sputum->sput_date_collected))
-                                                                            {{ \Carbon\Carbon::parse($sputum->sput_date_collected)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $sputum->sput_smear_result ?? '—' }}</td>
-                                                                    <td>{{ $sputum->sput_xpert_result ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No sputum monitoring records have been added for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Chest X-ray</h5>
-                                                <p class="text-muted small mb-0">Recorded chest X-ray examinations and findings during
-                                                    patient management.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editChestXrayModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
-
-                                        @if ($patient->chestXrays->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Date Examined</th>
-                                                            <th>Impression / Comparative Reading</th>
-                                                            <th>Descriptive Comments</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->chestXrays as $xray)
-                                                            @php
-                                                                $hasData = !empty($xray->xray_date_examined)
-                                                                    || !empty($xray->xray_impression)
-                                                                    || !empty($xray->xray_descriptive_comment);
-                                                            @endphp
-
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>
-                                                                        @if(!empty($xray->xray_date_examined))
-                                                                            {{ \Carbon\Carbon::parse($xray->xray_date_examined)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $xray->xray_impression ?? '—' }}</td>
-                                                                    <td>{{ $xray->xray_descriptive_comment ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No chest X-ray results have been recorded for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>
+                                                @if(!empty($prog->prog_date))
+                                                    {{ \Carbon\Carbon::parse($prog->prog_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $prog->prog_problem ?? '—' }}</td>
+                                            <td>{{ $prog->prog_action_taken ?? '—' }}</td>
+                                            <td>{{ $prog->prog_plan ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No progress reports have been recorded for this patient.</p>
+                @endif
+            </div>
 
 
-                                    <div class="info-section card p-3 shadow-sm border-0 rounded-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <div>
-                                                <h5 class="fw-bold mb-1">Post-Treatment Follow-up</h5>
-                                                <p class="text-muted small mb-0">Follow-up examinations and results after treatment
-                                                    completion.</p>
-                                            </div>
-                                            <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
-                                                data-bs-target="#editPostTreatmentModal">
-                                                <i class="fas fa-plus"></i> Add Record
-                                            </button>
-                                        </div>
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Close Contacts</h5>
+                        <p class="text-muted small mb-0">List of patient’s identified close contacts and their
+                            screening details.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editCloseContactModal">
+                        <i class="fas fa-plus"></i> Add Contact
+                    </button>
+                </div>
 
-                                        @if ($patient->postTreatment->isNotEmpty())
-                                            <div class="table-responsive">
-                                                <table class="table align-middle">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Months After Tx</th>
-                                                            <th>Date</th>
-                                                            <th>CXR Findings</th>
-                                                            <th>Smear / Xpert</th>
-                                                            <th>TBC & DST</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($patient->postTreatment as $followup)
-                                                            @php
-                                                                $hasData = !empty($followup->fol_months_after_tx)
-                                                                    || !empty($followup->fol_date)
-                                                                    || !empty($followup->fol_cxr_findings)
-                                                                    || !empty($followup->fol_smear_xpert)
-                                                                    || !empty($followup->fol_tbc_dst);
-                                                            @endphp
+                @if ($patient->close_contacts->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Sex</th>
+                                    <th>Relationship</th>
+                                    <th>Initial Screening</th>
+                                    <th>Follow-up</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->close_contacts as $contact)
+                                    @php
+                                        $hasData = !empty($contact->con_name)
+                                            || !empty($contact->con_age)
+                                            || !empty($contact->con_sex)
+                                            || !empty($contact->con_relationship)
+                                            || !empty($contact->con_initial_screening)
+                                            || !empty($contact->con_follow_up)
+                                            || !empty($contact->con_remarks);
+                                    @endphp
 
-                                                            @if ($hasData)
-                                                                <tr>
-                                                                    <td>{{ $followup->fol_months_after_tx ?? '—' }}</td>
-                                                                    <td>
-                                                                        @if(!empty($followup->fol_date))
-                                                                            {{ \Carbon\Carbon::parse($followup->fol_date)->format('F j, Y') }}
-                                                                        @else
-                                                                            —
-                                                                        @endif
-                                                                    </td>
-                                                                    <td>{{ $followup->fol_cxr_findings ?? '—' }}</td>
-                                                                    <td>{{ $followup->fol_smear_xpert ?? '—' }}</td>
-                                                                    <td>{{ $followup->fol_tbc_dst ?? '—' }}</td>
-                                                                </tr>
-                                                            @endif
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        @else
-                                            <p class="text-muted fst-italic mt-2">No post-treatment follow-up records found for this patient.
-                                            </p>
-                                        @endif
-                                    </div>
-
-
-                                </div>
-
-                                <!-- Medication Adherence Tab -->
-                                <div id="adherence-tab" class="tab-content" style="margin-top: 30px; display: none;">
-                                    <div class="info-section">
-                                        <h5 class="fw-bold mb-3">Medication Adherence</h5>
-
-                                        <div class="adherence-calendar-card">
-                                            <div class="adherence-calendar-header">
-                                                <div class="d-flex align-items-center gap-3">
-                                                    <h3 class="adherence-calendar-title mb-0" id="monthYear"></h3>
-                                                </div>
-                                                <div class="adherence-calendar-nav">
-                                                    <button class="adherence-nav-btn" id="prevMonth">
-                                                        <i class="fa fa-chevron-left"></i>
-                                                    </button>
-                                                    <button class="adherence-nav-btn" id="nextMonth">
-                                                        <i class="fa fa-chevron-right"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            <div class="adherence-calendar-grid" id="calendar"></div>
-
-                                            <div class="adherence-stats-container mt-4">
-                                                <div class="adherence-stat-card adherence-stat-success">
-                                                    <div class="adherence-stat-label">Adherence Rate</div>
-                                                    <div class="adherence-stat-value" id="adherenceRate">0%</div>
-                                                </div>
-                                                <div class="adherence-stat-card adherence-stat-success">
-                                                    <div class="adherence-stat-label">Days Taken</div>
-                                                    <div class="adherence-stat-value" id="daysTaken">0</div>
-                                                </div>
-                                                <div class="adherence-stat-card adherence-stat-danger">
-                                                    <div class="adherence-stat-label">Days Missed</div>
-                                                    <div class="adherence-stat-value" id="daysMissed">0</div>
-                                                </div>
-                                            </div>
-
-                                            <div class="adherence-legend-container">
-                                                <div class="adherence-legend">
-                                                    <div class="adherence-legend-item">
-                                                        <div class="adherence-legend-indicator adherence-taken">
-                                                            <i class="fa fa-check"></i>
-                                                        </div>
-                                                        <span>Medication Taken</span>
-                                                    </div>
-                                                    <div class="adherence-legend-item">
-                                                        <div class="adherence-legend-indicator adherence-missed">
-                                                            <i class="fa fa-times"></i>
-                                                        </div>
-                                                        <span>Medication Missed</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <!-- Edit Laboratory Tests Modal -->
-                            <div class="modal fade" id="editLabTestsModal{{ $labTest->id }}" tabindex="-1"
-                                aria-labelledby="editLabTestsModalLabel{{ $labTest->id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-success text-white">
-                                            <h5 class="modal-title" id="editLabTestsModalLabel{{ $labTest->id }}">Edit Laboratory Tests</h5>
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-
-                                        <!-- ✅ Connect to update route -->
-                                        <form method="POST" action="{{ route('laboratory-tests.update', $labTest->id) }}">
-                                            @csrf
-                                            @method('PUT')
-
-                                            <div class="modal-body">
-                                                <!-- Smear Microscopy -->
-                                                <div class="row">
-
-                                                <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Xpert MTB/RIF Result</label>
-                                                        <!-- <input type="text" class="form-control" name="lab_xpert_result"
-                                                            value="{{ $labTest->lab_xpert_result }}"> -->
-                                                            <select name="lab_xpert_result" id="lab_xpert_result" class="form-control form-select"
-                                                            value="{{ $labTest->lab_xpert_result }}">
-                                                                <option value="MTB HIGH">MTB HIGH</option>
-                                                                <option value="MTB MEDIUM">MTB MEDIUM</option>
-                                                                <option value="MTB LOW">MTB LOW</option>
-                                                                <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                                                            </select>
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label for="lab_xpert_test_date" class="form-label">Xpert MTB/RIF Date</label>
-                                                        <input type="date" class="form-control" name="lab_xpert_test_date"
-                                                            value="{{ $labTest->lab_xpert_test_date ? \Carbon\Carbon::parse($labTest->lab_xpert_test_date)->format('Y-m-d') : '' }}"
-                                                            max="<?php    echo date('Y-m-d'); ?>">
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Smear Microscopy Result</label>
-                                                        <!-- <input type="text" class="form-control" name="lab_smear_result"
-                                                            value="{{ $labTest->lab_smear_result }}"> -->
-                                                            <select name="lab_smear_result" id="lab_smear_result" class="form-control form-select"
-                                                            value="{{ $labTest->lab_smear_result }}">
-                                                                <option value="" disabled selected>Select</option>
-                                                                <option value="MTB HIGH">MTB HIGH</option>
-                                                                <option value="MTB MEDIUM">MTB MEDIUM</option>
-                                                                <option value="MTB LOW">MTB LOW</option>
-                                                                <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                                                            </select>
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Smear Microscopy Date</label>
-                                                        <input type="date" class="form-control" name="lab_smear_test_date"
-                                                            value="{{ $labTest->lab_smear_test_date ? \Carbon\Carbon::parse($labTest->lab_smear_test_date)->format('Y-m-d') : '' }}"
-                                                            max="<?php    echo date('Y-m-d'); ?>">
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Chest X-ray Result</label>
-                                                        <!-- <input type="text" class="form-control" name="lab_cxray_result"
-                                                            value="{{ $labTest->lab_cxray_result }}"> -->
-                                                            <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select"
-                                                            value="{{ $labTest->lab_cxray_result }}">
-                                                                <option value="PTB BOTH RIGHT UPPER LOBE">PTB BOTH RIGHT UPPER LOBE</option>
-                                                                <option value="PTB BOTH LOWER LOBE">PTB BOTH LOWER LOBE</option>
-                                                                <option value="PTB SUGGESTIVE POSTIVE TUBERCULOSIS">PTB SUGGESTIVE POSTIVE TUBERCULOSIS</option>
-                                                            </select>
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Chest X-ray Date</label>
-                                                        <input type="date" class="form-control" name="lab_cxray_test_date"
-                                                            value="{{ $labTest->lab_cxray_test_date ? \Carbon\Carbon::parse($labTest->lab_cxray_test_date)->format('Y-m-d') : '' }}"
-                                                            max="<?php    echo date('Y-m-d'); ?>">
-                                                    </div>
-
-                                                </div>
-
-                                                <!-- Tuberculin Skin Test -->
-                                                <div class="row">
-
-                                                <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Tuberculin Skin Test Result</label>
-                                                        <!-- <input type="text" class="form-control" name="lab_tst_result"
-                                                            value="{{ $labTest->lab_tst_result }}"> -->
-                                                            <select name="lab_tst_result" id="lab_tst_result" class="form-control form-select"
-                                                            value="{{ $labTest->lab_tst_result }}">
-                                                                <option value="" disabled selected>Select</option>
-                                                                <option value="POSITIVE">POSITIVE</option>
-                                                                <option value="NEGATIVE">NEGATIVE</option>
-                                                            </select>
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Tuberculin Skin Test Date</label>
-                                                        <input type="date" class="form-control" name="lab_tst_test_date"
-                                                            value="{{ $labTest->lab_tst_test_date ? \Carbon\Carbon::parse($labTest->lab_tst_test_date)->format('Y-m-d') : '' }}"
-                                                            max="<?php    echo date('Y-m-d'); ?>">
-                                                    </div>
-
-                                                </div>
-
-                                                <!-- Other Tests -->
-                                                <div class="row">
-
-                                                <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Other Test Result (Specify)</label>
-                                                        <!-- <input type="text" class="form-control" name="lab_other_result"
-                                                            value="{{ $labTest->lab_other_result }}"> -->
-                                                            <select name="lab_other_result" id="lab_other_result" class="form-control form-select">
-                                                                <option value=""disabled selected>Select</option>
-                                                                <option value="POSITIVE">POSITIVE</option>
-                                                                <option value="NEGATIVE">NEGATIVE</option>
-                                                            </select>
-                                                    </div>
-
-                                                    <div class="col-md-6 mb-3">
-                                                        <label class="form-label">Other Test Date</label>
-                                                        <input type="date" class="form-control" name="lab_other_test_date"
-                                                            value="{{ $labTest->lab_other_test_date ? \Carbon\Carbon::parse($labTest->lab_other_test_date)->format('Y-m-d') : '' }}"
-                                                            max="<?php    echo date('Y-m-d'); ?>">
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-success">Submit</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>{{ $contact->con_name ?? '—' }}</td>
+                                            <td>{{ $contact->con_age ?? '—' }}</td>
+                                            <td>{{ $contact->con_sex ?? '—' }}</td>
+                                            <td>{{ $contact->con_relationship ?? '—' }}</td>
+                                            <td>
+                                                @if(!empty($contact->con_initial_screening))
+                                                    {{ \Carbon\Carbon::parse($contact->con_initial_screening)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(!empty($contact->con_follow_up))
+                                                    {{ \Carbon\Carbon::parse($contact->con_follow_up)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $contact->con_remarks ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No close contacts have been recorded for this patient.</p>
+                @endif
+            </div>
 
 
-        <!-- Referral Modal -->
-        <div class="modal fade" id="editDiagnosisModal" tabindex="-1" aria-labelledby="editDiagnosisModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editDiagnosisModalLabel">Referral Information</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Sputum Monitoring</h5>
+                        <p class="text-muted small mb-0">Laboratory monitoring results of sputum samples collected
+                            during treatment.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editSputumModal">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button>
+                </div>
+
+                @if ($patient->sputum_monitorings->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date Collected</th>
+                                    <th>Smear Microscopy / TB LAMP Result</th>
+                                    <th>Xpert MTB/RIF Result</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->sputum_monitorings as $sputum)
+                                    @php
+                                        $hasData = !empty($sputum->sput_date_collected)
+                                            || !empty($sputum->sput_smear_result)
+                                            || !empty($sputum->sput_xpert_result);
+                                    @endphp
+
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>
+                                                @if(!empty($sputum->sput_date_collected))
+                                                    {{ \Carbon\Carbon::parse($sputum->sput_date_collected)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $sputum->sput_smear_result ?? '—' }}</td>
+                                            <td>{{ $sputum->sput_xpert_result ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No sputum monitoring records have been added for this patient.
+                    </p>
+                @endif
+            </div>
+
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Chest X-ray</h5>
+                        <p class="text-muted small mb-0">Recorded chest X-ray examinations and findings during
+                            patient management.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editChestXrayModal">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button>
+                </div>
+
+                @if ($patient->chestXrays->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date Examined</th>
+                                    <th>Impression / Comparative Reading</th>
+                                    <th>Descriptive Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->chestXrays as $xray)
+                                    @php
+                                        $hasData = !empty($xray->xray_date_examined)
+                                            || !empty($xray->xray_impression)
+                                            || !empty($xray->xray_descriptive_comment);
+                                    @endphp
+
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>
+                                                @if(!empty($xray->xray_date_examined))
+                                                    {{ \Carbon\Carbon::parse($xray->xray_date_examined)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $xray->xray_impression ?? '—' }}</td>
+                                            <td>{{ $xray->xray_descriptive_comment ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No chest X-ray results have been recorded for this patient.
+                    </p>
+                @endif
+            </div>
+
+
+            <div class="info-section card p-3 shadow-sm border-0 rounded-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">Post-Treatment Follow-up</h5>
+                        <p class="text-muted small mb-0">Follow-up examinations and results after treatment
+                            completion.</p>
+                    </div>
+                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                        data-bs-target="#editPostTreatmentModal">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button>
+                </div>
+
+                @if ($patient->postTreatment->isNotEmpty())
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Months After Tx</th>
+                                    <th>Date</th>
+                                    <th>CXR Findings</th>
+                                    <th>Smear / Xpert</th>
+                                    <th>TBC & DST</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($patient->postTreatment as $followup)
+                                    @php
+                                        $hasData = !empty($followup->fol_months_after_tx)
+                                            || !empty($followup->fol_date)
+                                            || !empty($followup->fol_cxr_findings)
+                                            || !empty($followup->fol_smear_xpert)
+                                            || !empty($followup->fol_tbc_dst);
+                                    @endphp
+
+                                    @if ($hasData)
+                                        <tr>
+                                            <td>{{ $followup->fol_months_after_tx ?? '—' }}</td>
+                                            <td>
+                                                @if(!empty($followup->fol_date))
+                                                    {{ \Carbon\Carbon::parse($followup->fol_date)->format('F j, Y') }}
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $followup->fol_cxr_findings ?? '—' }}</td>
+                                            <td>{{ $followup->fol_smear_xpert ?? '—' }}</td>
+                                            <td>{{ $followup->fol_tbc_dst ?? '—' }}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted fst-italic mt-2">No post-treatment follow-up records found for this patient.
+                    </p>
+                @endif
+            </div>
+
+        </div>
+        <!-- End of Follow Ups Tab -->
+
+        <!-- Medication Adherence Tab -->
+        <div id="adherence-tab" class="tab-content" style="margin-top: 30px; display: none;">
+            <div class="info-section">
+                <h5 class="fw-bold mb-3">Medication Adherence</h5>
+
+                <div class="adherence-calendar-card">
+                    <div class="adherence-calendar-header">
+                        <div class="d-flex align-items-center gap-3">
+                            <h3 class="adherence-calendar-title mb-0" id="monthYear"></h3>
+                        </div>
+                        <div class="adherence-calendar-nav">
+                            <button class="adherence-nav-btn" id="prevMonth">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button class="adherence-nav-btn" id="nextMonth">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- ✅ Add action route -->
-                    <form method="POST" action="{{ route('referrals.update', $patient->diagnosis->id ?? 0) }}">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-body">
-                            <!-- <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_diagnosis_date" class="form-label">Diagnosis Date</label>
-                                    <input type="text" class="form-control" id="diag_diagnosis_date"
-                                        name="diag_diagnosis_date"
-                                        value="{{ old('diag_diagnosis_date', $patient->diagnosis->diag_diagnosis_date ?? '') }}" readonly>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_notification_date" class="form-label">Notification Date</label>
-                                    <input type="text" class="form-control" id="diag_notification_date"
-                                        name="diag_notification_date"
-                                        value="{{ old('diag_notification_date', $patient->diagnosis->diag_notification_date ?? '') }}" readonly>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_tb_case_no" class="form-label">TB Case No.</label>
-                                    <input type="text" class="form-control" id="diag_tb_case_no" name="diag_tb_case_no"
-                                        value="{{ old('diag_tb_case_no', $patient->diagnosis->diag_tb_case_no ?? '') }}"
-                                        readonly>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_attending_physician" class="form-label">Attending Physician</label>
-                                    <input type="text" class="form-control" id="diag_attending_physician"
-                                        name="diag_attending_physician"
-                                        value="{{ old('diag_attending_physician', $patient->diagnosis->diag_attending_physician ?? '') }}"
-                                        readonly>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_referred_to" class="form-label">Referred to</label>
-                                    <input type="text" class="form-control" id="diag_referred_to"
-                                        name="diag_referred_to" placeholder="Hospital / Barangay Name"
-                                        value="{{ old('diag_referred_to', $patient->diagnosis->diag_referred_to ?? '') }}">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_address" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="diag_address" name="diag_address"
-                                        placeholder="Address"
-                                        value="{{ old('diag_address', $patient->diagnosis->diag_address ?? '') }}">
-                                </div>
-                            </div> -->
-                                        <input type="hidden" class="form-control" id="diag_diagnosis_date"
-                                        name="diag_diagnosis_date"
-                                        value="{{ old('diag_diagnosis_date', $patient->diagnosis->diag_diagnosis_date ?? '') }}" readonly>
-                                        <input type="hidden" class="form-control" id="diag_notification_date"
-                                        name="diag_notification_date"
-                                        value="{{ old('diag_notification_date', $patient->diagnosis->diag_notification_date ?? '') }}" readonly>
-                                        <input type="hidden" class="form-control" id="diag_tb_case_no" name="diag_tb_case_no"
-                                        value="{{ old('diag_tb_case_no', $patient->diagnosis->diag_tb_case_no ?? '') }}" readonly>
-                                        <input type="hidden" class="form-control" id="diag_attending_physician"
-                                        name="diag_attending_physician"
-                                        value="{{ old('diag_attending_physician', $patient->diagnosis->diag_attending_physician ?? '') }}" readonly>
+                    <div class="adherence-calendar-grid" id="calendar"></div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_referred_to" class="form-label">Referred to</label>
-                                    <input type="text" class="form-control" id="diag_referred_to"
-                                        name="diag_referred_to" placeholder="Hospital / Barangay Name"
-                                        value="{{ old('diag_referred_to', $patient->diagnosis->diag_referred_to ?? '') }}">
+                    <div class="adherence-stats-container mt-4">
+                        <div class="adherence-stat-card adherence-stat-success">
+                            <div class="adherence-stat-label">Days Taken</div>
+                            <div class="adherence-stat-value" id="daysTaken">0</div>
+                        </div>
+                        <div class="adherence-stat-card adherence-stat-danger">
+                            <div class="adherence-stat-label">Days Missed</div>
+                            <div class="adherence-stat-value" id="daysMissed">0</div>
+                        </div>
+                        <div class="adherence-stat-card adherence-stat-success">
+                            <div class="adherence-stat-label">Adherence Rate</div>
+                            <div class="adherence-stat-value" id="adherenceRate">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="adherence-stats-container mt-4">
+                        <div class="adherence-stat-card adherence-stat-info">
+                            <div class="adherence-stat-label">Total Days Taken</div>
+                            <div class="adherence-stat-value" id="totalDaysTaken">0</div>
+                        </div>
+                        <div class="adherence-stat-card adherence-stat-info">
+                            <div class="adherence-stat-label">Total Days Missed</div>
+                            <div class="adherence-stat-value" id="totalDaysMissed">0</div>
+                        </div>
+                        <div class="adherence-stat-card adherence-stat-primary">
+                            <div class="adherence-stat-label">Overall Adherence Rate</div>
+                            <div class="adherence-stat-value" id="totalAdherenceRate">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="adherence-legend-container">
+                        <div class="adherence-legend">
+                            <div class="adherence-legend-item">
+                                <div class="adherence-legend-indicator adherence-taken">
+                                    <i class="fa fa-check"></i>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_address" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="diag_address" name="diag_address"
-                                        placeholder="Address"
-                                        value="{{ old('diag_address', $patient->diagnosis->diag_address ?? '') }}">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_facility_code" class="form-label">Facility Code</label>
-                                    <input type="text" class="form-control" id="diag_facility_code"
-                                        name="diag_facility_code" placeholder="Facility code"
-                                        value="{{ old('diag_facility_code', $patient->diagnosis->diag_facility_code ?? '') }}">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_province" class="form-label">Province</label>
-                                    <input type="text" class="form-control" id="diag_province" name="diag_province"
-                                        placeholder="Province"
-                                        value="{{ old('diag_province', $patient->diagnosis->diag_province ?? '') }}">
-                                </div>
+                                <span>Medication Taken</span>
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="diag_region" class="form-label">Region</label>
-                                    <input type="text" class="form-control" id="diag_region" name="diag_region"
-                                        placeholder="Region"
-                                        value="{{ old('diag_region', $patient->diagnosis->diag_region ?? '') }}">
+                            <div class="adherence-legend-item">
+                                <div class="adherence-legend-indicator adherence-missed">
+                                    <i class="fa fa-times"></i>
                                 </div>
+                                <span>Medication Missed</span>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
+        <!-- End of Monitoring Tab -->
+
+        </div>
+
+
+
+
+        <!-- Referral Modal -->
+<div class="modal fade" id="editDiagnosisModal" tabindex="-1" aria-labelledby="editDiagnosisModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="editDiagnosisModalLabel">Referral Information</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- ✅ Always point to latest diagnosis record -->
+            @php
+                $latestDiagnosis = $patient->diagnoses->sortByDesc('created_at')->first();
+            @endphp
+
+            @if ($latestDiagnosis)
+            <form method="POST" action="{{ route('referrals.update', $latestDiagnosis->id) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-body">
+                    <!-- Hidden core fields -->
+                    <input type="hidden" name="diag_diagnosis_date" value="{{ old('diag_diagnosis_date', $latestDiagnosis->diag_diagnosis_date) }}">
+                    <input type="hidden" name="diag_notification_date" value="{{ old('diag_notification_date', $latestDiagnosis->diag_notification_date) }}">
+                    <input type="hidden" name="diag_tb_case_no" value="{{ old('diag_tb_case_no', $latestDiagnosis->diag_tb_case_no) }}">
+                    <input type="hidden" name="diag_attending_physician" value="{{ old('diag_attending_physician', $latestDiagnosis->diag_attending_physician) }}">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="diag_referred_to" class="form-label">Referred to</label>
+                            <input type="text" class="form-control" id="diag_referred_to" name="diag_referred_to"
+                                placeholder="Treatment Facility Name"
+                                value="{{ old('diag_referred_to', $latestDiagnosis->diag_referred_to) }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="diag_address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="diag_address" name="diag_address"
+                                placeholder="Address"
+                                value="{{ old('diag_address', $latestDiagnosis->diag_address) }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="diag_facility_code" class="form-label">Facility Code</label>
+                            <input type="text" class="form-control" id="diag_facility_code" name="diag_facility_code"
+                                placeholder="Facility code"
+                                value="{{ old('diag_facility_code', $latestDiagnosis->diag_facility_code) }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="diag_region" class="form-label">Region</label>
+                            <select id="diag_region" class="form-control form-select" required>
+                                <option value="" disabled>Select</option>
+                            </select>
+                            <input type="hidden" name="diag_region" id="diag_region_text"
+                                value="{{ old('diag_region', $latestDiagnosis->diag_region) }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="diag_province" class="form-label">Province</label>
+                            <select id="diag_province" class="form-control form-select" required>
+                                <option value="" disabled>Select</option>
+                            </select>
+                            <input type="hidden" name="diag_province" id="diag_province_text"
+                                value="{{ old('diag_province', $latestDiagnosis->diag_province) }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+            @else
+                <div class="modal-body text-center text-muted">
+                    <p>No diagnosis record found for this patient.</p>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
 
 
         <!-- History of TB Treatment Modal -->
@@ -2363,7 +2206,7 @@
                             <div class="mb-3">
                                 <label for="hist_outcome" class="form-label">Outcome</label>
                                 <select class="form-control form-select" id="hist_outcome" name="hist_outcome" required>
-                                    <option value="" disabled selected>Please Select</option>
+                                    <option value="" disabled selected>Select</option>
                                     <option value="Cured">Cured</option>
                                     <option value="Treatment Completed">Treatment Completed</option>
                                     <option value="Lost to Follow-up">Lost to Follow-up</option>
@@ -2389,7 +2232,8 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editComorbiditiesModalLabel">Co-morbidities</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Add form action for saving co-morbidity -->
@@ -2399,35 +2243,35 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                <label for="com_date_diagnosed" class="form-label">Date Diagnosed</label>
-                                <input type="date" class="form-control" id="com_date_diagnosed"
-                                    name="com_date_diagnosed" max="<?php echo date('Y-m-d'); ?>" required>
-                            </div>
+                                    <label for="com_date_diagnosed" class="form-label">Date Diagnosed</label>
+                                    <input type="date" class="form-control" id="com_date_diagnosed"
+                                        name="com_date_diagnosed" max="<?php echo date('Y-m-d'); ?>" required>
+                                </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="com_type" class="form-label">Type</label>
-                                <select class="form-control form-select" id="com_type" name="com_type" required>
-                                    <option value="">Please Select</option>
-                                    <option value="Diabetes Mellitus">Diabetes Mellitus</option>
-                                    <option value="Mental Illness">Mental Illness</option>
-                                    <option value="Substance Abuse">Substance Abuse</option>
-                                    <option value="Liver Disease">Liver Disease</option>
-                                    <option value="Renal Disease">Renal Disease</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="com_type" class="form-label">Type</label>
+                                    <select class="form-control form-select" id="com_type" name="com_type" required>
+                                        <option value="">Select</option>
+                                        <option value="Diabetes Mellitus">Diabetes Mellitus</option>
+                                        <option value="Mental Illness">Mental Illness</option>
+                                        <option value="Substance Abuse">Substance Abuse</option>
+                                        <option value="Liver Disease">Liver Disease</option>
+                                        <option value="Renal Disease">Renal Disease</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="com_other" class="form-label">Other (Optional)</label>
-                                <input type="text" class="form-control" id="com_other" name="com_other"
-                                    placeholder="Specify">
-                            </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="com_other" class="form-label">Other (Optional)</label>
+                                    <input type="text" class="form-control" id="com_other" name="com_other"
+                                        placeholder="Specify">
+                                </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="com_treatment" class="form-label">Treatment</label>
-                                <input type="text" class="form-control" id="com_treatment" name="com_treatment"
-                                    placeholder="Treatment">
-                            </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="com_treatment" class="form-label">Treatment</label>
+                                    <input type="text" class="form-control" id="com_treatment" name="com_treatment"
+                                        placeholder="Treatment">
+                                </div>
                             </div>
                         </div>
 
@@ -2448,7 +2292,8 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editBaselineModalLabel">HIV Information</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Form with action route -->
@@ -2487,7 +2332,7 @@
                                     <label for="hiv_art_started" class="form-label">Started on ART?</label>
                                     <select class="form-control form-select" id="hiv_art_started"
                                         name="hiv_art_started">
-                                        <option value="">Please Select</option>
+                                        <option value="">Select</option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
                                     </select>
@@ -2496,7 +2341,7 @@
                                     <label for="hiv_cpt_started" class="form-label">Started on CPT?</label>
                                     <select class="form-control form-select" id="hiv_cpt_started"
                                         name="hiv_cpt_started">
-                                        <option value="">Please Select</option>
+                                        <option value="">Select</option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
                                     </select>
@@ -2521,37 +2366,46 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editTreatmentOutcomeModalLabel">Edit Treatment Outcome</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <form method="POST" id="editOutcomeForm">
                         @csrf
                         @method('PUT')
                         <div class="modal-body">
+                            @php
+                                $treatment = $patient->treatmentOutcomes->first();
+                                $selectedOutcome = old('out_outcome', optional($treatment)->out_outcome);
+                                $outDate = old('out_date', optional($treatment)->out_date);
+                                $outReason = old('out_reason', optional($treatment)->out_reason);
+                            @endphp
+
+                            <!-- Outcome -->
                             <div class="mb-3">
                                 <label for="edit_out_outcome" class="form-label">Outcome</label>
                                 <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
-                                    value="{{ old('out_outcome', $patient->treatmentOutcomes->first()->out_outcome ?? '') }}"
                                     required>
-                                    <option value="Cured">Cured</option>
-                                    <option value="Treatment Completed">Treatment Completed</option>
-                                    <option value="Lost to Follow-up">Lost to Follow-up</option>
-                                    <option value="Died">Died</option>
+                                    @foreach (['Cured', 'Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
+                                        <option value="{{ $option }}" {{ $selectedOutcome === $option ? 'selected' : '' }}>
+                                            {{ $option }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
+                            <!-- Date -->
                             <div class="mb-3">
                                 <label for="edit_out_date" class="form-label">Date of Outcome</label>
                                 <input type="date" class="form-control" id="edit_out_date" name="out_date"
-                                    max="<?php echo date('Y-m-d'); ?>"
-                                    value="{{ old('out_outcome', $patient->treatmentOutcomes->first()->out_outcome ?? '') }}">
+                                    max="{{ date('Y-m-d') }}" value="{{ $outDate }}">
                             </div>
 
+                            <!-- Reason -->
                             <div class="mb-3">
                                 <label for="edit_out_reason" class="form-label">Reason</label>
                                 <input type="text" class="form-control" id="edit_out_reason" name="out_reason"
-                                    placeholder="Enter reason"
-                                    value="{{ old('out_outcome', $patient->treatmentOutcomes->first()->out_outcome ?? '') }}">
+                                    placeholder="Enter reason" value="{{ $outReason }}">
                             </div>
                         </div>
 
@@ -2568,255 +2422,121 @@
             </div>
         </div>
 
-
-        <!-- ✅ Prescribed Drugs Modal -->
-        <div class="modal fade" id="editPrescribedDrugsModal" tabindex="-1"
-            aria-labelledby="editPrescribedDrugsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editPrescribedDrugsModalLabel">Prescribed Drugs</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <!-- ✅ Use patient ID in route -->
-                    <form method="POST" action="{{ route('prescribed-drugs.update', $patient->id) }}">
-                        @csrf
-                        <div class="modal-body">
-                            <!-- <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_start_date" class="form-label">Intensive Date</label>
-                                    <input type="date" class="form-control" id="drug_start_date" name="drug_start_date"
-                                        max="{{ date('Y-m-d') }}"
-                                        value="{{ old('drug_start_date', $firstDrug->drug_start_date ?? '') }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_name" class="form-label">Drug</label>
-                                    <input type="text" class="form-control" id="drug_name" name="drug_name"
-                                        value="{{ old('drug_name', $firstDrug->drug_name ?? '') }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_no_of_tablets" class="form-label">No. of Tablets</label>
-                                    <input type="text" class="form-control" id="drug_no_of_tablets" name="drug_no_of_tablets"
-                                        value="{{ old('drug_no_of_tablets', $firstDrug->drug_no_of_tablets ?? '') }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_strength" class="form-label">Strength</label>
-                                    <input type="text" class="form-control" id="drug_strength" name="drug_strength"
-                                        value="{{ old('drug_strength', $firstDrug->drug_strength ?? '') }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_unit" class="form-label">Unit</label>
-                                    <input type="text" class="form-control" id="drug_unit" name="drug_unit"
-                                        value="{{ old('drug_unit', $firstDrug->drug_unit ?? '') }}" readonly>
-                                </div>
-                            </div> -->
-                            
-                                        <input type="hidden" class="form-control" id="drug_start_date" name="drug_start_date"
-                                        max="{{ date('Y-m-d') }}"
-                                        value="{{ old('drug_start_date', $firstDrug->drug_start_date ?? '') }}" readonly>
-                                        <input type="hidden" class="form-control" id="drug_name" name="drug_name"
-                                        value="{{ old('drug_name', $firstDrug->drug_name ?? '') }}" readonly>
-                                        <input type="hidden" class="form-control" id="drug_no_of_tablets" name="drug_no_of_tablets"
-                                        value="{{ old('drug_no_of_tablets', $firstDrug->drug_no_of_tablets ?? '') }}" readonly>
-                                        <input type="hidden" class="form-control" id="drug_strength" name="drug_strength"
-                                        value="{{ old('drug_strength', $firstDrug->drug_strength ?? '') }}" readonly>
-                                        <input type="hidden" class="form-control" id="drug_unit" name="drug_unit"
-                                        value="{{ old('drug_unit', $firstDrug->drug_unit ?? '') }}" readonly>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_date" class="form-label">Continuation Date</label>
-                                    <input type="date" class="form-control" id="drug_con_date" name="drug_con_date"
-                                        max="{{ date('Y-m-d') }}" 
-                                        value="{{ old('drug_con_date', $firstDrug->drug_con_date ?? '') }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_name" class="form-label">Drug</label>
-                                    <select name="drug_con_name" id="drug_con_name" class="form-control form-select"
-                                    value="{{ old('drug_con_name', $firstDrug->drug_con_name ?? '') }}">
-                                        <option value="2FDC">2FDC</option>
-                                        <option value="H">H</option>
-                                        <option value="R">R</option>
-                                        <option value="Z">Z</option>
-                                        <option value="E">E</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_no_of_tablets" class="form-label">No. of Tablets</label>
-                                    <input type="number" class="form-control" id="drug_con_no_of_tablets" name="drug_con_no_of_tablets" 
-                                    value="{{ old('drug_con_no_of_tablets', $firstDrug->drug_con_no_of_tablets ?? '') }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_strength" class="form-label">Strength</label>
-                                    <select name="drug_con_strength" id="drug_con_strength" class="form-control form-select"
-                                    value="{{ old('drug_con_strength', $firstDrug->drug_con_strength ?? '') }}">
-                                        <option value="150mg">150mg</option>
-                                        <option value="75mg">75mg</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="drug_con_unit" class="form-label">Unit</label>
-                                    <select name="drug_con_unit" id="drug_con_unit" class="form-control form-select"
-                                    value="{{ old('drug_con_unit', $firstDrug->drug_con_unit ?? '') }}">
-                                        <option value="Tablet">Tablet</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-
         <!-- Administration of Drugs Modal -->
-        <div class="modal fade" id="editAdministrationModal" tabindex="-1"
-            aria-labelledby="editAdministrationModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editAdministrationModalLabel">Administration of Drugs</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-
-                    <!-- ✅ Form with update route -->
-                    <form method="POST" action="{{ route('adherence.update', $patient->id) }}">
-                        @csrf
-                        @method('PUT')
-
-                        <div class="modal-body">
-                            {{-- ========================= --}}
-                            {{-- 🟩 TREATMENT SUPPORTER INFO --}}
-                            {{-- ========================= --}}
-                            <!-- <h5 class="fw-semibold">Treatment Supporter Information</h5>
-                            <div class="row mt-4">
-                                <div class="col-md-6 mb-3">
-                                    <label for="sup_location" class="form-label">Location of Treatment</label>
-                                    <input type="text" class="form-control" id="sup_location" name="sup_location"
-                                        value="{{ $patient->txSupporters->first()->sup_location ?? '' }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="sup_name" class="form-label">Supporter Name</label>
-                                    <input type="text" class="form-control" id="sup_name" name="sup_name"
-                                        value="{{ $patient->txSupporters->first()->sup_name ?? '' }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="sup_designation" class="form-label">Designation</label>
-                                    <input type="text" class="form-control" id="sup_designation" name="sup_designation"
-                                        value="{{ $patient->txSupporters->first()->sup_designation ?? '' }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="sup_type" class="form-label">Supporter Type</label>
-                                    <input type="text" class="form-control" id="sup_type" name="sup_type"
-                                        value="{{ $patient->txSupporters->first()->sup_type ?? '' }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="sup_contact_info" class="form-label">Contact Information</label>
-                                    <input type="text" class="form-control" id="sup_contact_info" name="sup_contact_info"
-                                        value="{{ $patient->txSupporters->first()->sup_contact_info ?? '' }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="sup_dat_used" class="form-label">Name of DAT/s Used</label>
-                                    <input type="text" class="form-control" id="sup_dat_used" name="sup_dat_used"
-                                        value="{{ $patient->txSupporters->first()->sup_dat_used ?? '' }}">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="sup_treatment_schedule" class="form-label">Schedule of Treatment</label>
-                                    <input type="text" class="form-control" id="sup_treatment_schedule" name="sup_treatment_schedule"
-                                        value="{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '' }}" readonly>
-                                </div>
-                            </div> -->
-                                        <input type="hidden" class="form-control" id="sup_location" name="sup_location"
-                                        value="{{ $patient->txSupporters->first()->sup_location ?? '' }}" readonly>
-                                        <input type="hidden" class="form-control" id="sup_name" name="sup_name"
-                                        value="{{ $patient->txSupporters->first()->sup_name ?? '' }}" readonly>
-                                        <input type="hidden" class="form-control" id="sup_designation" name="sup_designation"
-                                        value="{{ $patient->txSupporters->first()->sup_designation ?? '' }}" readonly>
-                                        <input type="hidden" class="form-control" id="sup_type" name="sup_type"
-                                        value="{{ $patient->txSupporters->first()->sup_type ?? '' }}" readonly>
-                                        <input type="hidden" class="form-control" id="sup_contact_info" name="sup_contact_info"
-                                        value="{{ $patient->txSupporters->first()->sup_contact_info ?? '' }}" readonly>
-                                        <input type="hidden" class="form-control" id="sup_dat_used" name="sup_dat_used"
-                                        value="{{ $patient->txSupporters->first()->sup_dat_used ?? '' }}">
-                                        <input type="hidden" class="form-control" id="sup_treatment_schedule" name="sup_treatment_schedule"
-                                        value="{{ $patient->txSupporters->first()->sup_treatment_schedule ?? '' }}" readonly>
-
-                            {{-- ========================= --}}
-                            {{-- 🟦 TREATMENT SCHEDULE DETAILS --}}
-                            {{-- ========================= --}}
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_intensive_start" class="form-label">Intensive Phase Start Date</label>
-                                    <input type="date" class="form-control" id="pha_intensive_start" name="pha_intensive_start"
-                                        value="{{ $patient->adherences->first()->pha_intensive_start ?? '' }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_intensive_end" class="form-label">Intensive Phase End Date</label>
-                                    <input type="date" class="form-control" id="pha_intensive_end" name="pha_intensive_end"
-                                        value="{{ $patient->adherences->first()->pha_intensive_end ?? '' }}" readonly>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_continuation_start" class="form-label">Continuation Phase Start Date</label>
-                                    <input type="date" class="form-control" id="pha_continuation_start" name="pha_continuation_start"
-                                        value="{{ $patient->adherences->first()->pha_continuation_start ?? '' }}">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_continuation_end" class="form-label">Continuation Phase End Date</label>
-                                    <input type="date" class="form-control" id="pha_continuation_end" name="pha_continuation_end"
-                                        value="{{ $patient->adherences->first()->pha_continuation_end ?? '' }}">
-                                </div>
-                            </div>
-
-                            {{-- ========================= --}}
-                            {{-- 🟨 MEASUREMENTS --}}
-                            {{-- ========================= --}}
-                            <h5 class="fw-semibold mt-3">Measurements</h5>
-                            <div class="row mt-4">
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" step="0.01" class="form-control" id="pha_weight" name="pha_weight"
-                                        value="{{ $patient->adherences->first()->pha_weight ?? '' }}">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="pha_child_height" class="form-label">Height (cm) for Children</label>
-                                    <input type="number" step="0.01" class="form-control" id="pha_child_height" name="pha_child_height"
-                                        value="{{ $patient->adherences->first()->pha_child_height ?? '' }}">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
+<div class="modal fade" id="editAdministrationModal" tabindex="-1"
+    aria-labelledby="editAdministrationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="editAdministrationModalLabel">Administration of Drugs</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
+
+            <!-- ✅ Form with update route -->
+            <form method="POST" action="{{ route('adherence.update', $patient->id) }}">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-body">
+                    @php
+                        // ✅ Get latest related records safely
+                        $latestSupporter = $patient->txSupporters->sortByDesc('created_at')->first();
+                        $latestAdherence = $patient->adherences->sortByDesc('created_at')->first();
+                        $latestDrug = $patient->prescribedDrugs->sortByDesc('created_at')->first();
+                    @endphp
+
+                    {{-- ========================= --}}
+                    {{-- 🟩 HIDDEN TREATMENT SUPPORTER INFO --}}
+                    {{-- ========================= --}}
+                    <input type="hidden" name="sup_location" value="{{ $latestSupporter->sup_location ?? '' }}">
+                    <input type="hidden" name="sup_name" value="{{ $latestSupporter->sup_name ?? '' }}">
+                    <input type="hidden" name="sup_designation" value="{{ $latestSupporter->sup_designation ?? '' }}">
+                    <input type="hidden" name="sup_type" value="{{ $latestSupporter->sup_type ?? '' }}">
+                    <input type="hidden" name="sup_contact_info" value="{{ $latestSupporter->sup_contact_info ?? '' }}">
+                    <input type="hidden" name="sup_dat_used" value="{{ $latestSupporter->sup_dat_used ?? '' }}">
+                    <input type="hidden" name="sup_treatment_schedule" value="{{ $latestSupporter->sup_treatment_schedule ?? '' }}">
+
+                    {{-- ========================= --}}
+                    {{-- 🟦 TREATMENT SCHEDULE DETAILS --}}
+                    {{-- ========================= --}}
+                    <input type="hidden" name="pha_intensive_start" value="{{ $latestAdherence->pha_intensive_start ?? '' }}">
+                    <input type="hidden" name="pha_intensive_end" value="{{ $latestAdherence->pha_intensive_end ?? '' }}">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="pha_weight" class="form-label">Weight (kg)</label>
+                            <input type="number" step="0.01" class="form-control" id="pha_weight" name="pha_weight"
+                                value="{{ $latestAdherence->pha_weight ?? '' }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="pha_child_height" class="form-label">Height (cm) for Children</label>
+                            <input type="number" step="0.01" class="form-control" id="pha_child_height"
+                                name="pha_child_height"
+                                value="{{ $latestAdherence->pha_child_height ?? '' }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="pha_continuation_start" class="form-label">Continuation Phase Start Date</label>
+                            <input type="date" class="form-control" id="pha_continuation_start" name="pha_continuation_start"
+                                value="{{ $latestAdherence->pha_continuation_start ?? '' }}" max="<?php echo date('Y-m-d'); ?>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="pha_continuation_end" class="form-label">Continuation Phase End Date</label>
+                            <input type="date" class="form-control" id="pha_continuation_end" name="pha_continuation_end"
+                                value="{{ $latestAdherence->pha_continuation_end ?? '' }}" readonly>
+                        </div>
+
+                        {{-- ========================= --}}
+                        {{-- 🧪 PRESCRIBED DRUGS --}}
+                        {{-- ========================= --}}
+                        <div class="col-md-6 mb-3">
+                            <label for="drug_con_date">Continuation Date</label>
+                            <input type="text" class="form-control" id="drug_con_date" name="drug_con_date"
+                                max="{{ date('Y-m-d') }}"
+                                value="{{ old('drug_con_date', $latestDrug->drug_con_date ?? '') }}" readonly>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="drug_con_name" class="form-label">Drug</label>
+                            <input type="text" name="drug_con_name" id="drug_con_name" class="form-control"
+                                value="{{ old('drug_con_name', $latestDrug->drug_con_name ?? '') }}" readonly>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="drug_con_no_of_tablets">No. of Tablets</label>
+                            <input type="text" class="form-control" id="drug_con_no_of_tablets"
+                                name="drug_con_no_of_tablets"
+                                value="{{ old('drug_con_no_of_tablets', $latestDrug->drug_con_no_of_tablets ?? '') }}"
+                                readonly>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="drug_con_strength" class="form-label">Strength</label>
+                            <input type="text" name="drug_con_strength" id="drug_con_strength"
+                                class="form-control"
+                                value="{{ old('drug_con_strength', $latestDrug->drug_con_strength ?? '') }}" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="drug_con_unit" class="form-label">Unit</label>
+                            <input type="text" name="drug_con_unit" id="drug_con_unit" class="form-control"
+                                value="{{ old('drug_con_unit', $latestDrug->drug_con_unit ?? '') }}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
+
 
 
         <!-- Adverse Events Modal -->
@@ -2829,7 +2549,8 @@
                         <h5 class="modal-title" id="editAdverseEventModalLabel">
                             Serious Adverse Event
                         </h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- IMPORTANT: action points to adverse.store route -->
@@ -2876,8 +2597,9 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editProgressModalLabel">Patient Progress Report Form</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="editProgressModalLabel">Patient Progress Report</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- Laravel Route for storing progress -->
@@ -2886,25 +2608,25 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                <label for="prog_date" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="prog_date" name="prog_date"
-                                    max="<?php echo date('Y-m-d'); ?>" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="prog_problem" class="form-label">Problem</label>
-                                <input type="text" class="form-control" id="prog_problem" name="prog_problem"
-                                    placeholder="Problem" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="prog_action_taken" class="form-label">Action Taken</label>
-                                <input type="text" class="form-control" id="prog_action_taken" name="prog_action_taken"
-                                    placeholder="Action taken" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="prog_plan" class="form-label">Plan</label>
-                                <input type="text" class="form-control" id="prog_plan" name="prog_plan"
-                                    placeholder="Plan" required>
-                            </div>
+                                    <label for="prog_date" class="form-label">Date</label>
+                                    <input type="date" class="form-control" id="prog_date" name="prog_date"
+                                        max="<?php echo date('Y-m-d'); ?>" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="prog_problem" class="form-label">Problem</label>
+                                    <input type="text" class="form-control" id="prog_problem" name="prog_problem"
+                                        placeholder="Problem" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="prog_action_taken" class="form-label">Action Taken</label>
+                                    <input type="text" class="form-control" id="prog_action_taken"
+                                        name="prog_action_taken" placeholder="Action taken" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="prog_plan" class="form-label">Plan</label>
+                                    <input type="text" class="form-control" id="prog_plan" name="prog_plan"
+                                        placeholder="Plan" required>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -2924,7 +2646,8 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editCloseContactModalLabel">Close Contact</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- Laravel Route for storing close contact -->
@@ -2946,7 +2669,7 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="con_sex" class="form-label">Sex</label>
                                     <select class="form-control form-select" id="con_sex" name="con_sex" required>
-                                        <option value="">Please Select</option>
+                                        <option value="">Select</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
@@ -2995,7 +2718,8 @@
 
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editSputumModalLabel">Sputum Monitoring</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- Important: route should point to sputum.store (create new) -->
@@ -3014,13 +2738,14 @@
                                 <label for="sput_smear_result" class="form-label">Smear Microscopy /TB LAMP</label>
                                 <!-- <input type="text" class="form-control" id="sput_smear_result" name="sput_smear_result"
                                     placeholder="Smear microscopy / tb lamp"> -->
-                                    <select name="sput_smear_result" id="sput_smear_result" class="form-control form-select">
-                                        <option value="" disabled selected>Select</option>
-                                        <option value="MTB HIGH">MTB HIGH</option>
-                                        <option value="MTB MEDIUM">MTB MEDIUM</option>
-                                        <option value="MTB LOW">MTB LOW</option>
-                                        <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                                    </select>
+                                <select name="sput_smear_result" id="sput_smear_result"
+                                    class="form-control form-select">
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="MTB HIGH">MTB HIGH</option>
+                                    <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                    <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                </select>
                             </div>
 
                             <!-- Xpert MTB/RIF -->
@@ -3028,13 +2753,14 @@
                                 <label for="sput_xpert_result" class="form-label">Xpert MTB/RIF</label>
                                 <!-- <input type="text" class="form-control" id="sput_xpert_result" name="sput_xpert_result"
                                     placeholder="Xpert mtb / rif" required> -->
-                                    <select name="sput_xpert_result" id="sput_xpert_result" class="form-control form-select">
-                                        <option value="" disabled selected>Select</option>
-                                        <option value="MTB HIGH">MTB HIGH</option>
-                                        <option value="MTB MEDIUM">MTB MEDIUM</option>
-                                        <option value="MTB LOW">MTB LOW</option>
-                                        <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                                    </select>
+                                <select name="sput_xpert_result" id="sput_xpert_result"
+                                    class="form-control form-select">
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="MTB HIGH">MTB HIGH</option>
+                                    <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                    <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                </select>
                             </div>
                         </div>
 
@@ -3056,7 +2782,8 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editChestXrayModalLabel">Chest X-ray</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- Laravel route for storing chest x-ray -->
@@ -3071,7 +2798,7 @@
                             <div class="mb-3">
                                 <label for="xray_impression" class="form-label">Impression/ Comparative Reading</label>
                                 <select name="xray_impression" id="xray_impression" class="form-control form-select">
-                                    <option value="" disabled selected>Please Select</option>
+                                    <option value="" disabled selected>Select</option>
                                     <option value="Normal">Normal</option>
                                     <option value="Abnormal suggestive of TB">Abnormal suggestive of TB</option>
                                     <option value="Abnormal not suggestive of TB">Abnormal not suggestive of TB</option>
@@ -3103,7 +2830,8 @@
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="editPostTreatmentModalLabel">Post Treatment Follow-up</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
                     <!-- ✅ Add action route -->
@@ -3193,14 +2921,14 @@
         });
     </script>
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const modal = document.getElementById('editPrescribedDrugsModal');
             modal.addEventListener('shown.bs.modal', function () {
                 document.getElementById('drug_start_date').focus();
             });
         });
-    </script>
+    </script> -->
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -3256,10 +2984,10 @@
                 }
             });
         });
-        </script>
+    </script>
 
 
-    
+
 
     <script>
         (function () {
@@ -3269,37 +2997,51 @@
             const daysTakenEl = document.getElementById("daysTaken");
             const daysMissedEl = document.getElementById("daysMissed");
 
-            if (!calendar || !monthYear || !adherenceRateEl || !daysTakenEl || !daysMissedEl) {
-                console.warn('Adherence calendar elements not found; skipping calendar init.');
-                return;
-            }
+            // new total stat elements
+            const totalDaysTakenEl = document.getElementById("totalDaysTaken");
+            const totalDaysMissedEl = document.getElementById("totalDaysMissed");
+            const totalAdherenceRateEl = document.getElementById("totalAdherenceRate");
+
+            if (!calendar || !monthYear) return;
 
             let currentDate = new Date();
-            let adherenceData = {}; // reassignable
+            let adherenceData = {};
 
-            // pass server-side username if available, otherwise null
             const username = @json(
                 $patient->adherences->first()->username ?? $patient->patientAccount->acc_username ?? null
             );
 
             function calculateStats(year, month) {
-                let taken = 0;
-                let missed = 0;
+                let taken = 0, missed = 0;
+                let totalTaken = 0, totalMissed = 0;
 
                 Object.keys(adherenceData).forEach(dateStr => {
                     const date = new Date(dateStr);
+
+                    // count monthly
                     if (date.getFullYear() === year && date.getMonth() === month) {
                         if (adherenceData[dateStr] === "taken") taken++;
                         if (adherenceData[dateStr] === "missed") missed++;
                     }
+
+                    // count overall totals
+                    if (adherenceData[dateStr] === "taken") totalTaken++;
+                    if (adherenceData[dateStr] === "missed") totalMissed++;
                 });
 
-                const total = taken + missed;
-                const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
-
-                adherenceRateEl.textContent = rate + "%";
+                // per-month
+                const monthTotal = taken + missed;
+                const monthRate = monthTotal > 0 ? Math.round((taken / monthTotal) * 100) : 0;
+                adherenceRateEl.textContent = monthRate + "%";
                 daysTakenEl.textContent = taken;
                 daysMissedEl.textContent = missed;
+
+                // total
+                const totalDays = totalTaken + totalMissed;
+                const totalRate = totalDays > 0 ? Math.round((totalTaken / totalDays) * 100) : 0;
+                totalDaysTakenEl.textContent = totalTaken;
+                totalDaysMissedEl.textContent = totalMissed;
+                totalAdherenceRateEl.textContent = totalRate + "%";
             }
 
             function renderCalendar(date) {
@@ -3312,7 +3054,6 @@
                 const monthName = date.toLocaleString("default", { month: "long" });
                 monthYear.textContent = `${monthName} ${year}`;
 
-                // Day headers
                 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                 daysOfWeek.forEach(day => {
                     const header = document.createElement("div");
@@ -3321,18 +3062,15 @@
                     calendar.appendChild(header);
                 });
 
-                // Empty cells for offset
                 for (let i = 0; i < firstDay.getDay(); i++) {
                     const empty = document.createElement("div");
                     empty.classList.add("adherence-calendar-day", "adherence-empty");
                     calendar.appendChild(empty);
                 }
 
-                // Calendar days with adherence status
                 for (let day = 1; day <= lastDay.getDate(); day++) {
                     const cell = document.createElement("div");
                     const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-
                     cell.textContent = day;
                     cell.classList.add("adherence-calendar-day");
 
@@ -3365,12 +3103,9 @@
 
             async function fetchAdherenceData() {
                 try {
-                    let url;
-                    if (username) {
-                        url = `/api/adherence/${encodeURIComponent(username)}`;
-                    } else {
-                        url = `/api/adherence/patient/{{ $patient->id }}`;
-                    }
+                    let url = username
+                        ? `/api/adherence/${encodeURIComponent(username)}`
+                        : `/api/adherence/patient/{{ $patient->id }}`;
 
                     const response = await fetch(url, { credentials: 'same-origin' });
                     if (!response.ok) {
@@ -3379,10 +3114,8 @@
                     }
 
                     const data = await response.json();
-
                     adherenceData = {};
                     (data || []).forEach(item => {
-                        // ensure date format YYYY-MM-DD
                         const d = item.date ? item.date.split(' ')[0] : null;
                         if (d) adherenceData[d] = item.status;
                     });
@@ -3393,11 +3126,9 @@
                 }
             }
 
-            // Initial fetch and render
             fetchAdherenceData();
         })();
-        </script>
-
+    </script>
 
     <script>
         function editOutcome(id, outcome, date, reason) {
@@ -3418,16 +3149,198 @@
     </script>
 
     @if (session('stay_on_tab'))
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tabName = @json(session('stay_on_tab'));
-        // Apply tab
-        applyTab(tabName);
-        // Save in sessionStorage so that reload/back keeps it active
-        sessionStorage.setItem(STORAGE_KEY, tabName);
-    });
-    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const tabName = @json(session('stay_on_tab'));
+                // Apply tab
+                applyTab(tabName);
+                // Save in sessionStorage so that reload/back keeps it active
+                sessionStorage.setItem(STORAGE_KEY, tabName);
+            });
+        </script>
     @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 🟩 Elements
+            const weightInput = document.getElementById('pha_weight');
+            const heightInput = document.getElementById('pha_child_height');
+            const drugName = document.getElementById('drug_con_name');
+            const noOfTablets = document.getElementById('drug_con_no_of_tablets');
+            const strength = document.getElementById('drug_con_strength');
+            const unit = document.getElementById('drug_con_unit');
+
+            // 🚫 Function to block invalid keys
+            function preventInvalidKeys(input) {
+                input.addEventListener('keydown', function (event) {
+                    if (['-', 'e', 'E', '+'].includes(event.key)) {
+                        event.preventDefault();
+                    }
+                });
+
+                // 🚫 Prevent negative or invalid values
+                input.addEventListener('input', function () {
+                    const value = parseFloat(this.value);
+                    if (isNaN(value) || value < 0) {
+                        this.value = '';
+                    }
+                });
+            }
+
+            // Apply validation to both weight & height
+            if (weightInput) preventInvalidKeys(weightInput);
+            if (heightInput) preventInvalidKeys(heightInput);
+
+            // 🧮 Weight-based drug logic
+            if (weightInput) {
+                weightInput.addEventListener('input', function () {
+                    const weight = parseFloat(this.value);
+
+                    // 🧹 Reset if invalid
+                    if (isNaN(weight) || this.value.trim() === '') {
+                        drugName.value = '';
+                        noOfTablets.value = '';
+                        strength.value = '';
+                        unit.value = '';
+                        return;
+                    }
+
+                    // ✅ Set base drug name
+                    drugName.value = '2FDC';
+
+                    // ✅ Determine dosage by weight range
+                    if (weight >= 25 && weight <= 37) {
+                        noOfTablets.value = '2';
+                        strength.value = '75mg';
+                        unit.value = 'Tablet';
+                    } else if (weight >= 38 && weight <= 54) {
+                        noOfTablets.value = '3';
+                        strength.value = '150mg';
+                        unit.value = 'Tablet';
+                    } else if (weight >= 55 && weight <= 70) {
+                        noOfTablets.value = '4';
+                        strength.value = '275mg';
+                        unit.value = 'Tablet';
+                    } else if (weight > 70) {
+                        noOfTablets.value = '5';
+                        strength.value = '400mg';
+                        unit.value = 'Tablet';
+                    } else {
+                        // For weight below 25
+                        drugName.value = '';
+                        noOfTablets.value = '';
+                        strength.value = '';
+                        unit.value = '';
+                    }
+                });
+            }
+
+            // 🟦 Continuation Phase Date Logic
+            const conStart = document.getElementById('pha_continuation_start');
+            const conEnd = document.getElementById('pha_continuation_end');
+            const drugConDate = document.getElementById('drug_con_date');
+
+            if (conStart) {
+                conStart.addEventListener('change', function () {
+                    const startDate = new Date(this.value);
+
+                    // 🧹 Clear when invalid
+                    if (isNaN(startDate.getTime()) || this.value.trim() === '') {
+                        if (conEnd) conEnd.value = '';
+                        if (drugConDate) drugConDate.value = '';
+                        return;
+                    }
+
+                    // ✅ Auto-fill drug_con_date
+                    if (drugConDate) {
+                        drugConDate.value = this.value;
+                    }
+
+                    // ✅ Compute end date (+4 months)
+                    const endDate = new Date(startDate);
+                    endDate.setMonth(endDate.getMonth() + 4);
+
+                    // Fix for month overflow (e.g. Jan 31)
+                    if (endDate.getDate() !== startDate.getDate()) {
+                        endDate.setDate(0);
+                    }
+
+                    const formattedEnd = endDate.toISOString().split('T')[0];
+                    conEnd.value = formattedEnd;
+                });
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const diagRegion = document.getElementById("diag_region");
+            const diagProvince = document.getElementById("diag_province");
+            const diagRegionText = document.getElementById("diag_region_text");
+            const diagProvinceText = document.getElementById("diag_province_text");
+
+            // --- Load Regions ---
+            fetch("/api/regions")
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(region => {
+                        diagRegion.innerHTML += `<option value="${region.regCode}">${region.regDesc}</option>`;
+                    });
+                });
+
+            // --- When Region changes, load Provinces ---
+            diagRegion.addEventListener("change", () => {
+                const regionCode = diagRegion.value;
+                const regionName = diagRegion.options[diagRegion.selectedIndex].text;
+
+                diagRegionText.value = regionName; // Store selected text
+                diagProvince.innerHTML = '<option value="" disabled selected>Loading...</option>';
+
+                fetch(`/api/provinces/${regionCode}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        diagProvince.innerHTML = '<option value="" disabled selected>Select</option>';
+                        data.forEach(prov => {
+                            diagProvince.innerHTML += `<option value="${prov.provCode}">${prov.provDesc}</option>`;
+                        });
+                    });
+            });
+
+            // --- When Province changes, store province name ---
+            diagProvince.addEventListener("change", () => {
+                const provinceName = diagProvince.options[diagProvince.selectedIndex].text;
+                diagProvinceText.value = provinceName;
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.btn-relapse');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const url = this.getAttribute('data-url');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You are about to re-register this patient as a relapse case.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#198754',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, re-register!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect to the relapse form page
+                            window.location.href = url;
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 
 
 </body>

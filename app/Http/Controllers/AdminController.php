@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\DiagnosingFacility;
+use App\Models\Physician;
+use App\Models\TBClassification;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,113 +14,320 @@ use App\Models\Diagnosis;
 use App\Models\Treatment;
 use App\Models\Outcome;
 use App\Models\PatientAccount;
+use App\Models\User;
 use App\Models\MedicationAdherence;
+use Illuminate\Support\Facades\Cache;
 
 class AdminController extends Controller
 {
+    // public function index()
+    // {
+    //     $totalPatients = Patient::count();
+
+    //     $totalPhysician = Physician::count();
+
+    //     $totalPersonnel = User::count();
+
+    //     $totalFacility = DiagnosingFacility::count();
+
+    //     $pulmonary = TBClassification::where('clas_anatomical_site', 'Pulmonary')->count();
+
+    //     $extra = TBClassification::where('clas_anatomical_site', 'Extra-pulmonary')->count();
+
+    //     $accounts = PatientAccount::with('patient')->get();
+
+    //         $patientsWithConsecutiveMissed = $accounts->map(function ($acc) {
+    //             $patient = $acc->patient;
+    //             if (!$patient) return null;
+
+    //             $adherenceLogs = MedicationAdherence::where('username', $acc->acc_username)
+    //                 ->orderBy('date', 'desc')
+    //                 ->pluck('status', 'date');
+
+    //             $consecutiveMissed = 0;
+    //             foreach ($adherenceLogs as $status) {
+    //                 if ($status === 'missed') {
+    //                     $consecutiveMissed++;
+    //                 } else {
+    //                     break;
+    //                 }
+    //             }
+
+    //             if ($consecutiveMissed >= 2) {
+    //                 return [
+    //                     'patient_id' => $patient->id ?? null,
+    //                     'full_name' => $patient->pat_full_name,
+    //                     'barangay' => $patient->pat_current_address,
+    //                     'username' => $acc->acc_username,
+    //                     'contact' => $patient->pat_contact_number,
+    //                     'consecutive_missed' => $consecutiveMissed,
+    //                     'last_missed' => MedicationAdherence::where('username', $acc->acc_username)
+    //                         ->where('status', 'missed')
+    //                         ->orderByDesc('date')
+    //                         ->value('date'),
+    //                 ];
+    //             }
+
+    //             return null;
+    //         })->filter()->values();
+
+    //         return view('admin.index', compact(
+    //             'totalPatients',
+    //             'totalPhysician',
+    //             'pulmonary',
+    //             'extra',
+    //             'totalFacility',
+    //             'totalPersonnel',
+    //             'patientsWithConsecutiveMissed'
+    //         ));
+    // }
+
+
     public function index()
     {
-        $totalPatients = DB::table('tbl_patients')->count();
+        // ✅ Cache static counts (for 60 minutes)
+        $totalPatients   = Cache::remember('dashboard_total_patients', 3600, fn() => Patient::count());
+        $totalPhysician  = Cache::remember('dashboard_total_physician', 3600, fn() => Physician::count());
+        $totalPersonnel  = Cache::remember('dashboard_total_personnel', 3600, fn() => User::count());
+        $totalFacility   = Cache::remember('dashboard_total_facility', 3600, fn() => DiagnosingFacility::count());
+        $pulmonary       = Cache::remember('dashboard_pulmonary', 3600, fn() => TBClassification::where('clas_anatomical_site', 'Pulmonary')->count());
+        $extra           = Cache::remember('dashboard_extra', 3600, fn() => TBClassification::where('clas_anatomical_site', 'Extra-pulmonary')->count());
 
-        $totalStaff = DB::table('users')->count();
-
-        $totalPhysician = DB::table('tbl_physicians')
-            ->where('phy_designation', 'Doctor')->count();
-
-        $pulmonary = DB::table('tbl_tb_classifications')
-            ->where('clas_anatomical_site', 'Pulmonary')->count();
-
-        $extra = DB::table('tbl_tb_classifications')
-            ->where('clas_anatomical_site', 'Extra-pulmonary')->count();
-
-        $totalFacility = DB::table('tbl_diagnosing_facilities')->count();
-
-        $totalPersonnel = DB::table('users')->count();
-
+        // Eager load patients (1 query)
         $accounts = PatientAccount::with('patient')->get();
 
-            $patientsWithConsecutiveMissed = $accounts->map(function ($acc) {
-                $patient = $acc->patient;
-                if (!$patient) return null;
+        // Fetch all adherence logs in one query
+        $usernames = $accounts->pluck('acc_username')->toArray();
+        $adherenceLogs = MedicationAdherence::whereIn('username', $usernames)
+            ->orderByDesc('date')
+            ->get(['username', 'date', 'status'])
+            ->groupBy('username');
 
-                $adherenceLogs = MedicationAdherence::where('username', $acc->acc_username)
-                    ->orderBy('date', 'desc')
-                    ->pluck('status', 'date');
+        // Compute consecutive missed doses efficiently
+        $patientsWithConsecutiveMissed = $accounts->map(function ($acc) use ($adherenceLogs) {
+            $patient = $acc->patient;
+            if (!$patient || !isset($adherenceLogs[$acc->acc_username])) return null;
 
-                $consecutiveMissed = 0;
-                foreach ($adherenceLogs as $status) {
-                    if ($status === 'missed') {
-                        $consecutiveMissed++;
-                    } else {
-                        break;
-                    }
-                }
+            $logs = $adherenceLogs[$acc->acc_username]->sortByDesc('date')->values();
 
-                if ($consecutiveMissed >= 2) {
-                    return [
-                        'patient_id' => $patient->id ?? null,
-                        'full_name' => $patient->pat_full_name,
-                        'username' => $acc->acc_username,
-                        'contact' => $patient->pat_contact_number,
-                        'consecutive_missed' => $consecutiveMissed,
-                        'last_missed' => MedicationAdherence::where('username', $acc->acc_username)
-                            ->where('status', 'missed')
-                            ->orderByDesc('date')
-                            ->value('date'),
-                    ];
-                }
+            if ($logs->first()->status !== 'missed') return null;
 
-                return null;
-            })->filter()->values();
+            $consecutiveMissed = 0;
+            foreach ($logs as $log) {
+                if ($log->status === 'missed') $consecutiveMissed++;
+                else break;
+            }
 
-            return view('admin.index', compact(
-                'totalPatients',
-                'totalPhysician',
-                'totalStaff',
-                'pulmonary',
-                'extra',
-                'totalFacility',
-                'totalPersonnel',
-                'patientsWithConsecutiveMissed'
-            ));
+            return $consecutiveMissed >= 2 ? [
+                'patient_id' => $patient->id,
+                'full_name' => $patient->pat_full_name,
+                'contact' => $patient->pat_contact_number,
+                'barangay' => $patient->pat_permanent_address,
+                'consecutive_missed' => $consecutiveMissed,
+                'last_missed' => $logs->where('status', 'missed')->max('date'),
+            ] : null;
+        })->filter()
+        ->sortByDesc('last_missed')
+        ->values();
+
+        return view('dashboard', compact(
+            'totalPatients',
+            'totalPhysician',
+            'pulmonary',
+            'extra',
+            'totalFacility',
+            'totalPersonnel',
+            'patientsWithConsecutiveMissed'
+        ));
     }
 
+
+
+
+    // public function patient(Request $request)
+    // {
+    //     $search = $request->input('search');
+    //     $perPage = $request->input('per_page', 10); // default 10
+
+    //     $patients = DB::table('tbl_patients as p')
+    //         ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
+    //         ->join('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
+    //         ->select(
+    //             'p.id',
+    //             'p.*',
+    //             'p.pat_full_name',
+    //             'p.pat_sex',
+    //             DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+    //             'p.pat_current_address',
+    //             'd.diag_tb_case_no',
+    //             'd.diag_diagnosis_date',
+    //             'to.out_outcome as status'
+    //         )
+    //         ->when($search, function ($query, $search) {
+    //             $query->where('p.pat_full_name', 'LIKE', "%{$search}%")
+    //                 ->orWhere('d.diag_tb_case_no', 'LIKE', "%{$search}%");
+    //         })
+    //         ->orderBy('p.id', 'desc')
+    //         ->paginate($perPage);
+
+    //     $totalPatients = DB::table('tbl_patients')->count();
+
+    //     return view('admin.patient', compact('patients', 'totalPatients', 'perPage'));
+    // }
+
+    // public function patient(Request $request)
+    // {
+    //     $totalPatients = Cache::remember('total_patients_count', 60, fn() => Patient::count());
+    //     $search = $request->input('search');
+    //     $perPage = $request->input('per_page', 10);
+
+    //     $patients = DB::table('tbl_patients as p')
+    //         ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
+    //         ->join('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
+    //         ->select(
+    //             'p.id',
+    //             'p.pat_full_name',
+    //             'p.pat_sex',
+    //             'p.pat_date_of_birth',
+    //             'p.pat_civil_status',
+    //             DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+    //             'p.pat_current_region',
+    //             'p.pat_current_province',
+    //             'p.pat_current_city_mun',
+    //             'p.pat_current_address',
+    //             'p.pat_current_zip_code',
+    //             'p.pat_contact_number',
+    //             'p.pat_other_contact',
+    //             'p.pat_philhealth_no',
+    //             'p.pat_nationality',
+    //             'd.diag_tb_case_no',
+    //             'd.diag_diagnosis_date',
+    //             'to.out_outcome as status'
+    //         )
+    //         ->when($search, function ($query, $search) {
+    //             $query->whereRaw("MATCH(p.pat_full_name) AGAINST(? IN BOOLEAN MODE)", [$search])
+    //                 ->orWhere('d.diag_tb_case_no', 'LIKE', "{$search}%");
+    //         })
+    //         ->orderBy('p.id', 'desc')
+    //         ->paginate($perPage);
+
+    //     return view('admin.patient', compact('patients', 'totalPatients', 'perPage'));
+    // }
+    
     public function patient(Request $request)
     {
+        $totalPatients = Cache::remember('total_patients_count', 60, fn() => Patient::count());
+        
         $search = $request->input('search');
-        $perPage = $request->input('per_page', 10); // default 10
+        $perPage = $request->input('per_page', 10);
+        $lastId = $request->input('last_id');
+        $direction = $request->input('direction');
 
-        $patients = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
-            ->select(
-                'p.id',
-                'p.*',
-                'p.pat_full_name',
-                'p.pat_sex',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_current_address',
-                'd.diag_tb_case_no',
-                'd.diag_diagnosis_date',
-                'to.out_outcome as status'
-            )
-            ->when($search, function ($query, $search) {
-                $query->where('p.pat_full_name', 'LIKE', "%{$search}%")
-                    ->orWhere('p.pat_contact_number', 'LIKE', "%{$search}%")
-                    ->orWhere('p.pat_current_address', 'LIKE', "%{$search}%");
-            })
-            ->orderBy('p.id', 'desc')
-            ->paginate($perPage);
+        $query = DB::table('tbl_patients as p')
+        ->join(DB::raw('(SELECT MAX(id) AS latest_diag_id, patient_id FROM tbl_diagnosis GROUP BY patient_id) AS ld'), 'p.id', '=', 'ld.patient_id')
+        ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+        ->leftJoin(DB::raw('(SELECT MAX(id) AS latest_out_id, patient_id FROM tbl_treatment_outcomes GROUP BY patient_id) AS lo'), 'p.id', '=', 'lo.patient_id')
+        ->leftJoin('tbl_treatment_outcomes as to', 'to.id', '=', 'lo.latest_out_id')
+        ->leftJoin(DB::raw('(SELECT MAX(id) AS latest_phase_id, patient_id FROM tbl_adherences GROUP BY patient_id) AS lp'), 'p.id', '=', 'lp.patient_id')
+        ->leftJoin('tbl_adherences as tp', 'tp.id', '=', 'lp.latest_phase_id')
+        ->leftJoin('tbl_patient_accounts as pa', 'pa.patient_id', '=', 'p.id')
 
-        $totalPatients = DB::table('tbl_patients')->count();
+        ->select(
+            'p.id',
+            'p.pat_full_name',
+            'p.pat_sex',
+            'p.pat_date_of_birth',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_current_region',
+            'p.pat_current_province',
+            'p.pat_current_city_mun',
+            'p.pat_current_address',
+            'p.pat_current_zip_code',
+            'd.diag_tb_case_no',
+            'd.diag_diagnosis_date',
+            'to.out_outcome as status',
+            'tp.pha_intensive_start',
+            'tp.pha_intensive_end',
+            'tp.pha_continuation_start',
+            'tp.pha_continuation_end',
+            'pa.id as account_id'
 
-        return view('admin.patient', compact('patients', 'totalPatients', 'perPage'));
+        )
+        ->when($search, function ($query, $search) {
+            $query->where('p.pat_full_name', 'LIKE', "%{$search}%")
+                ->orWhere('d.diag_tb_case_no', 'LIKE', "{$search}%");
+        });
+
+
+        // ✅ Keyset pagination (unchanged)
+        if ($lastId) {
+            if ($direction === 'next') {
+                $query->where('p.id', '<', $lastId)->orderByDesc('p.id');
+            } elseif ($direction === 'prev') {
+                $query->where('p.id', '>', $lastId)->orderBy('p.id');
+            }
+        } else {
+            $query->orderByDesc('p.id');
+        }
+
+        // ✅ Fetch + check next/prev
+        $patients = $query->limit($perPage + 1)->get();
+        $hasMore = $patients->count() > $perPage;
+        $patients = $patients->take($perPage);
+
+        if ($direction === 'prev') {
+            $patients = $patients->sortByDesc('id')->values();
+        }
+
+        if ($direction === 'next') {
+            $nextId = $hasMore ? $patients->last()->id : null;
+            $prevId = $patients->first()->id;
+        } elseif ($direction === 'prev') {
+            $nextId = $patients->last()->id;
+            $prevId = $hasMore ? $patients->first()->id : null;
+        } else {
+            $nextId = $hasMore ? $patients->last()->id : null;
+            $prevId = null;
+        }
+
+        return view('admin.patient', compact('patients', 'totalPatients', 'perPage', 'nextId', 'prevId'));
     }
 
+
+
+
+    // public function patientProfile($id)
+    // {
+    //     $patient = Patient::findOrFail($id);
+    //     return view('admin.patient-profile', compact('patient'));
+    // }
 
     public function patientProfile($id)
     {
-        $patient = Patient::findOrFail($id);
+        $patient = Patient::with([
+            'diagnosingFacility',
+            'screenings.labTests',  // Make sure Screening model has labTests relationship
+            'diagnoses',
+            'tbClassification',  // Make sure Diagnosis model has tbClassification relationship
+            'treatmentFacilities',
+            'treatmentHistories',
+            'comorbidities',
+            'baselineInfos',
+            'hivInfos',
+            'treatmentRegimens',
+            'txSupporters',
+            'adherences',
+            'prescribedDrugs',
+            'treatmentOutcomes',
+            'adverseEvents',
+            'progress',
+            'close_contacts',
+            'sputum_monitorings',
+            'chestXrays',
+            'postTreatment',
+            'medicationAdherences'
+        ])->findOrFail($id);
+        
         return view('admin.patient-profile', compact('patient'));
     }
 
@@ -246,5 +456,6 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Patient deleted successfully.');
     }
 
+    
 
 }

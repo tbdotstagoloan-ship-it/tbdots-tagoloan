@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
     <title>404 - Page Not Found</title>
     <style>
         * {
@@ -30,7 +31,7 @@
         h1 {
             font-size: 8rem;
             font-weight: bold;
-            color: #2e8b57; /* Greenish like your image */
+            color: #4caf50;
             margin-bottom: 10px;
         }
 
@@ -49,7 +50,7 @@
         .btn {
             padding: 12px 28px;
             font-size: 1rem;
-            background-color: #20c997; /* Green color like your button */
+            background-color: #4caf50;
             color: white;
             border: none;
             border-radius: 5px;
@@ -60,7 +61,7 @@
         }
 
         .btn:hover {
-            background-color: #17a589;
+            background-color: #43a047;
         }
 
         @media (max-width: 600px) {
@@ -85,7 +86,7 @@
         <p>
             We are very sorry for inconvenience. This page is currently in development or not yet available. We're working on it.
         </p>
-        <a href="{{ url('admin/dashboard') }}" class="btn">Back To Home</a>
+        <a href="{{ url('dashboard') }}" class="btn">Back To Home</a>
     </div>
 </body>
 </html>

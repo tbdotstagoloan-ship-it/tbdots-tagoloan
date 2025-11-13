@@ -10,6 +10,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cache;
 
 
 class PatientSummaryController extends Controller
@@ -19,30 +20,207 @@ class PatientSummaryController extends Controller
     {
         // Get patient with joins
         $patient = DB::table('tbl_patients as p')
+            // ->leftJoin('tbl_diagnosing_facilities as df', 'p.id', '=', 'df.patient_id')
+            ->leftJoin('tbl_screenings as si', 'p.id', '=', 'si.patient_id')
+            ->leftJoin('tbl_laboratory_tests as lt', 'p.id', '=', 'lt.patient_id')
             ->leftJoin('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->leftJoin('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
-            ->leftJoin('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
             ->leftJoin('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+            ->leftJoin('tbl_treatment_facilities as tf', 'p.id', '=', 'tf.patient_id')
+            ->leftJoin('tbl_treatment_histories as th', 'p.id', '=', 'th.patient_id')
+            ->leftJoin('tbl_comorbidities as co', 'p.id', '=', 'co.patient_id')
+            ->leftJoin('tbl_baseline_infos as bi', 'p.id', '=', 'bi.patient_id')
+            ->leftJoin('tbl_hiv_infos as h', 'p.id', '=', 'h.patient_id')
+            ->leftJoin('tbl_treatment_regimens as tr', 'p.id', '=', 'tr.patient_id')
+            ->leftJoin('tbl_tx_supporters as tx', 'p.id', '=', 'tx.patient_id')
+            ->leftJoin('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
+            ->leftJoin('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
+            ->leftJoin('tbl_treatment_outcomes as to', 'p.id', '=', 'to.patient_id')
+            ->leftJoin('tbl_adverse_events as e', 'p.id', '=', 'e.patient_id')
+            ->leftJoin('tbl_progress as pr', 'p.id', '=', 'pr.patient_id')
+            ->leftJoin('tbl_close_contacts as cc', 'p.id', '=', 'cc.patient_id')
+            ->leftJoin('tbl_sputum_monitorings as sp', 'p.id', '=', 'sp.patient_id')
+            ->leftJoin('tbl_chest_xrays as x', 'p.id', '=', 'x.patient_id')
+            ->leftJoin('tbl_post_treatment_follow_ups as f', 'p.id', '=', 'f.patient_id')
             ->select(
+                // Diagnosing Facility
+                // 'df.fac_name',
+                // 'df.fac_ntp_code',
+                // 'df.fac_province',
+                // 'df.fac_region',
+
+                // Patient Demographic
                 'p.id',
                 'p.pat_full_name as name',
                 'p.pat_date_of_birth as birth_date',
                 'p.pat_age as age',
                 'p.pat_sex as sex',
+                'p.pat_civil_status as civil_status',
+                'p.pat_other_contact as other_contact',
+                'p.pat_philhealth_no as philhealth_no',
+                'p.pat_nationality as nationality',
                 'p.pat_current_address as address',
                 'p.pat_current_city_mun as city',
                 'p.pat_current_province as province',
                 'p.pat_current_region as region',
                 'p.pat_current_zip_code as zip_code',
                 'p.pat_contact_number as contact',
-                'd.diag_tb_case_no as tb_case_no',
-                'd.diag_diagnosis_date as diagnosis_date',
+                
+                // Screening Information
+                'si.scr_referred_by',
+                'si.scr_location',
+                'si.scr_referrer_type',
+                'si.scr_screening_mode',
+                'si.scr_screening_date',
+
+                // Laboratory Tests
+                'lt.lab_xpert_test_date',
+                'lt.lab_xpert_result',
+                'lt.lab_smear_test_date',
+                'lt.lab_smear_result',
+                'lt.lab_cxray_test_date',
+                'lt.lab_cxray_result',
+                'lt.lab_tst_test_date',
+                'lt.lab_tst_result',
+                'lt.lab_other_test_date',
+                'lt.lab_other_result',
+
+                // Diagnosis
+                'd.diag_diagnosis_date',
+                'd.diag_notification_date',
+                'd.diag_tb_case_no',
+                'd.diag_attending_physician',
+                'd.diag_referred_to',
+                'd.diag_address',
+                'd.diag_facility_code',
+                'd.diag_province',
+                'd.diag_region',
+
+                // TB Disease Classification
                 'c.clas_bacteriological_status',
+                'c.clas_drug_resistance_status',
+                'c.clas_other_drug_resistant',
                 'c.clas_anatomical_site',
-                'd.diag_attending_physician as physician',
-                't.out_outcome as outcome',
-                't.out_date as date',
-                't.out_reason as reason'
+                'c.clas_site_other',
+                'c.clas_registration_group',
+
+                // Treatment Facility
+                'tf.trea_name',
+                'tf.trea_ntp_code',
+                'tf.trea_province',
+                'tf.trea_region',
+                
+                // History of TB Treatment
+                'th.hist_date_tx_started',
+                'th.hist_treatment_unit',
+                'th.hist_drug',
+                'th.hist_treatment_duration',
+                'th.hist_outcome',
+
+                // Co-morbidities
+                'co.com_date_diagnosed',
+                'co.com_type',
+                'co.com_other',
+                'co.com_treatment',
+
+                // Baseline Information
+                'bi.base_weight',
+                'bi.base_height',
+                'bi.base_blood_pressure',
+                'bi.base_pulse_rate',
+                'bi.base_temperature',
+                'bi.base_emergency_contact_name',
+                'bi.base_relationship',
+                'bi.base_contact_info',
+                'bi.base_diabetes_screening',
+                'bi.base_four_ps_beneficiary',
+                'bi.base_fbs_screening',
+                'bi.base_date_tested',
+                'bi.base_occupation',
+
+                // HIV Information
+                'h.hiv_information',
+                'h.hiv_test_date',
+                'h.hiv_confirmatory_test_date',
+                'h.hiv_result',
+                'h.hiv_art_started',
+                'h.hiv_cpt_started',
+                
+                // Treatment Regimen
+                'tr.reg_start_type',
+                'tr.reg_start_date',
+                'tr.reg_end_type',
+
+                // Tx Supporter
+                'tx.sup_location',
+                'tx.sup_name',
+                'tx.sup_designation',
+                'tx.sup_type',
+                'tx.sup_contact_info',
+                'tx.sup_treatment_schedule',
+                'tx.sup_dat_used',
+
+                // Adherence
+                'a.pha_intensive_start',
+                'a.pha_intensive_end',
+                'a.pha_continuation_start',
+                'a.pha_continuation_end',
+                'a.pha_weight',
+                'a.pha_child_height',
+
+                // Prescribed Drugs
+                'pd.drug_start_date',
+                'pd.drug_name',
+                'pd.drug_no_of_tablets',
+                'pd.drug_strength',
+                'pd.drug_unit',
+                'pd.drug_con_date',
+                'pd.drug_con_name',
+                'pd.drug_con_no_of_tablets',
+                'pd.drug_con_strength',
+                'pd.drug_con_unit',
+
+                // Treatment Outcome
+                'to.out_outcome',
+                'to.out_date',
+                'to.out_reason',
+                
+                // Adverse Event
+                'e.adv_ae_date',
+                'e.adv_specific_ae',
+                'e.adv_fda_reported_date',
+
+                // Patient Progress
+                'pr.prog_date',
+                'pr.prog_problem',
+                'pr.prog_action_taken',
+                'pr.prog_plan',
+
+                // Close Contact
+                'cc.con_name',
+                'cc.con_age',
+                'cc.con_sex',
+                'cc.con_relationship',
+                'cc.con_initial_screening',
+                'cc.con_follow_up',
+                'cc.con_remarks',
+
+                // Sputum Monitoring
+                'sp.sput_date_collected',
+                'sp.sput_smear_result',
+                'sp.sput_xpert_result',
+
+                // Chest X-ray
+                'x.xray_date_examined',
+                'x.xray_impression',
+                'x.xray_descriptive_comment',
+
+                // Post Treatment Follow Up
+                'f.fol_months_after_tx',
+                'f.fol_date',
+                'f.fol_cxr_findings',
+                'f.fol_smear_xpert',
+                'f.fol_tbc_dst',
+
             )
             ->where('p.id', $id)
             ->first();
@@ -82,9 +260,9 @@ class PatientSummaryController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
-        $query = DB::table('tbl_patients as p')
+        $query = DB::table('tbl_tb_classifications as t')
+            ->join('tbl_patients as p', 'p.id', '=', 't.patient_id')
             ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -96,6 +274,7 @@ class PatientSummaryController extends Controller
             )
             ->where('t.clas_registration_group', 'New');
 
+
         // Apply date filters if provided
         if ($startDate) {
             $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
@@ -104,13 +283,18 @@ class PatientSummaryController extends Controller
             $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
         }
 
-        $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+        // ✅ Cache this heavy query for 5 minutes (300 seconds)
+        $cacheKey = "newly_diagnosed_pdf_{$startDate}_{$endDate}";
+        $patients = Cache::remember($cacheKey, 300, function () use ($query) {
+            return $query->orderByDesc('d.diag_tb_case_no')->get();
+        });
 
+        // Generate PDF
         $pdf = PDF::loadView('pdf.newly-diagnosed-report', ['new' => $patients])
             ->setPaper('A4', 'landscape');
 
         // Add page numbers
-        $pdf->output(); // Force render
+        $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
         $w = $canvas->get_width();
         $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');

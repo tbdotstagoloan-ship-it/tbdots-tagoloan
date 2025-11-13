@@ -51,25 +51,51 @@ class Patient extends Model
         return $this->hasMany(Screening::class, 'patient_id');
     }
 
+    public function latestScreening()
+    {
+        return $this->hasOne(Screening::class, 'patient_id')->latestOfMany('scr_screening_date');
+    }
+
+
     public function labTests()
     {
         return $this->hasMany(LaboratoryTest::class, 'patient_id');
     }
 
-    public function diagnosis()
+    // public function diagnosis()
+    // {
+    //     return $this->hasOne(Diagnosis::class, 'patient_id');
+    // }
+
+    // public function diagnoses()
+    // {
+    //     return $this->hasMany(Diagnosis::class, 'patient_id');
+    // }
+
+    public function diagnoses()
     {
-        return $this->hasOne(Diagnosis::class, 'patient_id');
+        return $this->hasMany(Diagnosis::class)->orderBy('created_at');
     }
+
+    // public function tbClassification()
+    // {
+    //     return $this->hasOne(TBClassification::class, 'patient_id');
+    // }
 
     public function tbClassification()
     {
-        return $this->hasOne(TBClassification::class, 'patient_id');
+        return $this->hasMany(TBClassification::class, 'patient_id');
     }
 
     // Page 2
     public function treatmentFacilities()
     {
         return $this->hasMany(TreatmentFacility::class, 'patient_id');
+    }
+
+    public function latestTreatmentFacility()
+    {
+        return $this->hasOne(TreatmentFacility::class)->latestOfMany();
     }
 
     public function treatmentHistories()
@@ -85,6 +111,11 @@ class Patient extends Model
     public function baselineInfos()
     {
         return $this->hasMany(BaselineInfo::class, 'patient_id');
+    }
+    
+    public function latestBaselineInfo()
+    {
+        return $this->hasOne(BaselineInfo::class)->latestOfMany();
     }
 
     public function comorbidities()
@@ -153,5 +184,9 @@ class Patient extends Model
         return $this->hasMany(MedicationAdherence::class, 'patient_id');
     }
 
-
+    public function patientAccount()
+    {
+        return $this->hasOne(PatientAccount::class, 'patient_id');
+    }
+    
 }

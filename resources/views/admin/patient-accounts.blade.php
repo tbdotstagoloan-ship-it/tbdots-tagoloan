@@ -6,7 +6,7 @@
   <title>TB DOTS - Patient Accounts</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="icon" href="{{ url('assets/img/lungs.png') }}">
+  <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
   <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
   
 </head>
@@ -26,7 +26,7 @@
 
     <ul class="sidebar-menu" id="sidebarAccordion">
       <li class="menu-item" data-tooltip="Dashboard">
-        <a href="{{url('admin/dashboard')}}">
+        <a href="{{url('dashboard')}}">
           <img src="{{ url('assets/img/m1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Dashboard</span>
         </a>
@@ -39,7 +39,7 @@
           <i class="fas fa-chevron-right toggle-arrow"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a class="nav-link" href="{{ url('form/page1') }}">Add TB Patient</a></li>
+          <li><a class="nav-link" href="{{ url('form/page1') }}">Add New TB Patient</a></li>
           <li><a class="nav-link" href="{{ url('patient') }}">TB Patients</a></li>
         </ul>
       </li>
@@ -65,15 +65,15 @@
         </a>
       </li>
 
-      <li class="menu-item" data-tooltip="Meidication Adherence Flags">
+      <li class="menu-item" data-tooltip="Meidication Adherence">
         <!-- make the anchor position-relative and give some right padding (pe-4) -->
-        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-2">
+        <a href="{{url('medication-adherence-flags')}}" class="d-flex align-items-center position-relative pe-4">
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Medication Adherence Flags</span>
+          <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <!-- dot positioned relative to the anchor -->
-            <span class="position-absolute top-50 end-0 translate-middle-y me-3 p-1 bg-danger border border-light rounded-circle" 
+            <span class="position-absolute top-50 end-0 translate-middle-y me-4 p-1 bg-danger border border-light rounded-circle" 
                   style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
               <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
             </span>
@@ -174,8 +174,7 @@
                 <th>Full Name</th>
                 <th>Username</th>
                 <th>Contact Information</th>
-                <th>Date of Birth</th>
-                <th>Gender</th>
+                <th>Sex</th>
                 <th>Barangay</th>
                 <!-- <th>Action</th> -->
               </tr>
@@ -186,10 +185,13 @@
 
           <tr>
           <td>{{ $patient->id }}</td>
-          <td>{{ $patient->pat_full_name }}</td>
+          <td>
+          <a href="{{ url('admin/patient-profile/' . $patient->id) }}" style="text-decoration: none; color: #212529;">
+            {{ $patient->pat_full_name }}
+          </a>
+        </td>
           <td>{{ $patient->acc_username }}</td>
           <td>{{ $patient->pat_contact_number }}</td>
-          <td>{{ Carbon\Carbon::parse($patient->pat_date_of_birth)->format('F j, Y') }}</td>
           <td>{{ $patient->pat_sex }}</td>
           <td>{{ $patient->pat_permanent_address }}</td>
           <!-- <td class="text-center">
@@ -223,12 +225,23 @@
         </div>
       </div>
 
-      <div class="card-footer">Showing {{ $patientAccount->firstItem() }} to {{ $patientAccount->lastItem() }} of
-        {{ $patientAccount->total() }} entries
-        <div class="mt-2">
-          {{ $patientAccount->links() }}
-        </div>
-      </div>
+      <div class="d-flex justify-content-center gap-3 mb-4">
+        {{-- Previous Page --}}
+        @if ($prevId)
+            <a href="{{ url()->current() }}?last_id={{ $prevId }}&direction=prev&per_page={{ $perPage }}"
+              class="btn backBtn">Previous</a>
+        @else
+            <button class="btn backBtn" disabled>Previous</button>
+        @endif
+
+        {{-- Next Page --}}
+        @if ($nextId)
+            <a href="{{ url()->current() }}?last_id={{ $nextId }}&direction=next&per_page={{ $perPage }}"
+              class="btn backBtn">Next</a>
+        @else
+            <button class="btn backBtn" disabled>Next</button>
+        @endif
+    </div>
 
     </div>
   </div>
