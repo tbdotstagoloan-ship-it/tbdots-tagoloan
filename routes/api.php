@@ -39,3 +39,5 @@ Route::post('patients/{username}/adverse-events', [AdverseEventController::class
 
 // Get Patient Details
 Route::get('/patient/details/{username}', [PatientProfileController::class, 'getPatientDetails']);
+
+Route::delete('/adherence/{username}/{date}', [MedicationAdherenceController::class, 'deleteAdherence']);

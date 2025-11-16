@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>TB DOTS - Patient Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -372,7 +373,46 @@
                 align-items: center;
             }
         }
+
+        /* Modal Styles */
+.adherence-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.adherence-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.adherence-modal-btn {
+    min-width: 100px;
+    padding: 0.75rem 1.5rem;
+}
+
+.adherence-calendar-day:not(.adherence-empty):not(.adherence-future):hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.adherence-future {
+    cursor: not-allowed !important;
+}
+
     </style>
+
 </head>
 
 <body>
@@ -2989,7 +3029,7 @@
 
 
 
-    <script>
+    <!-- <script>
         (function () {
             const calendar = document.getElementById("calendar");
             const monthYear = document.getElementById("monthYear");
@@ -2997,7 +3037,6 @@
             const daysTakenEl = document.getElementById("daysTaken");
             const daysMissedEl = document.getElementById("daysMissed");
 
-            // new total stat elements
             const totalDaysTakenEl = document.getElementById("totalDaysTaken");
             const totalDaysMissedEl = document.getElementById("totalDaysMissed");
             const totalAdherenceRateEl = document.getElementById("totalAdherenceRate");
@@ -3018,25 +3057,21 @@
                 Object.keys(adherenceData).forEach(dateStr => {
                     const date = new Date(dateStr);
 
-                    // count monthly
                     if (date.getFullYear() === year && date.getMonth() === month) {
                         if (adherenceData[dateStr] === "taken") taken++;
                         if (adherenceData[dateStr] === "missed") missed++;
                     }
 
-                    // count overall totals
                     if (adherenceData[dateStr] === "taken") totalTaken++;
                     if (adherenceData[dateStr] === "missed") totalMissed++;
                 });
 
-                // per-month
                 const monthTotal = taken + missed;
                 const monthRate = monthTotal > 0 ? Math.round((taken / monthTotal) * 100) : 0;
                 adherenceRateEl.textContent = monthRate + "%";
                 daysTakenEl.textContent = taken;
                 daysMissedEl.textContent = missed;
 
-                // total
                 const totalDays = totalTaken + totalMissed;
                 const totalRate = totalDays > 0 ? Math.round((totalTaken / totalDays) * 100) : 0;
                 totalDaysTakenEl.textContent = totalTaken;
@@ -3128,7 +3163,284 @@
 
             fetchAdherenceData();
         })();
-    </script>
+    </script> -->
+
+    <script>
+    (function () {
+        const calendar = document.getElementById("calendar");
+        const monthYear = document.getElementById("monthYear");
+        const adherenceRateEl = document.getElementById("adherenceRate");
+        const daysTakenEl = document.getElementById("daysTaken");
+        const daysMissedEl = document.getElementById("daysMissed");
+
+        // new total stat elements
+        const totalDaysTakenEl = document.getElementById("totalDaysTaken");
+        const totalDaysMissedEl = document.getElementById("totalDaysMissed");
+        const totalAdherenceRateEl = document.getElementById("totalAdherenceRate");
+
+        if (!calendar || !monthYear) return;
+
+        let currentDate = new Date();
+        let adherenceData = {};
+
+        const username = @json(
+            $patient->adherences->first()->username ?? $patient->patientAccount->acc_username ?? null
+        );
+
+        function calculateStats(year, month) {
+            let taken = 0, missed = 0;
+            let totalTaken = 0, totalMissed = 0;
+
+            Object.keys(adherenceData).forEach(dateStr => {
+                const date = new Date(dateStr);
+
+                // count monthly
+                if (date.getFullYear() === year && date.getMonth() === month) {
+                    if (adherenceData[dateStr] === "taken") taken++;
+                    if (adherenceData[dateStr] === "missed") missed++;
+                }
+
+                // count overall totals
+                if (adherenceData[dateStr] === "taken") totalTaken++;
+                if (adherenceData[dateStr] === "missed") totalMissed++;
+            });
+
+            // per-month
+            const monthTotal = taken + missed;
+            const monthRate = monthTotal > 0 ? Math.round((taken / monthTotal) * 100) : 0;
+            adherenceRateEl.textContent = monthRate + "%";
+            daysTakenEl.textContent = taken;
+            daysMissedEl.textContent = missed;
+
+            // total
+            const totalDays = totalTaken + totalMissed;
+            const totalRate = totalDays > 0 ? Math.round((totalTaken / totalDays) * 100) : 0;
+            totalDaysTakenEl.textContent = totalTaken;
+            totalDaysMissedEl.textContent = totalMissed;
+            totalAdherenceRateEl.textContent = totalRate + "%";
+        }
+
+        // Function to show status selection modal
+        function showStatusModal(dateStr, currentStatus) {
+            const existingModal = document.getElementById('adherenceModal');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'adherenceModal';
+            modal.innerHTML = `
+                <div class="adherence-modal-overlay">
+                    <div class="adherence-modal-content">
+                        <h4 class="mb-3">Log Medication for ${dateStr}</h4>
+                        <p class="text-muted mb-4">Select status:</p>
+                        <div class="d-flex gap-3 justify-content-center mb-3">
+                            <button class="btn btn-success adherence-modal-btn" data-status="taken">
+                                <i class="fa fa-check"></i> Taken
+                            </button>
+                            <button class="btn btn-danger adherence-modal-btn" data-status="missed">
+                                <i class="fa fa-times"></i> Missed
+                            </button>
+                            ${currentStatus ? `
+                            <button class="btn btn-secondary adherence-modal-btn" data-status="remove">
+                                <i class="fa fa-trash"></i> Remove
+                            </button>
+                            ` : ''}
+                        </div>
+                        <button class="btn btn-outline-secondary w-100" id="cancelModal">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Handle button clicks
+            modal.querySelectorAll('.adherence-modal-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const status = btn.dataset.status;
+                    if (status === 'remove') {
+                        deleteAdherence(dateStr);
+                    } else {
+                        saveAdherence(dateStr, status);
+                    }
+                    modal.remove();
+                });
+            });
+
+            document.getElementById('cancelModal').addEventListener('click', () => {
+                modal.remove();
+            });
+
+            // Close on overlay click
+            modal.querySelector('.adherence-modal-overlay').addEventListener('click', (e) => {
+                if (e.target.classList.contains('adherence-modal-overlay')) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Save adherence to backend
+        async function saveAdherence(dateStr, status) {
+            if (!username) {
+                alert('Username not found. Cannot save adherence data.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/adherence/log', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        username: username,
+                        date: dateStr,
+                        status: status
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save adherence');
+                }
+
+                // Update local data and re-render
+                adherenceData[dateStr] = status;
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error('Error saving adherence:', error);
+                alert('Failed to save adherence data. Please try again.');
+            }
+        }
+
+        // Delete adherence from backend
+        async function deleteAdherence(dateStr) {
+            if (!username) {
+                alert('Username not found. Cannot delete adherence data.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/adherence/${encodeURIComponent(username)}/${dateStr}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete adherence');
+                }
+
+                // Remove from local data and re-render
+                delete adherenceData[dateStr];
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error('Error deleting adherence:', error);
+                alert('Failed to delete adherence data. Please try again.');
+            }
+        }
+
+        function renderCalendar(date) {
+            calendar.innerHTML = "";
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const monthName = date.toLocaleString("default", { month: "long" });
+            monthYear.textContent = `${monthName} ${year}`;
+
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            daysOfWeek.forEach(day => {
+                const header = document.createElement("div");
+                header.textContent = day;
+                header.classList.add("adherence-day-header");
+                calendar.appendChild(header);
+            });
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const empty = document.createElement("div");
+                empty.classList.add("adherence-calendar-day", "adherence-empty");
+                calendar.appendChild(empty);
+            }
+
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const cell = document.createElement("div");
+                const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const cellDate = new Date(year, month, day);
+                
+                cell.textContent = day;
+                cell.classList.add("adherence-calendar-day");
+
+                // Don't allow clicking future dates
+                if (cellDate <= today) {
+                    cell.style.cursor = "pointer";
+                    cell.addEventListener("click", () => {
+                        showStatusModal(dateStr, adherenceData[dateStr]);
+                    });
+                } else {
+                    cell.classList.add("adherence-future");
+                    cell.style.opacity = "0.4";
+                }
+
+                if (adherenceData[dateStr]) {
+                    cell.classList.add("adherence-" + adherenceData[dateStr]);
+                    const icon = document.createElement("i");
+                    icon.classList.add(
+                        "fa",
+                        adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
+                        "adherence-status-icon"
+                    );
+                    cell.appendChild(icon);
+                }
+
+                calendar.appendChild(cell);
+            }
+
+            calculateStats(year, month);
+        }
+
+        document.getElementById("prevMonth")?.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        document.getElementById("nextMonth")?.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+
+        async function fetchAdherenceData() {
+            try {
+                let url = username
+                    ? `/api/adherence/${encodeURIComponent(username)}`
+                    : `/api/adherence/patient/{{ $patient->id }}`;
+
+                const response = await fetch(url, { credentials: 'same-origin' });
+                if (!response.ok) {
+                    console.error('Adherence API returned status', response.status);
+                    return;
+                }
+
+                const data = await response.json();
+                adherenceData = {};
+                (data || []).forEach(item => {
+                    const d = item.date ? item.date.split(' ')[0] : null;
+                    if (d) adherenceData[d] = item.status;
+                });
+
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error("Error fetching adherence data:", error);
+            }
+        }
+
+        fetchAdherenceData();
+    })();
+</script>
 
     <script>
         function editOutcome(id, outcome, date, reason) {
