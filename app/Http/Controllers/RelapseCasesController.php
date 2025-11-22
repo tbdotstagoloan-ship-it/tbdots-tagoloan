@@ -149,7 +149,7 @@ class RelapseCasesController extends Controller
 
         // Redirect to Page 2
         return redirect()->route('relapse.page2', $patient->id)
-                         ->with('success', 'Page 1 submitted successfully.');
+                         ->with('success', 'You have successfully completed Page 1.');
     }
 
     public function relapseFormPage2($id)
@@ -194,6 +194,10 @@ class RelapseCasesController extends Controller
             'base_temperature' => 'required|string|max:20',
             'base_diabetes_screening' => 'required|string',
             'base_four_ps_beneficiary' => 'required|string',
+            'base_emergency_contact_name' => 'required|string',
+            'base_relationship' => 'required|string',
+            'base_contact_info' => 'required|string|size:11',
+            'base_occupation' => 'required|string',
             'base_fbs_screening' => 'nullable|string',
             'base_date_tested' => 'nullable|date',
 
@@ -263,13 +267,12 @@ class RelapseCasesController extends Controller
             'base_temperature' => $validated['base_temperature'],
             'base_diabetes_screening' => $validated['base_diabetes_screening'],
             'base_four_ps_beneficiary' => $validated['base_four_ps_beneficiary'],
+            'base_emergency_contact_name' => $validated['base_emergency_contact_name'],
+            'base_relationship' => $validated['base_relationship'],
+            'base_contact_info' => $validated['base_contact_info'],
+            'base_occupation' => $validated['base_occupation'],
             'base_fbs_screening' => $validated['base_fbs_screening'] ?? null,
             'base_date_tested' => $validated['base_date_tested'] ?? null,
-            // Get from previous baseline info (readonly fields)
-            'base_emergency_contact_name' => $patient->latestBaselineInfo->base_emergency_contact_name ?? null,
-            'base_relationship' => $patient->latestBaselineInfo->base_relationship ?? null,
-            'base_contact_info' => $patient->latestBaselineInfo->base_contact_info ?? null,
-            'base_occupation' => $patient->latestBaselineInfo->base_occupation ?? null,
         ]);
 
         // 5️⃣ Comorbidities (optional)
@@ -329,7 +332,7 @@ class RelapseCasesController extends Controller
 
         // Redirect to success page or patient list
         return redirect()->route('relapse.page3', $patient->id)
-                        ->with('success', 'Page 2 submitted successfully.');
+                        ->with('success', 'You have successfully completed Page 2.');
     }
 
 

@@ -25,7 +25,7 @@ class AdverseEventController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Adverse Event saved successfully.')
+            ->with('success', 'Adverse Event added successfully.')
             ->with('stay_on_tab', 'lab');
     }
 

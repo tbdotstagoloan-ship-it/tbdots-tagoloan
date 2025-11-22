@@ -165,7 +165,7 @@
                 <th>Age</th>
                 <th>Sex</th>
                 <th>Barangay</th>
-                <th>TB Case #</th>
+                <th>TB Case No</th>
                 <th>Diagnosis Date</th>
                 <th>Anatomical Site</th>
                 <th>Site other</th>

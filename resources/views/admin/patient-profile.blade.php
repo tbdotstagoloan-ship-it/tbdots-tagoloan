@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>TB DOTS - Patient Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -372,7 +373,46 @@
                 align-items: center;
             }
         }
+
+        /* Modal Styles */
+.adherence-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.adherence-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.adherence-modal-btn {
+    min-width: 100px;
+    padding: 0.75rem 1.5rem;
+}
+
+.adherence-calendar-day:not(.adherence-empty):not(.adherence-future):hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.adherence-future {
+    cursor: not-allowed !important;
+}
+
     </style>
+
 </head>
 
 <body>
@@ -2303,8 +2343,13 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_information" class="form-label">HIV Information</label>
-                                    <input type="text" class="form-control" id="hiv_information" name="hiv_information"
-                                        placeholder="HIV Information">
+                                    <!-- <input type="text" class="form-control" id="hiv_information" name="hiv_information"
+                                        placeholder="HIV Information"> -->
+                                        <select name="hiv_information" id="hiv_information" class="form-control form-select">
+                                            <option value="" disabled selected>Select</option>
+                                            <option value="Known for HIV">Known for HIV</option>
+                                            <option value="Not yet Tested">Not yet Tested</option>
+                                        </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_test_date" class="form-label">HIV Test Date</label>
@@ -2322,8 +2367,13 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_result" class="form-label">Result</label>
-                                    <input type="text" name="hiv_result" id="hiv_result" class="form-control"
-                                        placeholder="Result">
+                                    <!-- <input type="text" name="hiv_result" id="hiv_result" class="form-control"
+                                        placeholder="Result"> -->
+                                        <select name="hiv_result" id="hiv_result" class="form-control form-select">
+                                            <option value="" disabled selected>Select</option>
+                                            <option value="Reactive">Reactive</option>
+                                            <option value="Non-reactive">Non-reactive</option>
+                                        </select>
                                 </div>
                             </div>
 
@@ -2359,68 +2409,68 @@
         </div>
 
 
-        <!-- Treatment Outcome Modal -->
         <div class="modal fade" id="editTreatmentOutcomeModal" tabindex="-1"
-            aria-labelledby="editTreatmentOutcomeModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editTreatmentOutcomeModalLabel">Edit Treatment Outcome</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+    aria-labelledby="editTreatmentOutcomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="editTreatmentOutcomeModalLabel">Edit Treatment Outcome</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <form method="POST" id="editOutcomeForm">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    @php
+                        // Get the latest treatment outcome instead of first
+                        $treatment = $patient->treatmentOutcomes->sortByDesc('created_at')->first();
+                        $selectedOutcome = old('out_outcome', optional($treatment)->out_outcome);
+                        $outDate = old('out_date', optional($treatment)->out_date);
+                        $outReason = old('out_reason', optional($treatment)->out_reason);
+                    @endphp
+
+                    <!-- Outcome -->
+                    <div class="mb-3">
+                        <label for="edit_out_outcome" class="form-label">Outcome</label>
+                        <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
+                            required>
+                            @foreach (['Cured', 'Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
+                                <option value="{{ $option }}" {{ $selectedOutcome === $option ? 'selected' : '' }}>
+                                    {{ $option }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    <form method="POST" id="editOutcomeForm">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-body">
-                            @php
-                                $treatment = $patient->treatmentOutcomes->first();
-                                $selectedOutcome = old('out_outcome', optional($treatment)->out_outcome);
-                                $outDate = old('out_date', optional($treatment)->out_date);
-                                $outReason = old('out_reason', optional($treatment)->out_reason);
-                            @endphp
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label for="edit_out_date" class="form-label">Date of Outcome</label>
+                        <input type="date" class="form-control" id="edit_out_date" name="out_date"
+                            max="{{ date('Y-m-d') }}" value="{{ $outDate }}">
+                    </div>
 
-                            <!-- Outcome -->
-                            <div class="mb-3">
-                                <label for="edit_out_outcome" class="form-label">Outcome</label>
-                                <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
-                                    required>
-                                    @foreach (['Cured', 'Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
-                                        <option value="{{ $option }}" {{ $selectedOutcome === $option ? 'selected' : '' }}>
-                                            {{ $option }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Date -->
-                            <div class="mb-3">
-                                <label for="edit_out_date" class="form-label">Date of Outcome</label>
-                                <input type="date" class="form-control" id="edit_out_date" name="out_date"
-                                    max="{{ date('Y-m-d') }}" value="{{ $outDate }}">
-                            </div>
-
-                            <!-- Reason -->
-                            <div class="mb-3">
-                                <label for="edit_out_reason" class="form-label">Reason</label>
-                                <input type="text" class="form-control" id="edit_out_reason" name="out_reason"
-                                    placeholder="Enter reason" value="{{ $outReason }}">
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="submit" class="btn btn-success">
-                                Update
-                            </button>
-                        </div>
-                    </form>
+                    <!-- Reason -->
+                    <div class="mb-3">
+                        <label for="edit_out_reason" class="form-label">Reason</label>
+                        <input type="text" class="form-control" id="edit_out_reason" name="out_reason"
+                            placeholder="Enter reason" value="{{ $outReason }}">
+                    </div>
                 </div>
-            </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        Update
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
 
         <!-- Administration of Drugs Modal -->
 <div class="modal fade" id="editAdministrationModal" tabindex="-1"
@@ -2460,8 +2510,7 @@
                     {{-- ========================= --}}
                     {{-- 🟦 TREATMENT SCHEDULE DETAILS --}}
                     {{-- ========================= --}}
-                    <input type="hidden" name="pha_intensive_start" value="{{ $latestAdherence->pha_intensive_start ?? '' }}">
-                    <input type="hidden" name="pha_intensive_end" value="{{ $latestAdherence->pha_intensive_end ?? '' }}">
+                    
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -2478,6 +2527,18 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
+                            <label for="pha_intensive_start">Intensive Phase Start Date</label>
+                            <input type="date" class="form-control" id="pha_intensive_start" name="pha_intensive_start" 
+                                value="{{ $latestAdherence->pha_intensive_start ?? '' }}" max="<?php echo date('Y-m-d'); ?>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="pha_intensive_end">Intensive Phase End Date</label>
+                            <input type="date" class="form-control" id="pha_intensive_end" name="pha_intensive_end" 
+                                value="{{ $latestAdherence->pha_intensive_end ?? '' }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
                             <label for="pha_continuation_start" class="form-label">Continuation Phase Start Date</label>
                             <input type="date" class="form-control" id="pha_continuation_start" name="pha_continuation_start"
                                 value="{{ $latestAdherence->pha_continuation_start ?? '' }}" max="<?php echo date('Y-m-d'); ?>">
@@ -2486,7 +2547,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="pha_continuation_end" class="form-label">Continuation Phase End Date</label>
                             <input type="date" class="form-control" id="pha_continuation_end" name="pha_continuation_end"
-                                value="{{ $latestAdherence->pha_continuation_end ?? '' }}" readonly>
+                                value="{{ $latestAdherence->pha_continuation_end ?? '' }}" >
                         </div>
 
                         {{-- ========================= --}}
@@ -2741,9 +2802,11 @@
                                 <select name="sput_smear_result" id="sput_smear_result"
                                     class="form-control form-select">
                                     <option value="" disabled selected>Select</option>
+                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
                                     <option value="MTB HIGH">MTB HIGH</option>
                                     <option value="MTB MEDIUM">MTB MEDIUM</option>
                                     <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
                                     <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                                 </select>
                             </div>
@@ -2756,9 +2819,11 @@
                                 <select name="sput_xpert_result" id="sput_xpert_result"
                                     class="form-control form-select">
                                     <option value="" disabled selected>Select</option>
+                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
                                     <option value="MTB HIGH">MTB HIGH</option>
                                     <option value="MTB MEDIUM">MTB MEDIUM</option>
                                     <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
                                     <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                                 </select>
                             </div>
@@ -2989,7 +3054,7 @@
 
 
 
-    <script>
+    <!-- <script>
         (function () {
             const calendar = document.getElementById("calendar");
             const monthYear = document.getElementById("monthYear");
@@ -2997,7 +3062,6 @@
             const daysTakenEl = document.getElementById("daysTaken");
             const daysMissedEl = document.getElementById("daysMissed");
 
-            // new total stat elements
             const totalDaysTakenEl = document.getElementById("totalDaysTaken");
             const totalDaysMissedEl = document.getElementById("totalDaysMissed");
             const totalAdherenceRateEl = document.getElementById("totalAdherenceRate");
@@ -3018,25 +3082,21 @@
                 Object.keys(adherenceData).forEach(dateStr => {
                     const date = new Date(dateStr);
 
-                    // count monthly
                     if (date.getFullYear() === year && date.getMonth() === month) {
                         if (adherenceData[dateStr] === "taken") taken++;
                         if (adherenceData[dateStr] === "missed") missed++;
                     }
 
-                    // count overall totals
                     if (adherenceData[dateStr] === "taken") totalTaken++;
                     if (adherenceData[dateStr] === "missed") totalMissed++;
                 });
 
-                // per-month
                 const monthTotal = taken + missed;
                 const monthRate = monthTotal > 0 ? Math.round((taken / monthTotal) * 100) : 0;
                 adherenceRateEl.textContent = monthRate + "%";
                 daysTakenEl.textContent = taken;
                 daysMissedEl.textContent = missed;
 
-                // total
                 const totalDays = totalTaken + totalMissed;
                 const totalRate = totalDays > 0 ? Math.round((totalTaken / totalDays) * 100) : 0;
                 totalDaysTakenEl.textContent = totalTaken;
@@ -3128,10 +3188,298 @@
 
             fetchAdherenceData();
         })();
-    </script>
+    </script> -->
 
     <script>
-        function editOutcome(id, outcome, date, reason) {
+    (function () {
+        const calendar = document.getElementById("calendar");
+        const monthYear = document.getElementById("monthYear");
+        const adherenceRateEl = document.getElementById("adherenceRate");
+        const daysTakenEl = document.getElementById("daysTaken");
+        const daysMissedEl = document.getElementById("daysMissed");
+
+        // new total stat elements
+        const totalDaysTakenEl = document.getElementById("totalDaysTaken");
+        const totalDaysMissedEl = document.getElementById("totalDaysMissed");
+        const totalAdherenceRateEl = document.getElementById("totalAdherenceRate");
+
+        if (!calendar || !monthYear) return;
+
+        let currentDate = new Date();
+        let adherenceData = {};
+
+        const username = @json(
+            $patient->adherences->first()->username ?? $patient->patientAccount->acc_username ?? null
+        );
+
+        function calculateStats(year, month) {
+            let taken = 0, missed = 0;
+            let totalTaken = 0, totalMissed = 0;
+
+            Object.keys(adherenceData).forEach(dateStr => {
+                const date = new Date(dateStr);
+
+                // count monthly
+                if (date.getFullYear() === year && date.getMonth() === month) {
+                    if (adherenceData[dateStr] === "taken") taken++;
+                    if (adherenceData[dateStr] === "missed") missed++;
+                }
+
+                // count overall totals
+                if (adherenceData[dateStr] === "taken") totalTaken++;
+                if (adherenceData[dateStr] === "missed") totalMissed++;
+            });
+
+            // per-month
+            const monthTotal = taken + missed;
+            const monthRate = monthTotal > 0 ? Math.round((taken / monthTotal) * 100) : 0;
+            adherenceRateEl.textContent = monthRate + "%";
+            daysTakenEl.textContent = taken;
+            daysMissedEl.textContent = missed;
+
+            // total
+            const totalDays = totalTaken + totalMissed;
+            const totalRate = totalDays > 0 ? Math.round((totalTaken / totalDays) * 100) : 0;
+            totalDaysTakenEl.textContent = totalTaken;
+            totalDaysMissedEl.textContent = totalMissed;
+            totalAdherenceRateEl.textContent = totalRate + "%";
+        }
+
+        // Function to show status selection modal
+        function showStatusModal(dateStr, currentStatus) {
+            const existingModal = document.getElementById('adherenceModal');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'adherenceModal';
+            modal.innerHTML = `
+                <div class="adherence-modal-overlay">
+                    <div class="adherence-modal-content">
+                        <h4 class="mb-3">Log Medication for ${dateStr}</h4>
+                        <p class="text-muted mb-4">Select status:</p>
+                        <div class="d-flex gap-3 justify-content-center mb-3">
+                            <button class="btn btn-success adherence-modal-btn" data-status="taken">
+                                <i class="fa fa-check"></i> Taken
+                            </button>
+                            <button class="btn btn-danger adherence-modal-btn" data-status="missed">
+                                <i class="fa fa-times"></i> Missed
+                            </button>
+                            ${currentStatus ? `
+                            <button class="btn btn-secondary adherence-modal-btn" data-status="remove">
+                                <i class="fa fa-trash"></i> Remove
+                            </button>
+                            ` : ''}
+                        </div>
+                        <button class="btn btn-outline-secondary w-100" id="cancelModal">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Handle button clicks
+            modal.querySelectorAll('.adherence-modal-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const status = btn.dataset.status;
+                    if (status === 'remove') {
+                        deleteAdherence(dateStr);
+                    } else {
+                        saveAdherence(dateStr, status);
+                    }
+                    modal.remove();
+                });
+            });
+
+            document.getElementById('cancelModal').addEventListener('click', () => {
+                modal.remove();
+            });
+
+            // Close on overlay click
+            modal.querySelector('.adherence-modal-overlay').addEventListener('click', (e) => {
+                if (e.target.classList.contains('adherence-modal-overlay')) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Save adherence to backend
+        async function saveAdherence(dateStr, status) {
+            if (!username) {
+                alert('Username not found. Cannot save adherence data.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/adherence/log', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        username: username,
+                        date: dateStr,
+                        status: status
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save adherence');
+                }
+
+                // Update local data and re-render
+                adherenceData[dateStr] = status;
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error('Error saving adherence:', error);
+                alert('Failed to save adherence data. Please try again.');
+            }
+        }
+
+        // Delete adherence from backend
+        async function deleteAdherence(dateStr) {
+            if (!username) {
+                alert('Username not found. Cannot delete adherence data.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/adherence/${encodeURIComponent(username)}/${dateStr}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete adherence');
+                }
+
+                // Remove from local data and re-render
+                delete adherenceData[dateStr];
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error('Error deleting adherence:', error);
+                alert('Failed to delete adherence data. Please try again.');
+            }
+        }
+
+        function renderCalendar(date) {
+            calendar.innerHTML = "";
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const monthName = date.toLocaleString("default", { month: "long" });
+            monthYear.textContent = `${monthName} ${year}`;
+
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            daysOfWeek.forEach(day => {
+                const header = document.createElement("div");
+                header.textContent = day;
+                header.classList.add("adherence-day-header");
+                calendar.appendChild(header);
+            });
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const empty = document.createElement("div");
+                empty.classList.add("adherence-calendar-day", "adherence-empty");
+                calendar.appendChild(empty);
+            }
+
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const cell = document.createElement("div");
+                const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const cellDate = new Date(year, month, day);
+                
+                cell.textContent = day;
+                cell.classList.add("adherence-calendar-day");
+
+                // Don't allow clicking future dates
+                if (cellDate <= today) {
+                    cell.style.cursor = "pointer";
+                    cell.addEventListener("click", () => {
+                        showStatusModal(dateStr, adherenceData[dateStr]);
+                    });
+                } else {
+                    cell.classList.add("adherence-future");
+                    cell.style.opacity = "0.4";
+                }
+
+                if (adherenceData[dateStr]) {
+                    cell.classList.add("adherence-" + adherenceData[dateStr]);
+                    const icon = document.createElement("i");
+                    icon.classList.add(
+                        "fa",
+                        adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
+                        "adherence-status-icon"
+                    );
+                    cell.appendChild(icon);
+                }
+
+                calendar.appendChild(cell);
+            }
+
+            calculateStats(year, month);
+        }
+
+        document.getElementById("prevMonth")?.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        document.getElementById("nextMonth")?.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+
+        async function fetchAdherenceData() {
+            try {
+                let url = username
+                    ? `/api/adherence/${encodeURIComponent(username)}`
+                    : `/api/adherence/patient/{{ $patient->id }}`;
+
+                const response = await fetch(url, { credentials: 'same-origin' });
+                if (!response.ok) {
+                    console.error('Adherence API returned status', response.status);
+                    return;
+                }
+
+                const data = await response.json();
+                adherenceData = {};
+                (data || []).forEach(item => {
+                    const d = item.date ? item.date.split(' ')[0] : null;
+                    if (d) adherenceData[d] = item.status;
+                });
+
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error("Error fetching adherence data:", error);
+            }
+        }
+
+        fetchAdherenceData();
+    })();
+</script>
+
+   <script>
+    function editOutcome() {
+        // Get the latest treatment outcome ID
+        @php
+            $latestOutcome = $patient->treatmentOutcomes->sortByDesc('created_at')->first();
+        @endphp
+        
+        @if($latestOutcome)
+            const id = {{ $latestOutcome->id }};
+            const outcome = "{{ $latestOutcome->out_outcome }}";
+            const date = "{{ $latestOutcome->out_date }}";
+            const reason = "{{ $latestOutcome->out_reason }}";
+
             // Set form action to update route
             const form = document.getElementById('editOutcomeForm');
             form.action = `/treatment-outcome/${id}`;
@@ -3140,13 +3488,14 @@
             document.getElementById('edit_out_outcome').value = outcome || '';
             document.getElementById('edit_out_date').value = date || '';
             document.getElementById('edit_out_reason').value = reason || '';
-        }
+        @endif
+    }
 
-        // Reset form when modal closes
-        document.getElementById('editTreatmentOutcomeModal').addEventListener('hidden.bs.modal', function () {
-            document.getElementById('editOutcomeForm').reset();
-        });
-    </script>
+    // Reset form when modal closes
+    document.getElementById('editTreatmentOutcomeModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('editOutcomeForm').reset();
+    });
+</script>
 
     @if (session('stay_on_tab'))
         <script>
@@ -3211,26 +3560,26 @@
                     // ✅ Determine dosage by weight range
                     if (weight >= 25 && weight <= 37) {
                         noOfTablets.value = '2';
-                        strength.value = '75mg';
+                        strength.value = '400mg';
                         unit.value = 'Tablet';
                     } else if (weight >= 38 && weight <= 54) {
                         noOfTablets.value = '3';
-                        strength.value = '150mg';
+                        strength.value = '600mg';
                         unit.value = 'Tablet';
                     } else if (weight >= 55 && weight <= 70) {
                         noOfTablets.value = '4';
-                        strength.value = '275mg';
+                        strength.value = '800mg';
                         unit.value = 'Tablet';
                     } else if (weight > 70) {
                         noOfTablets.value = '5';
-                        strength.value = '400mg';
+                        strength.value = '1000mg';
                         unit.value = 'Tablet';
                     } else {
                         // For weight below 25
-                        drugName.value = '';
-                        noOfTablets.value = '';
-                        strength.value = '';
-                        unit.value = '';
+                        drugName.value = '2FDC';
+                        noOfTablets.value = '1';
+                        strength.value = '200mg';
+                        unit.value = 'Tablet';
                     }
                 });
             }

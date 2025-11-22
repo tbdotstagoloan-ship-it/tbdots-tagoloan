@@ -414,7 +414,7 @@ class AdminController extends Controller
         $patient = Patient::findOrFail($id);
         $patient->update($validatedData);
 
-        return redirect()->back()->with('success', 'Patient updated successfully!');
+        return redirect()->back()->with('success', 'Record updated successfully!');
     }
 
     // View

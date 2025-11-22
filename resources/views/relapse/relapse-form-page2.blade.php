@@ -300,7 +300,7 @@
                   <div class="col-md-6">
                     <label for="hist_treatment_unit">Name of Treatment Unit <span style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="hist_treatment_unit" id="hist_treatment_unit" class="form-control"
-                      placeholder="Name of treatment unit">
+                      placeholder="Name of Treatment Unit">
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
@@ -351,8 +351,8 @@
                     <label for="hiv_information">HIV Information <span style="color: #6b7280;">(Optional)</span></label>
                     <select name="hiv_information" id="hiv_information" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
-                      <option value="Know PLHIV Prior to Start of Tx">Know PLHIV Prior to Start of Tx</option>
-                      <option value="Not Eligible for Testing">Not Eligible for Testing</option>
+                      <option value="Known for HIV">Known for HIV</option>
+                      <option value="Not yet Tested">Not yet Tested</option>
                     </select>
                   </div>
                   <div class="col-md-6">
@@ -370,8 +370,8 @@
                     <label for="hiv_result">Result <span style="color: #6b7280;">(Optional)</span></label>
                     <select name="hiv_result" id="hiv_result" class="form-control form-select">
                       <option value="" disabled selected>Select</option>
-                      <option value="P">P</option>
-                      <option value="N">N</option>
+                      <option value="Reactive">Reactive</option>
+                      <option value="Non-reactive">Non-reactive</option>
                       <option value="Undetermined">Undetermined</option>
                     </select>
                   </div>
@@ -443,20 +443,28 @@
                   <hr>
                   <div class="row mb-2">
                     <div class="col-md-3">
-                    <label for="base_emergency_contact_name">Person to Notify </label>
-                    <input type="text" value="{{ $patient->latestBaselineInfo->base_emergency_contact_name ?? '' }}" class="form-control" readonly>
+                    <label for="base_emergency_contact_name">Person to Notify <span style="color: red;">*</span></label>
+                     <input type="text" name="base_emergency_contact_name" id="base_emergency_contact_name" class="form-control" 
+                        placeholder="In Case of Emergency" required>
+                        <div class="error"></div>
                   </div>
                   <div class="col-md-3">
-                    <label for="base_relationship">Relationship </label>
-                    <input type="text" value="{{ $patient->latestBaselineInfo->base_relationship ?? '' }}" class="form-control" readonly>
+                    <label for="base_relationship">Relationship <span style="color: red;">*</span></label>
+                     <input type="text" name="base_relationship" id="base_relationship" class="form-control" 
+                        placeholder="Relationship" required>
+                        <div class="error"></div>
                   </div>
                   <div class="col-md-3">
-                    <label for="base_contact_info">Contact Information </label>
-                    <input type="text" value="{{ $patient->latestBaselineInfo->base_contact_info ?? '' }}" class="form-control" readonly>
+                    <label for="base_contact_info">Contact Information <span style="color: red;">*</span></label>
+                     <input type="text" name="base_contact_info" id="base_contact_info" class="form-control" 
+                        placeholder="Contact Information" required>
+                        <div class="error"></div>
                   </div>
                   <div class="col-md-3">
-                    <label for="base_occupation">Occupation </label>
-                    <input type="text" value="{{ $patient->latestBaselineInfo->base_occupation ?? '' }}" class="form-control" readonly>
+                    <label for="base_occupation">Occupation <span style="color: red;">*</span></label>
+                     <input type="text" name="base_occupation" id="base_occupation" class="form-control" 
+                        placeholder="Occupation" required>
+                        <div class="error"></div>
                   </div>
                   </div>
                   <div class="row">
@@ -682,8 +690,10 @@
                     <label for="sup_designation">Designation <span style="color: red;">*</span></label>
                       <select name="sup_designation" id="sup_designation" class="form-control form-select" required>
                         <option value="" disabled selected>Select</option>
+                        <option value="Doctor">Doctor</option>
                         <option value="Nurse">Nurse</option>
-                        <option value="Barangay Health Worker">Barangay Health Worker</option>
+                        <option value="Midwife">Midwife</option>
+                        <option value="BHW">BHW</option>
                       </select>
                     <div class="error"></div>
                   </div>
@@ -1253,32 +1263,41 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // Set drug to 4FDC for intensive phase
+      // Default drug is 4FDC (intensive phase)
       drugName.value = '4FDC';
 
-      // Determine values based on weight
+      let tablets = 0;
+
+      // Determine # of tablets based on weight
       if (weight >= 25 && weight <= 37) {
-        noOfTablets.value = '2';
-        strength.value = '75mg';
-        unit.value = 'Tablet';
+        tablets = 2;
       } else if (weight >= 38 && weight <= 54) {
-        noOfTablets.value = '3';
-        strength.value = '150mg';
-        unit.value = 'Tablet';
+        tablets = 3;
       } else if (weight >= 55 && weight <= 70) {
-        noOfTablets.value = '4';
-        strength.value = '275mg';
-        unit.value = 'Tablet';
+        tablets = 4;
       } else if (weight > 70) {
-        noOfTablets.value = '5';
-        strength.value = '400mg';
-        unit.value = 'Tablet';
+        tablets = 5;
       } else {
         drugName.value = '';
         noOfTablets.value = '';
         strength.value = '';
         unit.value = '';
+        return;
       }
+
+      noOfTablets.value = tablets;
+
+      // 4FDC strength table
+      const strengthMap4FDC = {
+        1: 400,
+        2: 800,
+        3: 12000,
+        4: 16000,
+        5: 20000
+      };
+      strength.value = strengthMap4FDC[tablets] + 'mg';
+
+      unit.value = 'Tablet';
     });
   });
 </script>

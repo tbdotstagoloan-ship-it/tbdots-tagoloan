@@ -32,7 +32,7 @@ class PhysicianController extends Controller
             'phy_specialty' => 'nullable',
             'phy_contact' => 'required',
             'phy_address' => 'required',
-            'phy_email' => 'required|email|unique:tbl_physicians,phy_email',
+            'phy_email' => 'nullable|email|unique:tbl_physicians,phy_email',
         ]);
 
         Physician::create($physician_validate);

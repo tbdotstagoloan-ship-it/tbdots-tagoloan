@@ -252,188 +252,331 @@ class PatientSummaryController extends Controller
     }
 
     public function newlyDiagnosedPDF(Request $request)
-    {
-        ini_set('memory_limit', '512M');
-        set_time_limit(300);
+{
+    ini_set('memory_limit', '512M');
+    set_time_limit(300);
 
-        // Get optional date filters from request
-        $startDate = $request->query('start_date');
-        $endDate = $request->query('end_date');
+    // Optional filters
+    $startDate = $request->query('start_date');
+    $endDate = $request->query('end_date');
 
-        $query = DB::table('tbl_tb_classifications as t')
-            ->join('tbl_patients as p', 'p.id', '=', 't.patient_id')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_diagnosis_date',
-                'd.diag_tb_case_no',
-                't.clas_registration_group'
-            )
-            ->where('t.clas_registration_group', 'New');
-
-
-        // Apply date filters if provided
-        if ($startDate) {
-            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-        }
-        if ($endDate) {
-            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-        }
-
-        // ✅ Cache this heavy query for 5 minutes (300 seconds)
-        $cacheKey = "newly_diagnosed_pdf_{$startDate}_{$endDate}";
-        $patients = Cache::remember($cacheKey, 300, function () use ($query) {
-            return $query->orderByDesc('d.diag_tb_case_no')->get();
-        });
-
-        // Generate PDF
-        $pdf = PDF::loadView('pdf.newly-diagnosed-report', ['new' => $patients])
-            ->setPaper('A4', 'landscape');
-
-        // Add page numbers
-        $pdf->output();
-        $canvas = $pdf->getDomPDF()->getCanvas();
-        $w = $canvas->get_width();
-        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
-        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
-
-        return $pdf->stream('Newly Diagnosed Report.pdf');
+    /**
+     * 1️⃣ EARLIEST classification per patient
+     *    We only include patient if FIRST = "new"
+     */
+    $firstClass = DB::table('tbl_tb_classifications as t1')
+        ->select(
+            't1.id',
+            't1.patient_id',
+            't1.clas_registration_group',
+            't1.created_at as class_date'
+        )
+        ->whereRaw('t1.id = (
+            SELECT t2.id 
+            FROM tbl_tb_classifications t2
+            WHERE t2.patient_id = t1.patient_id
+            ORDER BY t2.id ASC
+            LIMIT 1
+        )')
+        ->where('t1.clas_registration_group', 'new');  // only earliest = new
+    /**
+     * 2️⃣ EARLIEST diagnosis per patient
+     *     (Diagnosis recorded during the NEW phase,
+     *      NOT relapse or later diagnosis)
+     */
+    $diagnosisAtNew = DB::table('tbl_diagnosis as d1')
+        ->select(
+            'd1.id',
+            'd1.patient_id',
+            'd1.diag_diagnosis_date',
+            'd1.diag_tb_case_no'
+        )
+        ->whereRaw('d1.id = (
+            SELECT d2.id
+            FROM tbl_diagnosis d2
+            WHERE d2.patient_id = d1.patient_id
+            ORDER BY d2.id ASC   -- earliest diagnosis
+            LIMIT 1
+        )');
+    /**
+     * 3️⃣ MAIN QUERY: combine filtered first classification + first diagnosis
+     */
+    $query = DB::table('tbl_patients as p')
+        ->joinSub($firstClass, 't', 'p.id', '=', 't.patient_id')
+        ->leftJoinSub($diagnosisAtNew, 'd', 'p.id', '=', 'd.patient_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_diagnosis_date',
+            'd.diag_tb_case_no',
+            't.clas_registration_group'
+        );
+    /**
+     * 4️⃣ Optional date range filter
+     */
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
+
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+    /**
+     * 5️⃣ CACHE
+     */
+    $cacheKey = "newly_diagnosed_pdf_{$startDate}_{$endDate}";
+    $patients = Cache::remember($cacheKey, 300, function () use ($query) {
+        return $query->orderBy('d.diag_diagnosis_date', 'desc')->get();
+    });
+    /**
+     * 6️⃣ GENERATE PDF
+     */
+    $pdf = PDF::loadView('pdf.newly-diagnosed-report', ['new' => $patients])
+        ->setPaper('A4', 'landscape');
+    // Page Number
+    $pdf->output();
+    $canvas = $pdf->getDomPDF()->getCanvas();
+    $w = $canvas->get_width();
+    $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+    $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
+
+    return $pdf->stream('Newly Diagnosed Report.pdf');
+}
+
 
 
 
     public function relapsePDF(Request $request)
-    {
-        ini_set('memory_limit', '512M');
-        set_time_limit(300);
+{
+    ini_set('memory_limit', '512M');
+    set_time_limit(300);
 
-        $startDate = $request->query('start_date');
-        $endDate = $request->query('end_date');
+    $startDate = $request->query('start_date');
+    $endDate = $request->query('end_date');
 
-        $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_diagnosis_date',
-                'd.diag_tb_case_no',
-                't.clas_registration_group'
-            )
-            ->where('t.clas_registration_group', 'Relapse');
+    // 1️⃣ Get only the LATEST relapse classification per patient
+    $latestRelapse = DB::table('tbl_tb_classifications as t1')
+        ->select(
+            't1.id',
+            't1.patient_id',
+            't1.clas_registration_group',
+            't1.created_at'
+        )
+        ->where('t1.clas_registration_group', 'Relapse')
+        ->whereRaw("t1.id = (
+            SELECT t2.id
+            FROM tbl_tb_classifications t2
+            WHERE t2.patient_id = t1.patient_id
+              AND t2.clas_registration_group = 'Relapse'
+            ORDER BY t2.id DESC
+            LIMIT 1
+        )");
 
-        if ($startDate) {
-            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-        }
-        if ($endDate) {
-            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-        }
+    // 2️⃣ Get the LATEST diagnosis per patient
+    $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+        ->select(
+            'd1.id',
+            'd1.patient_id',
+            'd1.diag_diagnosis_date',
+            'd1.diag_tb_case_no'
+        )
+        ->whereRaw("d1.id = (
+            SELECT d2.id
+            FROM tbl_diagnosis d2
+            WHERE d2.patient_id = d1.patient_id
+            ORDER BY d2.id DESC
+            LIMIT 1
+        )");
 
-        $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+    // 3️⃣ Main query
+    $query = DB::table('tbl_patients as p')
+        ->joinSub($latestRelapse, 't', 'p.id', '=', 't.patient_id')
+        ->leftJoinSub($latestDiagnosis, 'd', 'p.id', '=', 'd.patient_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_diagnosis_date',
+            'd.diag_tb_case_no',
+            't.clas_registration_group'
+        );
 
-        $pdf = Pdf::loadView('pdf.relapse-report', ['relapse' => $patients])
-            ->setPaper('A4', 'landscape');
-
-        $pdf->output();
-        $canvas = $pdf->getDomPDF()->getCanvas();
-        $w = $canvas->get_width();
-        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
-        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
-
-        return $pdf->stream('Relapse Report.pdf');
+    // 4️⃣ Date filter
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+
+    // 5️⃣ Sort by latest TB case
+    $patients = $query->orderByDesc('d.diag_tb_case_no')->get();
+
+    // 6️⃣ Generate PDF
+    $pdf = Pdf::loadView('pdf.relapse-report', ['relapse' => $patients])
+        ->setPaper('A4', 'landscape');
+
+    $pdf->output();
+    $canvas = $pdf->getDomPDF()->getCanvas();
+    $w = $canvas->get_width();
+    $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+    $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
+
+    return $pdf->stream('Relapse Report.pdf');
+}
+
 
 
     public function bacteriologicallyConfirmedPDF(Request $request)
-    {
-        ini_set('memory_limit', '512M');
-        set_time_limit(300);
+{
+    ini_set('memory_limit', '512M');
+    set_time_limit(300);
 
-        $startDate = $request->query('start_date');
-        $endDate = $request->query('end_date');
+    $startDate = $request->query('start_date');
+    $endDate = $request->query('end_date');
 
-        $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_tb_case_no',
-                'd.diag_diagnosis_date',
-                'c.clas_bacteriological_status as tb_classification'
-            )
-            ->where('c.clas_bacteriological_status', 'Bacteriologically-confirmed TB');
+    // 1️⃣ Latest BC classification per patient
+    $latestBC = DB::table('tbl_tb_classifications as c1')
+        ->select(
+            'c1.id',
+            'c1.patient_id',
+            'c1.clas_bacteriological_status',
+            'c1.created_at'
+        )
+        ->where('c1.clas_bacteriological_status', 'Bacteriologically-confirmed TB')
+        ->whereRaw("c1.id = (
+            SELECT c2.id
+            FROM tbl_tb_classifications c2
+            WHERE c2.patient_id = c1.patient_id
+              AND c2.clas_bacteriological_status = 'Bacteriologically-confirmed TB'
+            ORDER BY c2.id DESC
+            LIMIT 1
+        )");
 
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
+    // 2️⃣ Latest diagnosis per patient
+    $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+        ->select(
+            'd1.id',
+            'd1.patient_id',
+            'd1.diag_diagnosis_date',
+            'd1.diag_tb_case_no'
+        )
+        ->whereRaw("d1.id = (
+            SELECT d2.id
+            FROM tbl_diagnosis d2
+            WHERE d2.patient_id = d1.patient_id
+            ORDER BY d2.id DESC
+            LIMIT 1
+        )");
 
-            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+    // 3️⃣ Main Query
+    $query = DB::table('tbl_patients as p')
+        ->joinSub($latestBC, 'c', 'p.id', '=', 'c.patient_id')
+        ->leftJoinSub($latestDiagnosis, 'd', 'p.id', '=', 'd.patient_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_tb_case_no',
+            'd.diag_diagnosis_date',
+            'c.clas_bacteriological_status as tb_classification'
+        );
 
-        $pdf = Pdf::loadView('pdf.bacteriologically-confirmed-report', ['bacteriologicallyConfirmed' => $patients])
-        ->setPaper('A4', 'landscape');
-
-        $pdf->output();
-        $canvas = $pdf->getDomPDF()->getCanvas();
-        $w = $canvas->get_width();
-        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
-        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
-
-        return $pdf->stream('Bacteriologically-Confirmed TB Report.pdf');
+    // 4️⃣ Date filters
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+
+    // 5️⃣ Fetch final sorted list
+    $patients = $query->orderByDesc('d.diag_tb_case_no')->get();
+
+    // 6️⃣ Generate PDF
+    $pdf = Pdf::loadView('pdf.bacteriologically-confirmed-report', [
+        'bacteriologicallyConfirmed' => $patients
+    ])->setPaper('A4', 'landscape');
+
+    $pdf->output();
+    $canvas = $pdf->getDomPDF()->getCanvas();
+    $w = $canvas->get_width();
+    $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+    $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
+
+    return $pdf->stream('Bacteriologically-Confirmed TB Report.pdf');
+}
+
 
     public function clinicallyDiagnosedPDF(Request $request)
-    {
-        ini_set('memory_limit', '512M');
-        set_time_limit(300);
+{
+    ini_set('memory_limit', '512M');
+    set_time_limit(300);
 
-        $startDate = $request->query('start_date');
-        $endDate = $request->query('end_date');
+    $startDate = $request->query('start_date');
+    $endDate = $request->query('end_date');
 
-        $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_tb_case_no',
-                'd.diag_diagnosis_date',
-                'c.clas_bacteriological_status as tb_classification'
-            )
-            ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
+    $query = DB::table('tbl_patients as p')
+        ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
+        ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_tb_case_no',
+            'd.diag_diagnosis_date',
+            'c.clas_bacteriological_status as tb_classification'
+        )
+        ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
 
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
-
-            $patient = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
-
-        $pdf = Pdf::loadView('pdf.clinically-diagnosed-report', ['clinicallyDiagnosed' => $patient])
-        ->setPaper('A4', 'landscape');
-
-        $pdf->output();
-        $canvas = $pdf->getDomPDF()->getCanvas();
-        $w = $canvas->get_width();
-        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
-        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
-
-        return $pdf->stream('Clinically Diagnosed Report.pdf');
+    // DATE FILTERS
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
+
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+
+    // 🔥 CORRECT SORTING
+    $patient = $query
+        // 1️⃣ Sort by diagnosis date first (latest)
+        ->orderBy('d.diag_diagnosis_date', 'DESC')
+
+        // 2️⃣ Then sort TB case number properly (YYYY-XXXXX)
+        ->orderByRaw("
+            STR_TO_DATE(
+                SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1),
+                '%Y'
+            ) DESC
+        ")
+        ->orderByRaw("
+            CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC
+        ")
+        ->get();
+
+    // PDF GENERATION
+    $pdf = Pdf::loadView('pdf.clinically-diagnosed-report', [
+        'clinicallyDiagnosed' => $patient
+    ])->setPaper('A4', 'landscape');
+
+    // PAGE NUMBERING
+    $pdf->output();
+    $canvas = $pdf->getDomPDF()->getCanvas();
+    $w = $canvas->get_width();
+    $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+
+    $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
+
+    return $pdf->stream('Clinically Diagnosed Report.pdf');
+}
+
+
 
     public function pulmonaryPDF(Request $request)
     {

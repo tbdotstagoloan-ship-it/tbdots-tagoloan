@@ -57,4 +57,14 @@ class MedicationAdherenceController extends Controller
         // reuse existing method logic: query by username
         return $this->getAdherence($account->acc_username);
     }
+
+    public function deleteAdherence($username, $date)
+    {
+        MedicationAdherence::where('username', $username)
+            ->where('date', $date)
+            ->delete();
+
+        return response()->json(['message' => 'Adherence deleted successfully']);
+    }
+
 }

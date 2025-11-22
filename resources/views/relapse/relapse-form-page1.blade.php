@@ -479,9 +479,11 @@
                         style="color: red;">*</span></label>
                     <select name="lab_xpert_result" id="lab_xpert_result" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
+                      <option value="MTB VERY HIGH">MTB VERY HIGH</option>
                       <option value="MTB HIGH">MTB HIGH</option>
                       <option value="MTB MEDIUM">MTB MEDIUM</option>
                       <option value="MTB LOW">MTB LOW</option>
+                      <option value="MTB VERY LOW">MTB VERY LOW</option>
                       <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                     </select>
                     <div class="error"></div>
@@ -500,12 +502,14 @@
                   <div class="col-md-6">
                     <label for="lab_cxray_result" class="form-label">Chest X-ray Test Result <span
                         style="color: red;">*</span></label>
-                    <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select" required>
+                    <!-- <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="PTB BOTH RIGHT UPPER LOBE">PTB BOTH RIGHT UPPER LOBE</option>
                       <option value="PTB BOTH LOWER LOBE">PTB BOTH LOWER LOBE</option>
                       <option value="SUGGESTIVE POSITIVE TUBERCULOSIS">SUGGESTIVE POSITIVE TUBERCULOSIS</option>
-                    </select>
+                    </select> -->
+                    <input type="text" name="lab_cxray_result" id="lab_cxray_result" class="form-control"
+                        placeholder="Chest X-ray Test Result" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">

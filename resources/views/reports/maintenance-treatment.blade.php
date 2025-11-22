@@ -219,12 +219,12 @@
                 <tr>
                   <th>Name</th>
                   <th>Drug</th>
-                  <th>No. of Tablets</th>
+                  <th>Tablets</th>
                   <th>Strength</th>
                   <th>Unit</th>
-                  <th>Continuation Phase Start</th>
+                  <th>Continuation Start</th>
                   <th>Day</th>
-                  <th>Continuation Phase End</th>
+                  <th>Continuation End</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -241,7 +241,7 @@
                   <td>{{ \Carbon\Carbon::parse($patient->pha_continuation_start)->format('F j, Y') }}</td>
                   <td>{{ $patient->treatment_day }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->pha_continuation_end)->format('F j, Y') }}</td>
-                  <td><span class="status-badge bg-success">{{ $patient->outcome }}</span></td>
+                  <td><span class="badge bg-warning">{{ $patient->outcome }}</span></td>
                 </tr>
 
                  @endforeach

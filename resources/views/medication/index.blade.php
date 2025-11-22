@@ -189,7 +189,7 @@
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 50px; color: #2c3e50; font-weight: 600;">
-        Medication Adherence Monitoring
+        Missed Medication Intake
     </h4>
 
     <div class="card shadow-sm border-0">
@@ -220,7 +220,7 @@
                     <td>{{ $row['contact'] ?? '—' }}</td>
                     <td>{{ $row['username'] }}</td>
                     <td>{{ \Carbon\Carbon::parse($row['last_missed'])->format('M d, Y') ?? '—' }}</td>
-                    <td><span class="status-badge bg-danger">Missed</span></td>
+                    <td><span class="badge bg-danger">Missed</span></td>
                   </tr>
                 @endforeach
               @else

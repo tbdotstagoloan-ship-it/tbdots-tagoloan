@@ -18,6 +18,7 @@ class PatientAccount extends Authenticatable
         'acc_username',
         'acc_password',
         'patient_id',
+        'password_reset_code'
     ];
 
     protected $hidden = [

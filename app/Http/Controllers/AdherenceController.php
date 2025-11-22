@@ -95,7 +95,7 @@ class AdherenceController extends Controller
 
     return redirect()
         ->back()
-        ->with('success', 'Latest administration of drugs record updated successfully!')
+        ->with('success', 'Record updated successfully!')
         ->with('stay_on_tab', 'treatment');
 }
 

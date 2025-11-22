@@ -243,7 +243,7 @@
                   <td>{{ \Carbon\Carbon::parse($patient->reg_start_date)->format('M j, Y') }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->outcome_date)->format('M j, Y') }}</td>
                   <td>{{ $patient->out_reason ?? 'N/A' }}</td>
-                  <td><span class="status-badge bg-success">{{ $patient->outcome }}</span></td>
+                  <td><span class="badge bg-success">{{ $patient->outcome }}</span></td>
                 </tr>
 
                 @endforeach

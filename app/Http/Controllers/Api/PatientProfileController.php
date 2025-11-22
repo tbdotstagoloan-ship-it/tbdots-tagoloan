@@ -15,10 +15,11 @@ class PatientProfileController extends Controller
         $account = DB::table('tbl_patient_accounts as a')
             ->join('tbl_patients as p', 'a.patient_id', '=', 'p.id')
             ->join('tbl_adherences as ad', 'a.patient_id', '=', 'ad.id')
+            ->join('tbl_baseline_infos as bi', 'a.patient_id', '=', 'bi.id')
             ->select(
                 'p.pat_full_name',
                 'p.pat_contact_number',
-                'p.pat_other_contact',
+                'bi.base_contact_info',
                 'ad.pha_intensive_start',
                 'ad.pha_intensive_end'
             )

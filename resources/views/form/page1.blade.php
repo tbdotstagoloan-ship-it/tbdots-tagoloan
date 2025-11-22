@@ -568,9 +568,11 @@
                         style="color: red;">*</span></label>
                     <select name="lab_xpert_result" id="lab_xpert_result" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
+                      <option value="MTB VERY HIGH">MTB VERY HIGH</option>
                       <option value="MTB HIGH">MTB HIGH</option>
                       <option value="MTB MEDIUM">MTB MEDIUM</option>
                       <option value="MTB LOW">MTB LOW</option>
+                      <option value="MTB VERY LOW">MTB VERY LOW</option>
                       <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                     </select>
                     <div class="error"></div>
@@ -589,12 +591,14 @@
                   <div class="col-md-6">
                     <label for="lab_cxray_result" class="form-label">Chest X-ray Test Result <span
                         style="color: red;">*</span></label>
-                    <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select" required>
+                    <!-- <select name="lab_cxray_result" id="lab_cxray_result" class="form-control form-select" required>
                       <option value="" disabled selected>Select</option>
                       <option value="PTB BOTH RIGHT UPPER LOBE">PTB BOTH RIGHT UPPER LOBE</option>
                       <option value="PTB BOTH LOWER LOBE">PTB BOTH LOWER LOBE</option>
                       <option value="SUGGESTIVE POSITIVE TUBERCULOSIS">SUGGESTIVE POSITIVE TUBERCULOSIS</option>
-                    </select>
+                    </select> -->
+                    <input type="text" name="lab_cxray_result" id="lab_cxray_result" class="form-control"
+                        placeholder="Chest X-ray Test Result" required>
                     <div class="error"></div>
                   </div>
                   <div class="col-md-6">
@@ -612,9 +616,13 @@
                     <label for="lab_smear_result" class="form-label">Smear Microscopy Test Result <span
                         style="color: #6b7280;">(Optional)</span></label>
                     <select name="lab_smear_result" id="lab_smear_result" class="form-control form-select">
-                      <option value="" disabled selected>Select</option>
-                      <option value="Positive">Positive</option>
-                      <option value="Negative">Negative</option>
+                        <option value="" disabled selected>Select</option>
+                        <option value="MTB VERY HIGH">MTB VERY HIGH</option>
+                        <option value="MTB HIGH">MTB HIGH</option>
+                        <option value="MTB MEDIUM">MTB MEDIUM</option>
+                        <option value="MTB LOW">MTB LOW</option>
+                        <option value="MTB VERY LOW">MTB VERY LOW</option>
+                        <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                     </select>
                   </div>
                   <div class="col-md-6">
@@ -650,11 +658,13 @@
                     <label for="lab_other_test_name" class="form-label">Other Test Name <span
                         style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="lab_other_test_name" id="lab_other_test_name" class="form-control" placeholder="Specify">
+                    <div class="error"></div>
                   </div>
                   <div class="col-md-6">
                     <label for="lab_other_result" class="form-label">Test Result <span
                         style="color: #6b7280;">(Optional)</span></label>
                     <input type="text" name="lab_other_result" id="lab_other_result" class="form-control" placeholder="Specify">
+                    <div class="error"></div>
                   </div>
                   <div class="col-md-6">
                     <label for="lab_other_test_date" class="form-label">Test Date <span
@@ -827,12 +837,13 @@
                   </div>
                   <div class="col-md-4">
                     <label for="clas_registration_group">Registration Group </label>
-                    <!-- <select name="clas_registration_group" id="clas_registration_group" class="form-control form-select"
+                    <select name="clas_registration_group" id="clas_registration_group" class="form-control form-select"
                       required>
                       <option value="" disabled selected>Select</option>
                       <option value="New">New</option>
-                    </select> -->
-                    <input type="text" name="clas_registration_group" id="clas_registration_group" class="form-control" value="New" readonly>
+                      <option value="Relapse">Relapse</option>
+                    </select>
+                    <!-- <input type="text" name="clas_registration_group" id="clas_registration_group" class="form-control" value="New" readonly> -->
                     <div class="error"></div>
                   </div>
                 </div>
@@ -1105,8 +1116,9 @@
                   <tr><th>Chest X-ray Result</th><td>${lab_cxray_result.value}</td></tr>
                   <tr><th>Tuberculin Skin Test Date</th><td>${lab_tst_test_date.value}</td></tr>
                   <tr><th>Tuberculin Skin Test Result</th><td>${lab_tst_result.value}</td></tr>
-                  <tr><th>Other Test Date</th><td>${lab_other_test_date.value}</td></tr>
-                  <tr><th>Other Test Result</th><td>${lab_other_result.value}</td></tr>
+                  <tr><th>Other Test Name</th><td>${lab_other_test_name.value}</td></tr>
+                  <tr><th>Test Result</th><td>${lab_other_result.value}</td></tr>
+                  <tr><th>Test Date</th><td>${lab_other_test_date.value}</td></tr>
                 </tbody>
               </table>
             </div>

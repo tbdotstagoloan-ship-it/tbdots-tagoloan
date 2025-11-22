@@ -18,8 +18,9 @@ class LaboratoryTest extends Model
         'lab_cxray_result',
         'lab_tst_test_date',
         'lab_tst_result',
-        'lab_other_test_date',
+        'lab_other_test_name',
         'lab_other_result',
+        'lab_other_test_date',
         'diagfacility_id',
     ];
 

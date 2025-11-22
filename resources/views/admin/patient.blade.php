@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>TB DOTS - Patient List</title>
+  <title>TB DOTS - TB Patients</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
@@ -219,12 +219,11 @@
               <tr>
                 <th>ID</th>
                 <th>Full Name</th>
-                <th>Sex</th>
-                <th>Barangay</th>
                 <th>Intensive Phase</th>
                 <th>Days</th>
                 <th>Maintenance Phase</th>
                 <th>Days</th>
+                <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -293,8 +292,6 @@
                         {{ $patient->pat_full_name }}
                     </a>
                 </td>
-                  <td>{{ $patient->pat_sex }}</td>
-                  <td>{{ $patient->pat_current_address }}</td>
                   <td>
                       <span class="badge 
                           @if($intensiveStatus === 'Ongoing') bg-warning
@@ -316,6 +313,18 @@
                       </span>
                   </td>
                   <td>{{ $maintenanceDaysRemaining !== '—' ? $maintenanceDaysRemaining . ' days' : '—' }}</td>
+                  <td>
+                    <span class="badge 
+                          @if($patient->status === 'Ongoing') bg-warning
+                          @elseif($patient->status === 'Cured') bg-success
+                          @elseif($patient->status === 'Treatment Completed') bg-success
+                          @elseif($patient->status === 'Lost to Follow Up') bg-warning
+                          @elseif($patient->status === 'Died') bg-danger
+                          @else bg-secondary
+                          @endif">
+                          {{ $patient->status }}
+                      </span>
+                  </td>
 
                   <td class="text-center">
                     <div class="dropdown">
@@ -354,26 +363,14 @@
                           </form>
                         </li>
 
-                       <!-- Create Patient Account or Change Password -->
-<li>
-  @if(isset($patient->account_id) && $patient->account_id)
-    <!-- If patient has account, show Change Password -->
-    <a class="dropdown-item d-flex align-items-center change-password-btn"
-      href="javascript:void(0);" 
-      data-patient-id="{{ $patient->id }}"
-      data-patient-name="{{ $patient->pat_full_name }}"
-      title="Change Patient Password">
-      <i class="fas fa-key me-2"></i> Change Password
-    </a>
-  @else
-    <!-- If patient has no account, show Create Account -->
-    <a class="dropdown-item d-flex align-items-center"
-      href="{{ route('patient.account', $patient->id) }}" 
-      title="Create Patient Account">
-      <i class="fas fa-user-plus me-2"></i> Create Account
-    </a>
-  @endif
-</li>
+                       <!-- Create Patient Account -->
+                        <li>
+                          <a class="dropdown-item d-flex align-items-center"
+                              href="{{ route('patient.account', $patient->id) }}" 
+                              title="Create Patient Account">
+                              <i class="fas fa-user-plus me-2"></i> Create Account
+                            </a>
+                        </li>
 
                         <!-- Report -->
                         <li>
@@ -387,43 +384,6 @@
                     </div>
                   </td>
                 </tr>
-
-                <!-- Change Password Modal - Place this OUTSIDE the foreach loop -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form method="POST" id="changePasswordForm">
-        @csrf
-        <div class="modal-header">
-          <h5 class="modal-title" id="changePasswordModalLabel">
-            Change Password - <span id="patientNameDisplay"></span>
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="acc_password" class="form-label">New Password</label>
-            <input type="acc_password" class="form-control" id="acc_password" name="password" required minlength="8">
-            <small class="text-muted">Minimum 8 characters</small>
-          </div>
-          
-          <div class="mb-3">
-            <label for="password_confirmation" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            <i class="fas fa-times me-1"></i> Cancel
-          </button>
-          <button type="submit" class="btn btn-primary">
-            <i class="fas fa-save me-1"></i> Update Password
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
 
                 <!-- Edit Patient Modal - MOVED INSIDE THE LOOP -->
                 <div class="modal fade" id="editPatientModal{{ $patient->id }}" tabindex="-1"
@@ -721,33 +681,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const changePasswordBtns = document.querySelectorAll('.change-password-btn');
-    const modal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
-    const form = document.getElementById('changePasswordForm');
-    const patientNameDisplay = document.getElementById('patientNameDisplay');
-    
-    changePasswordBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const patientId = this.dataset.patientId;
-            const patientName = this.dataset.patientName;
-            
-            // Update form action
-            form.action = `/patient/${patientId}/update-password`;
-            
-            // Update patient name in modal title
-            patientNameDisplay.textContent = patientName;
-            
-            // Clear previous inputs
-            form.reset();
-            
-            // Show modal
-            modal.show();
-        });
-    });
-});
-</script>
+
 
 </body>
 

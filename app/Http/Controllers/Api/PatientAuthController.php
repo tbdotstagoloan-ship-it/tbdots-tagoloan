@@ -47,37 +47,75 @@ class PatientAuthController extends Controller
         ]);
     }
 
-    public function logout(Request $request)
+    // public function logout(Request $request)
+    // {
+    //     $request->user()->currentAccessToken()->delete();
+
+    //     return response()->json([
+    //         'message' => 'Logout successful',
+    //     ]);
+    // }
+
+    // ✅ Verify username and get patient info
+    public function forgotPassword(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->validate([
+            'username' => 'required|string',
+        ]);
+
+        $account = PatientAccount::whereRaw('BINARY acc_username = ?', [$request->username])->first();
+
+        if (!$account) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Username not found.'
+            ], 404);
+        }
+
+        $patient = Patient::find($account->patient_id);
+
+        if (!$patient) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Patient record not found.'
+            ], 404);
+        }
 
         return response()->json([
-            'message' => 'Logout successful',
+            'success' => true,
+            'message' => 'Username verified. You can now reset your password.',
+            'patient_info' => [
+                'full_name' => $patient->pat_full_name,
+                'contact_number' => $patient->pat_contact_number,
+            ]
         ]);
     }
 
-    public function updatePassword(Request $request, $id)
+    // ✅ Reset password directly using username
+    public function resetPassword(Request $request)
     {
         $request->validate([
-            'password' => 'required|min:8|confirmed',
+            'username' => 'required|string',
+            'password' => 'required|min:8|confirmed', // needs password_confirmation
         ]);
-        
-        $account = DB::table('tbl_patient_accounts')
-            ->where('patient_id', $id)
-            ->first();
-        
+
+        $account = PatientAccount::whereRaw('BINARY acc_username = ?', [$request->username])->first();
+
         if (!$account) {
-            return redirect()->back()->with('error', 'Patient does not have an account.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Username not found.'
+            ], 404);
         }
-        
-        DB::table('tbl_patient_accounts')
-            ->where('patient_id', $id)
-            ->update([
-                'password' => Hash::make($request->password),
-                'updated_at' => now()
-            ]);
-        
-        return redirect()->back()->with('success', 'Password changed successfully for ' . $request->input('patient_name', 'patient') . '.');
+
+        // Update password
+        $account->acc_password = Hash::make($request->password);
+        $account->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Password has been reset successfully. You can now login with your new password.'
+        ]);
     }
 
 }

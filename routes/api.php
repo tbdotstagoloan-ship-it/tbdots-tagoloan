@@ -39,3 +39,9 @@ Route::post('patients/{username}/adverse-events', [AdverseEventController::class
 
 // Get Patient Details
 Route::get('/patient/details/{username}', [PatientProfileController::class, 'getPatientDetails']);
+
+Route::delete('/adherence/{username}/{date}', [MedicationAdherenceController::class, 'deleteAdherence']);
+
+// Forgot Password
+Route::post('/forgot-password', [PatientAuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [PatientAuthController::class, 'resetPassword']);

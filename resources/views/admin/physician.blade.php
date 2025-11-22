@@ -349,17 +349,20 @@
                       </div>
 
                       <div class="col-md-4">
-                        <label for="phy_designation" class="form-label">Designation <span class="text-danger">*</span></label>
-                        <select id="phy_designation" name="phy_designation" class="form-control form-select" required>
+                        <label for="phy_designation" class="form-label">Designation </label>
+                        <!-- <select id="phy_designation" name="phy_designation" class="form-control form-select" required>
                           <option value="" disabled selected>Select</option>
                           <option value="Doctor">Doctor</option>
-                        </select>
+                        </select> -->
+                        <input type="text" name="phy_designation" id="phy_designation" class="form-control"
+                          value="Doctor" readonly>
                       </div>
 
                       <div class="col-md-4">
                         <label for="phy_specialty" class="form-label">Specialty <span class="text-danger">*</span></label>
                         <select id="phy_specialty" name="phy_specialty" class="form-control form-select" required>
                           <option value="" disabled selected>Select</option>
+                          <option value="Pediatrician">Pediatrician</option>
                           <option value="Pulmonologist">Pulmonologist</option>
                           <option value="Infectious Disease Specialist">Infectious Disease Specialist</option>
                         </select>
@@ -376,8 +379,8 @@
                       </div>
 
                       <div class="col-md-4">
-                        <label for="phy_email" class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" id="phy_email" name="phy_email" class="form-control" placeholder="Email" required>
+                        <label for="phy_email" class="form-label">Email <span style="color: #6b7280;">(Optional)</span></label>
+                        <input type="email" id="phy_email" name="phy_email" class="form-control" placeholder="Email">
                       </div>
 
                     </div>
@@ -474,17 +477,17 @@
                     <div class="row">
 
                       <div class="col-md-4">
-                        <label for="edit_phy_first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                        <label for="edit_phy_first_name" class="form-label">First Name </label>
                         <input type="text" id="edit_phy_first_name" name="phy_first_name" class="form-control" required>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                        <label for="edit_phy_last_name" class="form-label">Last Name </label>
                         <input type="text" id="edit_phy_last_name" name="phy_last_name" class="form-control" required>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_sex" class="form-label">Sex <span class="text-danger">*</span></label>
+                        <label for="edit_phy_sex" class="form-label">Sex </label>
                         <select id="edit_phy_sex" name="phy_sex" class="form-control form-select" required>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
@@ -492,39 +495,41 @@
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                        <label for="edit_phy_dob" class="form-label">Date of Birth </label>
                         <input type="date" id="edit_phy_dob" name="phy_dob" class="form-control" required>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_designation" class="form-label">Designation <span class="text-danger">*</span></label>
-                        <select id="edit_phy_designation" name="phy_designation" class="form-control form-select" required>
+                        <label for="edit_phy_designation" class="form-label">Designation </label>
+                        <!-- <select id="edit_phy_designation" name="phy_designation" class="form-control form-select" required>
                           <option value="Doctor">Doctor</option>
-                        </select>
+                        </select> -->
+                        <input type="text" name="edit_phy_designation" id="edit_phy_designation" class="form-control" value="Doctor" readonly>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_specialty" class="form-label">Specialty <span class="text-danger">*</span></label>
+                        <label for="edit_phy_specialty" class="form-label">Specialty </label>
                         <select id="edit_phy_specialty" name="phy_specialty" class="form-control form-select">
                           <option value="" disabled selected>Select</option>
+                          <option value="Pediatrician">Pediatrician</option>
                           <option value="Pulmonologist">Pulmonologist</option>
                           <option value="Infectious Disease Specialist">Infectious Disease Specialist</option>
                         </select>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_contact" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                        <label for="edit_phy_contact" class="form-label">Contact Number </label>
                         <input type="text" id="edit_phy_contact" name="phy_contact" class="form-control" required>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_email" class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" id="edit_phy_email" name="phy_email" class="form-control" required>
+                        <label for="edit_phy_address" class="form-label">Address </label>
+                        <input type="text" id="edit_phy_address" name="phy_address" class="form-control" required>
                       </div>
 
                       <div class="col-md-4">
-                        <label for="edit_phy_address" class="form-label">Address <span class="text-danger">*</span></label>
-                        <input type="text" id="edit_phy_address" name="phy_address" class="form-control" required>
+                        <label for="edit_phy_email" class="form-label">Email </label>
+                        <input type="email" id="edit_phy_email" name="phy_email" class="form-control" required>
                       </div>
 
                     </div>
