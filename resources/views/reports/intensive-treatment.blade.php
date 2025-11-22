@@ -219,7 +219,7 @@
                   <tr>
                       <th>Name</th>
                       <th>Drug</th>
-                      <th>No. of Tablets</th>
+                      <th>Tablets</th>
                       <th>Strength</th>
                       <th>Unit</th>
                       <th>Intensive Phase Start</th>
@@ -240,7 +240,7 @@
                       <td>{{ \Carbon\Carbon::parse($patient->pha_intensive_start)->format('F j, Y') }}</td>
                       <td>{{ $patient->treatment_day }}</td>
                       <td>{{ \Carbon\Carbon::parse($patient->pha_intensive_end)->format('F j, Y') }}</td>
-                      <td><span class="status-badge bg-success">{{ $patient->outcome }}</span></td>
+                      <td><span class="badge bg-warning">{{ $patient->outcome }}</span></td>
                   </tr>
                   @endforeach
               </tbody>

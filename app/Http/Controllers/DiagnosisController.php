@@ -30,7 +30,7 @@ class DiagnosisController extends Controller
 
     return redirect()
         ->back()
-        ->with('success', 'Referral updated successfully!')
+        ->with('success', 'Referral added successfully!')
         ->with('stay_on_tab', 'diagnosis');
 }
 

@@ -135,8 +135,9 @@ class PatientController extends Controller
                 'lab_cxray_result' => 'required',
                 'lab_tst_test_date' => 'nullable',
                 'lab_tst_result' => 'nullable',
-                'lab_other_test_date' => 'nullable',
+                'lab_other_test_name' => 'nullable',
                 'lab_other_result' => 'nullable',
+                'lab_other_test_date' => 'nullable',
             ]);
 
             $labtest_validate['patient_id'] = $patient->id;

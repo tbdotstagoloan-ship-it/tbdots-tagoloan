@@ -30,7 +30,7 @@ class HivController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'HIV information saved successfully.')
+            ->with('success', 'HIV information added successfully.')
             ->with('stay_on_tab', 'treatment');
     }
 }

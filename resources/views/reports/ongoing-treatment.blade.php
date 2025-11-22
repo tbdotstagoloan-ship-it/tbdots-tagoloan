@@ -202,7 +202,7 @@
                 <th>Age</th>
                 <th>Sex</th>
                 <th>Barangay</th>
-                <th>TB Case #</th>
+                <th>TB Case No</th>
                 <th>Treatment Start</th>
                 <th>Status</th>
               </tr>
@@ -218,7 +218,7 @@
                   <td>{{ $patient->barangay }}</td>
                   <td>{{ $patient->diag_tb_case_no }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->reg_start_date)->format('F j, Y') }}</td>
-                  <td><span class="status-badge bg-secondary">{{ $patient->outcome }}</span></td>
+                  <td><span class="badge bg-warning">{{ $patient->outcome }}</span></td>
                 </tr>
               @endforeach
             </tbody>

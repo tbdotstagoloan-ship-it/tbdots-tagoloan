@@ -43,22 +43,48 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function newlyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
 {
-    // Get latest classification per patient where classification is "New"
-    $latestNewClassifications = DB::table('tbl_tb_classifications as t1')
-        ->select('t1.patient_id', DB::raw('MAX(t1.id) as latest_classification_id'))
-        ->where('t1.clas_registration_group', 'new')
-        ->groupBy('t1.patient_id');
+    // 1️⃣ Earliest TB classification per patient (must be NEW)
+    $firstClass = DB::table('tbl_tb_classifications as t1')
+        ->select(
+            't1.id',
+            't1.patient_id',
+            't1.clas_registration_group',
+            't1.created_at as class_date'
+        )
+        ->whereRaw('t1.id = (
+            SELECT t2.id
+            FROM tbl_tb_classifications t2
+            WHERE t2.patient_id = t1.patient_id
+            ORDER BY t2.id ASC
+            LIMIT 1
+        )')
+        ->where('t1.clas_registration_group', 'new');   // Ensure FIRST = NEW only
 
-    $query = DB::table('tbl_tb_classifications as t')
-        ->joinSub($latestNewClassifications, 'latest_new', function ($join) {
-            $join->on('t.id', '=', 'latest_new.latest_classification_id');
-        })
-        ->join('tbl_patients as p', 'p.id', '=', 't.patient_id')
-        // Join only the latest diagnosis per patient
-        ->join(DB::raw('(SELECT patient_id, MAX(id) as latest_diagnosis_id FROM tbl_diagnosis GROUP BY patient_id) as dmax'), function ($join) {
-            $join->on('dmax.patient_id', '=', 'p.id');
-        })
-        ->join('tbl_diagnosis as d', 'd.id', '=', 'dmax.latest_diagnosis_id')
+
+
+    // 2️⃣ Get diagnosis that is closest to the new classification date
+    //    (but must be BEFORE the relapse)
+    $diagnosisAtNew = DB::table('tbl_diagnosis as d1')
+        ->select(
+            'd1.id',
+            'd1.patient_id',
+            'd1.diag_diagnosis_date',
+            'd1.diag_tb_case_no'
+        )
+        ->whereRaw('d1.id = (
+            SELECT d2.id
+            FROM tbl_diagnosis d2
+            WHERE d2.patient_id = d1.patient_id
+            ORDER BY d2.id ASC   -- earliest diagnosis (matching NEW phase)
+            LIMIT 1
+        )');
+
+
+
+    // 3️⃣ Main query
+    $query = DB::table('tbl_patients as p')
+        ->joinSub($firstClass, 't', 'p.id', '=', 't.patient_id')
+        ->leftJoinSub($diagnosisAtNew, 'd', 'p.id', '=', 'd.patient_id')
         ->select(
             'p.pat_full_name',
             DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -67,10 +93,180 @@ class ReportRepository implements ReportRepositoryInterface
             'd.diag_diagnosis_date',
             'd.diag_tb_case_no',
             't.clas_registration_group'
-        )
-        ->where('t.clas_registration_group', '=', 'new');
+        );
 
-    // Optional date filters
+
+
+    // 4️⃣ Optional date filters
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+    }
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+
+
+
+    // 5️⃣ Cache + paginate
+    return Cache::remember(
+        "newly_diagnosed_{$startDate}_{$endDate}_page_" . request('page', 1),
+        120,
+        fn() => $query->orderBy('d.diag_diagnosis_date', 'desc')->paginate($perPage)
+    );
+}
+
+
+
+    public function relapse(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
+{
+    // 1️⃣ Get only the LATEST relapse classification per patient
+    $latestRelapse = DB::table('tbl_tb_classifications as t1')
+        ->select(
+            't1.id',
+            't1.patient_id',
+            't1.clas_registration_group',
+            't1.created_at'
+        )
+        ->where('t1.clas_registration_group', 'Relapse')
+        ->whereRaw("t1.id = (
+            SELECT t2.id
+            FROM tbl_tb_classifications t2
+            WHERE t2.patient_id = t1.patient_id
+              AND t2.clas_registration_group = 'Relapse'
+            ORDER BY t2.id DESC
+            LIMIT 1
+        )");
+
+    // 2️⃣ Get diagnosis that matches the relapse period (latest per patient)
+    $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+        ->select(
+            'd1.id',
+            'd1.patient_id',
+            'd1.diag_diagnosis_date',
+            'd1.diag_tb_case_no'
+        )
+        ->whereRaw("d1.id = (
+            SELECT d2.id
+            FROM tbl_diagnosis d2
+            WHERE d2.patient_id = d1.patient_id
+            ORDER BY d2.id DESC
+            LIMIT 1
+        )");
+
+    // 3️⃣ Main query
+    $query = DB::table('tbl_patients as p')
+        ->joinSub($latestRelapse, 't', 'p.id', '=', 't.patient_id')
+        ->leftJoinSub($latestDiagnosis, 'd', 'p.id', '=', 'd.patient_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_diagnosis_date',
+            'd.diag_tb_case_no',
+            't.clas_registration_group'
+        );
+
+    // 4️⃣ Optional date filters
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+    }
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+
+    // 5️⃣ Sort by latest case no
+    return $query->orderByDesc('d.diag_tb_case_no')->paginate($perPage);
+}
+
+
+
+    public function bacteriologicallyConfirmed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
+{
+    // 1️⃣ Get the LATEST classification per patient where bacteriological status = BC
+    $latestBC = DB::table('tbl_tb_classifications as c1')
+        ->select(
+            'c1.id',
+            'c1.patient_id',
+            'c1.clas_bacteriological_status',
+            'c1.created_at'
+        )
+        ->where('c1.clas_bacteriological_status', 'Bacteriologically-confirmed TB')
+        ->whereRaw("c1.id = (
+            SELECT c2.id
+            FROM tbl_tb_classifications c2
+            WHERE c2.patient_id = c1.patient_id
+              AND c2.clas_bacteriological_status = 'Bacteriologically-confirmed TB'
+            ORDER BY c2.id DESC
+            LIMIT 1
+        )");
+
+    // 2️⃣ Get the LATEST diagnosis per patient
+    $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+        ->select(
+            'd1.id',
+            'd1.patient_id',
+            'd1.diag_diagnosis_date',
+            'd1.diag_tb_case_no'
+        )
+        ->whereRaw("d1.id = (
+            SELECT d2.id
+            FROM tbl_diagnosis d2
+            WHERE d2.patient_id = d1.patient_id
+            ORDER BY d2.id DESC
+            LIMIT 1
+        )");
+
+    // 3️⃣ Main query
+    $query = DB::table('tbl_patients as p')
+        ->joinSub($latestBC, 'c', 'p.id', '=', 'c.patient_id')
+        ->leftJoinSub($latestDiagnosis, 'd', 'p.id', '=', 'd.patient_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_tb_case_no',
+            'd.diag_diagnosis_date',
+            'c.clas_bacteriological_status as tb_classification'
+        );
+
+    // 4️⃣ Date filters
+    if ($startDate) {
+        $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+    }
+    if ($endDate) {
+        $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+    }
+
+    // 5️⃣ Sort latest first and paginate
+    return $query
+        ->orderByDesc('d.diag_tb_case_no')
+        ->paginate($perPage);
+}
+
+
+    public function clinicallyDiagnosed(
+    int $perPage = 10, 
+    ?string $startDate = null, 
+    ?string $endDate = null
+): LengthAwarePaginator {
+
+    $query = DB::table('tbl_patients as p')
+        ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
+        ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+        ->select(
+            'p.pat_full_name',
+            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            'p.pat_sex',
+            'p.pat_permanent_address as barangay',
+            'd.diag_tb_case_no',
+            'd.diag_diagnosis_date',
+            'c.clas_bacteriological_status as tb_classification'
+        )
+        ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
+
+    // FILTER DATES
     if ($startDate) {
         $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
@@ -79,94 +275,24 @@ class ReportRepository implements ReportRepositoryInterface
         $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
     }
 
-    return Cache::remember(
-        "newly_diagnosed_{$startDate}_{$endDate}_page_" . request('page', 1),
-        120,
-        fn() => $query->orderByDesc('d.diag_diagnosis_date')->paginate($perPage)
-    );
+    return $query
+        // 1️⃣ Sort by latest diagnosis date first
+        ->orderBy('d.diag_diagnosis_date', 'DESC')
+
+        // 2️⃣ Then sort TB case number properly (YYYY-XXXXX)
+        ->orderByRaw("
+            STR_TO_DATE(
+                SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1),
+                '%Y'
+            ) DESC
+        ")
+        ->orderByRaw("
+            CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC
+        ")
+        ->paginate($perPage);
 }
 
 
-    public function relapse(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
-    {
-        $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as t', 'p.id', '=', 't.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_diagnosis_date',
-                'd.diag_tb_case_no',
-                't.clas_registration_group'
-            )
-            ->where('t.clas_registration_group', 'Relapse');
-
-        if ($startDate) {
-            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-        }
-        if ($endDate) {
-            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-        }
-
-        return $query->orderBy('d.diag_tb_case_no', 'desc')->paginate($perPage);
-    }
-
-
-    public function bacteriologicallyConfirmed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
-    {
-        $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_tb_case_no',
-                'd.diag_diagnosis_date',
-                'c.clas_bacteriological_status as tb_classification'
-            )
-            ->where('c.clas_bacteriological_status', 'Bacteriologically-confirmed TB');
-
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
-
-            return $query->orderBy('d.diag_tb_case_no', 'desc')
-            ->paginate($perPage);
-    }
-
-    public function clinicallyDiagnosed(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
-    {
-        $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
-            ->select(
-                'p.pat_full_name',
-                DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
-                'p.pat_sex',
-                'p.pat_permanent_address as barangay',
-                'd.diag_tb_case_no',
-                'd.diag_diagnosis_date',
-                'c.clas_bacteriological_status as tb_classification'
-            )
-            ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
-
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
-
-            return $query->orderBy('d.diag_tb_case_no', 'desc')
-            ->paginate($perPage);
-    }
 
     public function pulmonary(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {

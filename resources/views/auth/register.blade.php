@@ -118,21 +118,21 @@
             <!-- Name -->
             <div class="input-control">
                 <label for="name">Full Name</label>
-                <input id="name" name="name" type="text" placeholder="Enter Full Name" value="{{ old('name') }}">
+                <input id="name" name="name" type="text" placeholder="Full Name" value="{{ old('name') }}">
                 <div class="error"></div>
             </div>
 
             <!-- Email -->
             <div class="input-control">
                 <label for="email">Email</label>
-                <input id="email" name="email" type="email" placeholder="Enter Email" value="{{ old('email') }}">
+                <input id="email" name="email" type="email" placeholder="Email" value="{{ old('email') }}">
                 <div class="error"></div>
             </div>
 
             <!-- Phone -->
             <div class="input-control">
                 <label for="phone">Phone</label>
-                <input id="phone" name="phone" type="text" placeholder="Enter Phone" value="{{ old('phone') }}"
+                <input id="phone" name="phone" type="text" placeholder="Phone" value="{{ old('phone') }}"
                     maxlength="11">
                 <div class="error"></div>
             </div>
@@ -147,7 +147,7 @@
             <!-- Password -->
             <div class="input-control" style="position: relative;">
                 <label for="password">Password</label>
-                <input id="password" name="password" type="password" placeholder="Enter Password">
+                <input id="password" name="password" type="password" placeholder="Password">
                 <span class="toggle-password" onclick="togglePassword('password', this)">
                     <i class="fa-solid fa-eye-slash"></i>
                 </span>

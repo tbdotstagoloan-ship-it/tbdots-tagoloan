@@ -165,7 +165,7 @@
                 <th>Name</th>
                 <th>Age</th>
                 <th>Sex</th>
-                <th>TB Case #</th>
+                <th>TB Case No</th>
                 <th>Diagnosis Date</th>
                 <th>Status</th>
             </tr>

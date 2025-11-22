@@ -2343,8 +2343,13 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_information" class="form-label">HIV Information</label>
-                                    <input type="text" class="form-control" id="hiv_information" name="hiv_information"
-                                        placeholder="HIV Information">
+                                    <!-- <input type="text" class="form-control" id="hiv_information" name="hiv_information"
+                                        placeholder="HIV Information"> -->
+                                        <select name="hiv_information" id="hiv_information" class="form-control form-select">
+                                            <option value="" disabled selected>Select</option>
+                                            <option value="Known for HIV">Known for HIV</option>
+                                            <option value="Not yet Tested">Not yet Tested</option>
+                                        </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_test_date" class="form-label">HIV Test Date</label>
@@ -2362,8 +2367,13 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="hiv_result" class="form-label">Result</label>
-                                    <input type="text" name="hiv_result" id="hiv_result" class="form-control"
-                                        placeholder="Result">
+                                    <!-- <input type="text" name="hiv_result" id="hiv_result" class="form-control"
+                                        placeholder="Result"> -->
+                                        <select name="hiv_result" id="hiv_result" class="form-control form-select">
+                                            <option value="" disabled selected>Select</option>
+                                            <option value="Reactive">Reactive</option>
+                                            <option value="Non-reactive">Non-reactive</option>
+                                        </select>
                                 </div>
                             </div>
 
@@ -2399,68 +2409,68 @@
         </div>
 
 
-        <!-- Treatment Outcome Modal -->
         <div class="modal fade" id="editTreatmentOutcomeModal" tabindex="-1"
-            aria-labelledby="editTreatmentOutcomeModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editTreatmentOutcomeModalLabel">Edit Treatment Outcome</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+    aria-labelledby="editTreatmentOutcomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="editTreatmentOutcomeModalLabel">Edit Treatment Outcome</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <form method="POST" id="editOutcomeForm">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    @php
+                        // Get the latest treatment outcome instead of first
+                        $treatment = $patient->treatmentOutcomes->sortByDesc('created_at')->first();
+                        $selectedOutcome = old('out_outcome', optional($treatment)->out_outcome);
+                        $outDate = old('out_date', optional($treatment)->out_date);
+                        $outReason = old('out_reason', optional($treatment)->out_reason);
+                    @endphp
+
+                    <!-- Outcome -->
+                    <div class="mb-3">
+                        <label for="edit_out_outcome" class="form-label">Outcome</label>
+                        <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
+                            required>
+                            @foreach (['Cured', 'Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
+                                <option value="{{ $option }}" {{ $selectedOutcome === $option ? 'selected' : '' }}>
+                                    {{ $option }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    <form method="POST" id="editOutcomeForm">
-                        @csrf
-                        @method('PUT')
-                        <div class="modal-body">
-                            @php
-                                $treatment = $patient->treatmentOutcomes->first();
-                                $selectedOutcome = old('out_outcome', optional($treatment)->out_outcome);
-                                $outDate = old('out_date', optional($treatment)->out_date);
-                                $outReason = old('out_reason', optional($treatment)->out_reason);
-                            @endphp
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label for="edit_out_date" class="form-label">Date of Outcome</label>
+                        <input type="date" class="form-control" id="edit_out_date" name="out_date"
+                            max="{{ date('Y-m-d') }}" value="{{ $outDate }}">
+                    </div>
 
-                            <!-- Outcome -->
-                            <div class="mb-3">
-                                <label for="edit_out_outcome" class="form-label">Outcome</label>
-                                <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
-                                    required>
-                                    @foreach (['Cured', 'Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
-                                        <option value="{{ $option }}" {{ $selectedOutcome === $option ? 'selected' : '' }}>
-                                            {{ $option }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Date -->
-                            <div class="mb-3">
-                                <label for="edit_out_date" class="form-label">Date of Outcome</label>
-                                <input type="date" class="form-control" id="edit_out_date" name="out_date"
-                                    max="{{ date('Y-m-d') }}" value="{{ $outDate }}">
-                            </div>
-
-                            <!-- Reason -->
-                            <div class="mb-3">
-                                <label for="edit_out_reason" class="form-label">Reason</label>
-                                <input type="text" class="form-control" id="edit_out_reason" name="out_reason"
-                                    placeholder="Enter reason" value="{{ $outReason }}">
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="submit" class="btn btn-success">
-                                Update
-                            </button>
-                        </div>
-                    </form>
+                    <!-- Reason -->
+                    <div class="mb-3">
+                        <label for="edit_out_reason" class="form-label">Reason</label>
+                        <input type="text" class="form-control" id="edit_out_reason" name="out_reason"
+                            placeholder="Enter reason" value="{{ $outReason }}">
+                    </div>
                 </div>
-            </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        Update
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
 
         <!-- Administration of Drugs Modal -->
 <div class="modal fade" id="editAdministrationModal" tabindex="-1"
@@ -2500,8 +2510,7 @@
                     {{-- ========================= --}}
                     {{-- 🟦 TREATMENT SCHEDULE DETAILS --}}
                     {{-- ========================= --}}
-                    <input type="hidden" name="pha_intensive_start" value="{{ $latestAdherence->pha_intensive_start ?? '' }}">
-                    <input type="hidden" name="pha_intensive_end" value="{{ $latestAdherence->pha_intensive_end ?? '' }}">
+                    
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -2518,6 +2527,18 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
+                            <label for="pha_intensive_start">Intensive Phase Start Date</label>
+                            <input type="date" class="form-control" id="pha_intensive_start" name="pha_intensive_start" 
+                                value="{{ $latestAdherence->pha_intensive_start ?? '' }}" max="<?php echo date('Y-m-d'); ?>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="pha_intensive_end">Intensive Phase End Date</label>
+                            <input type="date" class="form-control" id="pha_intensive_end" name="pha_intensive_end" 
+                                value="{{ $latestAdherence->pha_intensive_end ?? '' }}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
                             <label for="pha_continuation_start" class="form-label">Continuation Phase Start Date</label>
                             <input type="date" class="form-control" id="pha_continuation_start" name="pha_continuation_start"
                                 value="{{ $latestAdherence->pha_continuation_start ?? '' }}" max="<?php echo date('Y-m-d'); ?>">
@@ -2526,7 +2547,7 @@
                         <div class="col-md-6 mb-3">
                             <label for="pha_continuation_end" class="form-label">Continuation Phase End Date</label>
                             <input type="date" class="form-control" id="pha_continuation_end" name="pha_continuation_end"
-                                value="{{ $latestAdherence->pha_continuation_end ?? '' }}" readonly>
+                                value="{{ $latestAdherence->pha_continuation_end ?? '' }}" >
                         </div>
 
                         {{-- ========================= --}}
@@ -2781,9 +2802,11 @@
                                 <select name="sput_smear_result" id="sput_smear_result"
                                     class="form-control form-select">
                                     <option value="" disabled selected>Select</option>
+                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
                                     <option value="MTB HIGH">MTB HIGH</option>
                                     <option value="MTB MEDIUM">MTB MEDIUM</option>
                                     <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
                                     <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                                 </select>
                             </div>
@@ -2796,9 +2819,11 @@
                                 <select name="sput_xpert_result" id="sput_xpert_result"
                                     class="form-control form-select">
                                     <option value="" disabled selected>Select</option>
+                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
                                     <option value="MTB HIGH">MTB HIGH</option>
                                     <option value="MTB MEDIUM">MTB MEDIUM</option>
                                     <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
                                     <option value="MTB NEGATIVE">MTB NEGATIVE</option>
                                 </select>
                             </div>
@@ -3442,8 +3467,19 @@
     })();
 </script>
 
-    <script>
-        function editOutcome(id, outcome, date, reason) {
+   <script>
+    function editOutcome() {
+        // Get the latest treatment outcome ID
+        @php
+            $latestOutcome = $patient->treatmentOutcomes->sortByDesc('created_at')->first();
+        @endphp
+        
+        @if($latestOutcome)
+            const id = {{ $latestOutcome->id }};
+            const outcome = "{{ $latestOutcome->out_outcome }}";
+            const date = "{{ $latestOutcome->out_date }}";
+            const reason = "{{ $latestOutcome->out_reason }}";
+
             // Set form action to update route
             const form = document.getElementById('editOutcomeForm');
             form.action = `/treatment-outcome/${id}`;
@@ -3452,13 +3488,14 @@
             document.getElementById('edit_out_outcome').value = outcome || '';
             document.getElementById('edit_out_date').value = date || '';
             document.getElementById('edit_out_reason').value = reason || '';
-        }
+        @endif
+    }
 
-        // Reset form when modal closes
-        document.getElementById('editTreatmentOutcomeModal').addEventListener('hidden.bs.modal', function () {
-            document.getElementById('editOutcomeForm').reset();
-        });
-    </script>
+    // Reset form when modal closes
+    document.getElementById('editTreatmentOutcomeModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('editOutcomeForm').reset();
+    });
+</script>
 
     @if (session('stay_on_tab'))
         <script>
@@ -3523,26 +3560,26 @@
                     // ✅ Determine dosage by weight range
                     if (weight >= 25 && weight <= 37) {
                         noOfTablets.value = '2';
-                        strength.value = '75mg';
+                        strength.value = '400mg';
                         unit.value = 'Tablet';
                     } else if (weight >= 38 && weight <= 54) {
                         noOfTablets.value = '3';
-                        strength.value = '150mg';
+                        strength.value = '600mg';
                         unit.value = 'Tablet';
                     } else if (weight >= 55 && weight <= 70) {
                         noOfTablets.value = '4';
-                        strength.value = '275mg';
+                        strength.value = '800mg';
                         unit.value = 'Tablet';
                     } else if (weight > 70) {
                         noOfTablets.value = '5';
-                        strength.value = '400mg';
+                        strength.value = '1000mg';
                         unit.value = 'Tablet';
                     } else {
                         // For weight below 25
-                        drugName.value = '';
-                        noOfTablets.value = '';
-                        strength.value = '';
-                        unit.value = '';
+                        drugName.value = '2FDC';
+                        noOfTablets.value = '1';
+                        strength.value = '200mg';
+                        unit.value = 'Tablet';
                     }
                 });
             }

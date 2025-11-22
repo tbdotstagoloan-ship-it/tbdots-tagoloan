@@ -24,7 +24,7 @@ class SputumMonitoringController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Sputum monitoring result added successfully!')
+            ->with('success', 'Sputum result added successfully!')
             ->with('stay_on_tab', 'lab');
     }
 }

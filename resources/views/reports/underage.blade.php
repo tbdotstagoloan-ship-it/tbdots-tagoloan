@@ -202,7 +202,7 @@
                   <th>Age</th>
                   <th>Sex</th>
                   <th>Barangay</th>
-                  <th>TB Case #</th>
+                  <th>TB Case No</th>
                   <th>Diagnosis Date</th>
                   <th>Status</th>
                 </tr>
@@ -239,7 +239,7 @@
                           };
                       @endphp
 
-                      <span class="status-badge badge {{ $badgeClass }}">{{ ucfirst($patient->out_outcome) }}</span>
+                      <span class="badge {{ $badgeClass }}">{{ ucfirst($patient->out_outcome) }}</span>
                   </td>
                 </tr>
 

@@ -59,12 +59,12 @@ class MedicationAdherenceController extends Controller
     }
 
     public function deleteAdherence($username, $date)
-{
-    MedicationAdherence::where('username', $username)
-        ->where('date', $date)
-        ->delete();
+    {
+        MedicationAdherence::where('username', $username)
+            ->where('date', $date)
+            ->delete();
 
-    return response()->json(['message' => 'Adherence deleted successfully']);
-}
+        return response()->json(['message' => 'Adherence deleted successfully']);
+    }
 
 }

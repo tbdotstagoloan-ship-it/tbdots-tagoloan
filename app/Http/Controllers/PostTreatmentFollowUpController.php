@@ -28,7 +28,7 @@ class PostTreatmentFollowUpController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Follow-up record added successfully.')
+            ->with('success', 'Post Treatment Follow-up record added successfully.')
             ->with('stay_on_tab', 'lab');
     }
 }

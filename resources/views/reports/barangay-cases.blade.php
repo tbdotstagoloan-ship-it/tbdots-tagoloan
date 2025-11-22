@@ -218,7 +218,7 @@
             <th>Name</th>
             <th>Age</th>
             <th>Sex</th>
-            <th>TB Case #</th>
+            <th>TB Case No</th>
             <th>Diagnosis Date</th>
             <th>Status</th>
         </tr>
@@ -244,13 +244,14 @@
                         $badgeClass = match ($status) {
                             'cured' => 'bg-success',
                             'treatment completed' => 'bg-success',
-                            'lost to follow-up' => 'bg-warning text-dark',
+                            'lost to follow-up' => 'bg-warning',
                             'died' => 'bg-danger',
+                            'ongoing' => 'bg-warning',
                             default => 'bg-secondary',
                         };
                     @endphp
 
-                    <span class="status-badge badge {{ $badgeClass }}">
+                    <span class="badge {{ $badgeClass }}">
                         {{ ucfirst($patient->out_outcome) }}
                     </span>
                   </td>
