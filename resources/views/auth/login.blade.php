@@ -56,12 +56,12 @@
                 </span>
             </button>
         </form>
-        <div class="text-center mt-4" style="font-size: 0.90rem;">
+        <!-- <div class="text-center mt-4" style="font-size: 0.90rem;">
             <p>Don't have an account? <a href="{{ route('register') }}" style="text-decoration: none;">
                 Sign Up
             </a>
             </p>
-        </div>
+        </div> -->
 
 
     </div>

@@ -364,13 +364,20 @@
                         </li>
 
                        <!-- Create Patient Account -->
-                        <li>
-                          <a class="dropdown-item d-flex align-items-center"
-                              href="{{ route('patient.account', $patient->id) }}" 
-                              title="Create Patient Account">
-                              <i class="fas fa-user-plus me-2"></i> Create Account
-                            </a>
-                        </li>
+                        @php
+                              $hasAccount = \App\Models\PatientAccount::where('patient_id', $patient->id)->exists();
+                          @endphp
+
+                          @if(!$hasAccount)
+                          <li>
+                              <a class="dropdown-item d-flex align-items-center"
+                                  href="{{ route('patient.account', $patient->id) }}" 
+                                  title="Create Patient Account">
+                                  <i class="fas fa-user-plus me-2"></i> Create Account
+                              </a>
+                          </li>
+                          @endif
+
 
                         <!-- Report -->
                         <li>

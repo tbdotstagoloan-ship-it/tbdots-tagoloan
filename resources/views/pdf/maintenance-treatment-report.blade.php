@@ -163,7 +163,7 @@
             <tr>
                 <th>Name</th>
                 <th>Drug</th>
-                <th>No. of Tablets</th>
+                <th>Tablets</th>
                 <th>Strength</th>
                 <th>Unit</th>
                 <th>Intensive Start</th>
