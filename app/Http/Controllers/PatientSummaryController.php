@@ -1148,23 +1148,29 @@ class PatientSummaryController extends Controller
                 's.sput_date_collected',
                 's.sput_smear_result',
                 's.sput_xpert_result'
-            )
-            ->where('s.sput_xpert_result', 'Positive');
+            );
 
-        if ($startDate) {
+        // Apply date range filters if provided
+        if (!empty($startDate)) {
             $query->whereDate('s.sput_date_collected', '>=', $startDate);
         }
-        if ($endDate) {
+
+        if (!empty($endDate)) {
             $query->whereDate('s.sput_date_collected', '<=', $endDate);
         }
 
+        // Fetch sputum records
         $patients = $query->orderBy('p.pat_full_name')
-            ->orderByDesc('s.sput_date_collected')
-            ->get();
+                        ->orderByDesc('s.sput_date_collected')
+                        ->get();
 
-        $pdf = Pdf::loadView('pdf.sputum-monitoring-report', ['sputum' => $patients])
+        // Generate PDF
+        $pdf = Pdf::loadView('pdf.sputum-monitoring-report', [
+                'sputum' => $patients
+            ])
             ->setPaper('A4', 'landscape');
 
+        // Add page numbers
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
         $w = $canvas->get_width();
@@ -1173,6 +1179,7 @@ class PatientSummaryController extends Controller
 
         return $pdf->stream('Sputum Monitoring Report.pdf');
     }
+
 
 
     public function curedPDF(Request $request)
