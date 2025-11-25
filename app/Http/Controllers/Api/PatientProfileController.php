@@ -19,6 +19,7 @@ class PatientProfileController extends Controller
             ->select(
                 'p.pat_full_name',
                 'p.pat_contact_number',
+                'bi.base_emergency_contact_name',
                 'bi.base_contact_info',
                 // Format dates properly
                 DB::raw("DATE_FORMAT(ad.pha_intensive_start, '%Y-%m-%d') as pha_intensive_start"),
