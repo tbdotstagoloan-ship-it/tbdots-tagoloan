@@ -570,7 +570,7 @@
                 $latestOutcome = $patient->treatmentOutcomes()->latest('created_at')->first();
             @endphp
 
-            @if ($latestOutcome && in_array(strtolower($latestOutcome->out_outcome), ['cured', 'completed', 'lost to follow up']))
+            @if ($latestOutcome && in_array(strtolower($latestOutcome->out_outcome), ['cured', 'treatment completed', 'lost to follow up']))
                 <a href="javascript:void(0);" class="btn btn-warning btn-relapse"
                     data-url="{{ route('relapse.page1', $patient->id) }}">
                     <i class="fas fa-arrows-rotate me-2"></i>Re-register <b>(Relapse)</b>

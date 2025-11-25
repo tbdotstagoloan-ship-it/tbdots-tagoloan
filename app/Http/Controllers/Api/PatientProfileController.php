@@ -28,6 +28,7 @@ class PatientProfileController extends Controller
                 DB::raw("DATE_FORMAT(ad.pha_continuation_end, '%Y-%m-%d') as pha_continuation_end")
             )
             ->where('a.acc_username', $username)
+            ->orderBy('ad.pha_intensive_start', 'DESC')
             ->first();
 
         if (!$account) {
