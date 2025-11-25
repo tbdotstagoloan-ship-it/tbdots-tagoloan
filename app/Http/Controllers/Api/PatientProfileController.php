@@ -14,23 +14,25 @@ class PatientProfileController extends Controller
     {
         $account = DB::table('tbl_patient_accounts as a')
             ->join('tbl_patients as p', 'a.patient_id', '=', 'p.id')
-            ->join('tbl_adherences as ad', 'a.patient_id', '=', 'ad.id')
-            ->join('tbl_baseline_infos as bi', 'a.patient_id', '=', 'bi.id')
+            ->join('tbl_adherences as ad', 'a.patient_id', '=', 'ad.patient_id')
+            ->join('tbl_baseline_infos as bi', 'a.patient_id', '=', 'bi.patient_id')
             ->select(
                 'p.pat_full_name',
                 'p.pat_contact_number',
                 'bi.base_contact_info',
-                'ad.pha_intensive_start',
-                'ad.pha_intensive_end'
+                // Format dates properly
+                DB::raw("DATE_FORMAT(ad.pha_intensive_start, '%Y-%m-%d') as pha_intensive_start"),
+                DB::raw("DATE_FORMAT(ad.pha_intensive_end, '%Y-%m-%d') as pha_intensive_end"),
+                DB::raw("DATE_FORMAT(ad.pha_continuation_start, '%Y-%m-%d') as pha_continuation_start"),
+                DB::raw("DATE_FORMAT(ad.pha_continuation_end, '%Y-%m-%d') as pha_continuation_end")
             )
             ->where('a.acc_username', $username)
             ->first();
 
-        if (! $account) {
+        if (!$account) {
             return response()->json(['message' => 'Patient not found'], 404);
         }
 
         return response()->json($account);
     }
-
 }
