@@ -110,10 +110,11 @@
           <span class="menu-text">Missed Medication Intake</span>
 
           @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
-            <!-- dot positioned relative to the anchor -->
-            <span class="position-absolute top-50 end-0 translate-middle-y me-4 p-1 bg-danger border border-light rounded-circle" 
-                  style="width:10px; height:10px;" title="{{ $missedAdherenceCount }} missed">
-              <span class="visually-hidden">{{ $missedAdherenceCount }} missed</span>
+            <span class="position-absolute top-50 end-0 translate-middle-y me-4 
+                        bg-danger text-white border border-light 
+                        rounded-circle d-flex justify-content-center align-items-center"
+                  style="width: 16px; height: 16px; font-size: 10px; font-weight: 600;">
+                {{ $missedAdherenceCount }}
             </span>
           @endif
         </a>
