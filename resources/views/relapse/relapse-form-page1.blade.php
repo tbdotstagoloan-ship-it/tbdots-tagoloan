@@ -416,16 +416,18 @@
                 <h5 class="mb-4">B. Screening Information</h5>
                 <div class="row mb-3">
                   <div class="col-md-4">
-                    <label>Referred by <span style="color: red;">*</span></label>
+                    <label>Referred by </label>
                     <!-- <input type="text" value="{{ $patient->latestScreening->scr_referred_by ?? '' }}" class="form-control" readonly> -->
-                     <input type="text" name="scr_referred_by" id="scr_referred_by" class="form-control"
-                      placeholder="Hospital / Barangay Name" required>
+                     <!-- <input type="text" name="scr_referred_by" id="scr_referred_by" class="form-control"
+                      placeholder="Hospital / Barangay Name" required> -->
+                      <input type="text" name="scr_referred_by" id="scr_referred_by" class="form-control" value="TB DOTS Tagoloan" readonly>
                   </div>
                   <div class="col-md-4">
-                    <label>Location <span style="color: red;">*</span></label>
+                    <label>Location </label>
                     <!-- <input type="text" value="{{ $patient->latestScreening->scr_location ?? '' }}" class="form-control" readonly> -->
-                     <input type="text" name="scr_location" id="scr_location" class="form-control"
-                      placeholder="Location" required>
+                     <!-- <input type="text" name="scr_location" id="scr_location" class="form-control"
+                      placeholder="Location" required> -->
+                      <input type="text" name="scr_location" id="scr_location" class="form-control" value="Poblacion, Tagoloan, Misamis Oriental" readonly>
                   </div>
                   <div class="col-md-4">
                     <label>Type of Referrer <span style="color: red;">*</span></label>
@@ -437,6 +439,7 @@
                       <option value="Private">Private</option>
                       <option value="Community">Community</option>
                     </select>
+                    <div class="error"></div>
                   </div>
                 </div>
 
@@ -451,11 +454,13 @@
                       <option value="ICF">ICF</option>
                       <option value="ECF">ECF</option>
                     </select>
+                    <div class="error"></div>
                   </div>
                   <div class="col-md-4">
                     <label>Date of Screening <span style="color: red;">*</span></label>
                     <!-- <input type="text" value="{{ $patient->latestScreening->scr_screening_date ?? '' }}" class="form-control" readonly> -->
-                     <input type="date" name="scr_screening_date" id="scr_screening_date" class="form-control" max="{{ date('Y-m-d') }}">
+                     <input type="date" name="scr_screening_date" id="scr_screening_date" class="form-control" max="{{ date('Y-m-d') }}" required>
+                     <div class="error"></div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-between mt-4">

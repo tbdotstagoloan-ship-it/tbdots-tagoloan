@@ -252,12 +252,40 @@ class ReportRepository implements ReportRepositoryInterface
     ?string $endDate = null
 ): LengthAwarePaginator {
 
+    // Subquery: get latest diagnosis per patient
+    $latestDiagnosis = DB::table('tbl_diagnosis')
+        ->select(
+            'patient_id',
+            DB::raw('MAX(diag_diagnosis_date) as latest_date')
+        )
+        ->groupBy('patient_id');
+
+    // Subquery: get latest classification per patient
+    $latestClassification = DB::table('tbl_tb_classifications')
+        ->select(
+            'patient_id',
+            DB::raw('MAX(id) as latest_classification_id')
+        )
+        ->groupBy('patient_id');
+
     $query = DB::table('tbl_patients as p')
-        ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-        ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+        ->joinSub($latestDiagnosis, 'ld', function ($join) {
+            $join->on('p.id', '=', 'ld.patient_id');
+        })
+        ->join('tbl_diagnosis as d', function ($join) {
+            $join->on('d.patient_id', '=', 'p.id')
+                 ->on('d.diag_diagnosis_date', '=', 'ld.latest_date');
+        })
+        ->joinSub($latestClassification, 'lc', function ($join) {
+            $join->on('p.id', '=', 'lc.patient_id');
+        })
+        ->join('tbl_tb_classifications as c', function ($join) {
+            $join->on('c.patient_id', '=', 'p.id')
+                 ->on('c.id', '=', 'lc.latest_classification_id');
+        })
         ->select(
             'p.pat_full_name',
-            DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
+            DB::raw("TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) AS pat_age"),
             'p.pat_sex',
             'p.pat_permanent_address as barangay',
             'd.diag_tb_case_no',
@@ -266,7 +294,7 @@ class ReportRepository implements ReportRepositoryInterface
         )
         ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
 
-    // FILTER DATES
+    // Date filters on latest diagnosis date
     if ($startDate) {
         $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
@@ -275,16 +303,11 @@ class ReportRepository implements ReportRepositoryInterface
         $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
     }
 
+    // Sort by latest date, then TB case no (YYYY-XXXXX)
     return $query
-        // 1️⃣ Sort by latest diagnosis date first
         ->orderBy('d.diag_diagnosis_date', 'DESC')
-
-        // 2️⃣ Then sort TB case number properly (YYYY-XXXXX)
         ->orderByRaw("
-            STR_TO_DATE(
-                SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1),
-                '%Y'
-            ) DESC
+            STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC
         ")
         ->orderByRaw("
             CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC
@@ -294,11 +317,37 @@ class ReportRepository implements ReportRepositoryInterface
 
 
 
+
     public function pulmonary(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
+        // Subquery: get latest diagnosis ID per patient (using both date and id)
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest classification ID per patient
+        $latestClassification = DB::table('tbl_tb_classifications')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_classification_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestClassification, 'lc', function ($join) {
+                $join->on('p.id', '=', 'lc.patient_id');
+            })
+            ->join('tbl_tb_classifications as c', 'c.id', '=', 'lc.latest_classification_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -310,22 +359,50 @@ class ReportRepository implements ReportRepositoryInterface
             )
             ->where('c.clas_anatomical_site', 'Pulmonary');
 
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
 
-            return $query->orderBy('d.diag_tb_case_no', 'desc')
+        return $query
+            ->orderBy('d.diag_diagnosis_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
             ->paginate($perPage);
     }
 
     public function extraPulmonary(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest classification ID per patient
+        $latestClassification = DB::table('tbl_tb_classifications')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_classification_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestClassification, 'lc', function ($join) {
+                $join->on('p.id', '=', 'lc.patient_id');
+            })
+            ->join('tbl_tb_classifications as c', 'c.id', '=', 'lc.latest_classification_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -338,23 +415,62 @@ class ReportRepository implements ReportRepositoryInterface
             )
             ->where('c.clas_anatomical_site', 'Extra-pulmonary');
 
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
 
-            return $query->orderBy('d.diag_tb_case_no', 'desc')
+        return $query
+            ->orderBy('d.diag_diagnosis_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
             ->paginate($perPage);
     }
 
     public function ongoingTreatment(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment regimen ID per patient
+        $latestRegimen = DB::table('tbl_treatment_regimens')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_regimen_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
-            ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->join('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
+            ->joinSub($latestRegimen, 'lr', function ($join) {
+                $join->on('p.id', '=', 'lr.patient_id');
+            })
+            ->join('tbl_treatment_regimens as r', 'r.id', '=', 'lr.latest_regimen_id')
             ->select(
                 'd.diag_tb_case_no',
                 'p.pat_full_name',
@@ -366,14 +482,17 @@ class ReportRepository implements ReportRepositoryInterface
             )
             ->where('t.out_outcome', 'Ongoing');
 
-            if ($startDate) {
-                $query->whereDate('r.reg_start_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('r.reg_start_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('r.reg_start_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('r.reg_start_date', '<=', $endDate);
+        }
 
-            return $query->orderBy('d.diag_tb_case_no', 'desc')
+        return $query
+            ->orderBy('r.reg_start_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
             ->paginate($perPage);
     }
 
@@ -415,11 +534,59 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function intensiveTreatment(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest prescribed drug ID per patient (4FDC only)
+        $latestDrug = DB::table('tbl_prescribed_drugs')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_drug_id')
+            )
+            ->where('drug_name', '4FDC')
+            ->groupBy('patient_id');
+
+        // Subquery: get latest adherence ID per patient
+        $latestAdherence = DB::table('tbl_adherences')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_adherence_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
-            ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
-            ->leftJoin('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestDrug, 'lpd', function ($join) {
+                $join->on('p.id', '=', 'lpd.patient_id');
+            })
+            ->join('tbl_prescribed_drugs as pd', 'pd.id', '=', 'lpd.latest_drug_id')
+            ->joinSub($latestAdherence, 'la', function ($join) {
+                $join->on('p.id', '=', 'la.patient_id');
+            })
+            ->join('tbl_adherences as a', 'a.id', '=', 'la.latest_adherence_id')
+            ->leftJoinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->leftJoin('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
             ->select(
                 'p.pat_full_name',
                 'p.pat_sex',
@@ -437,29 +604,77 @@ class ReportRepository implements ReportRepositoryInterface
                     END as treatment_day
                 ")
             )
-            ->where('pd.drug_name', '4FDC')
             ->where(function($q){
                 $q->whereNull('t.out_outcome')->orWhere('t.out_outcome', 'Ongoing');
             });
 
-            if ($startDate) {
-                $query->whereDate('a.pha_intensive_start', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('a.pha_intensive_end', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('a.pha_intensive_start', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('a.pha_intensive_end', '<=', $endDate);
+        }
 
-            return $query->orderBy('a.pha_intensive_start', 'desc')
+        return $query
+            ->orderBy('a.pha_intensive_start', 'desc')
             ->paginate($perPage);
     }
 
     public function maintenanceTreatment(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest prescribed drug ID per patient (2FDC only)
+        $latestDrug = DB::table('tbl_prescribed_drugs')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_drug_id')
+            )
+            ->where('drug_con_name', '2FDC')
+            ->groupBy('patient_id');
+
+        // Subquery: get latest adherence ID per patient
+        $latestAdherence = DB::table('tbl_adherences')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_adherence_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
-            ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
-            ->leftJoin('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestDrug, 'lpd', function ($join) {
+                $join->on('p.id', '=', 'lpd.patient_id');
+            })
+            ->join('tbl_prescribed_drugs as pd', 'pd.id', '=', 'lpd.latest_drug_id')
+            ->joinSub($latestAdherence, 'la', function ($join) {
+                $join->on('p.id', '=', 'la.patient_id');
+            })
+            ->join('tbl_adherences as a', 'a.id', '=', 'la.latest_adherence_id')
+            ->leftJoinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->leftJoin('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
             ->select(
                 'p.pat_full_name',
                 'p.pat_sex',
@@ -477,21 +692,19 @@ class ReportRepository implements ReportRepositoryInterface
                     END as treatment_day
                 ")
             )
-            ->where('pd.drug_con_name', '2FDC')
             ->where(function($q){
                 $q->whereNull('t.out_outcome')->orWhere('t.out_outcome', 'Ongoing');
             });
 
-            if ($startDate) {
-                $query->whereDate('a.pha_continuation_start', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('a.pha_continuation_end', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('a.pha_continuation_start', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('a.pha_continuation_end', '<=', $endDate);
+        }
 
-            // 👉 Para lumabas lang kapag Day 1 or higher
-            // ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
-            return $query->orderBy('a.pha_continuation_start')
+        return $query
+            ->orderBy('a.pha_continuation_start', 'desc')
             ->paginate($perPage);
     }
 
@@ -549,10 +762,46 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function cured(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
     {
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment regimen ID per patient
+        $latestRegimen = DB::table('tbl_treatment_regimens')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_regimen_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
-            ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->join('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
+            ->joinSub($latestRegimen, 'lr', function ($join) {
+                $join->on('p.id', '=', 'lr.patient_id');
+            })
+            ->join('tbl_treatment_regimens as r', 'r.id', '=', 'lr.latest_regimen_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -565,14 +814,17 @@ class ReportRepository implements ReportRepositoryInterface
             )
             ->where('t.out_outcome', 'Cured');
 
-            if ($startDate) {
-                $query->whereDate('r.reg_start_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('r.reg_start_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('r.reg_start_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('r.reg_start_date', '<=', $endDate);
+        }
 
-            return $query->orderBy('d.diag_tb_case_no', 'desc')
+        return $query
+            ->orderBy('t.out_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
             ->paginate($perPage);
     }
 

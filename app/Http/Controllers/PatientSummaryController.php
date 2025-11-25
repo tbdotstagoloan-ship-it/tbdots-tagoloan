@@ -520,9 +520,37 @@ class PatientSummaryController extends Controller
     $startDate = $request->query('start_date');
     $endDate = $request->query('end_date');
 
+    // Subquery: get latest diagnosis date per patient
+    $latestDiagnosis = DB::table('tbl_diagnosis')
+        ->select(
+            'patient_id',
+            DB::raw('MAX(diag_diagnosis_date) as latest_date')
+        )
+        ->groupBy('patient_id');
+
+    // Subquery: get latest classification per patient
+    $latestClassification = DB::table('tbl_tb_classifications')
+        ->select(
+            'patient_id',
+            DB::raw('MAX(id) as latest_classification_id')
+        )
+        ->groupBy('patient_id');
+
     $query = DB::table('tbl_patients as p')
-        ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-        ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+        ->joinSub($latestDiagnosis, 'ld', function ($join) {
+            $join->on('p.id', '=', 'ld.patient_id');
+        })
+        ->join('tbl_diagnosis as d', function ($join) {
+            $join->on('d.patient_id', '=', 'p.id')
+                 ->on('d.diag_diagnosis_date', '=', 'ld.latest_date');
+        })
+        ->joinSub($latestClassification, 'lc', function ($join) {
+            $join->on('p.id', '=', 'lc.patient_id');
+        })
+        ->join('tbl_tb_classifications as c', function ($join) {
+            $join->on('c.patient_id', '=', 'p.id')
+                 ->on('c.id', '=', 'lc.latest_classification_id');
+        })
         ->select(
             'p.pat_full_name',
             DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -534,7 +562,7 @@ class PatientSummaryController extends Controller
         )
         ->where('c.clas_bacteriological_status', 'Clinically-diagnosed TB');
 
-    // DATE FILTERS
+    // DATE FILTERS (applied to latest record only)
     if ($startDate) {
         $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
     }
@@ -543,17 +571,11 @@ class PatientSummaryController extends Controller
         $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
     }
 
-    // 🔥 CORRECT SORTING
+    // SORTING
     $patient = $query
-        // 1️⃣ Sort by diagnosis date first (latest)
         ->orderBy('d.diag_diagnosis_date', 'DESC')
-
-        // 2️⃣ Then sort TB case number properly (YYYY-XXXXX)
         ->orderByRaw("
-            STR_TO_DATE(
-                SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1),
-                '%Y'
-            ) DESC
+            STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC
         ")
         ->orderByRaw("
             CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC
@@ -570,7 +592,6 @@ class PatientSummaryController extends Controller
     $canvas = $pdf->getDomPDF()->getCanvas();
     $w = $canvas->get_width();
     $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
-
     $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
     return $pdf->stream('Clinically Diagnosed Report.pdf');
@@ -580,16 +601,40 @@ class PatientSummaryController extends Controller
 
     public function pulmonaryPDF(Request $request)
     {
-
         ini_set('memory_limit', '512M');
         set_time_limit(300);
 
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
+        // Subquery: get latest diagnosis ID per patient (using both date and id)
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest classification ID per patient
+        $latestClassification = DB::table('tbl_tb_classifications')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_classification_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestClassification, 'lc', function ($join) {
+                $join->on('p.id', '=', 'lc.patient_id');
+            })
+            ->join('tbl_tb_classifications as c', 'c.id', '=', 'lc.latest_classification_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -601,17 +646,21 @@ class PatientSummaryController extends Controller
             )
             ->where('c.clas_anatomical_site', 'Pulmonary');
 
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
 
-            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+        $patients = $query
+            ->orderBy('d.diag_diagnosis_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
+            ->get();
 
         $pdf = Pdf::loadView('pdf.pulmonary-report', ['pulmonary' => $patients])
-        ->setPaper('A4', 'landscape');
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
@@ -630,9 +679,34 @@ class PatientSummaryController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest classification ID per patient
+        $latestClassification = DB::table('tbl_tb_classifications')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_classification_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_tb_classifications as c', 'p.id', '=', 'c.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestClassification, 'lc', function ($join) {
+                $join->on('p.id', '=', 'lc.patient_id');
+            })
+            ->join('tbl_tb_classifications as c', 'c.id', '=', 'lc.latest_classification_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -645,17 +719,21 @@ class PatientSummaryController extends Controller
             )
             ->where('c.clas_anatomical_site', 'Extra-pulmonary');
 
-            if ($startDate) {
-                $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('d.diag_diagnosis_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('d.diag_diagnosis_date', '<=', $endDate);
+        }
 
-            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+        $patients = $query
+            ->orderBy('d.diag_diagnosis_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
+            ->get();
 
         $pdf = Pdf::loadView('pdf.extra-pulmonary-report', ['extraPulmonary' => $patients])
-        ->setPaper('A4', 'landscape');
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
@@ -674,10 +752,46 @@ class PatientSummaryController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment regimen ID per patient
+        $latestRegimen = DB::table('tbl_treatment_regimens')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_regimen_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
-            ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->join('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
+            ->joinSub($latestRegimen, 'lr', function ($join) {
+                $join->on('p.id', '=', 'lr.patient_id');
+            })
+            ->join('tbl_treatment_regimens as r', 'r.id', '=', 'lr.latest_regimen_id')
             ->select(
                 'd.diag_tb_case_no',
                 'p.pat_full_name',
@@ -689,17 +803,21 @@ class PatientSummaryController extends Controller
             )
             ->where('t.out_outcome', 'Ongoing');
 
-            if ($startDate) {
-                $query->whereDate('r.reg_start_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('r.reg_start_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('r.reg_start_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('r.reg_start_date', '<=', $endDate);
+        }
 
-            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+        $patients = $query
+            ->orderBy('r.reg_start_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
+            ->get();
 
         $pdf = Pdf::loadView('pdf.ongoing-treatment-report', ['ongoingPatients' => $patients])
-        ->setPaper('A4', 'landscape');
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
@@ -770,11 +888,59 @@ class PatientSummaryController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest prescribed drug ID per patient (4FDC only)
+        $latestDrug = DB::table('tbl_prescribed_drugs')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_drug_id')
+            )
+            ->where('drug_name', '4FDC')
+            ->groupBy('patient_id');
+
+        // Subquery: get latest adherence ID per patient
+        $latestAdherence = DB::table('tbl_adherences')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_adherence_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
-            ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
-            ->leftJoin('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestDrug, 'lpd', function ($join) {
+                $join->on('p.id', '=', 'lpd.patient_id');
+            })
+            ->join('tbl_prescribed_drugs as pd', 'pd.id', '=', 'lpd.latest_drug_id')
+            ->joinSub($latestAdherence, 'la', function ($join) {
+                $join->on('p.id', '=', 'la.patient_id');
+            })
+            ->join('tbl_adherences as a', 'a.id', '=', 'la.latest_adherence_id')
+            ->leftJoinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->leftJoin('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
             ->select(
                 'p.pat_full_name',
                 'p.pat_sex',
@@ -786,31 +952,29 @@ class PatientSummaryController extends Controller
                 'a.pha_intensive_end',
                 't.out_outcome as outcome',
                 DB::raw("
-                CASE 
-                    WHEN CURDATE() > a.pha_intensive_end 
-                        THEN 'Completed'
-                    ELSE DATEDIFF(CURDATE(), a.pha_intensive_start) + 1
-                END as treatment_day
-            ")
+                    CASE 
+                        WHEN CURDATE() > a.pha_intensive_end 
+                            THEN 'Completed'
+                        ELSE DATEDIFF(CURDATE(), a.pha_intensive_start) + 1
+                    END as treatment_day
+                ")
             )
-            ->where('pd.drug_name', '4FDC')   // Intensive = 4FDC
             ->where(function($query) {
                 $query->whereNull('t.out_outcome')
-                    ->orWhere('t.out_outcome', 'Ongoing'); // only ongoing patients
+                    ->orWhere('t.out_outcome', 'Ongoing');
             });
 
-            if ($startDate) {
-                $query->whereDate('a.pha_intensive_start', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('a.pha_intensive_end', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('a.pha_intensive_start', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('a.pha_intensive_end', '<=', $endDate);
+        }
 
-            // ->orderBy('p.pat_full_name')
-            $patients = $query->orderBy('a.pha_intensive_start', 'desc')->get();
+        $patients = $query->orderBy('a.pha_intensive_start', 'desc')->get();
 
         $pdf = Pdf::loadView('pdf.intensive-treatment-report', ['intensive' => $patients])
-        ->setPaper('A4', 'landscape');
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
@@ -829,48 +993,93 @@ class PatientSummaryController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest prescribed drug ID per patient (2FDC only)
+        $latestDrug = DB::table('tbl_prescribed_drugs')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_drug_id')
+            )
+            ->where('drug_con_name', '2FDC')
+            ->groupBy('patient_id');
+
+        // Subquery: get latest adherence ID per patient
+        $latestAdherence = DB::table('tbl_adherences')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_adherence_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_prescribed_drugs as pd', 'p.id', '=', 'pd.patient_id')
-            ->join('tbl_adherences as a', 'p.id', '=', 'a.patient_id')
-            ->leftJoin('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestDrug, 'lpd', function ($join) {
+                $join->on('p.id', '=', 'lpd.patient_id');
+            })
+            ->join('tbl_prescribed_drugs as pd', 'pd.id', '=', 'lpd.latest_drug_id')
+            ->joinSub($latestAdherence, 'la', function ($join) {
+                $join->on('p.id', '=', 'la.patient_id');
+            })
+            ->join('tbl_adherences as a', 'a.id', '=', 'la.latest_adherence_id')
+            ->leftJoinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->leftJoin('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
             ->select(
                 'p.pat_full_name',
                 'p.pat_sex',
                 'pd.drug_con_name',
-                'pd.drug_no_of_tablets',
+                'pd.drug_con_no_of_tablets',
                 'pd.drug_con_strength',
                 'pd.drug_con_unit',
                 'a.pha_continuation_start',
                 'a.pha_continuation_end',
                 't.out_outcome as outcome',
                 DB::raw("
-                CASE 
-                    WHEN CURDATE() > a.pha_continuation_end 
-                        THEN 'Completed'
-                    ELSE DATEDIFF(CURDATE(), a.pha_continuation_start) + 1
-                END as treatment_day
-            ")
+                    CASE 
+                        WHEN CURDATE() > a.pha_continuation_end 
+                            THEN 'Completed'
+                        ELSE DATEDIFF(CURDATE(), a.pha_continuation_start) + 1
+                    END as treatment_day
+                ")
             )
-            ->where('pd.drug_con_name', '2FDC')   // Maintenance = 2FDC
             ->where(function($query) {
                 $query->whereNull('t.out_outcome')
-                    ->orWhere('t.out_outcome', 'Ongoing'); // only ongoing patients
+                    ->orWhere('t.out_outcome', 'Ongoing');
             });
 
-            if ($startDate) {
-                $query->whereDate('a.pha_continuation_start', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('a.pha_continuation_end', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('a.pha_continuation_start', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('a.pha_continuation_end', '<=', $endDate);
+        }
 
-            // ->orderBy('p.pat_full_name')
-            // ->whereRaw('DATEDIFF(CURDATE(), a.pha_continuation_start) >= 0')
-            $patients = $query->orderBy('a.pha_continuation_start')->get();
+        $patients = $query->orderBy('a.pha_continuation_start', 'desc')->get();
 
         $pdf = Pdf::loadView('pdf.maintenance-treatment-report', ['maintenanceTreatment' => $patients])
-        ->setPaper('A4', 'landscape');
+            ->setPaper('A4', 'landscape');
 
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();
@@ -879,7 +1088,6 @@ class PatientSummaryController extends Controller
         $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
 
         return $pdf->stream('Maintenance Treatment Report.pdf');
-
     }
 
     public function underagePDF(Request $request)
@@ -975,10 +1183,46 @@ class PatientSummaryController extends Controller
         $startDate = $request->query('start_date');
         $endDate = $request->query('end_date');
 
+        // Subquery: get latest diagnosis ID per patient
+        $latestDiagnosis = DB::table('tbl_diagnosis as d1')
+            ->select('d1.patient_id', DB::raw('MAX(d1.id) as latest_diag_id'))
+            ->whereIn('d1.id', function($query) {
+                $query->select(DB::raw('MAX(d2.id)'))
+                    ->from('tbl_diagnosis as d2')
+                    ->whereColumn('d2.patient_id', 'd1.patient_id')
+                    ->groupBy('d2.patient_id');
+            })
+            ->groupBy('d1.patient_id');
+
+        // Subquery: get latest treatment outcome ID per patient
+        $latestOutcome = DB::table('tbl_treatment_outcomes')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_outcome_id')
+            )
+            ->groupBy('patient_id');
+
+        // Subquery: get latest treatment regimen ID per patient
+        $latestRegimen = DB::table('tbl_treatment_regimens')
+            ->select(
+                'patient_id',
+                DB::raw('MAX(id) as latest_regimen_id')
+            )
+            ->groupBy('patient_id');
+
         $query = DB::table('tbl_patients as p')
-            ->join('tbl_diagnosis as d', 'p.id', '=', 'd.patient_id')
-            ->join('tbl_treatment_outcomes as t', 'p.id', '=', 't.patient_id')
-            ->join('tbl_treatment_regimens as r', 'p.id', '=', 'r.patient_id')
+            ->joinSub($latestDiagnosis, 'ld', function ($join) {
+                $join->on('p.id', '=', 'ld.patient_id');
+            })
+            ->join('tbl_diagnosis as d', 'd.id', '=', 'ld.latest_diag_id')
+            ->joinSub($latestOutcome, 'lo', function ($join) {
+                $join->on('p.id', '=', 'lo.patient_id');
+            })
+            ->join('tbl_treatment_outcomes as t', 't.id', '=', 'lo.latest_outcome_id')
+            ->joinSub($latestRegimen, 'lr', function ($join) {
+                $join->on('p.id', '=', 'lr.patient_id');
+            })
+            ->join('tbl_treatment_regimens as r', 'r.id', '=', 'lr.latest_regimen_id')
             ->select(
                 'p.pat_full_name',
                 DB::raw('TIMESTAMPDIFF(YEAR, p.pat_date_of_birth, CURDATE()) as pat_age'),
@@ -991,17 +1235,21 @@ class PatientSummaryController extends Controller
             )
             ->where('t.out_outcome', 'Cured');
             
-            if ($startDate) {
-                $query->whereDate('r.reg_start_date', '>=', $startDate);
-            }
-            if ($endDate) {
-                $query->whereDate('r.reg_start_date', '<=', $endDate);
-            }
+        if ($startDate) {
+            $query->whereDate('r.reg_start_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('r.reg_start_date', '<=', $endDate);
+        }
 
-            $patients = $query->orderBy('d.diag_tb_case_no', 'desc')->get();
+        $patients = $query
+            ->orderBy('t.out_date', 'DESC')
+            ->orderByRaw("STR_TO_DATE(SUBSTRING_INDEX(d.diag_tb_case_no, '-', 1), '%Y') DESC")
+            ->orderByRaw("CAST(SUBSTRING_INDEX(d.diag_tb_case_no, '-', -1) AS UNSIGNED) DESC")
+            ->get();
 
         $pdf = Pdf::loadView('pdf.cured-report', ['cured' => $patients])
-        ->setPaper('A4', 'landscape');
+            ->setPaper('A4', 'landscape');
         
         $pdf->output();
         $canvas = $pdf->getDomPDF()->getCanvas();

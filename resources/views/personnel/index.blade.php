@@ -308,10 +308,10 @@
                     <input type="text" id="address" name="address" class="form-control" placeholder="Enter address" required>
                   </div>
 
-                  <!-- <div class="col-md-6">
+                  <div class="col-md-6">
                     <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
-                  </div> -->
+                  </div>
 
                 </div>
               </div>
