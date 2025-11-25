@@ -744,8 +744,7 @@ class ReportRepository implements ReportRepositoryInterface
                 's.sput_date_collected',
                 's.sput_smear_result',
                 's.sput_xpert_result'
-            )
-            ->where('s.sput_xpert_result', 'Positive');
+            );
 
         if ($startDate) {
             $query->whereDate('s.sput_date_collected', '>=', $startDate);
