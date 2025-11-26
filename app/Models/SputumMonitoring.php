@@ -12,6 +12,7 @@ class SputumMonitoring extends Model
         'sput_date_collected',
         'sput_smear_result',
         'sput_xpert_result',
+        'lab_test_photo',
         'patient_id',
     ];
 

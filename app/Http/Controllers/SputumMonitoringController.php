@@ -4,76 +4,72 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SputumMonitoring;
-use App\Models\Patient;
-use App\Models\TreatmentOutcome;
 
 class SputumMonitoringController extends Controller
 {
     public function store(Request $request, $id)
-    {
-        $request->validate([
-            'sput_date_collected' => 'required|date',
-            'sput_smear_result' => 'nullable|string|max:255',
-            'sput_xpert_result' => 'required|string|max:255',
-        ]);
+{
+    $request->validate([
+        'sput_date_collected' => 'required|date',
+        'sput_smear_result' => 'nullable|string|max:255',
+        'sput_xpert_result' => 'required|string|max:255',
+        'lab_test_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        SputumMonitoring::create([
-            'patient_id' => $id,
-            'sput_date_collected' => $request->sput_date_collected,
-            'sput_smear_result' => $request->sput_smear_result,
-            'sput_xpert_result' => $request->sput_xpert_result,
-        ]);
+    // Handle file upload
+    $filePath = null;
+    if ($request->hasFile('lab_test_photo')) {
+        $file = $request->file('lab_test_photo');
+        $fileName = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
 
-        // Check if patient has 3 consecutive negative results
-        $this->checkForCuredStatus($id);
+
+        // Store inside storage/app/public/sputum/{patient_id}
+        $filePath = $file->storeAs('sputum/' . $id, $fileName, 'public');
+    }
+
+    // 1. Save sputum record
+    SputumMonitoring::create([
+        'patient_id' => $id,
+        'sput_date_collected' => $request->sput_date_collected,
+        'sput_smear_result' => $request->sput_smear_result,
+        'sput_xpert_result' => $request->sput_xpert_result,
+        'lab_test_photo' => $filePath,
+    ]);
+
+    // 2. Count MTB Negative Xpert results
+    $negativeCount = SputumMonitoring::where('patient_id', $id)
+        ->where('sput_xpert_result', 'MTB NEGATIVE')
+        ->count();
+
+    // 3. If 3+ MTB Negative → Create/update Treatment Outcome
+    if ($negativeCount >= 3) {
+
+        // Check latest treatment outcome
+        $treatment = \App\Models\TreatmentOutcome::where('patient_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        // Create ONLY if not already cured
+        if (!$treatment || $treatment->out_outcome !== 'Cured') {
+            \App\Models\TreatmentOutcome::create([
+                'patient_id' => $id,
+                'out_outcome' => 'Cured',
+                'out_date' => now()->toDateString(),
+                'out_reason' => '3 consecutive MTB Negative Xpert results',
+            ]);
+        }
 
         return redirect()
             ->back()
-            ->with('success', 'Sputum result added successfully!')
+            ->with('success', 'Sputum result added successfully! Patient is now marked as CURED based on 3 MTB Negative results.')
             ->with('stay_on_tab', 'lab');
     }
 
-    private function checkForCuredStatus($patientId)
-    {
-        // Get the last 3 sputum results ordered by date
-        $lastThreeResults = SputumMonitoring::where('patient_id', $patientId)
-            ->orderBy('sput_date_collected', 'desc')
-            ->take(3)
-            ->get();
+    // Default success message
+    return redirect()
+        ->back()
+        ->with('success', 'Sputum result added successfully!')
+        ->with('stay_on_tab', 'lab');
+}
 
-        // Check if we have exactly 3 results and all are negative
-        if ($lastThreeResults->count() === 3) {
-            $allNegative = $lastThreeResults->every(function ($result) {
-                return strtolower($result->sput_xpert_result) === 'mtb negative';
-            });
-
-            if ($allNegative) {
-                // Check if treatment outcome already exists
-                $existingOutcome = TreatmentOutcome::where('patient_id', $patientId)->first();
-                
-                if (!$existingOutcome) {
-                    // Create new treatment outcome
-                    TreatmentOutcome::create([
-                        'patient_id' => $patientId,
-                        'out_outcome' => 'Cured',
-                        'out_date' => now()->format('Y-m-d'),
-                        'out_reason' => 'Three consecutive negative sputum results'
-                    ]);
-
-                    // Add success message
-                    session()->flash('cured_notification', true);
-                } else if ($existingOutcome->out_outcome !== 'Cured') {
-                    // Update existing outcome if not already cured
-                    $existingOutcome->update([
-                        'out_outcome' => 'Cured',
-                        'out_date' => now()->format('Y-m-d'),
-                        'out_reason' => 'Three consecutive negative sputum results'
-                    ]);
-
-                    // Add success message
-                    session()->flash('cured_notification', true);
-                }
-            }
-        }
-    }
 }
