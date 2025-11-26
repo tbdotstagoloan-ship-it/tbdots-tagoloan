@@ -3691,6 +3691,29 @@
         });
     </script>
 
+        <!-- Success Notification -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <strong>Success!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <!-- Cure Notification - Special Alert -->
+    @if(session('cure_notification'))
+        <div class="alert alert-warning alert-dismissible fade show border-success" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill text-success me-3" style="font-size: 1.5rem;"></i>
+                <div>
+                    <h5 class="alert-heading mb-1">Important: Potential Cure Detected</h5>
+                    <p class="mb-0">{{ session('cure_notification') }}</p>
+                    <small class="text-muted">Please consult with the attending physician for treatment outcome assessment.</small>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
 </body>
 
