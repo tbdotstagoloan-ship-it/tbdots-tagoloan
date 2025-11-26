@@ -1895,6 +1895,7 @@
                                     <th>Date Collected</th>
                                     <th>Smear Microscopy / TB LAMP Result</th>
                                     <th>Xpert MTB/RIF Result</th>
+                                    <th>Lab Test Result</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1916,6 +1917,18 @@
                                             </td>
                                             <td>{{ $sputum->sput_smear_result ?? '—' }}</td>
                                             <td>{{ $sputum->sput_xpert_result ?? '—' }}</td>
+                                            <td>
+                                                @if ($sputum->lab_test_photo)
+                                                    <a href="{{ asset('storage/' . $sputum->lab_test_photo) }}" target="_blank">
+                                                        <img src="{{ asset('storage/' . $sputum->lab_test_photo) }}" 
+                                                            alt="Lab Test Photo" 
+                                                            style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px;">
+                                                    </a>
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+
                                         </tr>
                                     @endif
                                 @endforeach
@@ -2436,7 +2449,7 @@
                         <label for="edit_out_outcome" class="form-label">Outcome</label>
                         <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
                             required>
-                            @foreach (['Cured', 'Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
+                            @foreach (['Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
                                 <option value="{{ $option }}" {{ $selectedOutcome === $option ? 'selected' : '' }}>
                                     {{ $option }}
                                 </option>
@@ -2772,72 +2785,93 @@
 
 
         <!-- Sputum Monitoring Modal -->
-        <div class="modal fade" id="editSputumModal" tabindex="-1" aria-labelledby="editSputumModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
+<div class="modal fade" id="editSputumModal" tabindex="-1" aria-labelledby="editSputumModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="editSputumModalLabel">Sputum Monitoring</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="editSputumModalLabel">Sputum Monitoring</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <!-- Important: route should point to sputum.store (create new) -->
+            <form action="{{ route('sputum.store', $patient->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <!-- Date Collected -->
+                    <div class="mb-3">
+                        <label for="sput_date_collected" class="form-label">Date Collected</label>
+                        <input type="date" class="form-control" id="sput_date_collected"
+                            name="sput_date_collected" max="<?php echo date('Y-m-d'); ?>" required>
                     </div>
 
-                    <!-- Important: route should point to sputum.store (create new) -->
-                    <form action="{{ route('sputum.store', $patient->id) }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <!-- Date Collected -->
-                            <div class="mb-3">
-                                <label for="sput_date_collected" class="form-label">Date Collected</label>
-                                <input type="date" class="form-control" id="sput_date_collected"
-                                    name="sput_date_collected" max="<?php echo date('Y-m-d'); ?>" required>
-                            </div>
+                    <!-- Smear Microscopy -->
+                    <div class="mb-3">
+                        <label for="sput_smear_result" class="form-label">Smear Microscopy /TB LAMP</label>
+                        <select name="sput_smear_result" id="sput_smear_result"
+                            class="form-control form-select">
+                            <option value="" disabled selected>Select</option>
+                            <option value="MTB VERY HIGH">MTB VERY HIGH</option>
+                            <option value="MTB HIGH">MTB HIGH</option>
+                            <option value="MTB MEDIUM">MTB MEDIUM</option>
+                            <option value="MTB LOW">MTB LOW</option>
+                            <option value="MTB VERY LOW">MTB VERY LOW</option>
+                            <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                        </select>
+                    </div>
 
-                            <!-- Smear Microscopy -->
-                            <div class="mb-3">
-                                <label for="sput_smear_result" class="form-label">Smear Microscopy /TB LAMP</label>
-                                <!-- <input type="text" class="form-control" id="sput_smear_result" name="sput_smear_result"
-                                    placeholder="Smear microscopy / tb lamp"> -->
-                                <select name="sput_smear_result" id="sput_smear_result"
-                                    class="form-control form-select">
-                                    <option value="" disabled selected>Select</option>
-                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
-                                    <option value="MTB HIGH">MTB HIGH</option>
-                                    <option value="MTB MEDIUM">MTB MEDIUM</option>
-                                    <option value="MTB LOW">MTB LOW</option>
-                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
-                                    <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                                </select>
-                            </div>
+                    <!-- Xpert MTB/RIF -->
+                    <div class="mb-3">
+                        <label for="sput_xpert_result" class="form-label">Xpert MTB/RIF</label>
+                        <select name="sput_xpert_result" id="sput_xpert_result"
+                            class="form-control form-select" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="MTB VERY HIGH">MTB VERY HIGH</option>
+                            <option value="MTB HIGH">MTB HIGH</option>
+                            <option value="MTB MEDIUM">MTB MEDIUM</option>
+                            <option value="MTB LOW">MTB LOW</option>
+                            <option value="MTB VERY LOW">MTB VERY LOW</option>
+                            <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                        </select>
+                    </div>
 
-                            <!-- Xpert MTB/RIF -->
-                            <div class="mb-3">
-                                <label for="sput_xpert_result" class="form-label">Xpert MTB/RIF</label>
-                                <!-- <input type="text" class="form-control" id="sput_xpert_result" name="sput_xpert_result"
-                                    placeholder="Xpert mtb / rif" required> -->
-                                <select name="sput_xpert_result" id="sput_xpert_result"
-                                    class="form-control form-select">
-                                    <option value="" disabled selected>Select</option>
-                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
-                                    <option value="MTB HIGH">MTB HIGH</option>
-                                    <option value="MTB MEDIUM">MTB MEDIUM</option>
-                                    <option value="MTB LOW">MTB LOW</option>
-                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
-                                    <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                                </select>
+                    <!-- Lab Test Photo Upload with Preview -->
+                    <div class="mb-3">
+                        <label for="lab_test_photo" class="form-label">Upload Lab Test Photo</label>
+                        <input type="file" class="form-control" id="lab_test_photo" name="lab_test_photo" 
+                            accept="image/*" onchange="previewImage(event)">
+                        
+                        <!-- Image Preview Container -->
+                        <div id="imagePreviewContainer" class="mt-3" style="display: none;">
+                            <div class="position-relative d-inline-block">
+                                <img id="imagePreview" src="" alt="Preview" 
+                                    class="img-thumbnail" 
+                                    style="max-width: 100%; max-height: 300px; object-fit: contain;">
+                                <button type="button" 
+                                    class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
+                                    onclick="removeImage()"
+                                    style="padding: 0.25rem 0.5rem;">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
+                            <p class="text-muted small mt-2 mb-0">
+                                <i class="fas fa-info-circle"></i> Preview of your lab test photo
+                            </p>
                         </div>
-
-                        <!-- Footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success">Submit</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
 
 
         <!-- Chest X-ray Modal -->
@@ -3691,6 +3725,44 @@
         });
     </script>
 
+<script>
+function previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('imagePreview');
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    
+    if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewContainer.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(file);
+    } else {
+        previewContainer.style.display = 'none';
+    }
+}
+
+function removeImage() {
+    const fileInput = document.getElementById('lab_test_photo');
+    const preview = document.getElementById('imagePreview');
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    
+    // Clear the file input
+    fileInput.value = '';
+    
+    // Hide preview
+    preview.src = '';
+    previewContainer.style.display = 'none';
+}
+
+// Reset preview when modal is closed
+document.getElementById('editSputumModal').addEventListener('hidden.bs.modal', function () {
+    removeImage();
+});
+</script>
 
 </body>
 
