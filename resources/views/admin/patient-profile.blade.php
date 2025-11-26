@@ -2449,7 +2449,7 @@
                         <label for="edit_out_outcome" class="form-label">Outcome</label>
                         <select class="form-control form-select" id="edit_out_outcome" name="out_outcome"
                             required>
-                            @foreach (['Cured', 'Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
+                            @foreach (['Treatment Completed', 'Lost to Follow-up', 'Died'] as $option)
                                 <option value="{{ $option }}" {{ $selectedOutcome === $option ? 'selected' : '' }}>
                                     {{ $option }}
                                 </option>

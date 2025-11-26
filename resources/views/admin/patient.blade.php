@@ -230,14 +230,27 @@
             </thead>
             <tbody>
               @foreach ($patients as $patient)
-                @php
-                    $now = \Carbon\Carbon::now();
+            @php
+                $now = \Carbon\Carbon::now();
+                
+                // 🎯 Check if patient is cured
+                $isCured = $patient->status === 'Cured';
 
-                    $intensiveStart = $patient->pha_intensive_start ? \Carbon\Carbon::parse($patient->pha_intensive_start) : null;
-                    $intensiveEnd = $patient->pha_intensive_end ? \Carbon\Carbon::parse($patient->pha_intensive_end) : null;
-                    $maintenanceStart = $patient->pha_continuation_start ? \Carbon\Carbon::parse($patient->pha_continuation_start) : null;
-                    $maintenanceEnd = $patient->pha_continuation_end ? \Carbon\Carbon::parse($patient->pha_continuation_end) : null;
+                $intensiveStart = $patient->pha_intensive_start ? \Carbon\Carbon::parse($patient->pha_intensive_start) : null;
+                $intensiveEnd = $patient->pha_intensive_end ? \Carbon\Carbon::parse($patient->pha_intensive_end) : null;
+                $maintenanceStart = $patient->pha_continuation_start ? \Carbon\Carbon::parse($patient->pha_continuation_start) : null;
+                $maintenanceEnd = $patient->pha_continuation_end ? \Carbon\Carbon::parse($patient->pha_continuation_end) : null;
 
+                // 🔥 If patient is CURED, override all calculations
+                if ($isCured) {
+                    $intensiveStatus = 'Completed';
+                    $intensiveDaysRemaining = 0;
+                    $maintenanceStatus = 'Completed';
+                    $maintenanceDaysRemaining = 0;
+                    $currentPhase = 'Treatment Completed';
+                } else {
+                    // Normal logic for non-cured patients
+                    
                     // Intensive Phase Logic
                     if ($intensiveStart && $intensiveEnd) {
                         if ($now->between($intensiveStart, $intensiveEnd)) {
@@ -283,7 +296,8 @@
                     } elseif ($intensiveEnd && $now->greaterThan($intensiveEnd) && (!$maintenanceStart || $now->lessThan($maintenanceStart))) {
                         $currentPhase = 'Intensive Completed';
                     }
-                @endphp
+                }
+            @endphp
 
                 <tr>
                   <td>{{ $patient->id }}</td>
@@ -294,15 +308,21 @@
                     </a>
                 </td>
                   <td>
-                      <span class="badge 
-                          @if($intensiveStatus === 'Ongoing') bg-warning
-                          @elseif($intensiveStatus === 'Completed') bg-success
-                          @else bg-secondary
-                          @endif">
-                          {{ $intensiveStatus }}
-                      </span>
-                  </td>
-                  <td>{{ $intensiveDaysRemaining !== '—' ? $intensiveDaysRemaining . ' days' : '—' }}</td>
+                    <span class="badge 
+                        @if($intensiveStatus === 'Ongoing') bg-warning
+                        @elseif($intensiveStatus === 'Completed') bg-success
+                        @else bg-secondary
+                        @endif">
+                        {{ $intensiveStatus }}
+                    </span>
+                </td>
+                  <td>
+                    @if($isCured)
+                        <span class="text-success fw-bold">0 days</span>
+                    @else
+                        {{ $intensiveDaysRemaining !== '—' ? $intensiveDaysRemaining . ' days' : '—' }}
+                    @endif
+                </td>
                   <td>
                       <span class="badge 
                           @if($maintenanceStatus === 'Ongoing') bg-warning
@@ -313,7 +333,13 @@
                           {{ $maintenanceStatus }}
                       </span>
                   </td>
-                  <td>{{ $maintenanceDaysRemaining !== '—' ? $maintenanceDaysRemaining . ' days' : '—' }}</td>
+                  <td>
+                    @if($isCured)
+                        <span class="text-success fw-bold">0 days</span>
+                    @else
+                        {{ $maintenanceDaysRemaining !== '—' ? $maintenanceDaysRemaining . ' days' : '—' }}
+                    @endif
+                </td>
                   <td>
                     <span class="badge 
                           @if($patient->status === 'Ongoing') bg-warning
