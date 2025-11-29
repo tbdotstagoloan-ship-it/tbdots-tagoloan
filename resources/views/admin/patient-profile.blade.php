@@ -1682,7 +1682,7 @@
         <!-- End of Treatment Information Tab -->
 
 
-        <!-- Follow Ups Tab -->
+        <!-- Serious Adverse Events -->
         <div id="lab-tab" class="tab-content" style="margin-top: 30px; display: none;">
 
             <div class="info-section card p-3 shadow-sm border-0 rounded-3">
@@ -1692,10 +1692,10 @@
                         <p class="text-muted small mb-0">Recorded adverse events and AEs of special interest for
                             this patient.</p>
                     </div>
-                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                    <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                         data-bs-target="#editAdverseEventModal">
                         <i class="fas fa-plus"></i> Add Event
-                    </button>
+                    </button> -->
                 </div>
 
                 @if ($patient->adverseEvents->isNotEmpty())
@@ -2665,6 +2665,7 @@
         </div>
 
 
+        
         <!-- Patient Progress Modal -->
         <div class="modal fade" id="editProgressModal" tabindex="-1" aria-labelledby="editProgressModalLabel"
             aria-hidden="true">
@@ -2688,8 +2689,16 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="prog_problem" class="form-label">Problem</label>
-                                    <input type="text" class="form-control" id="prog_problem" name="prog_problem"
-                                        placeholder="Problem" required>
+                                    <select class="form-control" id="prog_problem" name="prog_problem">
+                                        <option value="">-- Select from Adverse Events --</option>
+                                        @foreach ($patient->adverseEvents as $adverse)
+                                            @if(!empty($adverse->adv_specific_ae))
+                                                <option value="{{ $adverse->adv_specific_ae }}">
+                                                    {{ $adverse->adv_specific_ae }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="prog_action_taken" class="form-label">Action Taken</label>
@@ -3761,6 +3770,37 @@ function removeImage() {
 // Reset preview when modal is closed
 document.getElementById('editSputumModal').addEventListener('hidden.bs.modal', function () {
     removeImage();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const problemSelect = document.getElementById('prog_problem_select');
+    const problemInput = document.getElementById('prog_problem');
+    const dateInput = document.getElementById('prog_date');
+
+    if (problemSelect && problemInput) {
+        problemSelect.addEventListener('change', function() {
+            if (this.value) {
+                // Populate the problem field with selected adverse event
+                problemInput.value = this.value;
+                
+                // Optionally populate the date field with the adverse event date
+                const selectedOption = this.options[this.selectedIndex];
+                const aeDate = selectedOption.getAttribute('data-date');
+                if (aeDate && dateInput) {
+                    dateInput.value = aeDate;
+                }
+            }
+        });
+
+        // Clear select when user types in the input field
+        problemInput.addEventListener('input', function() {
+            if (problemSelect.value && this.value !== problemSelect.value) {
+                problemSelect.value = '';
+            }
+        });
+    }
 });
 </script>
 
