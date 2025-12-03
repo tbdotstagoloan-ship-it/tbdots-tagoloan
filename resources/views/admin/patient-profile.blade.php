@@ -508,19 +508,19 @@
                     <i class="fas fa-chevron-right toggle-arrow rotate-icon"></i>
                 </a>
                 <ul class="submenu list-unstyled ps-4">
-                    <li><a href="{{ url('newly-diagnosed')}}" class="nav-link">Newly Diagnosed</a></li>
-                    <li><a href="{{ url('relapse') }}" class="nav-link">Relapse Patients</a></li>
-                    <li><a href="{{ url('underage')}}" class="nav-link">Underage Patients</a></li>
-                    <li><a href="{{ url('bacteriologically-confirmed') }}" class="nav-link">TB Classification</a></li>
+                    <li><a href="{{ url('adverse-event') }}" class="nav-link">Adverse Events</a></li>
                     <li><a href="{{ url('pulmonary') }}" class="nav-link">Anatomical Sites</a></li>
-                    <li><a href="{{ url('ongoing-treatment')}}" class="nav-link">Ongoing Treatments</a></li>
                     <li><a href="{{ url('barangay-cases')}}" class="nav-link">Barangay Cases</a></li>
-                    <li><a href="{{ url('intensive-treatment') }}" class="nav-link">Treatment Phases</a></li>
-                    <li><a href="{{ url('sputum-monitoring') }}" class="nav-link">Sputum Monitoring</a></li>
-                    <li><a href="{{ url('cured')}}" class="nav-link">Treatment Outcomes</a></li>
-                    <li><a href="{{ url('barangay-cases-notification') }}" class="nav-link">Barangay Cases
-                            Notification</a></li>
+                    <li><a href="{{ url('barangay-cases-notification') }}" class="nav-link">Barangay Cases Notification</a></li>
+                    <li><a href="{{ url('newly-diagnosed')}}" class="nav-link">Newly Diagnosed</a></li>
+                    <li><a href="{{ url('ongoing-treatment')}}" class="nav-link">Ongoing Treatments</a></li>
                     <li><a href="{{ url('quarterly-cases-notification') }}" class="nav-link">Quarterly Reports</a></li>
+                    <li><a href="{{ url('relapse') }}" class="nav-link">Relapse Patients</a></li>
+                    <li><a href="{{ url('sputum-monitoring') }}" class="nav-link">Sputum Monitoring</a></li>
+                    <li><a href="{{ url('bacteriologically-confirmed') }}" class="nav-link">TB Classification</a></li>
+                    <li><a href="{{ url('cured')}}" class="nav-link">Treatment Outcomes</a></li>
+                    <li><a href="{{ url('intensive-treatment') }}" class="nav-link">Treatment Phases</a></li>
+                    <li><a href="{{ url('underage')}}" class="nav-link">Underage Patients</a></li>
                 </ul>
             </li>
 
@@ -1682,7 +1682,7 @@
         <!-- End of Treatment Information Tab -->
 
 
-        <!-- Follow Ups Tab -->
+        <!-- Serious Adverse Events -->
         <div id="lab-tab" class="tab-content" style="margin-top: 30px; display: none;">
 
             <div class="info-section card p-3 shadow-sm border-0 rounded-3">
@@ -1692,10 +1692,10 @@
                         <p class="text-muted small mb-0">Recorded adverse events and AEs of special interest for
                             this patient.</p>
                     </div>
-                    <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
+                    <!-- <button class="btn btn-success btn-sm d-flex align-items-center gap-1" data-bs-toggle="modal"
                         data-bs-target="#editAdverseEventModal">
                         <i class="fas fa-plus"></i> Add Event
-                    </button>
+                    </button> -->
                 </div>
 
                 @if ($patient->adverseEvents->isNotEmpty())
@@ -2140,87 +2140,87 @@
 
 
         <!-- Referral Modal -->
-<div class="modal fade" id="editDiagnosisModal" tabindex="-1" aria-labelledby="editDiagnosisModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="editDiagnosisModalLabel">Referral Information</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- ✅ Always point to latest diagnosis record -->
-            @php
-                $latestDiagnosis = $patient->diagnoses->sortByDesc('created_at')->first();
-            @endphp
-
-            @if ($latestDiagnosis)
-            <form method="POST" action="{{ route('referrals.update', $latestDiagnosis->id) }}">
-                @csrf
-                @method('PUT')
-
-                <div class="modal-body">
-                    <!-- Hidden core fields -->
-                    <input type="hidden" name="diag_diagnosis_date" value="{{ old('diag_diagnosis_date', $latestDiagnosis->diag_diagnosis_date) }}">
-                    <input type="hidden" name="diag_notification_date" value="{{ old('diag_notification_date', $latestDiagnosis->diag_notification_date) }}">
-                    <input type="hidden" name="diag_tb_case_no" value="{{ old('diag_tb_case_no', $latestDiagnosis->diag_tb_case_no) }}">
-                    <input type="hidden" name="diag_attending_physician" value="{{ old('diag_attending_physician', $latestDiagnosis->diag_attending_physician) }}">
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="diag_referred_to" class="form-label">Referred to</label>
-                            <input type="text" class="form-control" id="diag_referred_to" name="diag_referred_to"
-                                placeholder="Treatment Facility Name"
-                                value="{{ old('diag_referred_to', $latestDiagnosis->diag_referred_to) }}">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="diag_address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="diag_address" name="diag_address"
-                                placeholder="Address"
-                                value="{{ old('diag_address', $latestDiagnosis->diag_address) }}">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="diag_facility_code" class="form-label">Facility Code</label>
-                            <input type="text" class="form-control" id="diag_facility_code" name="diag_facility_code"
-                                placeholder="Facility code"
-                                value="{{ old('diag_facility_code', $latestDiagnosis->diag_facility_code) }}">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="diag_region" class="form-label">Region</label>
-                            <select id="diag_region" class="form-control form-select" required>
-                                <option value="" disabled>Select</option>
-                            </select>
-                            <input type="hidden" name="diag_region" id="diag_region_text"
-                                value="{{ old('diag_region', $latestDiagnosis->diag_region) }}">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="diag_province" class="form-label">Province</label>
-                            <select id="diag_province" class="form-control form-select" required>
-                                <option value="" disabled>Select</option>
-                            </select>
-                            <input type="hidden" name="diag_province" id="diag_province_text"
-                                value="{{ old('diag_province', $latestDiagnosis->diag_province) }}">
-                        </div>
+        <div class="modal fade" id="editDiagnosisModal" tabindex="-1" aria-labelledby="editDiagnosisModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="editDiagnosisModalLabel">Referral Information</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <!-- ✅ Always point to latest diagnosis record -->
+                    @php
+                        $latestDiagnosis = $patient->diagnoses->sortByDesc('created_at')->first();
+                    @endphp
+
+                    @if ($latestDiagnosis)
+                    <form method="POST" action="{{ route('referrals.update', $latestDiagnosis->id) }}">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="modal-body">
+                            <!-- Hidden core fields -->
+                            <input type="hidden" name="diag_diagnosis_date" value="{{ old('diag_diagnosis_date', $latestDiagnosis->diag_diagnosis_date) }}">
+                            <input type="hidden" name="diag_notification_date" value="{{ old('diag_notification_date', $latestDiagnosis->diag_notification_date) }}">
+                            <input type="hidden" name="diag_tb_case_no" value="{{ old('diag_tb_case_no', $latestDiagnosis->diag_tb_case_no) }}">
+                            <input type="hidden" name="diag_attending_physician" value="{{ old('diag_attending_physician', $latestDiagnosis->diag_attending_physician) }}">
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="diag_referred_to" class="form-label">Referred to</label>
+                                    <input type="text" class="form-control" id="diag_referred_to" name="diag_referred_to"
+                                        placeholder="Treatment Facility Name"
+                                        value="{{ old('diag_referred_to', $latestDiagnosis->diag_referred_to) }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="diag_address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="diag_address" name="diag_address"
+                                        placeholder="Address"
+                                        value="{{ old('diag_address', $latestDiagnosis->diag_address) }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="diag_facility_code" class="form-label">Facility Code</label>
+                                    <input type="text" class="form-control" id="diag_facility_code" name="diag_facility_code"
+                                        placeholder="Facility code"
+                                        value="{{ old('diag_facility_code', $latestDiagnosis->diag_facility_code) }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="diag_region" class="form-label">Region</label>
+                                    <select id="diag_region" class="form-control form-select" required>
+                                        <option value="" disabled>Select</option>
+                                    </select>
+                                    <input type="hidden" name="diag_region" id="diag_region_text"
+                                        value="{{ old('diag_region', $latestDiagnosis->diag_region) }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="diag_province" class="form-label">Province</label>
+                                    <select id="diag_province" class="form-control form-select" required>
+                                        <option value="" disabled>Select</option>
+                                    </select>
+                                    <input type="hidden" name="diag_province" id="diag_province_text"
+                                        value="{{ old('diag_province', $latestDiagnosis->diag_province) }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
+                    @else
+                        <div class="modal-body text-center text-muted">
+                            <p>No diagnosis record found for this patient.</p>
+                        </div>
+                    @endif
                 </div>
-            </form>
-            @else
-                <div class="modal-body text-center text-muted">
-                    <p>No diagnosis record found for this patient.</p>
-                </div>
-            @endif
+            </div>
         </div>
-    </div>
-</div>
 
 
 
@@ -2665,6 +2665,7 @@
         </div>
 
 
+        
         <!-- Patient Progress Modal -->
         <div class="modal fade" id="editProgressModal" tabindex="-1" aria-labelledby="editProgressModalLabel"
             aria-hidden="true">
@@ -2688,8 +2689,16 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="prog_problem" class="form-label">Problem</label>
-                                    <input type="text" class="form-control" id="prog_problem" name="prog_problem"
-                                        placeholder="Problem" required>
+                                    <select class="form-control" id="prog_problem" name="prog_problem">
+                                        <option value="">-- Select from Adverse Events --</option>
+                                        @foreach ($patient->adverseEvents as $adverse)
+                                            @if(!empty($adverse->adv_specific_ae))
+                                                <option value="{{ $adverse->adv_specific_ae }}">
+                                                    {{ $adverse->adv_specific_ae }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="prog_action_taken" class="form-label">Action Taken</label>
@@ -2785,93 +2794,93 @@
 
 
         <!-- Sputum Monitoring Modal -->
-<div class="modal fade" id="editSputumModal" tabindex="-1" aria-labelledby="editSputumModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal fade" id="editSputumModal" tabindex="-1" aria-labelledby="editSputumModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
 
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="editSputumModalLabel">Sputum Monitoring</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-
-            <!-- Important: route should point to sputum.store (create new) -->
-            <form action="{{ route('sputum.store', $patient->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body">
-                    <!-- Date Collected -->
-                    <div class="mb-3">
-                        <label for="sput_date_collected" class="form-label">Date Collected</label>
-                        <input type="date" class="form-control" id="sput_date_collected"
-                            name="sput_date_collected" max="<?php echo date('Y-m-d'); ?>" required>
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="editSputumModalLabel">Sputum Monitoring</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
 
-                    <!-- Smear Microscopy -->
-                    <div class="mb-3">
-                        <label for="sput_smear_result" class="form-label">Smear Microscopy /TB LAMP</label>
-                        <select name="sput_smear_result" id="sput_smear_result"
-                            class="form-control form-select">
-                            <option value="" disabled selected>Select</option>
-                            <option value="MTB VERY HIGH">MTB VERY HIGH</option>
-                            <option value="MTB HIGH">MTB HIGH</option>
-                            <option value="MTB MEDIUM">MTB MEDIUM</option>
-                            <option value="MTB LOW">MTB LOW</option>
-                            <option value="MTB VERY LOW">MTB VERY LOW</option>
-                            <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                        </select>
-                    </div>
-
-                    <!-- Xpert MTB/RIF -->
-                    <div class="mb-3">
-                        <label for="sput_xpert_result" class="form-label">Xpert MTB/RIF</label>
-                        <select name="sput_xpert_result" id="sput_xpert_result"
-                            class="form-control form-select" required>
-                            <option value="" disabled selected>Select</option>
-                            <option value="MTB VERY HIGH">MTB VERY HIGH</option>
-                            <option value="MTB HIGH">MTB HIGH</option>
-                            <option value="MTB MEDIUM">MTB MEDIUM</option>
-                            <option value="MTB LOW">MTB LOW</option>
-                            <option value="MTB VERY LOW">MTB VERY LOW</option>
-                            <option value="MTB NEGATIVE">MTB NEGATIVE</option>
-                        </select>
-                    </div>
-
-                    <!-- Lab Test Photo Upload with Preview -->
-                    <div class="mb-3">
-                        <label for="lab_test_photo" class="form-label">Upload Lab Test Photo</label>
-                        <input type="file" class="form-control" id="lab_test_photo" name="lab_test_photo" 
-                            accept="image/*" onchange="previewImage(event)">
-                        
-                        <!-- Image Preview Container -->
-                        <div id="imagePreviewContainer" class="mt-3" style="display: none;">
-                            <div class="position-relative d-inline-block">
-                                <img id="imagePreview" src="" alt="Preview" 
-                                    class="img-thumbnail" 
-                                    style="max-width: 100%; max-height: 300px; object-fit: contain;">
-                                <button type="button" 
-                                    class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
-                                    onclick="removeImage()"
-                                    style="padding: 0.25rem 0.5rem;">
-                                    <i class="fas fa-times"></i>
-                                </button>
+                    <!-- Important: route should point to sputum.store (create new) -->
+                    <form action="{{ route('sputum.store', $patient->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <!-- Date Collected -->
+                            <div class="mb-3">
+                                <label for="sput_date_collected" class="form-label">Date Collected</label>
+                                <input type="date" class="form-control" id="sput_date_collected"
+                                    name="sput_date_collected" max="<?php echo date('Y-m-d'); ?>" required>
                             </div>
-                            <p class="text-muted small mt-2 mb-0">
-                                <i class="fas fa-info-circle"></i> Preview of your lab test photo
-                            </p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                            <!-- Smear Microscopy -->
+                            <div class="mb-3">
+                                <label for="sput_smear_result" class="form-label">Smear Microscopy /TB LAMP</label>
+                                <select name="sput_smear_result" id="sput_smear_result"
+                                    class="form-control form-select">
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
+                                    <option value="MTB HIGH">MTB HIGH</option>
+                                    <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                    <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
+                                    <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                </select>
+                            </div>
+
+                            <!-- Xpert MTB/RIF -->
+                            <div class="mb-3">
+                                <label for="sput_xpert_result" class="form-label">Xpert MTB/RIF</label>
+                                <select name="sput_xpert_result" id="sput_xpert_result"
+                                    class="form-control form-select" required>
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="MTB VERY HIGH">MTB VERY HIGH</option>
+                                    <option value="MTB HIGH">MTB HIGH</option>
+                                    <option value="MTB MEDIUM">MTB MEDIUM</option>
+                                    <option value="MTB LOW">MTB LOW</option>
+                                    <option value="MTB VERY LOW">MTB VERY LOW</option>
+                                    <option value="MTB NEGATIVE">MTB NEGATIVE</option>
+                                </select>
+                            </div>
+
+                            <!-- Lab Test Photo Upload with Preview -->
+                            <div class="mb-3">
+                                <label for="lab_test_photo" class="form-label">Upload Lab Test Photo</label>
+                                <input type="file" class="form-control" id="lab_test_photo" name="lab_test_photo" 
+                                    accept="image/*" onchange="previewImage(event)">
+                                
+                                <!-- Image Preview Container -->
+                                <div id="imagePreviewContainer" class="mt-3" style="display: none;">
+                                    <div class="position-relative d-inline-block">
+                                        <img id="imagePreview" src="" alt="Preview" 
+                                            class="img-thumbnail" 
+                                            style="max-width: 100%; max-height: 300px; object-fit: contain;">
+                                        <button type="button" 
+                                            class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" 
+                                            onclick="removeImage()"
+                                            style="padding: 0.25rem 0.5rem;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                    <p class="text-muted small mt-2 mb-0">
+                                        <i class="fas fa-info-circle"></i> Preview of your lab test photo
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
 
 
         <!-- Chest X-ray Modal -->
@@ -3761,6 +3770,37 @@ function removeImage() {
 // Reset preview when modal is closed
 document.getElementById('editSputumModal').addEventListener('hidden.bs.modal', function () {
     removeImage();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const problemSelect = document.getElementById('prog_problem_select');
+    const problemInput = document.getElementById('prog_problem');
+    const dateInput = document.getElementById('prog_date');
+
+    if (problemSelect && problemInput) {
+        problemSelect.addEventListener('change', function() {
+            if (this.value) {
+                // Populate the problem field with selected adverse event
+                problemInput.value = this.value;
+                
+                // Optionally populate the date field with the adverse event date
+                const selectedOption = this.options[this.selectedIndex];
+                const aeDate = selectedOption.getAttribute('data-date');
+                if (aeDate && dateInput) {
+                    dateInput.value = aeDate;
+                }
+            }
+        });
+
+        // Clear select when user types in the input field
+        problemInput.addEventListener('input', function() {
+            if (problemSelect.value && this.value !== problemSelect.value) {
+                problemSelect.value = '';
+            }
+        });
+    }
 });
 </script>
 

@@ -1671,7 +1671,52 @@ class PatientSummaryController extends Controller
         return $pdf->stream('Quarterly Treatment Outcome Report.pdf');
     }
 
+    public function adverseEventPDF(Request $request)
+    {
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
 
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = DB::table('tbl_patients as p')
+            ->join('tbl_adverse_events as a', 'p.id', '=', 'a.patient_id')
+            ->select(
+                'p.pat_full_name',
+                'a.adv_ae_date',
+                'a.adv_specific_ae',
+                'a.adv_fda_reported_date'
+            );
+
+        // Apply date range filters if provided
+        if (!empty($startDate)) {
+            $query->whereDate('a.adv_ae_date', '>=', $startDate);
+        }
+
+        if (!empty($endDate)) {
+            $query->whereDate('a.adv_ae_date', '<=', $endDate);
+        }
+
+        // Fetch Adverse Event records
+        $patients = $query->orderBy('p.pat_full_name')
+                        ->orderByDesc('a.adv_ae_date')
+                        ->get();
+
+        // Generate PDF
+        $pdf = Pdf::loadView('pdf.adverse-event-report', [
+                'adverseEvent' => $patients
+            ])
+            ->setPaper('A4', 'landscape');
+
+        // Add page numbers
+        $pdf->output();
+        $canvas = $pdf->getDomPDF()->getCanvas();
+        $w = $canvas->get_width();
+        $font = $pdf->getDomPDF()->getFontMetrics()->getFont('helvetica', 'normal');
+        $canvas->page_text($w - 50, 30, "{PAGE_NUM}", $font, 11, [0, 0, 0]);
+
+        return $pdf->stream('Adverse Event Report.pdf');
+    }
     
 
 

@@ -161,7 +161,7 @@
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Full Name</th>
                 <th>Drug</th>
                 <th>Tablets</th>
                 <th>Strength</th>

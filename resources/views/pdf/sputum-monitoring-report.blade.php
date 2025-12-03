@@ -161,7 +161,7 @@
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Full Name</th>
                 <th>Date Collected</th>
                 <th>Smear Microscopy / TB LAMP</th>
                 <th>Xpert MTB/RIF</th>

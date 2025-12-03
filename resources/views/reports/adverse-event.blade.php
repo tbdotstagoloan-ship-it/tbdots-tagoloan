@@ -69,7 +69,7 @@
           <img src="{{ url('assets/img/health-report.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Missed Medication Intake</span>
 
-          @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
+         @if(!empty($missedAdherenceCount) && $missedAdherenceCount > 0)
             <span class="position-absolute top-50 end-0 translate-middle-y me-4 
                         bg-danger text-white border border-light 
                         rounded-circle d-flex justify-content-center align-items-center"
@@ -147,12 +147,13 @@
 
     <div class="main-content py-4" id="mainContent">
       <h4 style="margin-bottom: 10px; color: #2c3e50; font-weight: 600;">
-        Pulmonary
+        Adverse Events
       </h4>
       <p class="text-muted mb-3">
-        Patients with TB affecting the lungs.
+        Patients who experience side effects from medication during treatment.
       </p>
 
+      <!-- Floating Date Filter (Fixed & Polished) -->
       <div class="d-flex justify-content-end align-items-center mb-3 position-relative">
         <div class="dropdown">
           <button class="btn btn-light border-0 shadow-sm rounded-circle d-flex align-items-center justify-content-center" 
@@ -163,7 +164,7 @@
 
           <div class="dropdown-menu dropdown-menu-end p-4 shadow-lg border-0 rounded-4" style="width: 320px;">
             <h6 class="fw-semibold text-dark mb-3">Filter by Date</h6>
-            <form method="GET" action="{{ url('pulmonary') }}" class="row g-3">
+            <form method="GET" action="{{ url('adverse-event') }}" class="row g-3">
               <div class="col-12">
                 <label class="form-label small text-muted mb-1">Start Date</label>
                 <input type="date" class="form-control form-control-sm" id="start_date" name="start_date"
@@ -175,7 +176,7 @@
                       value="{{ $endDate ?? '' }}">
               </div>
               <div class="col-12 d-flex justify-content-between align-items-center mt-2">
-                <a href="{{ url('pulmonary') }}" class="btn btn-outline-secondary btn-sm px-3">
+                <a href="{{ url('adverse-event') }}" class="btn btn-outline-secondary btn-sm px-3">
                   Reset
                 </a>
                 <button type="submit" class="btn btn-primary btn-sm px-3">
@@ -186,7 +187,7 @@
           </div>
         </div>
 
-        <a href="{{ route('pulmonary.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}" 
+        <a href="{{ route('adverse-event.pdf', ['start_date' => $startDate, 'end_date' => $endDate]) }}" 
           target="_blank" class="btn btn-danger ms-2 d-flex align-items-center gap-1">
           <i class="fas fa-file-pdf"></i> Generate Report
         </a>
@@ -196,52 +197,33 @@
         <div class="card-body p-0">
           <div class="table-responsive">
 
-          <select id="statusRedirect" class="form-select mb-2" style="width: 210px;">
-            <option value="" disabled selected>Select Anatomical Site</option>
-            <option value="{{ url('pulmonary') }}">Pulmonary</option>
-            <option value="{{ url('extra-pulmonary') }}">Extra Pulmonary</option>
-            </select>
-
                 <table class="table">
               <thead>
                 <tr>
-                  <th>Full Name</th>
-                  <th>Age</th>
-                  <th>Sex</th>
-                  <th>Barangay</th>
-                  <th>TB Case No</th>
-                  <th>Diagnosis Date</th>
-                  <th>Anatomical Site</th>
+                    <th>Full Name</th>
+                    <th>Date of Adverse Event</th>
+                    <th>Specific Adverse Event</th>
+                    <th>Date Reported to FDA</th>
                 </tr>
               </thead>
               <tbody>
 
-              @foreach ($pulmonary as $patient)
-                
-                <tr>
-                  <td>{{ $patient->pat_full_name }}</td>
-                  <td>{{ $patient->pat_age }}</td>
-                  <td>{{ $patient->pat_sex }}</td>
-                  <td>{{ $patient->barangay }}</td>
-                  <td>{{ $patient->diag_tb_case_no }}</td>
-                  <td>{{ \Carbon\Carbon::parse($patient->diag_diagnosis_date)->format('F j, Y') }}</td>
-                  <td><span class="badge bg-success">{{ $patient->anatomical_site }}</span></td>
+              @foreach ($adverseEvent as $event)
+              
+              <tr>
+                    <td>{{ $event->pat_full_name }}</td>
+                    <td>{{ \Carbon\Carbon::parse($event->adv_ae_date)->format('F j, Y') ?? 'N/A'}}</td>
+                    <td>{{ $event->adv_specific_ae ?? 'N/A'}}</td>
+                    <td>{{ \Carbon\Carbon::parse($event->adv_fda_reported_date)->format('F j, Y') ?? 'N/A'}}</td>
                 </tr>
 
-                @endforeach
+              @endforeach
 
               </tbody>
             </table>
   
                 </div>
               </div>
-
-              <div class="card-footer">Showing {{ $pulmonary->firstItem() }} to {{ $pulmonary->lastItem() }} of
-        {{ $pulmonary->total() }} entries
-        <div class="mt-2">
-          {{ $pulmonary->links() }}
-        </div>
-      </div>
 
             </div>
           </div>
@@ -258,13 +240,13 @@
 
     <script src="{{ url('assets/js/rotate-icon.js') }}"></script>
 
-    <script>
+    <!-- <script>
       document.getElementById("statusRedirect").addEventListener("change", function() {
         if (this.value) {
           window.location.href = this.value;
         }
       });
-    </script>
+    </script> -->
     
   </body>
 </html>

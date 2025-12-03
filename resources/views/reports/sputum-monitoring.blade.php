@@ -101,18 +101,19 @@
           <i class="fas fa-chevron-right toggle-arrow rotate-icon"></i>
         </a>
         <ul class="submenu list-unstyled ps-4">
-          <li><a href="{{ url('newly-diagnosed')}}" class="nav-link">Newly Diagnosed</a></li>
-          <li><a href="{{ url('relapse') }}" class="nav-link">Relapse Patients</a></li>
-          <li><a href="{{ url('underage')}}" class="nav-link">Underage Patients</a></li>
-          <li><a href="{{ url('bacteriologically-confirmed') }}" class="nav-link">TB Classification</a></li>
+          <li><a href="{{ url('adverse-event') }}" class="nav-link">Adverse Events</a></li>
           <li><a href="{{ url('pulmonary') }}" class="nav-link">Anatomical Sites</a></li>
-          <li><a href="{{ url('ongoing-treatment')}}" class="nav-link">Ongoing Treatments</a></li>
           <li><a href="{{ url('barangay-cases')}}" class="nav-link">Barangay Cases</a></li>
-          <li><a href="{{ url('intensive-treatment') }}" class="nav-link">Treatment Phases</a></li>
-          <li><a href="{{ url('sputum-monitoring') }}" class="nav-link">Sputum Monitoring</a></li>
-          <li><a href="{{ url('cured')}}" class="nav-link">Treatment Outcomes</a></li>
           <li><a href="{{ url('barangay-cases-notification') }}" class="nav-link">Barangay Cases Notification</a></li>
+          <li><a href="{{ url('newly-diagnosed')}}" class="nav-link">Newly Diagnosed</a></li>
+          <li><a href="{{ url('ongoing-treatment')}}" class="nav-link">Ongoing Treatments</a></li>
           <li><a href="{{ url('quarterly-cases-notification') }}" class="nav-link">Quarterly Reports</a></li>
+          <li><a href="{{ url('relapse') }}" class="nav-link">Relapse Patients</a></li>
+          <li><a href="{{ url('sputum-monitoring') }}" class="nav-link">Sputum Monitoring</a></li>
+          <li><a href="{{ url('bacteriologically-confirmed') }}" class="nav-link">TB Classification</a></li>
+          <li><a href="{{ url('cured')}}" class="nav-link">Treatment Outcomes</a></li>
+          <li><a href="{{ url('intensive-treatment') }}" class="nav-link">Treatment Phases</a></li>
+          <li><a href="{{ url('underage')}}" class="nav-link">Underage Patients</a></li>
         </ul>
       </li>
 
@@ -198,7 +199,7 @@
                 <table class="table">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Full Name</th>
                   <th>Date Collected</th>
                   <th>Smear Microscopy / TB LAMP</th>
                   <th>Xpert MTB/RIF</th>
@@ -212,7 +213,7 @@
                   <td>{{ $patient->pat_full_name }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->sput_date_collected)->format('F j, Y') }}</td>
                   <td>{{ $patient->sput_smear_result ?? 'N/A' }}</td>
-                  <td>{{ $patient->sput_xpert_result }}</td>
+                  <td>{{ $patient->sput_xpert_result ?? 'N/A' }}</td>
                 </tr>
 
                 @endforeach

@@ -232,15 +232,14 @@ Route::get('expired/pdf', [PatientSummaryController::class, 'expiredPDF'])
 Route::get('barangay-cases/pdf', [PatientSummaryController::class, 'barangayCasesPDF'])
     ->name('barangay-cases.pdf');
 
+Route::get('adverse-event/pdf', [PatientSummaryController::class, 'adverseEventPDF'])
+    ->name('adverse-event.pdf');
+
 // Personnel
 Route::get('personnel', [PersonnelController::class, 'index'])->middleware(['auth'])->name('personnel.index');
 Route::post('/personnel', [PersonnelController::class, 'store'])->name('personnel.store');
 Route::put('/personnel/{id}', [PersonnelController::class, 'update'])->name('personnel.update');
 Route::delete('/personnel/{id}', [PersonnelController::class, 'destroy'])->name('personnel.destroy');
-
-// Search Patient for Relapse Registration
-
-
 
 
 // Check Patient Name
@@ -260,3 +259,6 @@ Route::post('validateRelapsePage3/{id}', [RelapseCasesController::class, 'valida
 
 // Reset Password
 Route::post('/patient/{id}/update-password', [PatientAuthController::class, 'updatePassword'])->name('patient.update-password');
+
+// Adverse Events
+Route::get('adverse-event', [ReportGenerationController::class, 'adverseEvent'])->middleware(['auth']);
