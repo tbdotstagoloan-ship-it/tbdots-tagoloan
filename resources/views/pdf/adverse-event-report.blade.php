@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Cured Patients</title>
+    <title>Adverse Events</title>
     <style>
         body { 
             font-family: Arial, sans-serif;
@@ -155,37 +155,29 @@
     </div>
 
     <!-- TITLE -->
-    <div class="report-title">Cured Tuberculosis Patients Report</div>
+    <div class="report-title">Adverse Events Report</div>
 
     <!-- TABLE -->
     <table>
         <thead>
             <tr>
                 <th>Full Name</th>
-                <th>Age</th>
-                <th>Sex</th>
-                <th>Barangay</th>
-                <!-- <th>TB Case #</th> -->
-                <th>Treatment Start Date</th>
-                <th>Treatment End Date</th>
-                <th>Status</th>
+                <th>Date of Adverse Event</th>
+                <th>Specific Adverse Event</th>
+                <th>Date Reported to FDA</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($cured as $patient)
+            @forelse($adverseEvent as $patient)
             <tr>
                 <td>{{ $patient->pat_full_name }}</td>
-                <td>{{ $patient->pat_age }}</td>
-                <td>{{ $patient->pat_sex }}</td>
-                <td>{{ $patient->barangay }}</td>
-                <!-- <td>{{ $patient->diag_tb_case_no }}</td> -->
-                <td>{{ \Carbon\Carbon::parse($patient->reg_start_date)->format('F j, Y') }}</td>
-                <td>{{ \Carbon\Carbon::parse($patient->outcome_date)->format('F j, Y') }}</td>
-                <td>{{ $patient->outcome }}</td>
+                <td>{{ \Carbon\Carbon::parse($patient->adv_ae_date)->format('F j, Y') }}</td>
+                <td>{{ $patient->adv_specific_ae ?? 'N/A' }}</td>
+                <td>{{ \Carbon\Carbon::parse($patient->adv_fda_reported_date)->format('F j, Y') ?? 'N/A' }}</td>
             </tr>
             @empty
             <tr>
-                <td colspan="8" style="text-align:center;">No data found.</td>
+                <td colspan="7" style="text-align:center;">No data found.</td>
             </tr>
             @endforelse
         </tbody>
@@ -198,7 +190,7 @@
             {{ \Carbon\Carbon::now()->format('F j, Y') }}
         </em>
     </div>
-    
+
     <!-- SIGNATURE -->
     <div class="signature-section">
         <div class="signature">

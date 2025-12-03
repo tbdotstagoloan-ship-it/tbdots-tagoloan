@@ -227,4 +227,15 @@ class ReportGenerationController extends Controller
         $quarterlyOutcome = $this->reports->quarterlyTreatmentOutcome($perPage);
         return view('reports.quarterly-treatment-outcome', compact('quarterlyOutcome'));
     }
+
+    public function adverseEvent(Request $request)
+    {
+        $perPage = (int) $request->query('per_page', 10);
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+        
+        $adverseEvent = $this->reports->adverseEvent($perPage, $startDate, $endDate);
+        
+        return view('reports.adverse-event', compact('adverseEvent', 'startDate', 'endDate'));
+    }
 }

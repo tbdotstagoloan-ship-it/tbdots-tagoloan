@@ -76,4 +76,11 @@ class AdverseEventController extends Controller
         ], 201);
     }
 
+
+    // public function index()
+    // {
+
+    //     return view('reports.adverse-event');
+    // }
+
 }

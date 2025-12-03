@@ -199,7 +199,7 @@
                 <table class="table">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Full Name</th>
                   <th>Age</th>
                   <th>Sex</th>
                   <th>Barangay</th>

@@ -1017,4 +1017,27 @@ class ReportRepository implements ReportRepositoryInterface
             ->orderBy('quarter')
             ->paginate($perPage);
     }
+
+    public function adverseEvent(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator
+    {
+        $query = DB::table('tbl_patients as p')
+            ->join('tbl_adverse_events as a', 'p.id', '=', 'a.patient_id')
+            ->select(
+                'p.pat_full_name',
+                'a.adv_ae_date',
+                'a.adv_specific_ae',
+                'a.adv_fda_reported_date'
+            );
+
+        if ($startDate) {
+            $query->whereDate('a.adv_ae_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('a.adv_ae_date', '<=', $endDate);
+        }
+
+        return $query->orderBy('p.pat_full_name')
+            ->orderByDesc('a.adv_ae_date')
+            ->paginate($perPage);
+    }
 }

@@ -198,7 +198,7 @@
                 <table class="table">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Full Name</th>
                   <th>Date Collected</th>
                   <th>Smear Microscopy / TB LAMP</th>
                   <th>Xpert MTB/RIF</th>
@@ -212,7 +212,7 @@
                   <td>{{ $patient->pat_full_name }}</td>
                   <td>{{ \Carbon\Carbon::parse($patient->sput_date_collected)->format('F j, Y') }}</td>
                   <td>{{ $patient->sput_smear_result ?? 'N/A' }}</td>
-                  <td>{{ $patient->sput_xpert_result }}</td>
+                  <td>{{ $patient->sput_xpert_result ?? 'N/A' }}</td>
                 </tr>
 
                 @endforeach

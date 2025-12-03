@@ -162,7 +162,7 @@
         <thead>
             <tr>
                 <th>Barangay</th>
-                <th>Name</th>
+                <th>Full Name</th>
                 <th>Age</th>
                 <th>Sex</th>
                 <th>TB Case No</th>

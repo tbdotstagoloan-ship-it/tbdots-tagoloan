@@ -27,4 +27,6 @@ interface ReportRepositoryInterface
     public function quarterlyTBClassification(int $perPage = 10): LengthAwarePaginator;
     public function quarterlyAnatomicalSite(int $perPage = 10): LengthAwarePaginator;
     public function quarterlyTreatmentOutcome(int $perPage = 10): LengthAwarePaginator;
+
+    public function adverseEvent(int $perPage = 10, ?string $startDate = null, ?string $endDate = null): LengthAwarePaginator;
 }
