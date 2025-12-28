@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\PatientProfileController;
+use App\Http\Controllers\PatientSummaryController;
 use App\Http\Controllers\PhysicianController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,3 +46,8 @@ Route::delete('/adherence/{username}/{date}', [MedicationAdherenceController::cl
 // Forgot Password
 Route::post('/forgot-password', [PatientAuthController::class, 'forgotPassword']);
 Route::post('/reset-password', [PatientAuthController::class, 'resetPassword']);
+
+// Generate adherence report
+Route::post('/adherence/generate-report', [PatientSummaryController::class, 'generateReport'])
+    ->middleware('auth:sanctum') // Add authentication middleware if needed
+    ->name('api.adherence.generate-report');

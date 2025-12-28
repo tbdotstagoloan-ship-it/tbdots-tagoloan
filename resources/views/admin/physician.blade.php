@@ -159,6 +159,13 @@
         </ul>
       </li>
 
+      <li class="menu-item" data-tooltip="Settings">
+        <a href="{{url('profile')}}">
+        <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
+        <span class="menu-text">Settings</span>
+        </a>
+      </li>
+
     </ul>
 
     <div class="logout-section">

@@ -171,12 +171,12 @@
         </ul>
       </li>
 
-      <!-- <li class="menu-item" data-tooltip="Settings">
+      <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li> -->
+      </li>
     </ul>
 
     <div class="logout-section">
@@ -199,7 +199,6 @@
     </div>
 
   </div>
-
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 20px; color: #2c3e50; font-weight: 600;">
@@ -384,12 +383,12 @@
             {{ $extra }}
           ],
           backgroundColor: [
-            'rgba(76, 175, 80, 0.85)',     // Pulmonary - Green (#4CAF50)
-            'rgba(255, 222, 0, 0.85)'      // Extra-pulmonary - Yellow (#ffde00)
+            'rgba(0, 148, 50, 0.85)',    // Pulmonary - New Green (#009432)
+            'rgba(255, 222, 0, 0.85)'    // Extra-pulmonary - Yellow (#ffde00)
           ],
           borderColor: [
-            'rgba(56, 142, 60, 1)',        // Pulmonary - Dark Green
-            'rgba(255, 222, 0, 1)'         // Extra-pulmonary - Yellow border
+            'rgba(0, 120, 40, 1)',       // Pulmonary - Darker Green
+            'rgba(255, 222, 0, 1)'       // Extra-pulmonary - Yellow border
           ],
           borderWidth: 1
         }]
@@ -424,8 +423,8 @@
             datasets: [{
               label: 'Patients Diagnosed',
               data: monthlyData,
-              backgroundColor: 'rgba(76, 175, 80, 0.85)',  // theme green
-              borderColor: 'rgba(56, 142, 60, 1)',         // darker green
+              backgroundColor: 'rgba(0, 148, 50, 0.85)',  // theme green
+              borderColor: 'rgba(0, 120, 40, 1)',         // darker green
               borderWidth: 1,
               borderRadius: 6
             }]

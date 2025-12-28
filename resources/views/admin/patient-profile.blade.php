@@ -524,12 +524,12 @@
                 </ul>
             </li>
 
-            <!-- <li class="menu-item" data-tooltip="Settings">
-        <a href="{{url('profile')}}">
-          <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
-          <span class="menu-text">Settings</span>
-        </a>
-      </li> -->
+            <li class="menu-item" data-tooltip="Settings">
+                <a href="{{url('profile')}}">
+                <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
+                <span class="menu-text">Settings</span>
+                </a>
+            </li>
         </ul>
 
         <div class="logout-section">
@@ -2063,7 +2063,12 @@
         <!-- Medication Adherence Tab -->
         <div id="adherence-tab" class="tab-content" style="margin-top: 30px; display: none;">
             <div class="info-section">
-                <h5 class="fw-bold mb-3">Medication Adherence</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Medication Adherence</h5>
+                    <button class="btn btn-danger" id="generateReportBtn">
+                        <i class="fa fa-file-pdf"></i> Generate Report
+                    </button>
+                </div>
 
                 <div class="adherence-calendar-card">
                     <div class="adherence-calendar-header">
@@ -2084,11 +2089,11 @@
 
                     <div class="adherence-stats-container mt-4">
                         <div class="adherence-stat-card adherence-stat-success">
-                            <div class="adherence-stat-label">Days Taken</div>
+                            <div class="adherence-stat-label">Monthly Doses Taken</div>
                             <div class="adherence-stat-value" id="daysTaken">0</div>
                         </div>
                         <div class="adherence-stat-card adherence-stat-danger">
-                            <div class="adherence-stat-label">Days Missed</div>
+                            <div class="adherence-stat-label">Monthly Missed Doses</div>
                             <div class="adherence-stat-value" id="daysMissed">0</div>
                         </div>
                         <div class="adherence-stat-card adherence-stat-success">
@@ -2128,7 +2133,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -3233,7 +3237,11 @@
         })();
     </script> -->
 
-    <script>
+
+
+    <!-- Old Medication Adherence Script - Dec 14 -->
+
+    <!-- <script>
     (function () {
         const calendar = document.getElementById("calendar");
         const monthYear = document.getElementById("monthYear");
@@ -3506,6 +3514,598 @@
             }
         }
 
+        fetchAdherenceData();
+    })();
+</script> -->
+
+
+<script>
+    (function () {
+        const calendar = document.getElementById("calendar");
+        const monthYear = document.getElementById("monthYear");
+        const adherenceRateEl = document.getElementById("adherenceRate");
+        const daysTakenEl = document.getElementById("daysTaken");
+        const daysMissedEl = document.getElementById("daysMissed");
+
+        // Total stat elements
+        const totalDaysTakenEl = document.getElementById("totalDaysTaken");
+        const totalDaysMissedEl = document.getElementById("totalDaysMissed");
+        const totalAdherenceRateEl = document.getElementById("totalAdherenceRate");
+        
+        // Treatment start date element
+        const treatmentStartDateEl = document.getElementById("treatmentStartDate");
+
+        if (!calendar || !monthYear) return;
+
+        let currentDate = new Date();
+        let adherenceData = {};
+        let treatmentStartDate = null;
+
+        // Update this line with your actual patient data injection
+        const username = "{{ $patient->adherences->first()->username ?? $patient->patientAccount->acc_username ?? 'N/A' }}";
+        const patientName = "{{ $patient->pat_full_name ?? '' }}";
+        const regStartDate = "{{ $patient->treatmentRegimens->first()->reg_start_date ?? '' }}";
+
+        // Parse and set treatment start date
+        if (regStartDate) {
+            treatmentStartDate = new Date(regStartDate);
+            if (treatmentStartDateEl) {
+                treatmentStartDateEl.textContent = treatmentStartDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+        } else {
+            if (treatmentStartDateEl) {
+                treatmentStartDateEl.textContent = 'Not specified';
+            }
+        }
+
+        function calculateStats(year, month) {
+            let taken = 0, missed = 0;
+            let totalTaken = 0, totalMissed = 0;
+
+            Object.keys(adherenceData).forEach(dateStr => {
+                const date = new Date(dateStr);
+
+                // Count monthly
+                if (date.getFullYear() === year && date.getMonth() === month) {
+                    if (adherenceData[dateStr] === "taken") taken++;
+                    if (adherenceData[dateStr] === "missed") missed++;
+                }
+
+                // Count overall totals
+                if (adherenceData[dateStr] === "taken") totalTaken++;
+                if (adherenceData[dateStr] === "missed") totalMissed++;
+            });
+
+            // Per-month stats
+            const monthTotal = taken + missed;
+            const monthRate = monthTotal > 0 ? Math.round((taken / monthTotal) * 100) : 0;
+            adherenceRateEl.textContent = monthRate + "%";
+            daysTakenEl.textContent = taken;
+            daysMissedEl.textContent = missed;
+
+            // Total stats
+            const totalDays = totalTaken + totalMissed;
+            const totalRate = totalDays > 0 ? Math.round((totalTaken / totalDays) * 100) : 0;
+            totalDaysTakenEl.textContent = totalTaken;
+            totalDaysMissedEl.textContent = totalMissed;
+            totalAdherenceRateEl.textContent = totalRate + "%";
+        }
+
+        // Show status selection modal
+        function showStatusModal(dateStr, currentStatus) {
+            const existingModal = document.getElementById('adherenceModal');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'adherenceModal';
+            modal.innerHTML = `
+                <div class="adherence-modal-overlay">
+                    <div class="adherence-modal-content">
+                        <h4 class="mb-3">Log Medication for ${dateStr}</h4>
+                        <p class="text-muted mb-4">Select status:</p>
+                        <div class="d-flex gap-3 justify-content-center mb-3">
+                            <button class="btn btn-success adherence-modal-btn" data-status="taken">
+                                <i class="fa fa-check"></i> Taken
+                            </button>
+                            <button class="btn btn-danger adherence-modal-btn" data-status="missed">
+                                <i class="fa fa-times"></i> Missed
+                            </button>
+                            ${currentStatus ? `
+                            <button class="btn btn-secondary adherence-modal-btn" data-status="remove">
+                                <i class="fa fa-trash"></i> Remove
+                            </button>
+                            ` : ''}
+                        </div>
+                        <button class="btn btn-outline-secondary w-100" id="cancelModal">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            modal.querySelectorAll('.adherence-modal-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const status = btn.dataset.status;
+                    if (status === 'remove') {
+                        deleteAdherence(dateStr);
+                    } else {
+                        saveAdherence(dateStr, status);
+                    }
+                    modal.remove();
+                });
+            });
+
+            document.getElementById('cancelModal').addEventListener('click', () => {
+                modal.remove();
+            });
+
+            modal.querySelector('.adherence-modal-overlay').addEventListener('click', (e) => {
+                if (e.target.classList.contains('adherence-modal-overlay')) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Save adherence to backend
+        async function saveAdherence(dateStr, status) {
+            if (!username || username === 'N/A') {
+                alert('Username not found. Cannot save adherence data.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/adherence/log', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        username: username,
+                        date: dateStr,
+                        status: status
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to save adherence');
+                }
+
+                adherenceData[dateStr] = status;
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error('Error saving adherence:', error);
+                alert('Failed to save adherence data. Please try again.');
+            }
+        }
+
+        // Delete adherence from backend
+        async function deleteAdherence(dateStr) {
+            if (!username || username === 'N/A') {
+                alert('Username not found. Cannot delete adherence data.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/adherence/${encodeURIComponent(username)}/${dateStr}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    },
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to delete adherence');
+                }
+
+                delete adherenceData[dateStr];
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error('Error deleting adherence:', error);
+                alert('Failed to delete adherence data. Please try again.');
+            }
+        }
+
+        function renderCalendar(date) {
+            calendar.innerHTML = "";
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const monthName = date.toLocaleString("default", { month: "long" });
+            monthYear.textContent = `${monthName} ${year}`;
+
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            daysOfWeek.forEach(day => {
+                const header = document.createElement("div");
+                header.textContent = day;
+                header.classList.add("adherence-day-header");
+                calendar.appendChild(header);
+            });
+
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                const empty = document.createElement("div");
+                empty.classList.add("adherence-calendar-day", "adherence-empty");
+                calendar.appendChild(empty);
+            }
+
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const cell = document.createElement("div");
+                const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const cellDate = new Date(year, month, day);
+                
+                cell.textContent = day;
+                cell.classList.add("adherence-calendar-day");
+
+                // Check if date is before treatment start date
+                if (treatmentStartDate && cellDate < treatmentStartDate) {
+                    cell.classList.add("adherence-before-treatment");
+                    cell.style.opacity = "0.3";
+                    cell.style.cursor = "not-allowed";
+                    cell.title = "Before treatment start date";
+                } else if (cellDate <= today) {
+                    cell.style.cursor = "pointer";
+                    cell.addEventListener("click", () => {
+                        showStatusModal(dateStr, adherenceData[dateStr]);
+                    });
+                } else {
+                    cell.classList.add("adherence-future");
+                    cell.style.opacity = "0.4";
+                }
+
+                if (adherenceData[dateStr]) {
+                    cell.classList.add("adherence-" + adherenceData[dateStr]);
+                    const icon = document.createElement("i");
+                    icon.classList.add(
+                        "fa",
+                        adherenceData[dateStr] === "taken" ? "fa-check" : "fa-times",
+                        "adherence-status-icon"
+                    );
+                    cell.appendChild(icon);
+                }
+
+                calendar.appendChild(cell);
+            }
+
+            calculateStats(year, month);
+        }
+
+        document.getElementById("prevMonth")?.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+
+        document.getElementById("nextMonth")?.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+
+        async function fetchAdherenceData() {
+            try {
+                let url = username && username !== 'N/A'
+                    ? `/api/adherence/${encodeURIComponent(username)}`
+                    : `/api/adherence/patient/{{ $patient->id ?? '' }}`;
+
+                const response = await fetch(url, { credentials: 'same-origin' });
+                if (!response.ok) {
+                    console.error('Adherence API returned status', response.status);
+                    return;
+                }
+
+                const data = await response.json();
+                adherenceData = {};
+                (data || []).forEach(item => {
+                    const d = item.date ? item.date.split(' ')[0] : null;
+                    if (d) adherenceData[d] = item.status;
+                });
+
+                renderCalendar(currentDate);
+            } catch (error) {
+                console.error("Error fetching adherence data:", error);
+            }
+        }
+
+        // ==========================================
+        // REPORT GENERATION FUNCTIONS
+        // ==========================================
+
+        function showReportOptionsModal() {
+            const existingModal = document.getElementById('reportOptionsModal');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'reportOptionsModal';
+            modal.innerHTML = `
+                <div class="adherence-modal-overlay">
+                    <div class="adherence-modal-content" style="max-width: 400px;">
+                        <h4 class="mb-3"><i class="fa fa-file-pdf"></i> Generate Report</h4>
+                        <p class="text-muted mb-4">Choose how you want to get your report:</p>
+                        <div class="d-grid gap-3 mb-3">
+                            <button class="btn btn-success btn-lg" id="printReportBtn">
+                                <i class="fa fa-print"></i> Print Report
+                            </button>
+                            <button class="btn btn-danger btn-lg" id="downloadReportBtn">
+                                <i class="fa fa-download"></i> Download
+                            </button>
+                        </div>
+                        <button class="btn btn-outline-secondary w-100" id="cancelReportModal">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            document.getElementById('printReportBtn').addEventListener('click', () => {
+                modal.remove();
+                printAdherenceReport();
+            });
+
+            document.getElementById('downloadReportBtn').addEventListener('click', () => {
+                modal.remove();
+                downloadAdherenceReport();
+            });
+
+            document.getElementById('cancelReportModal').addEventListener('click', () => {
+                modal.remove();
+            });
+
+            modal.querySelector('.adherence-modal-overlay').addEventListener('click', (e) => {
+                if (e.target.classList.contains('adherence-modal-overlay')) {
+                    modal.remove();
+                }
+            });
+        }
+
+        function generateReportHTML() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const monthName = currentDate.toLocaleString("default", { month: "long" });
+            
+            const monthlyTaken = parseInt(daysTakenEl.textContent) || 0;
+            const monthlyMissed = parseInt(daysMissedEl.textContent) || 0;
+            const monthlyRate = adherenceRateEl.textContent;
+            
+            const totalTaken = parseInt(totalDaysTakenEl.textContent) || 0;
+            const totalMissed = parseInt(totalDaysMissedEl.textContent) || 0;
+            const totalRate = totalAdherenceRateEl.textContent;
+            
+            const treatmentStartFormatted = treatmentStartDate 
+                ? treatmentStartDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                : 'Not specified';
+            
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Medication Adherence Report - ${patientName}</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body {
+                            font-family: 'Segoe UI', Arial, sans-serif;
+                            padding: 40px;
+                            max-width: 900px;
+                            margin: 0 auto;
+                            background: white;
+                        }
+                        .header {
+                            text-align: center;
+                            border-bottom: 4px solid #dc3545;
+                            padding-bottom: 25px;
+                            margin-bottom: 40px;
+                        }
+                        .header h1 {
+                            color: #2c3e50;
+                            font-size: 32px;
+                            margin-bottom: 15px;
+                        }
+                        .header .info {
+                            color: #6c757d;
+                            font-size: 14px;
+                            line-height: 1.8;
+                        }
+                        .header .info strong {
+                            color: #495057;
+                        }
+                        .section {
+                            margin: 40px 0;
+                            page-break-inside: avoid;
+                        }
+                        .section h2 {
+                            color: #2c3e50;
+                            font-size: 20px;
+                            border-bottom: 2px solid #dee2e6;
+                            padding-bottom: 12px;
+                            margin-bottom: 25px;
+                        }
+                        .stats-grid {
+                            display: grid;
+                            grid-template-columns: repeat(3, 1fr);
+                            gap: 20px;
+                            margin: 25px 0;
+                        }
+                        .stat-box {
+                            border: 2px solid #e9ecef;
+                            border-radius: 10px;
+                            padding: 25px 20px;
+                            text-align: center;
+                            transition: transform 0.2s;
+                        }
+                        .stat-box.success {
+                            border-color: #28a745;
+                            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+                        }
+                        .stat-box.danger {
+                            border-color: #dc3545;
+                            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+                        }
+                        .stat-box.info {
+                            border-color: #17a2b8;
+                            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+                        }
+                        .stat-label {
+                            font-size: 13px;
+                            color: #495057;
+                            font-weight: 600;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            margin-bottom: 12px;
+                        }
+                        .stat-value {
+                            font-size: 42px;
+                            font-weight: bold;
+                            color: #212529;
+                        }
+                        .summary-box {
+                            background: #f8f9fa;
+                            border-left: 4px solid #17a2b8;
+                            padding: 20px;
+                            margin: 30px 0;
+                            border-radius: 8px;
+                        }
+                        .summary-box h3 {
+                            color: #2c3e50;
+                            font-size: 18px;
+                            margin-bottom: 15px;
+                        }
+                        .summary-box p {
+                            color: #495057;
+                            line-height: 1.8;
+                            margin-bottom: 10px;
+                        }
+                        .footer {
+                            margin-top: 60px;
+                            padding-top: 25px;
+                            border-top: 2px solid #dee2e6;
+                            text-align: center;
+                        }
+                        .footer p {
+                            color: #6c757d;
+                            font-size: 12px;
+                            line-height: 1.8;
+                        }
+                        @media print {
+                            body { padding: 20px; }
+                            .section { page-break-inside: avoid; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>📊 Medication Adherence Report</h1>
+                        <div class="info">
+                            <p><strong>Patient Name:</strong> ${patientName || 'N/A'}</p>
+                            <p><strong>Treatment Start Date:</strong> ${treatmentStartFormatted}</p>
+                            <p><strong>Report Period:</strong> ${monthName} ${year}</p>
+                            <p><strong>Generated:</strong> ${new Date().toLocaleString('en-US', { 
+                                dateStyle: 'full', 
+                                timeStyle: 'short' 
+                            })}</p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>📅 Monthly Summary (${monthName} ${year})</h2>
+                        <div class="stats-grid">
+                            <div class="stat-box success">
+                                <div class="stat-label">Monthly Doses Taken</div>
+                                <div class="stat-value">${monthlyTaken}</div>
+                            </div>
+                            <div class="stat-box danger">
+                                <div class="stat-label">Monthly Missed Doses</div>
+                                <div class="stat-value">${monthlyMissed}</div>
+                            </div>
+                            <div class="stat-box success">
+                                <div class="stat-label">Adherence Rate</div>
+                                <div class="stat-value">${monthlyRate}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>📈 Overall Statistics (All Time)</h2>
+                        <div class="stats-grid">
+                            <div class="stat-box info">
+                                <div class="stat-label">Total Days Taken</div>
+                                <div class="stat-value">${totalTaken}</div>
+                            </div>
+                            <div class="stat-box info">
+                                <div class="stat-label">Total Days Missed</div>
+                                <div class="stat-value">${totalMissed}</div>
+                            </div>
+                            <div class="stat-box info">
+                                <div class="stat-label">Overall Adherence</div>
+                                <div class="stat-value">${totalRate}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>📝 Summary & Recommendations</h2>
+                        <div class="summary-box">
+                            <h3>Adherence Analysis</h3>
+                            <p><strong>Treatment Start Date:</strong> ${treatmentStartFormatted}</p>
+                            <p><strong>Monthly Performance:</strong> You have taken ${monthlyTaken} dose(s) and missed ${monthlyMissed} dose(s) in ${monthName} ${year}, resulting in a ${monthlyRate} adherence rate.</p>
+                            <p><strong>Overall Performance:</strong> Your overall medication adherence rate is ${totalRate} with ${totalTaken} total doses taken and ${totalMissed} doses missed.</p>
+                            ${parseInt(totalRate) >= 80 
+                                ? '<p style="color: #28a745;"><strong>✓ Excellent adherence!</strong> Keep up the great work maintaining your medication schedule.</p>' 
+                                : '<p style="color: #dc3545;"><strong>⚠ Improvement needed:</strong> Please consult with your healthcare provider to discuss strategies for improving medication adherence.</p>'
+                            }
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <p><strong>Important Notice:</strong> This report was automatically generated by the TB DOTS Patient Monitoring System</p>
+                        <p>For questions or concerns about your medication adherence, please consult your healthcare provider</p>
+                        <p style="margin-top: 10px;">© ${new Date().getFullYear()} TB DOTS Patient Monitoring System</p>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        function printAdherenceReport() {
+            const reportHTML = generateReportHTML();
+            const reportWindow = window.open('', '_blank', 'width=900,height=800');
+            reportWindow.document.write(reportHTML);
+            reportWindow.document.close();
+            
+            setTimeout(() => {
+                reportWindow.print();
+            }, 500);
+        }
+
+        function downloadAdherenceReport() {
+            const reportHTML = generateReportHTML();
+            const blob = new Blob([reportHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Medication_Adherence_Report_${patientName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ==========================================
+        // ATTACH REPORT BUTTON EVENT
+        // ==========================================
+        document.getElementById("generateReportBtn")?.addEventListener("click", function(e) {
+            e.preventDefault();
+            showReportOptionsModal();
+        });
+
+        // Initialize
         fetchAdherenceData();
     })();
 </script>

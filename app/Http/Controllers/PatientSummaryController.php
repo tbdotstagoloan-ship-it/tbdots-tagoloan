@@ -1719,5 +1719,48 @@ class PatientSummaryController extends Controller
     }
     
 
+    /**
+     * Generate medication adherence report
+     */
+    public function generateReport(Request $request)
+    {
+        $validated = $request->validate([
+            'patientName' => 'required|string',
+            'patientId' => 'required',
+            'username' => 'nullable|string',
+            'reportDate' => 'required|string',
+            'currentMonth' => 'required|string',
+            'monthlyTaken' => 'required|integer',
+            'monthlyMissed' => 'required|integer',
+            'monthlyRate' => 'required|integer',
+            'totalTaken' => 'required|integer',
+            'totalMissed' => 'required|integer',
+            'totalRate' => 'required|integer',
+        ]);
+
+        // Prepare data for PDF
+        $data = [
+            'patientName' => $validated['patientName'],
+            'patientId' => $validated['patientId'],
+            'username' => $validated['username'] ?? 'N/A',
+            'reportDate' => $validated['reportDate'],
+            'currentMonth' => $validated['currentMonth'],
+            'monthlyTaken' => $validated['monthlyTaken'],
+            'monthlyMissed' => $validated['monthlyMissed'],
+            'monthlyRate' => $validated['monthlyRate'],
+            'totalTaken' => $validated['totalTaken'],
+            'totalMissed' => $validated['totalMissed'],
+            'totalRate' => $validated['totalRate'],
+        ];
+
+        // Generate PDF
+        $pdf = Pdf::loadView('reports.adherence-report', $data);
+        
+        // Set paper size and orientation
+        $pdf->setPaper('A4', 'portrait');
+
+        // Return PDF download
+        return $pdf->download('adherence_report_' . date('Y-m-d') . '.pdf');
+    }
 
 }
