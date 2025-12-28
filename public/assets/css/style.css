@@ -81,7 +81,8 @@ body {
 .sidebar {
     width: 280px;
     height: 100vh;
-    background-color: #4caf50;
+    /* background-color: #4caf50; */
+    background-color: #009432;
     position: fixed;
     left: 0;
     top: 0;
@@ -900,11 +901,13 @@ pointer-events: auto !important; /* ensures cursor still shows */
 
   .nav-tabs .nav-link:hover {
     background-color: #e6f4ea;
-    color: #45a049;
+    /* color: #45a049; */
+    color: #009432;
   }
 
   .nav-tabs .nav-link.active {
-    background-color: #4caf50;
+    /* background-color: #4caf50; */
+    background-color: #009432;
     color: #fff;
     font-weight: 600;
   }
