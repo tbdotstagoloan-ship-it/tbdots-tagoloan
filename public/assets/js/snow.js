@@ -27,7 +27,7 @@ for (let i = 0; i < 60; i++) {
 
 function drawSnow() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "#bdc3c7";
     ctx.font = "20px Arial";
     ctx.textAlign = "center";
     
