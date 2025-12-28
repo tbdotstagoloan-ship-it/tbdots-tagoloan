@@ -171,12 +171,12 @@
         </ul>
       </li>
 
-      <!-- <li class="menu-item" data-tooltip="Settings">
+      <li class="menu-item" data-tooltip="Settings">
         <a href="{{url('profile')}}">
           <img src="{{ url('assets/img/s1.png') }}" class="menu-icon" alt="">
           <span class="menu-text">Settings</span>
         </a>
-      </li> -->
+      </li>
     </ul>
 
     <div class="logout-section">
@@ -200,6 +200,9 @@
 
   </div>
 
+  <!-- Snowfall Effect -->
+    <canvas id="snow"></canvas>
+    @vite('public/assets/js/snow.js')
 
   <div class="main-content py-4" id="mainContent">
     <h4 style="margin-bottom: 20px; color: #2c3e50; font-weight: 600;">
