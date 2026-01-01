@@ -19,7 +19,8 @@
 
     <div class="login-container">
         <div class="login-header">
-            <h2>Please Sign In</h2>
+            <h2>Welcome Back!</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 8px;">Please sign in to your account.</p>
         </div>
 
         <!-- Laravel Status Message -->
@@ -49,6 +50,10 @@
                     <div class="error-message">{{ $message }}</div>
                 @enderror
             </div>
+
+            <div class="forgot-password">
+              <a href="{{ route('password.request') }}">Forgot your password?</a>
+          </div>
 
             <button type="submit" class="login-btn" id="login-btn">
                 <span id="login-btn-text">
