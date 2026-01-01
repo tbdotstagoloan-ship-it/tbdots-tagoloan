@@ -216,7 +216,7 @@
               <option value="250" {{ $perPage == 250 ? 'selected' : '' }}>250</option>
               <option value="500" {{ $perPage == 500 ? 'selected' : '' }}>500</option>
             </select>
-            <span class="ms-2"></span>
+            <span class="ms-2">entries</span>
           </form>
 
           <table class="table">
