@@ -184,8 +184,8 @@
       <form method="GET" action="{{ url('patient') }}" class="d-flex">
         <input type="hidden" name="per_page" value="{{ $perPage }}">
         <input type="text" name="search" value="{{ request('search') }}" class="form-control searchBtn me-2"
-            placeholder="Search patients...">
-          <button type="submit" class="btn btn-secondary search-btn">Search</button>
+            placeholder="Search patients">
+          <button type="submit" class="btn btn-primary search-btn"><i class="fas fa-search me-1"></i>Search</button>
       </form>
 
       <!-- Add Patient button -->
@@ -234,7 +234,7 @@
             @php
                 $now = \Carbon\Carbon::now();
                 
-                // 🎯 Check if patient is cured
+                //  Check if patient is cured
                 $isCured = $patient->status === 'Cured';
 
                 $intensiveStart = $patient->pha_intensive_start ? \Carbon\Carbon::parse($patient->pha_intensive_start) : null;
@@ -242,7 +242,7 @@
                 $maintenanceStart = $patient->pha_continuation_start ? \Carbon\Carbon::parse($patient->pha_continuation_start) : null;
                 $maintenanceEnd = $patient->pha_continuation_end ? \Carbon\Carbon::parse($patient->pha_continuation_end) : null;
 
-                // 🔥 If patient is CURED, override all calculations
+                //  If patient is CURED, override all calculations
                 if ($isCured) {
                     $intensiveStatus = 'Completed';
                     $intensiveDaysRemaining = 0;
