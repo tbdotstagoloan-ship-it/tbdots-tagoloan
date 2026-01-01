@@ -6,7 +6,8 @@
 
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #fffbea 0%, #e8f5e9 100%);
+    /* background: linear-gradient(135deg, #fffbea 0%, #e8f5e9 100%); */
+    background-color: #ecf0f1;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -23,7 +24,7 @@ body {
     width: 100%;
     max-width: 420px;
     margin-top: 10px;
-    border-top: 4px solid #ffde00;
+    border-top: 3px solid #ffde00;
     border-left: 1px solid rgba(251, 191, 36, 0.2);
     border-right: 1px solid rgba(76, 175, 80, 0.1);
     border-bottom: 1px solid rgba(76, 175, 80, 0.1);
@@ -35,7 +36,8 @@ body {
 }
 
 .login-header h2 {
-    color: #2d5f3f;
+    /* color: #2d5f3f; */
+    columns: #000000;
     font-size: 1.4rem;
     font-weight: 600;
     letter-spacing: -0.3px;
@@ -333,31 +335,6 @@ body {
 
     .error {
         font-size: 0.75rem;
-    }
-}
-
-/* Extra small devices */
-@media (max-width: 360px) {
-    .top-logo img {
-        height: 80px;
-        max-height: 80px;
-    }
-
-    .login-container {
-        padding: 20px 16px;
-    }
-
-    .login-header h2 {
-        font-size: 1rem;
-    }
-
-    .form-group input {
-        padding: 10px;
-    }
-
-    .login-btn {
-        padding: 11px;
-        font-size: 14px;
     }
 }
 
