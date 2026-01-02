@@ -173,6 +173,7 @@
       <div class="login-container">
         <div class="login-header">
           <h2>Create Patient Account</h2>
+          <p>Set credentials for patient mobile access</p>
         </div>
 
         <!-- Login Form -->

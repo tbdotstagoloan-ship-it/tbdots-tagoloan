@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\PatientAuthController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdverseEventController;
 use App\Http\Controllers\Api\MedicationAdherenceController;
+use App\Http\Controllers\Api\PatientAccountController;
+use App\Http\Controllers\Api\TreatmentOutcomeController;
 
 
 
