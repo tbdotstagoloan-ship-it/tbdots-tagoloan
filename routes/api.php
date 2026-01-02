@@ -51,3 +51,9 @@ Route::post('/reset-password', [PatientAuthController::class, 'resetPassword']);
 Route::post('/adherence/generate-report', [PatientSummaryController::class, 'generateReport'])
     ->middleware('auth:sanctum') // Add authentication middleware if needed
     ->name('api.adherence.generate-report');
+
+// Get patient account by username
+Route::get('/patient-account/{username}', [PatientAccountController::class, 'getByUsername']);
+
+// Get latest treatment outcome by patient ID
+Route::get('/treatment-outcome/{patientId}', [TreatmentOutcomeController::class, 'getLatestByPatientId']);
