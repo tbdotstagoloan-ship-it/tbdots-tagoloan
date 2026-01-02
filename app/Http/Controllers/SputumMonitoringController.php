@@ -55,7 +55,7 @@ class SputumMonitoringController extends Controller
                     'patient_id' => $id,
                     'out_outcome' => 'Cured',
                     'out_date' => now()->toDateString(),
-                    'out_reason' => '3 consecutive MTB Negative Xpert results',
+                    'out_reason' => '3 MTB Negative Xpert results',
                 ]);
             }
 
