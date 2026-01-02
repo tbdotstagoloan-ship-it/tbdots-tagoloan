@@ -217,7 +217,7 @@ body {
 } */
 
 /* Mobile Responsive Styles */
-@media (max-width: 768px) {
+@media (max-width: 576px) {
     body {
         padding: 15px;
     }
@@ -329,7 +329,7 @@ body {
 }
 
 /* Landscape mode adjustments */
-@media (max-height: 600px) and (orientation: landscape) {
+@media (max-height: 576px) and (orientation: landscape) {
     body {
         padding: 10px;
     }
