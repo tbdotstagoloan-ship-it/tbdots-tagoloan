@@ -54,7 +54,7 @@ body {
 
 .top-logo {
     text-align: center;
-    margin-bottom: 20px;
+    /* margin-bottom: 8px; */
     height: 140px; /* reserve space */
     display: flex;
     align-items: center;
@@ -78,7 +78,7 @@ body {
 .form-group .form-label {
     color: #2d5f3f; 
     font-size: 0.95rem;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
     display: inline-block;
     font-weight: 600;
 }
