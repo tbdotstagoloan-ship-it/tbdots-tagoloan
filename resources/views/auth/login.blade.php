@@ -19,8 +19,8 @@
 
     <div class="login-container">
         <div class="login-header">
-            <h2>Welcome Back!</h2>
-            <p style="font-size: 0.9rem; color: #666; margin-top: 8px;">Please sign in to your account.</p>
+            <h2>Welcome Back</h2>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 8px;">Enter your email to sign in to your account</p>
         </div>
 
         <!-- Laravel Status Message -->
