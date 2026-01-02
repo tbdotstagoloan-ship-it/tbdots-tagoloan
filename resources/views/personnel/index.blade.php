@@ -195,12 +195,16 @@
       Personnel
     </h4>
 
-    <div class="d-flex justify-content-end mb-2">
-      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPersonnelModal">
-        <i class="fas fa-plus me-2"></i>Add Personnel
-      </button>
+    @auth
+      @if(auth()->user()->email === config('admin.email'))
+        <div class="d-flex justify-content-end mb-2">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPersonnelModal">
+            <i class="fas fa-plus me-2"></i>Add Personnel
+          </button>
+        </div>
+      @endif
+    @endauth
 
-    </div>
 
     <div class="card shadow-sm border-0">
       <div class="card-body p-0">
@@ -239,42 +243,42 @@
                   <td>{{ $personnel->email }}</td>
                   <td>{{ $personnel->phone }}</td>
                   <td class="text-center">
-                    <div class="dropdown">
-                      <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fas fa-ellipsis-v"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end">
+                    @if(auth()->user()->email === config('admin.email'))
+                      <div class="dropdown">
+                        <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </button>
 
-                        <!-- Edit -->
-                        <li>
-                          <a href="#" 
-                            class="dropdown-item d-flex align-items-center btn-edit"
-                            data-id="{{ $personnel->id }}"
-                            data-name="{{ $personnel->name }}"
-                            data-email="{{ $personnel->email }}"
-                            data-phone="{{ $personnel->phone }}"
-                            data-bs-toggle="modal"
-                            data-bs-target="#editPersonnelModal">
-                            <i class="fas fa-edit me-2"></i> Edit
-                          </a>
-                        </li>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li>
+                            <a href="#"
+                              class="dropdown-item btn-edit"
+                              data-id="{{ $personnel->id }}"
+                              data-name="{{ $personnel->name }}"
+                              data-email="{{ $personnel->email }}"
+                              data-phone="{{ $personnel->phone }}"
+                              data-bs-toggle="modal"
+                              data-bs-target="#editPersonnelModal">
+                              <i class="fas fa-edit me-2"></i>Edit
+                            </a>
+                          </li>
 
-                        <!-- Delete -->
-                        <li>
-                          <form action="{{ route('personnel.destroy', $personnel->id) }}" method="POST" class="d-inline delete-form">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="dropdown-item d-flex align-items-center btn-delete">
-                              <i class="fas fa-trash-alt me-2"></i> Delete
-                            </button>
-                          </form>
-                        </li>
-
-                        
-                      </ul>
-                    </div>
+                          <li>
+                            <form action="{{ route('personnel.destroy', $personnel->id) }}" method="POST">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="dropdown-item">
+                                <i class="fas fa-trash-alt me-2"></i>Delete
+                              </button>
+                            </form>
+                          </li>
+                        </ul>
+                      </div>
+                    @else
+                      <span class="text-muted">View only</span>
+                    @endif
                   </td>
+
                   
                 </tr>
                 @endforeach

@@ -19,6 +19,12 @@ class PersonnelController extends Controller
 
     public function store(Request $request)
     {
+
+        //  ADMIN CHECK
+        if (!$this->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
@@ -40,6 +46,11 @@ class PersonnelController extends Controller
 
     public function update(Request $request, $id)
     {
+        //  ADMIN CHECK
+        if (!$this->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+
         $personnel = User::findOrFail($id);
 
         $request->validate([
@@ -59,9 +70,24 @@ class PersonnelController extends Controller
 
     public function destroy($id)
     {
+         //  ADMIN CHECK
+        if (!$this->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+
         $personnel = User::findOrFail($id);
         $personnel->delete();
 
         return redirect()->back()->with('success', 'Personnel deleted successfully!');
     }
+
+    /**
+     * Check if logged-in user is the admin
+     */
+    private function isAdmin()
+    {
+        return auth()->check() &&
+               auth()->user()->email === config('admin.email');
+    }
+
 }
