@@ -12,9 +12,9 @@
     
     <div class="page-wrapper">
         <!-- TOP LOGO -->
-        <div class="top-logo">
+        <!-- <div class="top-logo">
             <img src="{{ url('assets/img/tbdots-logo-1.png') }}" alt="logo">
-        </div>
+        </div> -->
 
         <div class="login-container">
             <div class="login-header">
