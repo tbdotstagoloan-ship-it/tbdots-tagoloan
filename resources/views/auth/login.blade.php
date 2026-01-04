@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TB DOTS is a public health program for the diagnosis, treatment, and monitoring of tuberculosis.">
     <title>TB DOTS | Log-In</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link rel="icon" href="{{ url('assets/img/tbdots-logo-1.png') }}">
