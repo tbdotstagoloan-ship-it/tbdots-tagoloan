@@ -144,9 +144,9 @@ body {
 }
 
 .login-btn:hover {
-    background: linear-gradient(135deg, #007a28 0%, #006020 100%); /* darker hover gradient */
-    box-shadow: 0 6px 16px rgba(0, 148, 50, 0.35); /* darker shadow on hover */
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #00a838 0%, #008a2f 100%);
+    box-shadow: 0 5px 14px rgba(0, 148, 50, 0.3);
+    /* transform: translateY(-1px); */
 }
 
 
