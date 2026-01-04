@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="TB DOTS is a public health program for the diagnosis, treatment, and monitoring of tuberculosis.">
     <title>TB DOTS | Log-In</title>
