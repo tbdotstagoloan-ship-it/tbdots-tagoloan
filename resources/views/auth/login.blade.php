@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label class="form-label">Email</label>
-                <input type="text" id="email" name="email" placeholder="Email" type="text" value="{{ old('email') }}">
+                <input type="text" id="email" name="email" placeholder="Enter your email" type="text" value="{{ old('email') }}">
                 <div class="error"></div>
                 <!-- @error('email')
                     <div class="error-message">{{ $message }}</div>
@@ -43,7 +43,7 @@
 
             <div class="form-group">
                 <label class="form-label">Password</label>
-                <input type="password" id="password" name="password" placeholder="Password" type="text">
+                <input type="password" id="password" name="password" placeholder="Enter you password" type="text">
                 <span class="toggle-password" onclick="togglePassword('password', this)">
                   <i class="fa-solid fa-eye-slash"></i>
               </span>
@@ -54,7 +54,7 @@
             </div>
 
             <div class="forgot-password">
-              <a href="{{ route('password.request') }}">Forgot your password?</a>
+              <a href="{{ route('password.request') }}">Forgot password?</a>
           </div>
 
             <button type="submit" class="login-btn" id="login-btn">
@@ -70,6 +70,9 @@
             </p>
         </div> -->
 
+        <div class="footer">
+        <p class="copy-right">©2026 TB DOTS Tagoloan. All rights reserved.</p>
+    </div>
 
     </div>
 </div>
