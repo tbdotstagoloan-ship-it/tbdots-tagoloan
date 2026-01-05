@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="text" id="email" name="email" placeholder="Email" value="{{ old('email') }}">
+                    <input type="text" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}">
                     <div class="error"></div>
                     @error('email')
                         <div class="error-message" style="color: #dc3545; font-size: 0.875rem; margin-top: 5px;">
