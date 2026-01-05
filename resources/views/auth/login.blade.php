@@ -188,29 +188,47 @@
   password.addEventListener('input', liveValidatePassword);
 
   // ✅ Final validation on submit
+  // form.addEventListener('submit', e => {
+  //   e.preventDefault();
+  //   if (validateOnSubmit()) {
+  //     form.submit();
+  //   }
+  // });
+
   form.addEventListener('submit', e => {
-    e.preventDefault();
-    if (validateOnSubmit()) {
-      form.submit();
-    }
+      e.preventDefault();
+      if (validateOnSubmit()) {
+          // Show loading state
+          const loginBtn = document.getElementById('login-btn');
+          const loginBtnText = document.getElementById('login-btn-text');
+          
+          loginBtn.disabled = true;
+          loginBtn.style.opacity = '0.7';
+          loginBtn.style.cursor = 'not-allowed';
+          
+          loginBtnText.innerHTML = '<span class="loader"></span> Signing in...';
+          
+          // Submit the form
+          form.submit();
+      }
   });
 </script>
 
 <script>
-function togglePassword(fieldId, el) {
-    const input = document.getElementById(fieldId);
-    const icon = el.querySelector("i");
+  function togglePassword(fieldId, el) {
+      const input = document.getElementById(fieldId);
+      const icon = el.querySelector("i");
 
-    if (input.type === "password") {
-        input.type = "text";
-        icon.classList.remove("fa-eye-slash");
-        icon.classList.add("fa-eye");
-    } else {
-        input.type = "password";
-        icon.classList.remove("fa-eye");
-        icon.classList.add("fa-eye-slash");
-    }
-}
+      if (input.type === "password") {
+          input.type = "text";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+      } else {
+          input.type = "password";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+      }
+  }
 </script>
 
 
